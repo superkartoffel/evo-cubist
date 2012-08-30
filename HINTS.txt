@@ -1,0 +1,4 @@
+
+Difference between two colors:
+http://de.wikipedia.org/wiki/Delta_E
+http://www.colorwiki.com/wiki/Delta_E:_The_Color_Difference
