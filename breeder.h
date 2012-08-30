@@ -14,6 +14,7 @@
 class Breeder : public QThread
 {
     Q_OBJECT
+
 public:
     friend class Genome;
 
@@ -27,6 +28,8 @@ public:
     unsigned long currentFitness(void) const { return mFitness; }
     unsigned long selected(void) const { return mSelected; }
     void stop(void);
+
+    static const int MutationRate = 1500;
 
 protected:
     virtual void run(void);
@@ -49,7 +52,9 @@ private:
     int mdR;
     int mdG;
     int mdB;
+    int mdA;
     qreal mdXY;
+    int mMutationRate;
 
     static const int MAX_GENOMES = 200;
 
@@ -62,7 +67,9 @@ public slots:
     void setDeltaR(int);
     void setDeltaG(int);
     void setDeltaB(int);
+    void setDeltaA(int);
     void setDeltaXY(int);
+    void setMutationRate(int);
 
 };
 

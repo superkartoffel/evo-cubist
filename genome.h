@@ -23,9 +23,6 @@ public:
 
     static const int NUM_POINTS = 3;
 
-    static const qreal POINT_MUTATION_SCALE;
-    static const int RGB_MUTATION_SCALE;
-
     void mutate(void);
 
 private:
@@ -34,6 +31,7 @@ private:
     QColor mColor;
 
     static qreal rnd(void);
+    bool willMutate(void);
 };
 
 

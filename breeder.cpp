@@ -11,6 +11,7 @@
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
     , mStopped(false)
+    , mMutationRate(100)
 {
     reset();
 }
@@ -39,28 +40,36 @@ void Breeder::reset(void)
 void Breeder::setDeltaR(int d)
 {
     mdR = d;
-    qDebug() << d;
 }
 
 
 void Breeder::setDeltaG(int d)
 {
     mdG = d;
-    qDebug() << d;
 }
 
 
 void Breeder::setDeltaB(int d)
 {
     mdB = d;
-    qDebug() << d;
+}
+
+
+void Breeder::setDeltaA(int d)
+{
+    mdA = d;
 }
 
 
 void Breeder::setDeltaXY(int d)
 {
     mdXY = 1e-3 * (qreal) d;
-    qDebug() << mdXY;
+}
+
+
+void Breeder::setMutationRate(int r)
+{
+    mMutationRate = r;
 }
 
 
@@ -77,7 +86,7 @@ unsigned long Breeder::fitness(void)
 {
     Q_ASSERT(mOriginal.size() == mGenerated.size());
     unsigned long sum = 0;
-#pragma omp parallel for lastprivate(sum)
+#pragma omp parallel for reduction(+ : sum)
     for (int y = 0; y < mOriginal.height(); ++y) {
         const QRgb* o = reinterpret_cast<QRgb*>(mOriginal.scanLine(y));
         const QRgb* g = reinterpret_cast<QRgb*>(mGenerated.scanLine(y));
@@ -109,6 +118,7 @@ void Breeder::mutate(void)
     mMutation = mDNA;
     for (DNA::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)
         genome->mutate();
+    // TODO: kill/add genomes eventually
 }
 
 

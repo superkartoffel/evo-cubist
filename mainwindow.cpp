@@ -56,6 +56,8 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->redSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaR(int)));
     QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaG(int)));
     QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaB(int)));
+    QObject::connect(ui->alphaSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaA(int)));
+    QObject::connect(ui->rateSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setMutationRate(int)));
     QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaXY(int)));
 
     restoreAppSettings();
@@ -64,8 +66,6 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow()
 {
-    delete mImageWidget;
-    delete mGenerationWidget;
     delete ui;
 }
 
@@ -90,7 +90,6 @@ void MainWindow::evolved(void)
 
 void MainWindow::proceeded(void)
 {
-    mGenerationWidget->setImage(mBreeder.image());
     ui->generationLineEdit->setText(QString("%1").arg(mBreeder.generation()));
 }
 
@@ -98,7 +97,7 @@ void MainWindow::proceeded(void)
 void MainWindow::startStop(void)
 {
     if (ui->startStopPushButton->text() == tr("Start")) {
-        mBreeder.start(QThread::LowPriority);
+        mBreeder.start(QThread::HighPriority);
         ui->startStopPushButton->setText(tr("Stop"));
     }
     else {
