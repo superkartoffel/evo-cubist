@@ -4,62 +4,46 @@
 #include "genome.h"
 #include "breeder.h"
 #include <QtGlobal>
+#include <QtCore/QDebug>
 
 
-Genome::Genome(void)
-    : mBreeder(NULL)
-{
-    // ...
-}
-
-
-Genome::Genome(const Breeder* breeder)
+Genome::Genome(Breeder* breeder)
     : mBreeder(breeder)
 {
     Q_ASSERT(mBreeder != NULL);
-    for (int x = 0; x < NUM_POINTS; ++x)
-        mPolygon.append(QPointF(rnd(), rnd()));
-    mColor.setRgb(qrand() % 255, qrand() % 255, qrand() % 255, 10 + qrand() % 50);
-}
-
-
-Genome::Genome(const Genome& o)
-    : mBreeder(o.mBreeder)
-    , mPolygon(o.mPolygon)
-    , mColor(o.mColor)
-{
-    Q_ASSERT(mBreeder != NULL);
-    // ...
-}
-
-
-qreal Genome::rnd(void) {
-    return (qreal)qrand() / (qreal)RAND_MAX;
+    const int N = MIN_NUM_POINTS + mBreeder->random() % (MAX_NUM_POINTS - MIN_NUM_POINTS);
+    for (int x = 0; x < N; ++x)
+        mPolygon.append(QPointF(mBreeder->random1(), mBreeder->random1()));
+    mColor.setRgb(mBreeder->random() % 255, mBreeder->random() % 255, mBreeder->random() % 255, 10 + mBreeder->random() % 50);
 }
 
 
 inline bool Genome::willMutate(void) {
-    return (qrand() % mBreeder->mMutationRate) == 1;
+    return (mBreeder->random() % mBreeder->mMutationRate) == 0;
 }
 
 
 void Genome::mutate(void)
 {
-    // TODO: kill/add points occasionally
-    // ...
+    if (willMutate() && mPolygon.size() < 9) {
+        mPolygon.append(QPointF(mBreeder->random1(), mBreeder->random1()));
+    }
+    if (willMutate() && mPolygon.size() > 3) {
+        mPolygon.remove(mBreeder->random() % mPolygon.size());
+    }
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate()) {
-            qreal x2 = p->x() + mBreeder->mdXY * (rnd() - 0.5);
-            qreal y2 = p->y() + mBreeder->mdXY * (rnd() - 0.5);
+            qreal x2 = p->x() + mBreeder->mdXY * (mBreeder->random1() - 0.5);
+            qreal y2 = p->y() + mBreeder->mdXY * (mBreeder->random1() - 0.5);
             p->setX((x2 < 0.0)? 0.0 : ((x2 > 1.0)? 1.0 : x2));
             p->setY((y2 < 0.0)? 0.0 : ((y2 > 1.0)? 1.0 : y2));
         }
     }
     if (willMutate()) {
-        const int r = 0xff & (qrand() % mBreeder->mdR + mColor.red());
-        const int g = 0xff & (qrand() % mBreeder->mdG + mColor.green());
-        const int b = 0xff & (qrand() % mBreeder->mdB + mColor.blue());
-        const int a = qrand() % mBreeder->mdA + mColor.alpha();
+        const int r = 0xff & (mBreeder->random() % mBreeder->mdR + mColor.red());
+        const int g = 0xff & (mBreeder->random() % mBreeder->mdG + mColor.green());
+        const int b = 0xff & (mBreeder->random() % mBreeder->mdB + mColor.blue());
+        const int a = mBreeder->random() % mBreeder->mdA + mColor.alpha();
         mColor.setRgb(r, g, b, (a < 10)? 10 : ((a > 60)? 60 : a));
     }
 }

@@ -23,6 +23,8 @@ public:
     bool save(const QString& filename) const;
     bool load(const QString& filename);
 
+    unsigned int points(void) const;
+
 signals:
     
 public slots:

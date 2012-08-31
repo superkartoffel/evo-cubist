@@ -9,8 +9,14 @@
 #include <QRgb>
 #include <QThread>
 
+#include <limits>
+
 #include "dna.h"
 #include "genome.h"
+#include "random/mersenne_twister.h"
+
+using namespace randomtools;
+
 
 class Breeder : public QThread
 {
@@ -19,21 +25,23 @@ class Breeder : public QThread
 public:
     friend class Genome;
 
-    explicit Breeder(QThread* parent = NULL);
+    Breeder(QThread* parent = NULL);
     void reset(void);
     void mutate(void);
-    const DNA& dna(void) const { return mDNA; }
-    const DNA& mutation(void) const { return mMutation; }
-    const QImage& image(void) const { return mGenerated; }
-    unsigned long generation(void) const { return mGeneration; }
-    unsigned long currentFitness(void) const { return mFitness; }
-    unsigned long selected(void) const { return mSelected; }
+
+    inline const DNA& dna(void) const { return mDNA; }
+    inline const DNA& mutation(void) const { return mMutation; }
+    inline const QImage& image(void) const { return mGenerated; }
+    inline unsigned long generation(void) const { return mGeneration; }
+    inline unsigned long currentFitness(void) const { return mFitness; }
+    inline unsigned long selected(void) const { return mSelected; }
+    unsigned int random(void) { return mRandom.next(); }
+    qreal random1(void) { return (qreal)mRandom.next() / mRandom.max(); }
+
     void breed(void);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
     void setDNA(DNA);
-
-    static const int MutationRate = 1500;
 
 protected:
     virtual void run(void);
@@ -43,6 +51,7 @@ private:
     static unsigned long deltaE(QRgb c1, QRgb c2);
     void draw(void);
     void proceed(void);
+    bool willMutate(void);
 
     bool mDirty;
     bool mStopped;
@@ -60,8 +69,13 @@ private:
     int mdA;
     qreal mdXY;
     int mMutationRate;
+    int mMinGenomes;
+    int mMaxGenomes;
 
-    static const int MAX_GENOMES = 200;
+    static const int MIN_GENOMES = 200;
+    static const int MAX_GENOMES = 400;
+
+    MersenneTwister mRandom;
 
 signals:
     void evolved(void);

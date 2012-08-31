@@ -29,8 +29,6 @@ MainWindow::MainWindow(QWidget* parent)
     QCoreApplication::setApplicationName(MainWindow::AppName);
     QSettings::setDefaultFormat(QSettings::NativeFormat);
 
-    qsrand(QDateTime::currentDateTime().toTime_t());
-
     ui->setupUi(this);
 
 #if _OPENMP >= 200203
@@ -93,13 +91,14 @@ void MainWindow::evolved(void)
     ui->fitnessLineEdit->setText(QString("%1").arg(mBreeder.currentFitness()));
     ui->selectedLineEdit->setText(QString("%1").arg(mBreeder.selected()));
     ui->polygonsLineEdit->setText(QString("%1").arg(mBreeder.dna().size()));
+    ui->pointsLineEdit->setText(QString("%1").arg(mBreeder.dna().points()));
 }
 
 
 void MainWindow::proceeded(void)
 {
     ui->generationLineEdit->setText(QString("%1").arg(mBreeder.generation()));
-    ui->gensSLineEdit->setText(QString("%1").arg(mBreeder.generation() / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
+    ui->gensSLineEdit->setText(QString("%1").arg((qreal) mBreeder.generation() / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
 }
 
 

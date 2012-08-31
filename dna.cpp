@@ -55,3 +55,12 @@ bool DNA::load(const QString& filename)
     }
     return rc && ok;
 }
+
+
+unsigned int DNA::points(void) const
+{
+    unsigned int sum = 0;
+    for (DNAType::const_iterator genome = constBegin(); genome != constEnd(); ++genome)
+        sum += genome->size();
+    return sum;
+}

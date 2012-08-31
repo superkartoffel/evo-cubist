@@ -5,14 +5,18 @@
 #include <QBrush>
 #include <QColor>
 #include <QPainter>
+#include <QDateTime>
 #include <QtCore/QDebug>
 #include <limits>
 
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
-    , mMutationRate(100)
+    , mMutationRate(1)
+    , mMinGenomes(MIN_GENOMES)
+    , mMaxGenomes(MAX_GENOMES)
 {
     reset();
+    mRandom.seed(QDateTime::currentDateTime().toTime_t());
 }
 
 
@@ -33,7 +37,8 @@ void Breeder::reset(void)
     mStopped = false;
     mDNA.clear();
     mMutation.clear();
-    for (int i = 0; i < MAX_GENOMES; ++i)
+    int N = mMinGenomes + random() % (mMaxGenomes - mMinGenomes);
+    for (int i = 0; i < N; ++i)
         mDNA.append(Genome(this));
 }
 
@@ -109,7 +114,6 @@ unsigned long Breeder::fitness(void)
 }
 
 
-
 void Breeder::draw(void)
 {
     QPainter p(&mGenerated);
@@ -120,16 +124,26 @@ void Breeder::draw(void)
     p.scale(mGenerated.width(), mGenerated.height());
     for (DNAType::const_iterator genome = mMutation.constBegin(); genome != mMutation.constEnd(); ++genome) {
         p.setBrush(genome->color());
-        p.drawConvexPolygon(genome->polygon());
+        // p.drawConvexPolygon(genome->polygon());
+        p.drawPolygon(genome->polygon());
     }
+}
+
+
+inline bool Breeder::willMutate(void) {
+    return (random() % mMutationRate) == 0;
 }
 
 
 void Breeder::mutate(void)
 {
     mMutation = mDNA;
-    // TODO: kill/add genomes occasionally
-    // ...
+    if (willMutate() && mMutation.size() < MAX_GENOMES) {
+        mMutation.append(Genome(this));
+    }
+    if (willMutate() && mMutation.size() > MIN_GENOMES) {
+        mMutation.remove(random() % mMutation.size());
+    }
     for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)
         genome->mutate();
 }

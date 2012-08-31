@@ -10,7 +10,7 @@ QMAKE_CXXFLAGS += /openmp
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = genart
+TARGET = evo-cubist
 TEMPLATE = app
 
 SOURCES += main.cpp\
@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     breeder.cpp \
     genome.cpp \
     dna.cpp \
-    qt-json/json.cpp
+    qt-json/json.cpp \
+    random/mersenne_twister.cpp \
+    random/compat-win32.cpp
 
 HEADERS  += mainwindow.h \
     imagewidget.h \
@@ -28,16 +30,12 @@ HEADERS  += mainwindow.h \
     breeder.h \
     genome.h \
     dna.h \
-    qt-json/json.h
+    qt-json/json.h \
+    random/mersenne_twister.h \
+    random/abstract_random_number_generator.h \
+    random/compat-win32.h
 
 FORMS    += mainwindow.ui
 
 OTHER_FILES += \
     HINTS.txt
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/qjson-build-desktop-Qt_4_8_2__4_8_2-VS2010__Debug/lib/ -lqjson0
-
-INCLUDEPATH += $$PWD/qjson-build-desktop-Qt_4_8_2__4_8_2-VS2010__Debug
-DEPENDPATH += $$PWD/qjson-build-desktop-Qt_4_8_2__4_8_2-VS2010__Debug
-
-win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/qjson-build-desktop-Qt_4_8_2__4_8_2-VS2010__Debug/lib/qjson0.lib

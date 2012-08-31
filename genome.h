@@ -15,26 +15,31 @@ class Breeder;
 class Genome
 {
 public:
-    Genome(void);
-    Genome(const Breeder*);
-    Genome(const Genome&);
+    inline Genome(void)
+        : mBreeder(NULL) { /* ... */ }
+    inline Genome(const Genome& o)
+        : mBreeder(o.mBreeder)
+        , mPolygon(o.mPolygon)
+        , mColor(o.mColor) { /* ... */ }
+    Genome(Breeder*);
 
-    const QColor& color(void) const { return mColor; }
-    const QPolygonF& polygon(void) const { return mPolygon; }
+    inline const QColor& color(void) const { return mColor; }
+    inline const QPolygonF& polygon(void) const { return mPolygon; }
+    inline unsigned int size(void) const { return polygon().size(); }
 
     void setColor(const QColor&);
     void setPolygon(const QPolygonF&);
 
-    static const int NUM_POINTS = 3;
+    static const int MIN_NUM_POINTS = 3;
+    static const int MAX_NUM_POINTS = 9;
 
     void mutate(void);
 
 private:
-    const Breeder* mBreeder;
+    Breeder* mBreeder;
     QPolygonF mPolygon;
     QColor mColor;
 
-    static qreal rnd(void);
     bool willMutate(void);
 };
 
