@@ -17,7 +17,6 @@ class ImageWidget : public QFrame
 public:
     explicit ImageWidget(QFrame* parent = NULL);
     void setImage(const QImage&);
-    void setImageFileName(const QString&);
     const QString& imageFileName(void) const { return mImageFileName; }
     void loadImage(const QString& fileName);
 

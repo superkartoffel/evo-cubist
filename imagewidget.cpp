@@ -7,8 +7,8 @@
 
 #include "imagewidget.h"
 
-ImageWidget::ImageWidget(QFrame* parent) :
-    QFrame(parent)
+ImageWidget::ImageWidget(QFrame* parent)
+    : QFrame(parent)
 {
     QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHeightForWidth(true);
@@ -25,18 +25,11 @@ void ImageWidget::setImage(const QImage& image)
 }
 
 
-void ImageWidget::setImageFileName(const QString& name)
-{
-    mImageFileName = name;
-}
-
-
 void ImageWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawImage(0, 0, mImage);
 }
-
 
 
 void ImageWidget::dragEnterEvent(QDragEnterEvent* e)
