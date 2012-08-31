@@ -21,7 +21,7 @@ public:
     inline DNA(const DNAType &v) : DNAType(v) {}
 
     bool save(const QString& filename) const;
-
+    bool load(const QString& filename);
 
 signals:
     

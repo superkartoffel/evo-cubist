@@ -65,11 +65,38 @@ void Genome::mutate(void)
 }
 
 
-QDataStream& operator<< (QDataStream& s, const Genome& genome)
+void Genome::setColor(const QColor& color)
 {
-    s << genome.color();
+    mColor = color;
+}
+
+
+void Genome::setPolygon(const QPolygonF& polygon)
+{
+    mPolygon = polygon;
+}
+
+
+QTextStream& operator<< (QTextStream& s, const Genome& genome)
+{
+    const QColor& color = genome.color();
+    s << "{\n"
+      << "  \"color\": { " << QString("\"r\": %1, \"g\": %2, \"b\": %3, \"a\": %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alphaF()) << " },\n";
+    s << "  \"vertices\": [\n";
     for (QPolygonF::const_iterator p = genome.polygon().constBegin(); p != genome.polygon().constEnd(); ++p) {
-        s << *p;
+        s << "    { " << QString("\"x\": %1, \"y\": %2").arg(p->x()).arg(p->y()) << " }";
+        if ((p+1) != genome.polygon().constEnd())
+            s << ",";
+        s << "\n";
     }
+    s << "  ]\n"
+      << "}";
+    return s;
+}
+
+
+QTextStream& operator>> (QTextStream& s, const Genome& genome)
+{
+    Q_UNUSED(genome);
     return s;
 }

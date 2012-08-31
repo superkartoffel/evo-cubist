@@ -8,7 +8,7 @@
 #include <QColor>
 #include <QPointF>
 #include <QPolygonF>
-#include <QDataStream>
+#include <QTextStream>
 
 class Breeder;
 
@@ -21,6 +21,9 @@ public:
 
     const QColor& color(void) const { return mColor; }
     const QPolygonF& polygon(void) const { return mPolygon; }
+
+    void setColor(const QColor&);
+    void setPolygon(const QPolygonF&);
 
     static const int NUM_POINTS = 3;
 
@@ -36,7 +39,8 @@ private:
 };
 
 
-QDataStream& operator<<(QDataStream&, const Genome&);
+QTextStream& operator<<(QTextStream&, const Genome&);
+QTextStream& operator>>(QTextStream&, const Genome&);
 
 
 

@@ -31,6 +31,7 @@ public:
     void breed(void);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
+    void setDNA(DNA);
 
     static const int MutationRate = 1500;
 

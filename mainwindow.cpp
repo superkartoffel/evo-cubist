@@ -61,6 +61,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     QObject::connect(ui->actionSaveDNA, SIGNAL(triggered()), SLOT(saveDNA()));
     QObject::connect(ui->actionOpenOriginalImage, SIGNAL(triggered()), SLOT(openOriginalImage()));
+    QObject::connect(ui->actionOpenDNA, SIGNAL(triggered()), SLOT(openDNA()));
+
+    QObject::connect(ui->actionExit, SIGNAL(triggered()), SLOT(close()));
     restoreAppSettings();
 }
 
@@ -197,6 +200,29 @@ void MainWindow::openOriginalImage(void)
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Originalbild laden"));
     loadOriginalImage(filename);
+}
+
+
+void MainWindow::loadDNA(const QString& filename)
+{
+    if (filename != "") {
+        DNA dna;
+        bool success = dna.load(filename);
+        if (success) {
+            mBreeder.setDNA(dna);
+            statusBar()->showMessage(tr("DNA '%1' geladen.").arg(filename), 3000);
+        }
+        else {
+            QMessageBox::warning(this, tr("Fehler beim Laden der DNA"), tr("DNA konnte nicht geladen werden."));
+        }
+    }
+}
+
+
+void MainWindow::openDNA(void)
+{
+    QString filename = QFileDialog::getOpenFileName(this, tr("DNA laden"));
+    loadDNA(filename);
 }
 
 

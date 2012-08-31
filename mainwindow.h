@@ -42,13 +42,15 @@ private:
     void restoreAppSettings(void);
     void startBreeding(void);
     void stopBreeding(void);
-    void loadOriginalImage(const QString&);
+    void loadOriginalImage(const QString& filename);
+    void loadDNA(const QString& filename);
 
 private slots:
     void evolved(void);
     void proceeded(void);
     void startStop(void);
     void saveDNA(void);
+    void openDNA(void);
     void openOriginalImage(void);
     void resetBreeder(void);
 };

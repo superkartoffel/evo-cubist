@@ -376,8 +376,22 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="actionOpenOriginalImage"/>
-    <addaction name="actionSaveDNA"/>
+    <widget class="QMenu" name="menuOpen">
+     <property name="title">
+      <string>Open</string>
+     </property>
+     <addaction name="actionOpenDNA"/>
+     <addaction name="actionOpenOriginalImage"/>
+    </widget>
+    <widget class="QMenu" name="menuSave">
+     <property name="title">
+      <string>Save</string>
+     </property>
+     <addaction name="actionSaveDNA"/>
+    </widget>
+    <addaction name="menuOpen"/>
+    <addaction name="menuSave"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menu_File"/>
   </widget>
@@ -392,7 +406,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpenOriginalImage">
    <property name="text">
-    <string>Open original image ...</string>
+    <string>Original image ...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -404,6 +418,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionOpenDNA">
+   <property name="text">
+    <string>DNA ...</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>

@@ -74,6 +74,17 @@ void Breeder::setMutationRate(int r)
 }
 
 
+void Breeder::setDNA(DNA dna)
+{
+    bool wasRunning = isRunning();
+    if (wasRunning)
+        stop();
+    mDNA = dna;
+    if (wasRunning)
+        breed();
+}
+
+
 inline unsigned long Breeder::deltaE(QRgb c1, QRgb c2)
 {
     const unsigned int r = qRed(c1) - qRed(c2);
@@ -145,6 +156,7 @@ void Breeder::proceed(void)
 void Breeder::stop(void)
 {
     mStopped = true;
+    wait();
 }
 
 
