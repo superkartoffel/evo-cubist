@@ -8,6 +8,7 @@
 #include <QColor>
 #include <QPointF>
 #include <QPolygonF>
+#include <QDataStream>
 
 class Breeder;
 
@@ -25,6 +26,8 @@ public:
 
     void mutate(void);
 
+    QDataStream& operator<<(QDataStream&);
+
 private:
     const Breeder* mBreeder;
     QPolygonF mPolygon;
@@ -34,7 +37,5 @@ private:
     bool willMutate(void);
 };
 
-
-typedef QVector<Genome> DNA;
 
 #endif // __GENOME_H_

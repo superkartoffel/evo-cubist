@@ -106,7 +106,7 @@ void Breeder::draw(void)
     p.drawRect(0, 0, mGenerated.width(), mGenerated.height());
     p.setRenderHint(QPainter::Antialiasing);
     p.scale(mGenerated.width(), mGenerated.height());
-    for (DNA::const_iterator genome = mMutation.constBegin(); genome != mMutation.constEnd(); ++genome) {
+    for (DNAType::const_iterator genome = mMutation.constBegin(); genome != mMutation.constEnd(); ++genome) {
         p.setBrush(genome->color());
         p.drawConvexPolygon(genome->polygon());
     }
@@ -116,9 +116,10 @@ void Breeder::draw(void)
 void Breeder::mutate(void)
 {
     mMutation = mDNA;
-    for (DNA::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)
+    // TODO: kill/add genomes occasionally
+    // ...
+    for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)
         genome->mutate();
-    // TODO: kill/add genomes eventually
 }
 
 

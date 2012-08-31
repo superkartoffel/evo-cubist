@@ -45,6 +45,8 @@ inline bool Genome::willMutate(void) {
 
 void Genome::mutate(void)
 {
+    // TODO: kill/add points occasionally
+    // ...
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate()) {
             qreal x2 = p->x() + mBreeder->mdXY * (rnd() - 0.5);
@@ -53,7 +55,6 @@ void Genome::mutate(void)
             p->setY((y2 < 0.0)? 0.0 : ((y2 > 1.0)? 1.0 : y2));
         }
     }
-    // TODO: kill/add points eventually
     if (willMutate()) {
         const int r = 0xff & (qrand() % mBreeder->mdR + mColor.red());
         const int g = 0xff & (qrand() % mBreeder->mdG + mColor.green());
@@ -61,4 +62,14 @@ void Genome::mutate(void)
         const int a = qrand() % mBreeder->mdA + mColor.alpha();
         mColor.setRgb(r, g, b, (a < 10)? 10 : ((a > 60)? 60 : a));
     }
+}
+
+
+QDataStream& Genome::operator<< (QDataStream& s)
+{
+    s << mColor;
+    for (QPolygonF::const_iterator p = mPolygon.constBegin(); p != mPolygon.constEnd(); ++p) {
+        s << p;
+    }
+    return s;
 }

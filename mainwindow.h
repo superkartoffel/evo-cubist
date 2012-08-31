@@ -5,6 +5,8 @@
 #define __MAINWINDOW_H_
 
 #include <QMainWindow>
+#include <QDateTime>
+#include <QString>
 
 #include "imagewidget.h"
 #include "generationwidget.h"
@@ -34,15 +36,20 @@ private:
     ImageWidget* mImageWidget;
     GenerationWidget* mGenerationWidget;
     Breeder mBreeder;
+    QDateTime mStartTime;
 
     void saveAppSettings(void);
     void restoreAppSettings(void);
-
+    void startBreeding(void);
+    void stopBreeding(void);
+    void loadOriginalImage(const QString&);
 
 private slots:
     void evolved(void);
     void proceeded(void);
     void startStop(void);
+    void saveDNA(void);
+    void openOriginalImage(void);
 };
 
 #endif // __MAINWINDOW_H_

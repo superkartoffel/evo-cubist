@@ -2,16 +2,17 @@
 // All rights reserved.
 
 #include <QtGlobal>
-#include <QDateTime>
 #include <QTextStream>
 #include <QtCore/QDebug>
 #include <QSettings>
+#include <QFileDialog>
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 
 const QString MainWindow::Company = "c't";
-const QString MainWindow::AppName = QObject::tr("GenArt");
+const QString MainWindow::AppName = QObject::tr("Evo Cubist");
 #ifdef QT_NO_DEBUG
 const QString MainWindow::AppVersion = "0.1";
 #else
@@ -60,6 +61,8 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->rateSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setMutationRate(int)));
     QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaXY(int)));
 
+    QObject::connect(ui->actionSaveDNA, SIGNAL(triggered()), SLOT(saveDNA()));
+    QObject::connect(ui->actionOpenOriginalImage, SIGNAL(triggered()), SLOT(openOriginalImage()));
     restoreAppSettings();
 }
 
@@ -72,8 +75,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent* e)
 {
-    mBreeder.stop();
-    mBreeder.wait();
+    stopBreeding();
     saveAppSettings();
     e->accept();
 }
@@ -91,18 +93,33 @@ void MainWindow::evolved(void)
 void MainWindow::proceeded(void)
 {
     ui->generationLineEdit->setText(QString("%1").arg(mBreeder.generation()));
+    ui->gensSLineEdit->setText(QString("%1").arg(mBreeder.generation() / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
+}
+
+
+void MainWindow::startBreeding(void)
+{
+    mStartTime = QDateTime::currentDateTime();
+    mBreeder.start();
+    ui->startStopPushButton->setText(tr("Stop"));
+}
+
+
+void MainWindow::stopBreeding(void)
+{
+    mBreeder.stop();
+    mBreeder.wait();
+    ui->startStopPushButton->setText(tr("Start"));
 }
 
 
 void MainWindow::startStop(void)
 {
     if (ui->startStopPushButton->text() == tr("Start")) {
-        mBreeder.start(QThread::HighPriority);
-        ui->startStopPushButton->setText(tr("Stop"));
+        startBreeding();
     }
     else {
-        mBreeder.stop();
-        ui->startStopPushButton->setText(tr("Start"));
+        stopBreeding();
     }
 }
 
@@ -113,6 +130,12 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/geometry", saveGeometry());
     settings.setValue("MainWindow/windowState", saveState());
     settings.setValue("MainWindow/imageFilename", mImageWidget->imageFileName());
+    settings.setValue("MainWindow/deltaR", ui->redSlider->value());
+    settings.setValue("MainWindow/deltaG", ui->greenSlider->value());
+    settings.setValue("MainWindow/deltaB", ui->blueSlider->value());
+    settings.setValue("MainWindow/deltaA", ui->alphaSlider->value());
+    settings.setValue("MainWindow/deltaXY", ui->xySlider->value());
+    settings.setValue("MainWindow/mutationRate", ui->rateSlider->value());
 }
 
 
@@ -124,4 +147,47 @@ void MainWindow::restoreAppSettings(void)
     QString imageFileName = settings.value("MainWindow/imageFilename").toString();
     if (imageFileName != "")
         mImageWidget->loadImage(imageFileName);
+    ui->redSlider->setValue(settings.value("MainWindow/deltaR").toInt());
+    ui->greenSlider->setValue(settings.value("MainWindow/deltaG").toInt());
+    ui->blueSlider->setValue(settings.value("MainWindow/deltaB").toInt());
+    ui->alphaSlider->setValue(settings.value("MainWindow/deltaA").toInt());
+    ui->xySlider->setValue(settings.value("MainWindow/deltaXY").toInt());
+    ui->rateSlider->setValue(settings.value("MainWindow/mutationRate").toInt());
+}
+
+
+
+void MainWindow::saveDNA(void)
+{
+    const QString& dnaImageFilename = QFileDialog::getSaveFileName(this, tr("DNA speichern"));
+    bool success = mBreeder.dna().save(dnaImageFilename);
+    if (success) {
+        statusBar()->showMessage(tr("DNA unter '%1' gespeichert.").arg(dnaImageFilename), 3000);
+    }
+    else {
+        QMessageBox::critical(this, tr("Fehler beim Speichern der DNA"), tr("Die DNA konnte nicht unter dem Namen '%1' gespeichert werden.").arg(dnaImageFilename));
+    }
+}
+
+
+void MainWindow::loadOriginalImage(const QString& filename)
+{
+    if (filename != "") {
+        QImage image;
+        bool success = image.load(filename);
+        if (success) {
+            mBreeder.setOriginalImage(image);
+            statusBar()->showMessage(tr("Originalbild '%1' geladen.").arg(filename), 3000);
+        }
+        else {
+            QMessageBox::warning(this, tr("Fehler beim Laden des Originalbildes"), tr("Originalbild konnte nicht geladen werden."));
+        }
+    }
+}
+
+
+void MainWindow::openOriginalImage(void)
+{
+    QString filename = QFileDialog::getOpenFileName(this, tr("Originalbild laden"));
+    loadOriginalImage(filename);
 }

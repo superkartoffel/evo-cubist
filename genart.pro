@@ -6,7 +6,7 @@
 
 QT += core gui
 
-QMAKE_CXXFLAGS += /openmp
+# QMAKE_CXXFLAGS += /openmp
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,13 +19,15 @@ SOURCES += main.cpp\
     imagewidget.cpp \
     generationwidget.cpp \
     breeder.cpp \
-    genome.cpp
+    genome.cpp \
+    dna.cpp
 
 HEADERS  += mainwindow.h \
     imagewidget.h \
     generationwidget.h \
     breeder.h \
-    genome.h
+    genome.h \
+    dna.h
 
 FORMS    += mainwindow.ui
 

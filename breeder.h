@@ -9,6 +9,7 @@
 #include <QRgb>
 #include <QThread>
 
+#include "dna.h"
 #include "genome.h"
 
 class Breeder : public QThread
