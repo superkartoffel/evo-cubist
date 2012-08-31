@@ -10,7 +10,6 @@
 
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
-    , mStopped(false)
     , mMutationRate(100)
 {
     reset();
@@ -30,6 +29,8 @@ void Breeder::reset(void)
     mGeneration = 0;
     mFitness = ULONG_MAX;
     mSelected = 0;
+    mDirty = false;
+    mStopped = false;
     mDNA.clear();
     mMutation.clear();
     for (int i = 0; i < MAX_GENOMES; ++i)
@@ -144,6 +145,14 @@ void Breeder::proceed(void)
 void Breeder::stop(void)
 {
     mStopped = true;
+}
+
+
+void Breeder::breed(void)
+{
+    mStopped = false;
+    mDirty = true;
+    start();
 }
 
 

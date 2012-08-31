@@ -28,7 +28,9 @@ public:
     unsigned long generation(void) const { return mGeneration; }
     unsigned long currentFitness(void) const { return mFitness; }
     unsigned long selected(void) const { return mSelected; }
+    void breed(void);
     void stop(void);
+    bool isDirty(void) const { return mDirty; }
 
     static const int MutationRate = 1500;
 
@@ -41,6 +43,7 @@ private:
     void draw(void);
     void proceed(void);
 
+    bool mDirty;
     bool mStopped;
     unsigned long mGeneration;
     unsigned long mFitness;

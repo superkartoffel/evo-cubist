@@ -4,9 +4,9 @@
 #
 #-------------------------------------------------
 
-QT += core gui
+QT += core gui opengl
 
-# QMAKE_CXXFLAGS += /openmp
+QMAKE_CXXFLAGS += /openmp
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

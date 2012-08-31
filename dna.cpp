@@ -15,7 +15,7 @@ bool DNA::save(const QString& filename) const
         return false;
     QDataStream out(&file);
     for (DNAType::const_iterator genome = constBegin(); genome != constEnd(); ++genome)
-        out << genome;
+        out << *genome;
     file.close();
     return rc;
 }

@@ -26,8 +26,6 @@ public:
 
     void mutate(void);
 
-    QDataStream& operator<<(QDataStream&);
-
 private:
     const Breeder* mBreeder;
     QPolygonF mPolygon;
@@ -36,6 +34,10 @@ private:
     static qreal rnd(void);
     bool willMutate(void);
 };
+
+
+QDataStream& operator<<(QDataStream&, const Genome&);
+
 
 
 #endif // __GENOME_H_

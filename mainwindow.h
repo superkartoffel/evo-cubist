@@ -50,6 +50,7 @@ private slots:
     void startStop(void);
     void saveDNA(void);
     void openOriginalImage(void);
+    void resetBreeder(void);
 };
 
 #endif // __MAINWINDOW_H_

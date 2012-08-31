@@ -50,9 +50,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
 
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
-
-    QObject::connect(&mBreeder, SIGNAL(evolved()), SLOT(evolved()), Qt::BlockingQueuedConnection);
-    QObject::connect(&mBreeder, SIGNAL(proceeded()), SLOT(proceeded()), Qt::BlockingQueuedConnection);
+    QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetBreeder()));
 
     QObject::connect(ui->redSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaR(int)));
     QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaG(int)));
@@ -75,7 +73,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent* e)
 {
-    stopBreeding();
+//    if (mBreeder.isRunning() || mBreeder.isDirty()) {
+//        stopBreeding();
+//        if (QMessageBox::question(this, tr("DNA not saved"), tr("Save DNA before quitting?")) == QMessageBox::Ok) {
+//            saveDNA();
+//        }
+//    }
     saveAppSettings();
     e->accept();
 }
@@ -100,13 +103,17 @@ void MainWindow::proceeded(void)
 void MainWindow::startBreeding(void)
 {
     mStartTime = QDateTime::currentDateTime();
-    mBreeder.start();
+    QObject::connect(&mBreeder, SIGNAL(evolved()), SLOT(evolved()), Qt::BlockingQueuedConnection);
+    QObject::connect(&mBreeder, SIGNAL(proceeded()), SLOT(proceeded()), Qt::BlockingQueuedConnection);
+    mBreeder.breed();
     ui->startStopPushButton->setText(tr("Stop"));
 }
 
 
 void MainWindow::stopBreeding(void)
 {
+    QObject::disconnect(&mBreeder, SIGNAL(evolved()), this, SLOT(evolved()));
+    QObject::disconnect(&mBreeder, SIGNAL(proceeded()), this, SLOT(proceeded()));
     mBreeder.stop();
     mBreeder.wait();
     ui->startStopPushButton->setText(tr("Start"));
@@ -190,4 +197,14 @@ void MainWindow::openOriginalImage(void)
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Originalbild laden"));
     loadOriginalImage(filename);
+}
+
+
+void MainWindow::resetBreeder(void)
+{
+    QMessageBox::StandardButton button = QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?"));
+    if (button == QMessageBox::Ok) {
+        stopBreeding();
+        mBreeder.reset();
+    }
 }

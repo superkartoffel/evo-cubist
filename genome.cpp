@@ -65,11 +65,11 @@ void Genome::mutate(void)
 }
 
 
-QDataStream& Genome::operator<< (QDataStream& s)
+QDataStream& operator<< (QDataStream& s, const Genome& genome)
 {
-    s << mColor;
-    for (QPolygonF::const_iterator p = mPolygon.constBegin(); p != mPolygon.constEnd(); ++p) {
-        s << p;
+    s << genome.color();
+    for (QPolygonF::const_iterator p = genome.polygon().constBegin(); p != genome.polygon().constEnd(); ++p) {
+        s << *p;
     }
     return s;
 }
