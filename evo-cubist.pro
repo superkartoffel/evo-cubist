@@ -2,7 +2,7 @@
 
 QT += core gui xml
 
-QMAKE_CXXFLAGS += /openmp
+# QMAKE_CXXFLAGS += /openmp
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

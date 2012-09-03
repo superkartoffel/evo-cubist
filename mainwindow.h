@@ -39,6 +39,7 @@ private:
     QDateTime mStartTime;
     QString mLastSavedDNA;
     QString mLastSavedSVG;
+    QString mSaveDirectory;
 
     void saveAppSettings(void);
     void restoreAppSettings(void);

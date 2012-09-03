@@ -8,6 +8,7 @@
 
 
 #include "qt-json/json.h"
+#include "genome.h"
 #include "dna.h"
 #include "dnaxmlreader.h"
 
@@ -28,9 +29,9 @@ bool DNA::save(const QString& filename, const QSize& size, Format format) const
     {
         out << "{ \"size\": { \"x\": " << size.width() << ", \"y\": " << size.height() << " },"
             << " \"dna\": [\n";
-        for (DNAType::const_iterator genome = constBegin(); genome != constEnd(); ++genome) {
+        for (DNAType::const_iterator genome = this->constBegin(); genome != this->constEnd(); ++genome) {
             out << *genome;
-            if ((genome+1) != constEnd())
+            if ((genome+1) != this->constEnd())
                 out << ",";
             out << "\n";
         }
@@ -41,7 +42,7 @@ bool DNA::save(const QString& filename, const QSize& size, Format format) const
     {
         out << "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n"
             << " <g transform=\"scale(" << size.width() << ", " << size.height() << ")\">\n";
-        for (DNAType::const_iterator genome = constBegin(); genome != constEnd(); ++genome) {
+        for (DNAType::const_iterator genome = this->constBegin(); genome != this->constEnd(); ++genome) {
             const QColor& c = genome->color();
             out << "  <path fill=\"rgb(" << c.red() << "," << c.green() << "," << c.blue() << ")\""
                 << " fill-opacity=\"" << c.alphaF() << "\""
@@ -77,11 +78,27 @@ bool DNA::load(const QString& filename, Breeder* breeder, Format format)
     case JSON:
     {
         QString jsonDNA = in.readAll();
-        QVariant v = Json::parse(jsonDNA, ok);
-        QVariantMap result = v.toMap();
+        const QVariant& v = Json::parse(jsonDNA, ok);
+        const QVariantMap& result = v.toMap();
         if (ok) {
             clear();
-            qDebug() << "RESULT:" << result["dna"].toString();
+            const QVariantMap& size = result["size"].toMap();
+            QSize originalSize(size["width"].toInt(), size["height"].toInt());
+            qDebug() << "Original size:" << originalSize; // XXX: what to do with it?
+            const QVariantList& dna = result["dna"].toList();
+            for (QVariantList::const_iterator genome = dna.constBegin(); genome != dna.constEnd(); ++genome) {
+                const QVariantMap& g = genome->toMap();
+                const QVariantMap& rgb = g["color"].toMap();
+                QColor color(rgb["r"].toInt(), rgb["g"].toInt(), rgb["b"].toInt());
+                color.setAlphaF(rgb["a"].toDouble());
+                const QVariantList& vertices = g["vertices"].toList();
+                QPolygonF polygon;
+                for (QVariantList::const_iterator point = vertices.constBegin(); point != vertices.constEnd(); ++point) {
+                    const QVariantMap& p = point->toMap();
+                    polygon << QPointF(p["x"].toDouble(), p["y"].toDouble());
+                }
+                this->append(Genome(breeder, polygon, color));
+            }
         }
         break;
     }
@@ -92,7 +109,7 @@ bool DNA::load(const QString& filename, Breeder* breeder, Format format)
         if (ok) {
             clear();
             *this = xml.dna();
-            qDebug() << "Original size: " << xml.size();
+            qDebug() << "Original size:" << xml.size(); // XXX: what to do with it?
         }
         break;
     }

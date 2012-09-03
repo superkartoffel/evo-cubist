@@ -491,7 +491,6 @@ QVariant Json::parseNumber(const QString &json, int &index)
 
         index = lastIndex + 1;
 
-        qDebug() << numberStr;
         if (numberStr.contains('.')) {
                 return QVariant(numberStr.toDouble(NULL));
         } else if (numberStr.startsWith('-')) {

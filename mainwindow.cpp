@@ -37,12 +37,12 @@ MainWindow::MainWindow(QWidget* parent)
     setWindowTitle(tr("%1 %2").arg(MainWindow::AppName).arg(MainWindow::AppVersion));
 #endif
 
-    ui->widgetsGridLayout->removeWidget(ui->widget1);
-    ui->widgetsGridLayout->removeWidget(ui->widget2);
 
     mImageWidget = new ImageWidget;
-    ui->widgetsGridLayout->addWidget(mImageWidget, 1, 0);
     mGenerationWidget = new GenerationWidget;
+    ui->widgetsGridLayout->removeWidget(ui->widget1);
+    ui->widgetsGridLayout->removeWidget(ui->widget2);
+    ui->widgetsGridLayout->addWidget(mImageWidget, 1, 0);
     ui->widgetsGridLayout->addWidget(mGenerationWidget, 1, 1);
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
