@@ -46,6 +46,7 @@ private:
     void stopBreeding(void);
     void loadOriginalImage(const QString& filename);
     void loadDNA(const QString& filename);
+    void loadSVG(const QString& filename);
 
 private slots:
     void evolved(void);
@@ -54,6 +55,7 @@ private slots:
     void saveDNA(void);
     void saveSVG(void);
     void openDNA(void);
+    void openSVG(void);
     void openOriginalImage(void);
     void resetBreeder(void);
 };

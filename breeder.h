@@ -27,6 +27,7 @@ public:
 
     Breeder(QThread* parent = NULL);
     void reset(void);
+    void populate(void);
     void mutate(void);
 
     inline const DNA& dna(void) const { return mDNA; }
@@ -39,6 +40,7 @@ public:
     unsigned int random(void) { return mRandom.next(); }
     qreal random1(void) { return (qreal)mRandom.next() / mRandom.max(); }
 
+    void proceed(void);
     void breed(void);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
@@ -51,7 +53,6 @@ private:
     unsigned long fitness(void);
     static unsigned long deltaE(QRgb c1, QRgb c2);
     void draw(void);
-    void proceed(void);
     bool willMutate(void);
 
     bool mDirty;

@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 
-QT += core gui
+QT += core gui xml
 
 QMAKE_CXXFLAGS += /openmp
 
@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     genome.cpp \
     dna.cpp \
     qt-json/json.cpp \
-    random/mersenne_twister.cpp
+    random/mersenne_twister.cpp \
+    dnaxmlreader.cpp
 
 HEADERS += mainwindow.h \
     imagewidget.h \
@@ -27,7 +28,8 @@ HEADERS += mainwindow.h \
     dna.h \
     qt-json/json.h \
     random/mersenne_twister.h \
-    random/abstract_random_number_generator.h
+    random/abstract_random_number_generator.h \
+    dnaxmlreader.h
 
 FORMS += mainwindow.ui
 

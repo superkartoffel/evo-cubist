@@ -419,15 +419,16 @@
      <property name="title">
       <string>Open</string>
      </property>
-     <addaction name="actionOpenDNA"/>
      <addaction name="actionOpenOriginalImage"/>
+     <addaction name="actionOpenSVG"/>
+     <addaction name="actionOpenDNA"/>
     </widget>
     <widget class="QMenu" name="menuSave">
      <property name="title">
       <string>Save</string>
      </property>
-     <addaction name="actionSaveDNA"/>
      <addaction name="actionSaveSVG"/>
+     <addaction name="actionSaveDNA"/>
     </widget>
     <addaction name="menuOpen"/>
     <addaction name="menuSave"/>
@@ -446,7 +447,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpenOriginalImage">
    <property name="text">
-    <string>Original image ...</string>
+    <string>Original image</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -457,12 +458,12 @@
     <string>DNA ...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionOpenDNA">
    <property name="text">
-    <string>DNA ...</string>
+    <string>DNA</string>
    </property>
   </action>
   <action name="actionExit">
@@ -473,6 +474,14 @@
   <action name="actionSaveSVG">
    <property name="text">
     <string>SVG ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionOpenSVG">
+   <property name="text">
+    <string>SVG</string>
    </property>
   </action>
  </widget>

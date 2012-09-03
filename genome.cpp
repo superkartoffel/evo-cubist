@@ -77,10 +77,3 @@ QTextStream& operator<< (QTextStream& s, const Genome& genome)
       << "}";
     return s;
 }
-
-
-QTextStream& operator>> (QTextStream& s, const Genome& genome)
-{
-    Q_UNUSED(genome);
-    return s;
-}

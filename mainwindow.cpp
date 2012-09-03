@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionSaveSVG, SIGNAL(triggered()), SLOT(saveSVG()));
     QObject::connect(ui->actionOpenOriginalImage, SIGNAL(triggered()), SLOT(openOriginalImage()));
     QObject::connect(ui->actionOpenDNA, SIGNAL(triggered()), SLOT(openDNA()));
+    QObject::connect(ui->actionOpenSVG, SIGNAL(triggered()), SLOT(openSVG()));
 
     QObject::connect(ui->actionExit, SIGNAL(triggered()), SLOT(close()));
     restoreAppSettings();
@@ -196,6 +197,13 @@ void MainWindow::saveSVG(void)
 }
 
 
+void MainWindow::openOriginalImage(void)
+{
+    QString filename = QFileDialog::getOpenFileName(this, tr("Originalbild laden"));
+    loadOriginalImage(filename);
+}
+
+
 void MainWindow::loadOriginalImage(const QString& filename)
 {
     if (filename != "") {
@@ -203,7 +211,6 @@ void MainWindow::loadOriginalImage(const QString& filename)
         bool success = image.load(filename);
         if (success) {
             mBreeder.setOriginalImage(image);
-            mGenerationWidget->setImage(QImage(image.size(), image.format());
             statusBar()->showMessage(tr("Originalbild '%1' geladen.").arg(filename), 3000);
         }
         else {
@@ -213,24 +220,45 @@ void MainWindow::loadOriginalImage(const QString& filename)
 }
 
 
-void MainWindow::openOriginalImage(void)
-{
-    QString filename = QFileDialog::getOpenFileName(this, tr("Originalbild laden"));
-    loadOriginalImage(filename);
-}
-
-
 void MainWindow::loadDNA(const QString& filename)
 {
     if (filename != "") {
         DNA dna;
-        bool success = dna.load(filename);
+        bool success = dna.load(filename, &mBreeder, DNA::JSON);
         if (success) {
+            stopBreeding();
+            QObject::connect(&mBreeder, SIGNAL(proceeded()), SLOT(proceeded()));
             mBreeder.setDNA(dna);
+            QObject::disconnect(&mBreeder, SIGNAL(proceeded()), this, SLOT(proceeded()));
             statusBar()->showMessage(tr("DNA '%1' geladen.").arg(filename), 3000);
         }
         else {
             QMessageBox::warning(this, tr("Fehler beim Laden der DNA"), tr("DNA konnte nicht geladen werden."));
+        }
+    }
+}
+
+
+void MainWindow::openSVG(void)
+{
+    QString filename = QFileDialog::getOpenFileName(this, tr("SVG laden"));
+    loadSVG(filename);
+}
+
+
+void MainWindow::loadSVG(const QString& filename)
+{
+    if (filename != "") {
+        DNA dna;
+        bool success = dna.load(filename, &mBreeder, DNA::SVG);
+        if (success) {
+            mBreeder.stop();
+            mBreeder.setDNA(dna);
+            mBreeder.proceed();
+            statusBar()->showMessage(tr("SVG '%1' geladen.").arg(filename), 3000);
+        }
+        else {
+            QMessageBox::warning(this, tr("Fehler beim Laden des SVG"), tr("SVG konnte nicht geladen werden."));
         }
     }
 }

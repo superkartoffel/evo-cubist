@@ -28,6 +28,17 @@ void Breeder::setOriginalImage(const QImage& original)
 }
 
 
+void Breeder::setDNA(DNA dna)
+{
+    bool wasRunning = isRunning();
+    if (wasRunning)
+        stop();
+    mDNA = dna;
+    if (wasRunning)
+        breed();
+}
+
+
 void Breeder::reset(void)
 {
     mGeneration = 0;
@@ -37,6 +48,12 @@ void Breeder::reset(void)
     mStopped = false;
     mDNA.clear();
     mMutation.clear();
+    populate();
+}
+
+
+void Breeder::populate(void)
+{
     int N = mMinGenomes + random() % (mMaxGenomes - mMinGenomes);
     for (int i = 0; i < N; ++i)
         mDNA.append(Genome(this));
@@ -76,17 +93,6 @@ void Breeder::setDeltaXY(int d)
 void Breeder::setMutationRate(int r)
 {
     mMutationRate = r;
-}
-
-
-void Breeder::setDNA(DNA dna)
-{
-    bool wasRunning = isRunning();
-    if (wasRunning)
-        stop();
-    mDNA = dna;
-    if (wasRunning)
-        breed();
 }
 
 

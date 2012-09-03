@@ -21,6 +21,10 @@ public:
         : mBreeder(o.mBreeder)
         , mPolygon(o.mPolygon)
         , mColor(o.mColor) { /* ... */ }
+    inline Genome(Breeder* breeder, QPolygonF polygon, QColor color)
+        : mBreeder(breeder)
+        , mPolygon(polygon)
+        , mColor(color) { /* ... */ }
     Genome(Breeder*);
 
     inline const QColor& color(void) const { return mColor; }
@@ -45,8 +49,6 @@ private:
 
 
 QTextStream& operator<<(QTextStream&, const Genome&);
-QTextStream& operator>>(QTextStream&, const Genome&);
-
 
 
 #endif // __GENOME_H_

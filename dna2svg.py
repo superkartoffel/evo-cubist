@@ -12,7 +12,7 @@ print "<g transform=\"scale(512)\">"
 for genome in dna["dna"]:
     c = genome["color"]
     vertices = genome["vertices"]
-    print "<path fill=\"rgba(%d,%d,%d,%f)\" d=\"M %f %f" % (c["r"], c["g"], c["b"], c["a"], vertices[0]["x"], vertices[0]["y"]),
+    print "<path fill=\"rgb(%d,%d,%d)\" fill-opacity=\"%f\" d=\"M %f %f" % (c["r"], c["g"], c["b"], c["a"], vertices[0]["x"], vertices[0]["y"]),
     for v in vertices[1:]:
         print "L %f %f" % (v["x"], v["y"]),
     print "Z\"/>"

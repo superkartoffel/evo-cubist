@@ -6,13 +6,15 @@
 #include <QTextStream>
 #include <QtCore/QDebug>
 
+
 #include "qt-json/json.h"
 #include "dna.h"
-
+#include "dnaxmlreader.h"
 
 using namespace QtJson;
 
 
+// XXX: move method to Breeder
 bool DNA::save(const QString& filename, const QSize& size, Format format) const
 {
     bool rc;
@@ -41,7 +43,8 @@ bool DNA::save(const QString& filename, const QSize& size, Format format) const
             << " <g transform=\"scale(" << size.width() << ", " << size.height() << ")\">\n";
         for (DNAType::const_iterator genome = constBegin(); genome != constEnd(); ++genome) {
             const QColor& c = genome->color();
-            out << "  <path fill=\"rgba(" << c.red() << "," << c.green() << "," << c.blue() << "," << c.alphaF() << ")\""
+            out << "  <path fill=\"rgb(" << c.red() << "," << c.green() << "," << c.blue() << ")\""
+                << " fill-opacity=\"" << c.alphaF() << "\""
                 << " d=\"M " << genome->polygon().at(0).x() << " " << genome->polygon().at(0).x();
             for (QPolygonF::const_iterator p = genome->polygon().constBegin() + 1; p != genome->polygon().constEnd(); ++p)
                 out << " L " << p->x() << " " << p->y();
@@ -60,7 +63,8 @@ bool DNA::save(const QString& filename, const QSize& size, Format format) const
 }
 
 
-bool DNA::load(const QString& filename, Format format)
+// XXX: move method to Breeder
+bool DNA::load(const QString& filename, Breeder* breeder, Format format)
 {
     bool rc;
     QFile file(filename);
@@ -68,24 +72,28 @@ bool DNA::load(const QString& filename, Format format)
     if (!rc)
         return false;
     QTextStream in(&file);
-    QString jsonDNA;
     bool ok = false;
     switch (format) {
     case JSON:
     {
-        jsonDNA = in.readAll();
+        QString jsonDNA = in.readAll();
         QVariant v = Json::parse(jsonDNA, ok);
         QVariantMap result = v.toMap();
         if (ok) {
             clear();
             qDebug() << "RESULT:" << result["dna"].toString();
         }
-        file.close();
         break;
     }
     case SVG:
     {
-        qWarning() << "DNA::load() SVG not implemented yet" << format;
+        DNAXmlReader xml(breeder);
+        ok = xml.readSVG(&file);
+        if (ok) {
+            clear();
+            *this = xml.dna();
+            qDebug() << "Original size: " << xml.size();
+        }
         break;
     }
     default:
@@ -93,6 +101,7 @@ bool DNA::load(const QString& filename, Format format)
         ok = false;
         break;
     }
+    file.close();
 
     return rc && ok;
 }
