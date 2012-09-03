@@ -211,6 +211,7 @@ void MainWindow::loadOriginalImage(const QString& filename)
         bool success = image.load(filename);
         if (success) {
             mBreeder.setOriginalImage(image);
+            mGenerationWidget->setMinimumSize(image.size());
             statusBar()->showMessage(tr("Originalbild '%1' geladen.").arg(filename), 3000);
         }
         else {
@@ -227,9 +228,7 @@ void MainWindow::loadDNA(const QString& filename)
         bool success = dna.load(filename, &mBreeder, DNA::JSON);
         if (success) {
             stopBreeding();
-            QObject::connect(&mBreeder, SIGNAL(proceeded()), SLOT(proceeded()));
             mBreeder.setDNA(dna);
-            QObject::disconnect(&mBreeder, SIGNAL(proceeded()), this, SLOT(proceeded()));
             statusBar()->showMessage(tr("DNA '%1' geladen.").arg(filename), 3000);
         }
         else {
@@ -252,9 +251,8 @@ void MainWindow::loadSVG(const QString& filename)
         DNA dna;
         bool success = dna.load(filename, &mBreeder, DNA::SVG);
         if (success) {
-            mBreeder.stop();
+            stopBreeding();
             mBreeder.setDNA(dna);
-            mBreeder.proceed();
             statusBar()->showMessage(tr("SVG '%1' geladen.").arg(filename), 3000);
         }
         else {
@@ -273,8 +271,7 @@ void MainWindow::openDNA(void)
 
 void MainWindow::resetBreeder(void)
 {
-    QMessageBox::StandardButton button = QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?"));
-    if (button == QMessageBox::Ok) {
+    if (QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?")) == QMessageBox::Ok) {
         stopBreeding();
         mBreeder.reset();
     }
