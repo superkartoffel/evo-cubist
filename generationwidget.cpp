@@ -5,8 +5,8 @@
 #include <QPainter>
 
 
-GenerationWidget::GenerationWidget(QFrame* parent) :
-    QFrame(parent)
+GenerationWidget::GenerationWidget(QFrame* parent)
+    : QFrame(parent)
 {
     QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHeightForWidth(true);
@@ -18,6 +18,7 @@ GenerationWidget::GenerationWidget(QFrame* parent) :
 void GenerationWidget::setImage(const QImage& image)
 {
     mImage = image;
+    setMinimumSize(mImage.size());
     update();
 }
 

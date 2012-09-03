@@ -124,7 +124,6 @@ void Breeder::draw(void)
     p.scale(mGenerated.width(), mGenerated.height());
     for (DNAType::const_iterator genome = mMutation.constBegin(); genome != mMutation.constEnd(); ++genome) {
         p.setBrush(genome->color());
-        // p.drawConvexPolygon(genome->polygon());
         p.drawPolygon(genome->polygon());
     }
 }

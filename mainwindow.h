@@ -37,6 +37,8 @@ private:
     GenerationWidget* mGenerationWidget;
     Breeder mBreeder;
     QDateTime mStartTime;
+    QString mLastSavedDNA;
+    QString mLastSavedSVG;
 
     void saveAppSettings(void);
     void restoreAppSettings(void);
@@ -50,6 +52,7 @@ private slots:
     void proceeded(void);
     void startStop(void);
     void saveDNA(void);
+    void saveSVG(void);
     void openDNA(void);
     void openOriginalImage(void);
     void resetBreeder(void);

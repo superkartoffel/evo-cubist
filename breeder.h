@@ -32,6 +32,7 @@ public:
     inline const DNA& dna(void) const { return mDNA; }
     inline const DNA& mutation(void) const { return mMutation; }
     inline const QImage& image(void) const { return mGenerated; }
+    inline const QImage& originalImage(void) const { return mOriginal; }
     inline unsigned long generation(void) const { return mGeneration; }
     inline unsigned long currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }

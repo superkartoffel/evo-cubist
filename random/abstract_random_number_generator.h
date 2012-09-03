@@ -5,14 +5,6 @@
 #ifndef __ABSTRACTNUMBERGENERATOR_H_
 #define __ABSTRACTNUMBERGENERATOR_H_
 
-#ifdef _WIN32
-#define _CRT_RAND_S
-#include "compat-win32.h"
-#else
-#include <cstdio>
-#include <ctime>
-#endif
-
 #include <cstdlib>
 #include <limits>
 

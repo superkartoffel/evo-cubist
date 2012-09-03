@@ -21,6 +21,7 @@ ImageWidget::ImageWidget(QFrame* parent)
 void ImageWidget::setImage(const QImage& image)
 {
     mImage = image.convertToFormat(QImage::Format_ARGB32);
+    setMinimumSize(mImage.size());
     update();
 }
 

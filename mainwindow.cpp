@@ -37,13 +37,13 @@ MainWindow::MainWindow(QWidget* parent)
     setWindowTitle(tr("%1 %2").arg(MainWindow::AppName).arg(MainWindow::AppVersion));
 #endif
 
-    ui->horizontalLayout->removeWidget(ui->widget1);
-    ui->horizontalLayout->removeWidget(ui->widget2);
+    ui->widgetsGridLayout->removeWidget(ui->widget1);
+    ui->widgetsGridLayout->removeWidget(ui->widget2);
 
     mImageWidget = new ImageWidget;
-    ui->horizontalLayout->insertWidget(0, mImageWidget);
+    ui->widgetsGridLayout->addWidget(mImageWidget, 1, 0);
     mGenerationWidget = new GenerationWidget;
-    ui->horizontalLayout->insertWidget(1, mGenerationWidget);
+    ui->widgetsGridLayout->addWidget(mGenerationWidget, 1, 1);
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
 
@@ -58,6 +58,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaXY(int)));
 
     QObject::connect(ui->actionSaveDNA, SIGNAL(triggered()), SLOT(saveDNA()));
+    QObject::connect(ui->actionSaveSVG, SIGNAL(triggered()), SLOT(saveSVG()));
     QObject::connect(ui->actionOpenOriginalImage, SIGNAL(triggered()), SLOT(openOriginalImage()));
     QObject::connect(ui->actionOpenDNA, SIGNAL(triggered()), SLOT(openDNA()));
 
@@ -74,12 +75,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent* e)
 {
-//    if (mBreeder.isRunning() || mBreeder.isDirty()) {
-//        stopBreeding();
-//        if (QMessageBox::question(this, tr("DNA not saved"), tr("Save DNA before quitting?")) == QMessageBox::Ok) {
-//            saveDNA();
-//        }
-//    }
+    if (mBreeder.isRunning())
+        stopBreeding();
     saveAppSettings();
     e->accept();
 }
@@ -117,7 +114,6 @@ void MainWindow::stopBreeding(void)
     QObject::disconnect(&mBreeder, SIGNAL(evolved()), this, SLOT(evolved()));
     QObject::disconnect(&mBreeder, SIGNAL(proceeded()), this, SLOT(proceeded()));
     mBreeder.stop();
-    mBreeder.wait();
     ui->startStopPushButton->setText(tr("Start"));
 }
 
@@ -145,6 +141,8 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/deltaA", ui->alphaSlider->value());
     settings.setValue("MainWindow/deltaXY", ui->xySlider->value());
     settings.setValue("MainWindow/mutationRate", ui->rateSlider->value());
+    settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
+    settings.setValue("MainWindow/lastSavedSVG", mLastSavedSVG);
 }
 
 
@@ -168,13 +166,32 @@ void MainWindow::restoreAppSettings(void)
 
 void MainWindow::saveDNA(void)
 {
-    const QString& dnaImageFilename = QFileDialog::getSaveFileName(this, tr("DNA speichern"));
-    bool success = mBreeder.dna().save(dnaImageFilename);
+    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("DNA speichern"));
+    if (dnaFilename.isNull())
+        return;
+    bool success = mBreeder.dna().save(dnaFilename, mBreeder.originalImage().size(), DNA::JSON);
     if (success) {
-        statusBar()->showMessage(tr("DNA unter '%1' gespeichert.").arg(dnaImageFilename), 3000);
+        statusBar()->showMessage(tr("DNA unter '%1' gespeichert.").arg(dnaFilename), 5000);
+        mLastSavedDNA = dnaFilename;
     }
     else {
-        QMessageBox::critical(this, tr("Fehler beim Speichern der DNA"), tr("Die DNA konnte nicht unter dem Namen '%1' gespeichert werden.").arg(dnaImageFilename));
+        QMessageBox::critical(this, tr("Fehler beim Speichern der DNA"), tr("Die DNA konnte nicht unter dem Namen '%1' gespeichert werden.").arg(dnaFilename));
+    }
+}
+
+
+void MainWindow::saveSVG(void)
+{
+    const QString& svgFilename = QFileDialog::getSaveFileName(this, tr("SVG speichern"));
+    if (svgFilename.isNull())
+        return;
+    bool success = mBreeder.dna().save(svgFilename, mBreeder.originalImage().size(), DNA::SVG);
+    if (success) {
+        statusBar()->showMessage(tr("SVG unter '%1' gespeichert.").arg(svgFilename), 5000);
+        mLastSavedSVG = svgFilename;
+    }
+    else {
+        QMessageBox::critical(this, tr("Fehler beim Speichern des SVG"), tr("Das SVG konnte nicht unter dem Namen '%1' gespeichert werden.").arg(svgFilename));
     }
 }
 
@@ -186,6 +203,7 @@ void MainWindow::loadOriginalImage(const QString& filename)
         bool success = image.load(filename);
         if (success) {
             mBreeder.setOriginalImage(image);
+            mGenerationWidget->setImage(QImage(image.size(), image.format());
             statusBar()->showMessage(tr("Originalbild '%1' geladen.").arg(filename), 3000);
         }
         else {

@@ -1,10 +1,6 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2012-08-30T11:03:33
-#
-#-------------------------------------------------
+# Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 
-QT += core gui opengl
+QT += core gui
 
 QMAKE_CXXFLAGS += /openmp
 
@@ -21,10 +17,9 @@ SOURCES += main.cpp\
     genome.cpp \
     dna.cpp \
     qt-json/json.cpp \
-    random/mersenne_twister.cpp \
-    random/compat-win32.cpp
+    random/mersenne_twister.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS += mainwindow.h \
     imagewidget.h \
     generationwidget.h \
     breeder.h \
@@ -32,10 +27,9 @@ HEADERS  += mainwindow.h \
     dna.h \
     qt-json/json.h \
     random/mersenne_twister.h \
-    random/abstract_random_number_generator.h \
-    random/compat-win32.h
+    random/abstract_random_number_generator.h
 
-FORMS    += mainwindow.ui
+FORMS += mainwindow.ui
 
 OTHER_FILES += \
     HINTS.txt

@@ -6,11 +6,6 @@
 
 namespace randomtools {
 
-    MersenneTwister::MersenneTwister(void)
-    {
-        // ...
-    }
-
 
     void MersenneTwister::seed(unsigned int _Seed)
     {

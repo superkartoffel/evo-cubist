@@ -11,7 +11,7 @@ namespace randomtools {
     class MersenneTwister : public RandomNumberGenerator<unsigned int>
     {
     public:
-        MersenneTwister(void);
+        MersenneTwister(void) {}
         unsigned int operator()();
         inline unsigned int next(void) { return (*this)(); }
         void seed(unsigned int _Seed = 9);
