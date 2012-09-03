@@ -1,4 +1,5 @@
-{ "dna": [
+{ "size": { "width": 256, "height": 256 }, 
+  "dna": [
 {
   "color": { "r": 95, "g": 229, "b": 71, "a": 0.235294 },
   "vertices": [
