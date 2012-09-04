@@ -91,5 +91,5 @@ QString OptionsForm::filenameFromImageFilename(const QString& imageFilename, uns
 {
     QFileInfo fileInfo(imageFilename);
     const QString& filename = fileInfo.completeBaseName();
-    return ui->saveDirectoryLineEdit->text() + "/" + QString(ui->imageFilenameTemplateLineEdit->text()).arg(filename).arg(generations).arg(selected);
+    return ui->saveDirectoryLineEdit->text() + "/" + QString(ui->imageFilenameTemplateLineEdit->text()).arg(filename).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
 }

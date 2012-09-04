@@ -56,7 +56,7 @@ private:
 
 private slots:
     void loadSVG(const QString& filename);
-    void evolved(const QImage&, const DNA&, unsigned int, unsigned int);
+    void evolved(const QImage&, const DNA&, unsigned int fitness, unsigned int selected, unsigned int generation);
     void proceeded(unsigned int);
     void startStop(void);
     void saveDNA(void);

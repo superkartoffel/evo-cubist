@@ -39,12 +39,13 @@ MainWindow::MainWindow(QWidget* parent)
 #endif
 
     mImageWidget = new ImageWidget;
-    mGenerationWidget = new GenerationWidget;
     QHBoxLayout* hbox1 = new QHBoxLayout;
     hbox1->addWidget(mImageWidget);
+    ui->originalGroupBox->setLayout(hbox1);
+
+    mGenerationWidget = new GenerationWidget;
     QHBoxLayout* hbox2 = new QHBoxLayout;
     hbox2->addWidget(mGenerationWidget);
-    ui->originalGroupBox->setLayout(hbox1);
     ui->generatedGroupBox->setLayout(hbox2);
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage, QString)), SLOT(imageDropped(QImage, QString)));
@@ -91,7 +92,7 @@ void MainWindow::closeEvent(QCloseEvent* e)
     }
     if (mBreeder.isDirty()) {
         QMessageBox msgBox;
-        msgBox.setText(tr("DNA has been modified."));
+        msgBox.setText(tr("<b>DNA has been modified.</b>"));
         msgBox.setInformativeText(tr("You have unsaved DNA. Do you want to save it?"));
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
@@ -111,11 +112,12 @@ void MainWindow::closeEvent(QCloseEvent* e)
 }
 
 
-void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitness, unsigned selected)
+void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitness, unsigned int selected, unsigned generation)
 {
     mGenerationWidget->setImage(image);
     ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
+    ui->selectedRatioLineEdit->setText(QString("%1").arg((qreal)generation/selected));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
     ui->pointsLineEdit->setText(QString("%1").arg(dna.points()));
 }
@@ -141,7 +143,7 @@ void MainWindow::startBreeding(void)
     statusBar()->showMessage(tr("Starting ..."), 3000);
     ui->startStopPushButton->setText(tr("Stop"));
     mStartTime = QDateTime::currentDateTime();
-    QObject::connect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int)), SLOT(evolved(QImage, DNA, unsigned int, unsigned int)), Qt::BlockingQueuedConnection);
+    QObject::connect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), Qt::BlockingQueuedConnection);
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)), Qt::BlockingQueuedConnection);
     mBreeder.breed();
     if (mOptionsForm.autoSave()) {
@@ -153,12 +155,11 @@ void MainWindow::startBreeding(void)
 
 void MainWindow::stopBreeding(void)
 {
-    QObject::disconnect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int)), this, SLOT(evolved(QImage, DNA, unsigned int, unsigned int)));
+    QObject::disconnect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), this, SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)));
     QObject::disconnect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)));
     ui->startStopPushButton->setText(tr("Start"));
+    mAutoSaveTimer.stop();
     mBreeder.stop();
-    if (mAutoSaveTimer.isActive())
-        mAutoSaveTimer.stop();
 }
 
 
@@ -187,6 +188,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/mutationRate", ui->rateSlider->value());
     settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
     settings.setValue("MainWindow/lastSavedSVG", mLastSavedSVG);
+    settings.setValue("Options/geometry", mOptionsForm.saveGeometry());
     settings.setValue("Options/saveDirectory", mOptionsForm.saveDirectory());
     settings.setValue("Options/saveFilenameTemplate", mOptionsForm.saveFilenameTemplate());
     settings.setValue("Options/saveInterval", mOptionsForm.saveInterval());
@@ -208,6 +210,7 @@ void MainWindow::restoreAppSettings(void)
     ui->alphaSlider->setValue(settings.value("MainWindow/deltaA").toInt());
     ui->xySlider->setValue(settings.value("MainWindow/deltaXY").toInt());
     ui->rateSlider->setValue(settings.value("MainWindow/mutationRate").toInt());
+    mOptionsForm.restoreGeometry(settings.value("Options/geometry").toByteArray());
     mOptionsForm.setSaveDirectory(settings.value("Options/saveDirectory").toString());
     mOptionsForm.setSaveFilenameTemplate(settings.value("Options/saveFilenameTemplate").toString());
     mOptionsForm.setSaveInterval(settings.value("Options/saveInterval").toInt());
@@ -233,7 +236,7 @@ void MainWindow::saveDNA(void)
         mLastSavedDNA = dnaFilename;
     }
     else {
-        QMessageBox::critical(this, tr("Error saving DNA"), tr("JSON-formatted DNA could not be saved as '%1'.").arg(dnaFilename));
+        QMessageBox::warning(this, tr("Error saving DNA"), tr("JSON-formatted DNA could not be saved as '%1'.").arg(dnaFilename));
     }
 }
 
@@ -249,7 +252,7 @@ void MainWindow::saveSVG(void)
         mLastSavedSVG = svgFilename;
     }
     else {
-        QMessageBox::critical(this, tr("Error saving SVG"), tr("SVG-formatted DNA could not be saved as '%1'.").arg(svgFilename));
+        QMessageBox::warning(this, tr("Error saving SVG"), tr("SVG-formatted DNA could not be saved as '%1'.").arg(svgFilename));
     }
 }
 

@@ -8,6 +8,8 @@
 #include <QImage>
 #include <QRgb>
 #include <QThread>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <limits>
 
@@ -30,8 +32,7 @@ public:
     void populate(void);
     void mutate(void);
 
-    inline const DNA& dna(void) const { return mDNA; }
-    inline const DNA& mutation(void) const { return mMutation; }
+    const DNA& dna(void);
     inline const QImage& image(void) const { return mGenerated; }
     inline const QImage& originalImage(void) const { return mOriginal; }
     inline unsigned long generation(void) const { return mGeneration; }
@@ -78,9 +79,10 @@ private:
     static const int MAX_GENOMES = 400;
 
     MersenneTwister mRandom;
+    QMutex mDNAMutex;
 
 signals:
-    void evolved(const QImage&, const DNA&, unsigned int, unsigned int);
+    void evolved(const QImage&, const DNA&, unsigned int, unsigned int, unsigned int);
     void proceeded(unsigned int);
     
 public slots:

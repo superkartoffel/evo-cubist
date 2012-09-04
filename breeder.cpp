@@ -28,12 +28,21 @@ void Breeder::setOriginalImage(const QImage& original)
 }
 
 
+const DNA& Breeder::dna(void)
+{
+    QMutexLocker locker(&mDNAMutex);
+    return mDNA;
+}
+
+
 void Breeder::setDNA(DNA dna)
 {
     bool wasRunning = isRunning();
     if (wasRunning)
         stop();
+    mDNAMutex.lock();
     mDNA = dna;
+    mDNAMutex.unlock();
     if (wasRunning)
         breed();
 }
@@ -46,14 +55,17 @@ void Breeder::reset(void)
     mSelected = 0;
     mDirty = false;
     mStopped = false;
-    mDNA.clear();
     mMutation.clear();
+    mDNAMutex.lock();
+    mDNA.clear();
+    mDNAMutex.unlock();
     populate();
 }
 
 
 void Breeder::populate(void)
 {
+    QMutexLocker locker(&mDNAMutex);
     int N = mMinGenomes + random() % (mMaxGenomes - mMinGenomes);
     for (int i = 0; i < N; ++i)
         mDNA.append(Genome(this));
@@ -163,9 +175,11 @@ void Breeder::proceed(void)
     const unsigned long f = fitness();
     if (f < mFitness) {
         mFitness = f;
+        mDNAMutex.lock();
         mDNA = mMutation;
+        mDNAMutex.unlock();
         ++mSelected;
-        emit evolved(mGenerated, mDNA, f, mSelected);
+        emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration+1);
     }
     ++mGeneration;
     emit proceeded(mGeneration);
