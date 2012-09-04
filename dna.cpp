@@ -10,7 +10,7 @@
 #include "qt-json/json.h"
 #include "genome.h"
 #include "dna.h"
-#include "dnaxmlreader.h"
+#include "svgreader.h"
 
 using namespace QtJson;
 
@@ -103,7 +103,7 @@ bool DNA::load(const QString& filename, Breeder* breeder, Format format)
     }
     case SVG:
     {
-        DNAXmlReader xml(breeder);
+        SVGReader xml(breeder);
         ok = xml.readSVG(&file);
         if (ok) {
             clear();

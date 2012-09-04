@@ -13,12 +13,12 @@
 ///
 /// Read SVG file as DNA object
 ///
-class DNAXmlReader
+class SVGReader
 {
 public:
-    DNAXmlReader(void)
+    SVGReader(void)
         : mBreeder(NULL) {}
-    DNAXmlReader(Breeder* breeder)
+    SVGReader(Breeder* breeder)
         : mBreeder(breeder)
     {
         Q_ASSERT(breeder != NULL);
@@ -27,7 +27,7 @@ public:
     const DNA& dna(void) const { return mDNA; }
     const QSize& size(void) const { return mSize; }
     bool readSVG(QIODevice*);
-    QString DNAXmlReader::errorString(void) const;
+    QString SVGReader::errorString(void) const;
 
 private:
     QXmlStreamReader mXml;

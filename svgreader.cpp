@@ -1,13 +1,13 @@
 // Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 // All rights reserved.
 
-#include "dnaxmlreader.h"
+#include "svgreader.h"
 #include "genome.h"
 #include <QRegExp>
 #include <QtCore/QDebug>
 
 
-void DNAXmlReader::readPath(void)
+void SVGReader::readPath(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "path");
     QString fill = mXml.attributes().value("fill").toString();
@@ -39,7 +39,7 @@ void DNAXmlReader::readPath(void)
 }
 
 
-void DNAXmlReader::readGroup(void)
+void SVGReader::readGroup(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "g");
     QString transform = mXml.attributes().value("transform").toString();
@@ -57,7 +57,7 @@ void DNAXmlReader::readGroup(void)
 }
 
 
-void DNAXmlReader::readSVG(void)
+void SVGReader::readSVG(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "svg");
     while (mXml.readNextStartElement()) {
@@ -69,7 +69,7 @@ void DNAXmlReader::readSVG(void)
 }
 
 
-bool DNAXmlReader::readSVG(QIODevice* device)
+bool SVGReader::readSVG(QIODevice* device)
 {
     mDNA.clear();
     mXml.setDevice(device);
@@ -83,7 +83,7 @@ bool DNAXmlReader::readSVG(QIODevice* device)
 }
 
 
-QString DNAXmlReader::errorString() const
+QString SVGReader::errorString() const
 {
     return QObject::tr("%1\nLine %2, column %3")
             .arg(mXml.errorString())
