@@ -47,9 +47,9 @@ private:
     void stopBreeding(void);
     void loadOriginalImage(const QString& filename);
     void loadDNA(const QString& filename);
-    void loadSVG(const QString& filename);
 
 private slots:
+    void loadSVG(const QString& filename);
     void evolved(void);
     void proceeded(void);
     void startStop(void);

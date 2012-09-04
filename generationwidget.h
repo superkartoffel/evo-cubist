@@ -6,6 +6,9 @@
 
 #include <QFrame>
 #include <QImage>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
 
 class GenerationWidget : public QFrame
 {
@@ -16,8 +19,12 @@ public:
 
 protected:
     void paintEvent(QPaintEvent*);
+    void dragEnterEvent(QDragEnterEvent*);
+    void dragLeaveEvent(QDragLeaveEvent*);
+    void dropEvent(QDropEvent*);
 
 signals:
+    void fileDropped(const QString&);
     
 public slots:
     void setImage(const QImage&);
