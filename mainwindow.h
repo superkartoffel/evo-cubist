@@ -67,7 +67,6 @@ private slots:
     void resetBreeder(void);
     void about(void);
     void aboutQt(void);
-    void imageDropped(const QImage& image, const QString& filename);
     void autoSaveGeneratedImage(void);
 };
 

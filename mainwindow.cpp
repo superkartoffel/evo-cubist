@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget* parent)
     hbox2->addWidget(mGenerationWidget);
     ui->generatedGroupBox->setLayout(hbox2);
 
-    QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage, QString)), SLOT(imageDropped(QImage, QString)));
+    QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadSVG(QString)));
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
@@ -117,7 +117,7 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitne
     mGenerationWidget->setImage(image);
     ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
-    ui->selectedRatioLineEdit->setText(QString("%1").arg((qreal)generation/selected));
+    ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation, 4, 'g', 4));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
     ui->pointsLineEdit->setText(QString("%1").arg(dna.points()));
 }
@@ -215,13 +215,6 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setSaveFilenameTemplate(settings.value("Options/saveFilenameTemplate").toString());
     mOptionsForm.setSaveInterval(settings.value("Options/saveInterval").toInt());
     mOptionsForm.setAutoSave(settings.value("Options/autoSave").toBool());
-}
-
-
-void MainWindow::imageDropped(const QImage& image, const QString& filename)
-{
-    mBreeder.setOriginalImage(image);
-    qDebug() << mOptionsForm.filenameFromImageFilename(filename, mBreeder.generation(), mBreeder.selected());
 }
 
 

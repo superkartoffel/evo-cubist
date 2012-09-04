@@ -201,7 +201,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>Ratio (G/S)</string>
+             <string>Ratio (S/G)</string>
             </property>
            </widget>
           </item>
