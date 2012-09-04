@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->generatedGroupBox->setLayout(hbox2);
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
-    QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadSVG(QString)));
+    QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
@@ -64,10 +64,8 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaXY(int)));
 
     QObject::connect(ui->actionSaveDNA, SIGNAL(triggered()), SLOT(saveDNA()));
-    QObject::connect(ui->actionSaveSVG, SIGNAL(triggered()), SLOT(saveSVG()));
-    QObject::connect(ui->actionOpenOriginalImage, SIGNAL(triggered()), SLOT(openOriginalImage()));
     QObject::connect(ui->actionOpenDNA, SIGNAL(triggered()), SLOT(openDNA()));
-    QObject::connect(ui->actionOpenSVG, SIGNAL(triggered()), SLOT(openSVG()));
+    QObject::connect(ui->actionOpenOriginalImage, SIGNAL(triggered()), SLOT(openOriginalImage()));
 
     QObject::connect(ui->actionExit, SIGNAL(triggered()), SLOT(close()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
@@ -99,7 +97,7 @@ void MainWindow::closeEvent(QCloseEvent* e)
         int ret = msgBox.exec();
         switch (ret) {
         case QMessageBox::Save:
-            saveSVG();
+            saveDNA();
             break;
         case QMessageBox::Discard:
             break;
@@ -229,7 +227,7 @@ void MainWindow::restoreAppSettings(void)
 
 void MainWindow::saveDNA(void)
 {
-    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), "DNA files (*.json, *.dna)");
+    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
     if (dnaFilename.isNull())
         return;
     bool success = mBreeder.dna().save(dnaFilename, mBreeder.originalImage().size());
@@ -239,22 +237,6 @@ void MainWindow::saveDNA(void)
     }
     else {
         QMessageBox::warning(this, tr("Error saving DNA"), tr("JSON-formatted DNA could not be saved as '%1'.").arg(dnaFilename));
-    }
-}
-
-
-void MainWindow::saveSVG(void)
-{
-    const QString& svgFilename = QFileDialog::getSaveFileName(this, tr("Save SVG"), QString(), QString("SVG (*.svg)"));
-    if (svgFilename.isNull())
-        return;
-    bool success = mBreeder.dna().save(svgFilename, mBreeder.originalImage().size());
-    if (success) {
-        statusBar()->showMessage(tr("SVG saved as '%1'.").arg(svgFilename), 5000);
-        mLastSavedSVG = svgFilename;
-    }
-    else {
-        QMessageBox::warning(this, tr("Error saving SVG"), tr("SVG-formatted DNA could not be saved as '%1'.").arg(svgFilename));
     }
 }
 
@@ -297,34 +279,9 @@ void MainWindow::loadDNA(const QString& filename)
 }
 
 
-void MainWindow::openSVG(void)
-{
-    QString filename = QFileDialog::getOpenFileName(this, tr("Load SVG"));
-    loadSVG(filename);
-}
-
-
-void MainWindow::loadSVG(const QString& filename)
-{
-    if (filename != "") {
-        DNA dna;
-        bool success = dna.load(filename, &mBreeder);
-        if (success) {
-            stopBreeding();
-            mBreeder.setDNA(dna);
-            statusBar()->showMessage(tr("SVG '%1' loaded.").arg(filename), 3000);
-            startBreeding();
-        }
-        else {
-            QMessageBox::warning(this, tr("Error loading SVG"), tr("SVG-formatted DNA could not be loaded."));
-        }
-    }
-}
-
-
 void MainWindow::openDNA(void)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Load DNA"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
     loadDNA(filename);
 }
 

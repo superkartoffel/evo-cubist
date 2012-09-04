@@ -529,14 +529,12 @@
       <string>Open</string>
      </property>
      <addaction name="actionOpenOriginalImage"/>
-     <addaction name="actionOpenSVG"/>
      <addaction name="actionOpenDNA"/>
     </widget>
     <widget class="QMenu" name="menuSave">
      <property name="title">
       <string>Save</string>
      </property>
-     <addaction name="actionSaveSVG"/>
      <addaction name="actionSaveDNA"/>
     </widget>
     <addaction name="menuOpen"/>

@@ -50,19 +50,16 @@ private:
     void startBreeding(void);
     void stopBreeding(void);
     void loadOriginalImage(const QString& filename);
-    void loadDNA(const QString& filename);
 
     QTimer mAutoSaveTimer;
 
 private slots:
-    void loadSVG(const QString& filename);
+    void loadDNA(const QString& filename);
     void evolved(const QImage&, const DNA&, unsigned int fitness, unsigned int selected, unsigned int generation);
     void proceeded(unsigned int);
     void startStop(void);
     void saveDNA(void);
-    void saveSVG(void);
     void openDNA(void);
-    void openSVG(void);
     void openOriginalImage(void);
     void resetBreeder(void);
     void about(void);
