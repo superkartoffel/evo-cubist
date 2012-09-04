@@ -11,6 +11,8 @@
 #include "imagewidget.h"
 #include "generationwidget.h"
 #include "breeder.h"
+#include "optionsform.h"
+
 
 namespace Ui {
     class MainWindow;
@@ -33,6 +35,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    OptionsForm mOptionsForm;
     ImageWidget* mImageWidget;
     GenerationWidget* mGenerationWidget;
     Breeder mBreeder;

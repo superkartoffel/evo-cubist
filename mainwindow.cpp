@@ -170,6 +170,8 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/mutationRate", ui->rateSlider->value());
     settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
     settings.setValue("MainWindow/lastSavedSVG", mLastSavedSVG);
+    settings.setValue("Options/saveDirectory", mOptionsForm.saveDirectory());
+    settings.setValue("Options/saveFilenameTemplate", mOptionsForm.saveFilenameTemplate());
 }
 
 
@@ -187,6 +189,8 @@ void MainWindow::restoreAppSettings(void)
     ui->alphaSlider->setValue(settings.value("MainWindow/deltaA").toInt());
     ui->xySlider->setValue(settings.value("MainWindow/deltaXY").toInt());
     ui->rateSlider->setValue(settings.value("MainWindow/mutationRate").toInt());
+    mOptionsForm.setSaveDirectory(settings.value("Options/saveDirectory").toString());
+    mOptionsForm.setSaveFilenameTemplate(settings.value("Options/saveFilenameTemplate").toString());
 }
 
 
