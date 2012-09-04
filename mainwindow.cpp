@@ -2,6 +2,7 @@
 // All rights reserved.
 
 #include <QtGlobal>
+#include <QHBoxLayout>
 #include <QTextStream>
 #include <QtCore/QDebug>
 #include <QSettings>
@@ -40,8 +41,12 @@ MainWindow::MainWindow(QWidget* parent)
 
     mImageWidget = new ImageWidget;
     mGenerationWidget = new GenerationWidget;
-    ui->widgetsGridLayout->addWidget(mImageWidget, 1, 0);
-    ui->widgetsGridLayout->addWidget(mGenerationWidget, 1, 1);
+    QHBoxLayout* hbox1 = new QHBoxLayout;
+    hbox1->addWidget(mImageWidget);
+    QHBoxLayout* hbox2 = new QHBoxLayout;
+    hbox2->addWidget(mGenerationWidget);
+    ui->originalGroupBox->setLayout(hbox1);
+    ui->generatedGroupBox->setLayout(hbox2);
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
 
@@ -62,6 +67,8 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionOpenSVG, SIGNAL(triggered()), SLOT(openSVG()));
 
     QObject::connect(ui->actionExit, SIGNAL(triggered()), SLOT(close()));
+    QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
+    QObject::connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(aboutQt()));
     restoreAppSettings();
 }
 
@@ -165,39 +172,39 @@ void MainWindow::restoreAppSettings(void)
 
 void MainWindow::saveDNA(void)
 {
-    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("DNA speichern"));
+    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"));
     if (dnaFilename.isNull())
         return;
     bool success = mBreeder.dna().save(dnaFilename, mBreeder.originalImage().size(), DNA::JSON);
     if (success) {
-        statusBar()->showMessage(tr("DNA unter '%1' gespeichert.").arg(dnaFilename), 5000);
+        statusBar()->showMessage(tr("DNA saved as '%1'.").arg(dnaFilename), 5000);
         mLastSavedDNA = dnaFilename;
     }
     else {
-        QMessageBox::critical(this, tr("Fehler beim Speichern der DNA"), tr("Die DNA konnte nicht unter dem Namen '%1' gespeichert werden.").arg(dnaFilename));
+        QMessageBox::critical(this, tr("Error saving DNA"), tr("JSON-formatted DNA could not be saved as '%1'.").arg(dnaFilename));
     }
 }
 
 
 void MainWindow::saveSVG(void)
 {
-    const QString& svgFilename = QFileDialog::getSaveFileName(this, tr("SVG speichern"));
+    const QString& svgFilename = QFileDialog::getSaveFileName(this, tr("Save SVG"));
     if (svgFilename.isNull())
         return;
     bool success = mBreeder.dna().save(svgFilename, mBreeder.originalImage().size(), DNA::SVG);
     if (success) {
-        statusBar()->showMessage(tr("SVG unter '%1' gespeichert.").arg(svgFilename), 5000);
+        statusBar()->showMessage(tr("SVG saved as '%1'.").arg(svgFilename), 5000);
         mLastSavedSVG = svgFilename;
     }
     else {
-        QMessageBox::critical(this, tr("Fehler beim Speichern des SVG"), tr("Das SVG konnte nicht unter dem Namen '%1' gespeichert werden.").arg(svgFilename));
+        QMessageBox::critical(this, tr("Error saving SVG"), tr("SVG-formatted DNA could not be saved as '%1'.").arg(svgFilename));
     }
 }
 
 
 void MainWindow::openOriginalImage(void)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Originalbild laden"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Load original picture"));
     loadOriginalImage(filename);
 }
 
@@ -210,10 +217,10 @@ void MainWindow::loadOriginalImage(const QString& filename)
         if (success) {
             mBreeder.setOriginalImage(image);
             mGenerationWidget->setMinimumSize(image.size());
-            statusBar()->showMessage(tr("Originalbild '%1' geladen.").arg(filename), 3000);
+            statusBar()->showMessage(tr("Original picture '%1' loaded.").arg(filename), 3000);
         }
         else {
-            QMessageBox::warning(this, tr("Fehler beim Laden des Originalbildes"), tr("Originalbild konnte nicht geladen werden."));
+            QMessageBox::warning(this, tr("Error loading the original picture."), tr("Original picture could not be loaded."));
         }
     }
 }
@@ -227,10 +234,10 @@ void MainWindow::loadDNA(const QString& filename)
         if (success) {
             stopBreeding();
             mBreeder.setDNA(dna);
-            statusBar()->showMessage(tr("DNA '%1' geladen.").arg(filename), 3000);
+            statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
         }
         else {
-            QMessageBox::warning(this, tr("Fehler beim Laden der DNA"), tr("DNA konnte nicht geladen werden."));
+            QMessageBox::warning(this, tr("Error loading DNA"), tr("JSON-formatted DNA could not be loaded."));
         }
     }
 }
@@ -238,7 +245,7 @@ void MainWindow::loadDNA(const QString& filename)
 
 void MainWindow::openSVG(void)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("SVG laden"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Load SVG"));
     loadSVG(filename);
 }
 
@@ -251,10 +258,10 @@ void MainWindow::loadSVG(const QString& filename)
         if (success) {
             stopBreeding();
             mBreeder.setDNA(dna);
-            statusBar()->showMessage(tr("SVG '%1' geladen.").arg(filename), 3000);
+            statusBar()->showMessage(tr("SVG '%1' loaded.").arg(filename), 3000);
         }
         else {
-            QMessageBox::warning(this, tr("Fehler beim Laden des SVG"), tr("SVG konnte nicht geladen werden."));
+            QMessageBox::warning(this, tr("Error loading SVG"), tr("SVG-formatted DNA could not be loaded."));
         }
     }
 }
@@ -262,7 +269,7 @@ void MainWindow::loadSVG(const QString& filename)
 
 void MainWindow::openDNA(void)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("DNA laden"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Load DNA"));
     loadDNA(filename);
 }
 
@@ -273,4 +280,27 @@ void MainWindow::resetBreeder(void)
         stopBreeding();
         mBreeder.reset();
     }
+}
+
+
+void MainWindow::about(void)
+{
+    QMessageBox::about(this, tr("About Evo Cubist"),
+                       tr("<p><b>Evo Cubist</b> calculates vector images from bitmaps by using genetic algorithms. See <a href=\"http://evo-cubist.googlecode.com/\">http://evo-cubist.googlecode.com/</a> for more info.</p>"
+                          "<p>Copyright &copy; 2012 Oliver Lau &lt;oliver@von-und-fuer.lau.de&gt;</p>"
+                          "<p>Licensed under the Apache License, Version 2.0 (the \"License\"); "
+                          "you may not use this file except in compliance with the License. "
+                          "You may obtain a copy of the License at</p>"
+                          "<p style=\"text-indent: 3em; margin-left: 3em; margin-top: 3ex; margin-bottom: 3ex;\"><a href=\"http://www.apache.org/licenses/LICENSE-2.0\">http://www.apache.org/licenses/LICENSE-2.0</p>"
+                          "Unless required by applicable law or agreed to in writing, software "
+                          "distributed under the License is distributed on an \"AS IS\" BASIS, "
+                          "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. "
+                          "See the License for the specific language governing permissions and "
+                          "limitations under the License."));
+}
+
+
+void MainWindow::aboutQt(void)
+{
+    QMessageBox::aboutQt(this);
 }

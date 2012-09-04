@@ -35,3 +35,6 @@ FORMS += mainwindow.ui
 
 OTHER_FILES += \
     HINTS.txt
+
+RESOURCES += \
+    images.qrc

@@ -59,6 +59,8 @@ private slots:
     void openSVG(void);
     void openOriginalImage(void);
     void resetBreeder(void);
+    void about(void);
+    void aboutQt(void);
 };
 
 #endif // __MAINWINDOW_H_

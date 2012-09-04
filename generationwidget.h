@@ -12,6 +12,7 @@ class GenerationWidget : public QFrame
     Q_OBJECT
 public:
     explicit GenerationWidget(QFrame* parent = NULL);
+    virtual QSize minimumSizeHint(void) const { return QSize(256, 256); }
 
 protected:
     void paintEvent(QPaintEvent*);

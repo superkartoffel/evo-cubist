@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>test/images/KWA10.jpg</file>
+        <file>test/images/Lego-Tactical-Guy.jpg</file>
+        <file>test/images/Mona-Lisa-256x256.jpg</file>
+        <file>test/images/Mona-Lisa-400x600.jpg</file>
+        <file>test/images/Pacman-Ghost.png</file>
+        <file>test/images/Pilzmaennchen.png</file>
+    </qresource>
+    <qresource prefix="/icons"/>
+</RCC>
