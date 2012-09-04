@@ -18,15 +18,15 @@ void SVGReader::readPath(void)
     QColor color(rgba.at(1).toInt(), rgba.at(2).toInt(), rgba.at(3).toInt());
     color.setAlphaF(mXml.attributes().value("fill-opacity").toString().toDouble());
 
-    QString d = mXml.attributes().value("d").toString();
-    QRegExp coords_re("([\\d\\.]+)\\s+([\\d\\.]+)");
-    int pos = 0;
     QPolygonF polygon;
+    QRegExp coords_re("([\\d\\.]+)\\s+([\\d\\.]+)");
+    QString d = mXml.attributes().value("d").toString();
+    int pos = 0;
     while ((pos = coords_re.indexIn(d)) >= 0) {
         const QStringList& xy = coords_re.capturedTexts();
         QPointF point(xy.at(1).toDouble(), xy.at(2).toDouble());
         polygon << point;
-        d = d.right(d.size() - pos - xy.at(0).size());
+        d = d.right(d.size() - pos - xy.at(0).size() + 1);
     }
     mDNA.append(Genome(mBreeder, polygon, color));
 
@@ -90,4 +90,3 @@ QString SVGReader::errorString() const
             .arg(mXml.lineNumber())
             .arg(mXml.columnNumber());
 }
-

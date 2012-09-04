@@ -1,8 +1,8 @@
 // Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 // All rights reserved.
 
-#ifndef __DNAXMLREADER_H_
-#define __DNAXMLREADER_H_
+#ifndef __SVGREADER_H_
+#define __SVGREADER_H_
 
 #include <QString>
 #include <QSize>
@@ -16,8 +16,6 @@
 class SVGReader
 {
 public:
-    SVGReader(void)
-        : mBreeder(NULL) {}
     SVGReader(Breeder* breeder)
         : mBreeder(breeder)
     {
@@ -27,7 +25,7 @@ public:
     const DNA& dna(void) const { return mDNA; }
     const QSize& size(void) const { return mSize; }
     bool readSVG(QIODevice*);
-    QString SVGReader::errorString(void) const;
+    QString errorString(void) const;
 
 private:
     QXmlStreamReader mXml;
@@ -41,4 +39,4 @@ private:
 
 };
 
-#endif // __DNAXMLREADER_H_
+#endif // __SVGREADER_H_
