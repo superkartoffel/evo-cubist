@@ -47,6 +47,8 @@ public:
     bool isDirty(void) const { return mDirty; }
     void setDNA(DNA);
 
+    QMutex* dnaMutex(void) { return &mDNAMutex; }
+
 protected:
     virtual void run(void);
     

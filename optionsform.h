@@ -18,19 +18,25 @@ public:
     explicit OptionsForm(QWidget* parent = NULL);
     ~OptionsForm();
 
-    QString saveDirectory(void) const;
-    QString saveFilenameTemplate(void) const;
+    QString imageSaveDirectory(void) const;
+    QString imageSaveFilenameTemplate(void) const;
+    QString dnaSaveDirectory(void) const;
+    QString dnaSaveFilenameTemplate(void) const;
     int saveInterval(void) const;
     bool autoSave(void) const;
 
     void setSaveInterval(int);
     void setAutoSave(bool);
-    void setSaveDirectory(const QString&);
-    void setSaveFilenameTemplate(const QString&);
-    QString filenameFromImageFilename(const QString&, unsigned int generations, unsigned int selected);
+    void setImageSaveDirectory(const QString&);
+    void setImageSaveFilenameTemplate(const QString&);
+    void setDNASaveDirectory(const QString&);
+    void setDNASaveFilenameTemplate(const QString&);
+    QString imageFilename(const QString&, unsigned int generations, unsigned int selected);
+    QString dnaFilename(const QString&, unsigned int generations, unsigned int selected);
     
 private slots:
-    void selectSaveDirectory(void);
+    void selectImageSaveDirectory(void);
+    void selectDNASaveDirectory(void);
 
 private:
     static const QString SaveFilenameTemplate;

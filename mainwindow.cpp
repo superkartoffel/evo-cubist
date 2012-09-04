@@ -132,9 +132,14 @@ void MainWindow::proceeded(unsigned int generation)
 
 void MainWindow::autoSaveGeneratedImage(void)
 {
-    const QString& filename = mOptionsForm.filenameFromImageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
-    mGenerationWidget->image().save(filename);
-    statusBar()->showMessage(tr("Automatically saved '%1'.").arg(filename), 1000);
+    const QString& imageFilename = mOptionsForm.imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    mGenerationWidget->image().save(imageFilename);
+    const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    const DNA& dna = mBreeder.dna();
+    mBreeder.dnaMutex()->lock();
+    dna.save(dnaFilename, mBreeder.originalImage().size());
+    mBreeder.dnaMutex()->unlock();
+    statusBar()->showMessage(tr("Automatically saved '%1' and '%2'.").arg(imageFilename).arg(dnaFilename), 1000);
 }
 
 
@@ -189,8 +194,10 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
     settings.setValue("MainWindow/lastSavedSVG", mLastSavedSVG);
     settings.setValue("Options/geometry", mOptionsForm.saveGeometry());
-    settings.setValue("Options/saveDirectory", mOptionsForm.saveDirectory());
-    settings.setValue("Options/saveFilenameTemplate", mOptionsForm.saveFilenameTemplate());
+    settings.setValue("Options/imageSaveDirectory", mOptionsForm.imageSaveDirectory());
+    settings.setValue("Options/imageSaveFilenameTemplate", mOptionsForm.imageSaveFilenameTemplate());
+    settings.setValue("Options/dnaSaveDirectory", mOptionsForm.dnaSaveDirectory());
+    settings.setValue("Options/dnaSaveFilenameTemplate", mOptionsForm.dnaSaveFilenameTemplate());
     settings.setValue("Options/saveInterval", mOptionsForm.saveInterval());
     settings.setValue("Options/autoSave", mOptionsForm.autoSave());
 }
@@ -211,8 +218,10 @@ void MainWindow::restoreAppSettings(void)
     ui->xySlider->setValue(settings.value("MainWindow/deltaXY").toInt());
     ui->rateSlider->setValue(settings.value("MainWindow/mutationRate").toInt());
     mOptionsForm.restoreGeometry(settings.value("Options/geometry").toByteArray());
-    mOptionsForm.setSaveDirectory(settings.value("Options/saveDirectory").toString());
-    mOptionsForm.setSaveFilenameTemplate(settings.value("Options/saveFilenameTemplate").toString());
+    mOptionsForm.setImageSaveDirectory(settings.value("Options/imageSaveDirectory").toString());
+    mOptionsForm.setImageSaveFilenameTemplate(settings.value("Options/imageSaveFilenameTemplate").toString());
+    mOptionsForm.setDNASaveDirectory(settings.value("Options/dnaSaveDirectory").toString());
+    mOptionsForm.setDNASaveFilenameTemplate(settings.value("Options/dnaSaveFilenameTemplate").toString());
     mOptionsForm.setSaveInterval(settings.value("Options/saveInterval").toInt());
     mOptionsForm.setAutoSave(settings.value("Options/autoSave").toBool());
 }
@@ -220,10 +229,10 @@ void MainWindow::restoreAppSettings(void)
 
 void MainWindow::saveDNA(void)
 {
-    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"));
+    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), "DNA files (*.json, *.dna)");
     if (dnaFilename.isNull())
         return;
-    bool success = mBreeder.dna().save(dnaFilename, mBreeder.originalImage().size(), DNA::JSON);
+    bool success = mBreeder.dna().save(dnaFilename, mBreeder.originalImage().size());
     if (success) {
         statusBar()->showMessage(tr("DNA saved as '%1'.").arg(dnaFilename), 5000);
         mLastSavedDNA = dnaFilename;
@@ -239,7 +248,7 @@ void MainWindow::saveSVG(void)
     const QString& svgFilename = QFileDialog::getSaveFileName(this, tr("Save SVG"), QString(), QString("SVG (*.svg)"));
     if (svgFilename.isNull())
         return;
-    bool success = mBreeder.dna().save(svgFilename, mBreeder.originalImage().size(), DNA::SVG);
+    bool success = mBreeder.dna().save(svgFilename, mBreeder.originalImage().size());
     if (success) {
         statusBar()->showMessage(tr("SVG saved as '%1'.").arg(svgFilename), 5000);
         mLastSavedSVG = svgFilename;
@@ -275,7 +284,7 @@ void MainWindow::loadDNA(const QString& filename)
 {
     if (filename != "") {
         DNA dna;
-        bool success = dna.load(filename, &mBreeder, DNA::JSON);
+        bool success = dna.load(filename, &mBreeder);
         if (success) {
             stopBreeding();
             mBreeder.setDNA(dna);
@@ -299,7 +308,7 @@ void MainWindow::loadSVG(const QString& filename)
 {
     if (filename != "") {
         DNA dna;
-        bool success = dna.load(filename, &mBreeder, DNA::SVG);
+        bool success = dna.load(filename, &mBreeder);
         if (success) {
             stopBreeding();
             mBreeder.setDNA(dna);

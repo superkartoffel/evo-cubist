@@ -21,21 +21,14 @@ OptionsForm::OptionsForm(QWidget* parent)
     , ui(new Ui::OptionsForm)
 {
     ui->setupUi(this);
-    QObject::connect(ui->selectDirectoryPushButton, SIGNAL(clicked()), SLOT(selectSaveDirectory()));
+    QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
+    QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
 }
 
 
 OptionsForm::~OptionsForm()
 {
     delete ui;
-}
-
-
-void OptionsForm::selectSaveDirectory(void)
-{
-    const QString& dirName = QFileDialog::getExistingDirectory(this, tr("Choose save directory"), ui->saveDirectoryLineEdit->text());
-    if (dirName != "")
-        setSaveDirectory(dirName);
 }
 
 
@@ -51,15 +44,43 @@ bool OptionsForm::autoSave(void) const
 }
 
 
-QString OptionsForm::saveDirectory(void) const
+void OptionsForm::selectImageSaveDirectory(void)
 {
-    return ui->saveDirectoryLineEdit->text();
+    const QString& dirName = QFileDialog::getExistingDirectory(this, tr("Choose image save directory"), ui->imageSaveDirectoryLineEdit->text());
+    if (dirName != "")
+        setImageSaveDirectory(dirName);
 }
 
 
-QString OptionsForm::saveFilenameTemplate(void) const
+void OptionsForm::selectDNASaveDirectory(void)
+{
+    const QString& dirName = QFileDialog::getExistingDirectory(this, tr("Choose DNA save directory"), ui->dnaSaveDirectoryLineEdit->text());
+    if (dirName != "")
+        setDNASaveDirectory(dirName);
+}
+
+
+QString OptionsForm::imageSaveDirectory(void) const
+{
+    return ui->imageSaveDirectoryLineEdit->text();
+}
+
+
+QString OptionsForm::imageSaveFilenameTemplate(void) const
 {
     return ui->imageFilenameTemplateLineEdit->text();
+}
+
+
+QString OptionsForm::dnaSaveDirectory(void) const
+{
+    return ui->dnaSaveDirectoryLineEdit->text();
+}
+
+
+QString OptionsForm::dnaSaveFilenameTemplate(void) const
+{
+    return ui->dnaFilenameTemplateLineEdit->text();
 }
 
 
@@ -75,21 +96,39 @@ void OptionsForm::setAutoSave(bool checked)
 }
 
 
-void OptionsForm::setSaveDirectory(const QString& directory)
+void OptionsForm::setImageSaveDirectory(const QString& directory)
 {
-    ui->saveDirectoryLineEdit->setText(directory);
+    ui->imageSaveDirectoryLineEdit->setText(directory);
 }
 
 
-void OptionsForm::setSaveFilenameTemplate(const QString& filenameTemplate)
+void OptionsForm::setDNASaveDirectory(const QString& directory)
+{
+    ui->dnaSaveDirectoryLineEdit->setText(directory);
+}
+
+
+void OptionsForm::setImageSaveFilenameTemplate(const QString& filenameTemplate)
 {
     ui->imageFilenameTemplateLineEdit->setText(filenameTemplate);
 }
 
 
-QString OptionsForm::filenameFromImageFilename(const QString& imageFilename, unsigned int generations, unsigned int selected)
+void OptionsForm::setDNASaveFilenameTemplate(const QString& filenameTemplate)
 {
-    QFileInfo fileInfo(imageFilename);
-    const QString& filename = fileInfo.completeBaseName();
-    return ui->saveDirectoryLineEdit->text() + "/" + QString(ui->imageFilenameTemplateLineEdit->text()).arg(filename).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
+    ui->dnaFilenameTemplateLineEdit->setText(filenameTemplate);
+}
+
+
+QString OptionsForm::imageFilename(const QString& originalImageFilename, unsigned int generations, unsigned int selected)
+{
+    QFileInfo fileInfo(originalImageFilename);
+    return ui->imageSaveDirectoryLineEdit->text() + "/" + QString(ui->imageFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
+}
+
+
+QString OptionsForm::dnaFilename(const QString& originalImageFilename, unsigned int generations, unsigned int selected)
+{
+    QFileInfo fileInfo(originalImageFilename);
+    return ui->dnaSaveDirectoryLineEdit->text() + "/" + QString(ui->dnaFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
 }

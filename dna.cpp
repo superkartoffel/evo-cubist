@@ -6,17 +6,17 @@
 #include <QTextStream>
 #include <QtCore/QDebug>
 
-
 #include "qt-json/json.h"
 #include "genome.h"
 #include "dna.h"
 #include "svgreader.h"
 
+
 using namespace QtJson;
 
 
 // XXX: move method to Breeder
-bool DNA::save(const QString& filename, const QSize& size, Format format) const
+bool DNA::save(const QString& filename, const QSize& size) const
 {
     bool rc;
     QFile file(filename);
@@ -24,9 +24,7 @@ bool DNA::save(const QString& filename, const QSize& size, Format format) const
     if (!rc)
         return false;
     QTextStream out(&file);
-    switch (format) {
-    case JSON:
-    {
+    if (filename.endsWith(".json") || filename.endsWith(".dna")) {
         out << "{ \"size\": { \"x\": " << size.width() << ", \"y\": " << size.height() << " },"
             << " \"dna\": [\n";
         for (DNAType::const_iterator genome = this->constBegin(); genome != this->constEnd(); ++genome) {
@@ -36,10 +34,8 @@ bool DNA::save(const QString& filename, const QSize& size, Format format) const
             out << "\n";
         }
         out << "] }\n";
-        break;
     }
-    case SVG:
-    {
+    else if (filename.endsWith(".svg")) {
         out << "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n"
             << " <g transform=\"scale(" << size.width() << ", " << size.height() << ")\">\n";
         for (DNAType::const_iterator genome = this->constBegin(); genome != this->constEnd(); ++genome) {
@@ -53,11 +49,9 @@ bool DNA::save(const QString& filename, const QSize& size, Format format) const
         }
         out << " </g>\n"
             << "</svg>\n";
-        break;
     }
-    default:
-        qWarning() << "DNA::save() unknown format:" << format;
-        break;
+    else {
+        qWarning() << "DNA::save() unknown format";
     }
     file.close();
     return rc;
@@ -65,7 +59,7 @@ bool DNA::save(const QString& filename, const QSize& size, Format format) const
 
 
 // XXX: move method to Breeder
-bool DNA::load(const QString& filename, Breeder* breeder, Format format)
+bool DNA::load(const QString& filename, Breeder* breeder)
 {
     bool rc;
     QFile file(filename);
@@ -74,9 +68,7 @@ bool DNA::load(const QString& filename, Breeder* breeder, Format format)
         return false;
     QTextStream in(&file);
     bool ok = false;
-    switch (format) {
-    case JSON:
-    {
+    if (filename.endsWith(".json") || filename.endsWith(".dna")) {
         QString jsonDNA = in.readAll();
         const QVariant& v = Json::parse(jsonDNA, ok);
         const QVariantMap& result = v.toMap();
@@ -99,10 +91,8 @@ bool DNA::load(const QString& filename, Breeder* breeder, Format format)
                 this->append(Genome(breeder, polygon, color));
             }
         }
-        break;
     }
-    case SVG:
-    {
+    else if (filename.endsWith(".svg")) {
         SVGReader xml(breeder);
         ok = xml.readSVG(&file);
         if (ok) {
@@ -110,12 +100,10 @@ bool DNA::load(const QString& filename, Breeder* breeder, Format format)
             *this = xml.dna();
             mSize = xml.size();
         }
-        break;
     }
-    default:
-        qWarning() << "DNA::load() unknown format:" << format;
+    else {
+        qWarning() << "DNA::load() unknown file format";
         ok = false;
-        break;
     }
     file.close();
 
