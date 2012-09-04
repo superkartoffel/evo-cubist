@@ -22,7 +22,7 @@ public:
     virtual QSize minimumSizeHint(void) const { return QSize(256, 256); }
 
 signals:
-    void imageDropped(const QImage&);
+    void imageDropped(const QImage&, const QString&);
 
 protected:
     void paintEvent(QPaintEvent*);

@@ -69,7 +69,7 @@ bool ImageWidget::loadImage(const QString& fileName)
     if (!image.isNull()) {
         setImage(image);
         mImageFileName = fileName;
-        emit imageDropped(mImage);
+        emit imageDropped(mImage, mImageFileName);
         return true;
     }
     return false;

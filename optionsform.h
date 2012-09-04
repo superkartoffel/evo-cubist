@@ -18,26 +18,24 @@ public:
     explicit OptionsForm(QWidget* parent = NULL);
     ~OptionsForm();
 
-    const QString& saveDirectory(void) const { return mSaveDirectory; }
-    const QString& saveFilename(void) const { return mSaveFilename; }
-    const QString& saveFilenameTemplate(void) const { return mSaveFilenameTemplate; }
+    QString saveDirectory(void) const;
+    QString saveFilenameTemplate(void) const;
+    int saveInterval(void) const;
+    bool autoSave(void) const;
 
+    void setSaveInterval(int);
+    void setAutoSave(bool);
     void setSaveDirectory(const QString&);
     void setSaveFilenameTemplate(const QString&);
-    void setImageFilename(const QString&);
-    void setGenerations(unsigned int generations, unsigned int selected);
+    QString filenameFromImageFilename(const QString&, unsigned int generations, unsigned int selected);
     
+private slots:
+    void selectSaveDirectory(void);
+
 private:
     static const QString SaveFilenameTemplate;
 
-    Ui::OptionsForm *ui;
-
-    QString mSaveDirectory;
-    QString mSaveFilenameTemplate;
-    QString mSaveFilename;
-    QString mImageFilename;
-    unsigned int mGenerations;
-    unsigned int mSelected;
+    Ui::OptionsForm* ui;
 };
 
 #endif // __OPTIONSFORM_H_

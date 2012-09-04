@@ -17,6 +17,8 @@ public:
     explicit GenerationWidget(QFrame* parent = NULL);
     virtual QSize minimumSizeHint(void) const { return QSize(256, 256); }
 
+    const QImage& image(void) const { return mImage; }
+
 protected:
     void paintEvent(QPaintEvent*);
     void dragEnterEvent(QDragEnterEvent*);

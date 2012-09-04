@@ -80,8 +80,8 @@ private:
     MersenneTwister mRandom;
 
 signals:
-    void evolved(void);
-    void proceeded(void);
+    void evolved(const QImage&, const DNA&, unsigned int, unsigned int);
+    void proceeded(unsigned int);
     
 public slots:
     void setOriginalImage(const QImage&);

@@ -2,6 +2,8 @@
 // All rights reserved.
 
 #include <QFileInfo>
+#include <QFileDialog>
+#include <QtCore/QDebug>
 
 #include "optionsform.h"
 #include "ui_optionsform.h"
@@ -17,11 +19,9 @@ const QString OptionsForm::SaveFilenameTemplate = "%1-%2-%3.png";
 OptionsForm::OptionsForm(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::OptionsForm)
-    , mGenerations(0U)
-    , mSelected(0U)
-    , mSaveFilenameTemplate(SaveFilenameTemplate)
 {
     ui->setupUi(this);
+    QObject::connect(ui->selectDirectoryPushButton, SIGNAL(clicked()), SLOT(selectSaveDirectory()));
 }
 
 
@@ -31,28 +31,65 @@ OptionsForm::~OptionsForm()
 }
 
 
+void OptionsForm::selectSaveDirectory(void)
+{
+    const QString& dirName = QFileDialog::getExistingDirectory(this, tr("Choose save directory"), ui->saveDirectoryLineEdit->text());
+    if (dirName != "")
+        setSaveDirectory(dirName);
+}
+
+
+int OptionsForm::saveInterval(void) const
+{
+    return ui->saveIntervalSpinBox->value();
+}
+
+
+bool OptionsForm::autoSave(void) const
+{
+    return ui->autoSaveCheckBox->isChecked();
+}
+
+
+QString OptionsForm::saveDirectory(void) const
+{
+    return ui->saveDirectoryLineEdit->text();
+}
+
+
+QString OptionsForm::saveFilenameTemplate(void) const
+{
+    return ui->imageFilenameTemplateLineEdit->text();
+}
+
+
+void OptionsForm::setSaveInterval(int interval)
+{
+    ui->saveIntervalSpinBox->setValue(interval);
+}
+
+
+void OptionsForm::setAutoSave(bool checked)
+{
+    ui->autoSaveCheckBox->setChecked(checked);
+}
+
+
 void OptionsForm::setSaveDirectory(const QString& directory)
 {
-    mSaveDirectory = directory;
+    ui->saveDirectoryLineEdit->setText(directory);
 }
 
 
 void OptionsForm::setSaveFilenameTemplate(const QString& filenameTemplate)
 {
-    mSaveFilenameTemplate = filenameTemplate;
+    ui->imageFilenameTemplateLineEdit->setText(filenameTemplate);
 }
 
 
-void OptionsForm::setImageFilename(const QString& imageFilename)
+QString OptionsForm::filenameFromImageFilename(const QString& imageFilename, unsigned int generations, unsigned int selected)
 {
     QFileInfo fileInfo(imageFilename);
-    const QString& filename = fileInfo.completeBaseName().remove(fileInfo.suffix());
-    mSaveFilename = mSaveDirectory + QString(mSaveFilenameTemplate).arg(filename).arg(mGenerations).arg(mSelected);
-}
-
-
-void OptionsForm::setGenerations(unsigned int generations, unsigned int selected)
-{
-    mGenerations = generations;
-    mSelected = selected;
+    const QString& filename = fileInfo.completeBaseName();
+    return ui->saveDirectoryLineEdit->text() + "/" + QString(ui->imageFilenameTemplateLineEdit->text()).arg(filename).arg(generations).arg(selected);
 }

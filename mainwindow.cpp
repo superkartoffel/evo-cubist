@@ -38,7 +38,6 @@ MainWindow::MainWindow(QWidget* parent)
     setWindowTitle(tr("%1 %2").arg(MainWindow::AppName).arg(MainWindow::AppVersion));
 #endif
 
-
     mImageWidget = new ImageWidget;
     mGenerationWidget = new GenerationWidget;
     QHBoxLayout* hbox1 = new QHBoxLayout;
@@ -48,8 +47,10 @@ MainWindow::MainWindow(QWidget* parent)
     ui->originalGroupBox->setLayout(hbox1);
     ui->generatedGroupBox->setLayout(hbox2);
 
-    QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
+    QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage, QString)), SLOT(imageDropped(QImage, QString)));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadSVG(QString)));
+
+    QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetBreeder()));
@@ -70,6 +71,8 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionExit, SIGNAL(triggered()), SLOT(close()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
     QObject::connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(aboutQt()));
+    QObject::connect(ui->actionOptions, SIGNAL(triggered()), &mOptionsForm, SLOT(show()));
+
     restoreAppSettings();
 }
 
@@ -108,20 +111,28 @@ void MainWindow::closeEvent(QCloseEvent* e)
 }
 
 
-void MainWindow::evolved(void)
+void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitness, unsigned selected)
 {
-    mGenerationWidget->setImage(mBreeder.image());
-    ui->fitnessLineEdit->setText(QString("%1").arg(mBreeder.currentFitness()));
-    ui->selectedLineEdit->setText(QString("%1").arg(mBreeder.selected()));
-    ui->polygonsLineEdit->setText(QString("%1").arg(mBreeder.dna().size()));
-    ui->pointsLineEdit->setText(QString("%1").arg(mBreeder.dna().points()));
+    mGenerationWidget->setImage(image);
+    ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
+    ui->selectedLineEdit->setText(QString("%1").arg(selected));
+    ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
+    ui->pointsLineEdit->setText(QString("%1").arg(dna.points()));
 }
 
 
-void MainWindow::proceeded(void)
+void MainWindow::proceeded(unsigned int generation)
 {
-    ui->generationLineEdit->setText(QString("%1").arg(mBreeder.generation()));
-    ui->gensSLineEdit->setText(QString("%1").arg((qreal) mBreeder.generation() / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
+    ui->generationLineEdit->setText(QString("%1").arg(generation));
+    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
+}
+
+
+void MainWindow::autoSaveGeneratedImage(void)
+{
+    const QString& filename = mOptionsForm.filenameFromImageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    mGenerationWidget->image().save(filename);
+    statusBar()->showMessage(tr("Automatically saved '%1'.").arg(filename), 1000);
 }
 
 
@@ -130,18 +141,24 @@ void MainWindow::startBreeding(void)
     statusBar()->showMessage(tr("Starting ..."), 3000);
     ui->startStopPushButton->setText(tr("Stop"));
     mStartTime = QDateTime::currentDateTime();
-    QObject::connect(&mBreeder, SIGNAL(evolved()), SLOT(evolved()), Qt::BlockingQueuedConnection);
-    QObject::connect(&mBreeder, SIGNAL(proceeded()), SLOT(proceeded()), Qt::BlockingQueuedConnection);
+    QObject::connect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int)), SLOT(evolved(QImage, DNA, unsigned int, unsigned int)), Qt::BlockingQueuedConnection);
+    QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)), Qt::BlockingQueuedConnection);
     mBreeder.breed();
+    if (mOptionsForm.autoSave()) {
+        mAutoSaveTimer.setInterval(1000 * mOptionsForm.saveInterval());
+        mAutoSaveTimer.start();
+    }
 }
 
 
 void MainWindow::stopBreeding(void)
 {
-    QObject::disconnect(&mBreeder, SIGNAL(evolved()), this, SLOT(evolved()));
-    QObject::disconnect(&mBreeder, SIGNAL(proceeded()), this, SLOT(proceeded()));
+    QObject::disconnect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int)), this, SLOT(evolved(QImage, DNA, unsigned int, unsigned int)));
+    QObject::disconnect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)));
     ui->startStopPushButton->setText(tr("Start"));
     mBreeder.stop();
+    if (mAutoSaveTimer.isActive())
+        mAutoSaveTimer.stop();
 }
 
 
@@ -172,6 +189,8 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/lastSavedSVG", mLastSavedSVG);
     settings.setValue("Options/saveDirectory", mOptionsForm.saveDirectory());
     settings.setValue("Options/saveFilenameTemplate", mOptionsForm.saveFilenameTemplate());
+    settings.setValue("Options/saveInterval", mOptionsForm.saveInterval());
+    settings.setValue("Options/autoSave", mOptionsForm.autoSave());
 }
 
 
@@ -191,8 +210,16 @@ void MainWindow::restoreAppSettings(void)
     ui->rateSlider->setValue(settings.value("MainWindow/mutationRate").toInt());
     mOptionsForm.setSaveDirectory(settings.value("Options/saveDirectory").toString());
     mOptionsForm.setSaveFilenameTemplate(settings.value("Options/saveFilenameTemplate").toString());
+    mOptionsForm.setSaveInterval(settings.value("Options/saveInterval").toInt());
+    mOptionsForm.setAutoSave(settings.value("Options/autoSave").toBool());
 }
 
+
+void MainWindow::imageDropped(const QImage& image, const QString& filename)
+{
+    mBreeder.setOriginalImage(image);
+    qDebug() << mOptionsForm.filenameFromImageFilename(filename, mBreeder.generation(), mBreeder.selected());
+}
 
 
 void MainWindow::saveDNA(void)
@@ -309,12 +336,13 @@ void MainWindow::resetBreeder(void)
 void MainWindow::about(void)
 {
     QMessageBox::about(this, tr("About Evo Cubist"),
-                       tr("<p><b>Evo Cubist</b> calculates vector images from bitmaps by using genetic algorithms. See <a href=\"http://evo-cubist.googlecode.com/\">http://evo-cubist.googlecode.com/</a> for more info.</p>"
+                       tr("<p><b>Evo Cubist</b> calculates vector images from bitmaps by using genetic algorithms. "
+                          "See <a href=\"http://evo-cubist.googlecode.com/\">http://evo-cubist.googlecode.com/</a> for more info.</p>"
                           "<p>Copyright &copy; 2012 Oliver Lau &lt;oliver@von-und-fuer.lau.de&gt;</p>"
                           "<p>Licensed under the Apache License, Version 2.0 (the \"License\"); "
                           "you may not use this file except in compliance with the License. "
                           "You may obtain a copy of the License at</p>"
-                          "<p style=\"text-indent: 3em; margin-left: 3em; margin-top: 3ex; margin-bottom: 3ex;\"><a href=\"http://www.apache.org/licenses/LICENSE-2.0\">http://www.apache.org/licenses/LICENSE-2.0</p>"
+                          "<p style=\"margin: 3ex 0 3ex 3em;\"><a href=\"http://www.apache.org/licenses/LICENSE-2.0\">http://www.apache.org/licenses/LICENSE-2.0</p>"
                           "Unless required by applicable law or agreed to in writing, software "
                           "distributed under the License is distributed on an \"AS IS\" BASIS, "
                           "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. "

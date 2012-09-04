@@ -162,13 +162,13 @@ void Breeder::proceed(void)
     draw();
     const unsigned long f = fitness();
     if (f < mFitness) {
-        ++mSelected;
         mFitness = f;
         mDNA = mMutation;
-        emit evolved();
+        ++mSelected;
+        emit evolved(mGenerated, mDNA, f, mSelected);
     }
     ++mGeneration;
-    emit proceeded();
+    emit proceeded(mGeneration);
 }
 
 
