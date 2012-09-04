@@ -18,7 +18,7 @@ public:
     explicit ImageWidget(QFrame* parent = NULL);
     void setImage(const QImage&);
     const QString& imageFileName(void) const { return mImageFileName; }
-    void loadImage(const QString& fileName);
+    bool loadImage(const QString& fileName);
     virtual QSize minimumSizeHint(void) const { return QSize(256, 256); }
 
 signals:

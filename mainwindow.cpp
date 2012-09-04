@@ -81,9 +81,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent* e)
 {
-    if (mBreeder.isRunning())
-        stopBreeding();
     saveAppSettings();
+    if (mBreeder.isRunning()) {
+        stopBreeding();
+    }
+    if (mBreeder.isDirty()) {
+        QMessageBox msgBox;
+        msgBox.setText(tr("DNA has been modified."));
+        msgBox.setInformativeText(tr("You have unsaved DNA. Do you want to save it?"));
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        switch (ret) {
+        case QMessageBox::Save:
+            saveSVG();
+            break;
+        case QMessageBox::Discard:
+            break;
+        case QMessageBox::Cancel:
+            e->ignore();
+            return;
+        }
+    }
     e->accept();
 }
 
@@ -107,11 +126,12 @@ void MainWindow::proceeded(void)
 
 void MainWindow::startBreeding(void)
 {
+    statusBar()->showMessage(tr("Starting ..."), 3000);
+    ui->startStopPushButton->setText(tr("Stop"));
     mStartTime = QDateTime::currentDateTime();
     QObject::connect(&mBreeder, SIGNAL(evolved()), SLOT(evolved()), Qt::BlockingQueuedConnection);
     QObject::connect(&mBreeder, SIGNAL(proceeded()), SLOT(proceeded()), Qt::BlockingQueuedConnection);
     mBreeder.breed();
-    ui->startStopPushButton->setText(tr("Stop"));
 }
 
 
@@ -119,8 +139,8 @@ void MainWindow::stopBreeding(void)
 {
     QObject::disconnect(&mBreeder, SIGNAL(evolved()), this, SLOT(evolved()));
     QObject::disconnect(&mBreeder, SIGNAL(proceeded()), this, SLOT(proceeded()));
-    mBreeder.stop();
     ui->startStopPushButton->setText(tr("Start"));
+    mBreeder.stop();
 }
 
 
@@ -188,7 +208,7 @@ void MainWindow::saveDNA(void)
 
 void MainWindow::saveSVG(void)
 {
-    const QString& svgFilename = QFileDialog::getSaveFileName(this, tr("Save SVG"));
+    const QString& svgFilename = QFileDialog::getSaveFileName(this, tr("Save SVG"), QString(), QString("SVG (*.svg)"));
     if (svgFilename.isNull())
         return;
     bool success = mBreeder.dna().save(svgFilename, mBreeder.originalImage().size(), DNA::SVG);
@@ -212,11 +232,8 @@ void MainWindow::openOriginalImage(void)
 void MainWindow::loadOriginalImage(const QString& filename)
 {
     if (filename != "") {
-        QImage image;
-        bool success = image.load(filename);
+        bool success = mImageWidget->loadImage(filename);
         if (success) {
-            mBreeder.setOriginalImage(image);
-            mGenerationWidget->setMinimumSize(image.size());
             statusBar()->showMessage(tr("Original picture '%1' loaded.").arg(filename), 3000);
         }
         else {

@@ -63,12 +63,14 @@ void ImageWidget::dropEvent(QDropEvent* e)
 }
 
 
-void ImageWidget::loadImage(const QString& fileName)
+bool ImageWidget::loadImage(const QString& fileName)
 {
     QImage image = QImage(fileName);
     if (!image.isNull()) {
         setImage(image);
         mImageFileName = fileName;
         emit imageDropped(mImage);
+        return true;
     }
+    return false;
 }
