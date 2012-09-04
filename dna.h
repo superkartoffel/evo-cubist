@@ -27,6 +27,7 @@ public:
     bool load(const QString& filename, Breeder* breeder, Format format = JSON);
 
     unsigned int points(void) const;
+    const QSize& originalSize(void) const { return mSize; }
 
     QString errorString(void) const;
 

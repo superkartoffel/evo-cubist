@@ -83,8 +83,7 @@ bool DNA::load(const QString& filename, Breeder* breeder, Format format)
         if (ok) {
             clear();
             const QVariantMap& size = result["size"].toMap();
-            QSize originalSize(size["width"].toInt(), size["height"].toInt());
-            qDebug() << "Original size:" << originalSize; // XXX: what to do with it?
+            mSize = QSize(size["width"].toInt(), size["height"].toInt());
             const QVariantList& dna = result["dna"].toList();
             for (QVariantList::const_iterator genome = dna.constBegin(); genome != dna.constEnd(); ++genome) {
                 const QVariantMap& g = genome->toMap();
@@ -109,7 +108,7 @@ bool DNA::load(const QString& filename, Breeder* breeder, Format format)
         if (ok) {
             clear();
             *this = xml.dna();
-            qDebug() << "Original size:" << xml.size(); // XXX: what to do with it?
+            mSize = xml.size();
         }
         break;
     }
