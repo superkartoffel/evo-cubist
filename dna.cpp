@@ -42,7 +42,7 @@ bool DNA::save(const QString& filename, const QSize& size) const
             const QColor& c = genome->color();
             out << "  <path fill=\"rgb(" << c.red() << "," << c.green() << "," << c.blue() << ")\""
                 << " fill-opacity=\"" << c.alphaF() << "\""
-                << " d=\"M " << genome->polygon().at(0).x() << " " << genome->polygon().at(0).x();
+                << " d=\"M " << genome->polygon().at(0).x() << " " << genome->polygon().at(0).y();
             for (QPolygonF::const_iterator p = genome->polygon().constBegin() + 1; p != genome->polygon().constEnd(); ++p)
                 out << " L " << p->x() << " " << p->y();
             out << " Z\" />\n";
