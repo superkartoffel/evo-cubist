@@ -528,7 +528,14 @@
     <addaction name="separator"/>
     <addaction name="actionAboutQt"/>
    </widget>
+   <widget class="QMenu" name="menuExtras">
+    <property name="title">
+     <string>Extras</string>
+    </property>
+    <addaction name="actionOptions"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuExtras"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -587,6 +594,11 @@
   <action name="actionAboutQt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="text">
+    <string>Options</string>
    </property>
   </action>
  </widget>

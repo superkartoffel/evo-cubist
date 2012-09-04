@@ -277,6 +277,7 @@ void MainWindow::loadSVG(const QString& filename)
             stopBreeding();
             mBreeder.setDNA(dna);
             statusBar()->showMessage(tr("SVG '%1' loaded.").arg(filename), 3000);
+            startBreeding();
         }
         else {
             QMessageBox::warning(this, tr("Error loading SVG"), tr("SVG-formatted DNA could not be loaded."));

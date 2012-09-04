@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     dna.cpp \
     qt-json/json.cpp \
     random/mersenne_twister.cpp \
-    dnaxmlreader.cpp
+    dnaxmlreader.cpp \
+    optionsform.cpp
 
 HEADERS += mainwindow.h \
     imagewidget.h \
@@ -29,9 +30,11 @@ HEADERS += mainwindow.h \
     qt-json/json.h \
     random/mersenne_twister.h \
     random/abstract_random_number_generator.h \
-    dnaxmlreader.h
+    dnaxmlreader.h \
+    optionsform.h
 
-FORMS += mainwindow.ui
+FORMS += mainwindow.ui \
+    optionsform.ui
 
 OTHER_FILES += \
     HINTS.txt
