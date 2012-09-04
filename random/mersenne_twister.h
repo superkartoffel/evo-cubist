@@ -8,7 +8,7 @@
 
 namespace randomtools {
 
-    class MersenneTwister : public RandomNumberGenerator<unsigned int>
+    class MersenneTwister : public UIntRandomNumberGenerator
     {
     public:
         MersenneTwister(void) {}

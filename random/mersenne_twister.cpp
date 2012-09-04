@@ -11,8 +11,7 @@ namespace randomtools {
     {
         unsigned int r = _Seed;
         unsigned int s = 3402;
-        for (int i = 0; i < N; ++i)
-        {
+        for (int i = 0; i < N; ++i) {
             r = 509845221 * r + 3;
             s *= s + 1;
             y[i] = s + (r >> 10);
@@ -31,16 +30,13 @@ namespace randomtools {
 
     unsigned int MersenneTwister::operator()()
     {
-        if (index >= N)
-        {
+        if (index >= N) {
             unsigned int h;
-            for (int k = 0 ; k < N-M ; ++k)
-            {
+            for (int k = 0 ; k < N-M ; ++k) {
                 h = (y[k] & HI) | (y[k+1] & LO);
                 y[k] = y[k+M] ^ (h >> 1) ^ A[h & 1];
             }
-            for (int k = N-M ; k < N-1 ; ++k)
-            {
+            for (int k = N-M ; k < N-1 ; ++k) {
                 h = (y[k] & HI) | (y[k+1] & LO);
                 y[k] = y[k+(M-N)] ^ (h >> 1) ^ A[h & 1];
             }

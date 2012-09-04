@@ -37,8 +37,8 @@ public:
     inline unsigned long generation(void) const { return mGeneration; }
     inline unsigned long currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }
-    unsigned int random(void) { return mRandom.next(); }
-    qreal random1(void) { return (qreal)mRandom.next() / mRandom.max(); }
+    inline unsigned int random(void) { return mRandom.next(); }
+    inline qreal random1(void) { return (qreal)random() / mRandom.max(); }
 
     void proceed(void);
     void breed(void);
