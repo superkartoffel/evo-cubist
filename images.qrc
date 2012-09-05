@@ -7,5 +7,7 @@
         <file>test/images/Pacman-Ghost.png</file>
         <file>test/images/Pilzmaennchen.png</file>
     </qresource>
-    <qresource prefix="/icons"/>
+    <qresource prefix="/icons">
+        <file>icons/evo-cubist.ico</file>
+    </qresource>
 </RCC>

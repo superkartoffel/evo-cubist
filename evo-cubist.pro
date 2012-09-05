@@ -2,12 +2,27 @@
 
 QT += core gui xml
 
-QMAKE_CXXFLAGS += /openmp
+CONFIG += warn_on thread qt
+
+# TRANSLATIONS = evo-cubist_de.ts
+
+CODECFORTR = UTF-8
+
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = evo-cubist
 TEMPLATE = app
+
+win32 {
+QMAKE_CXXFLAGS += /openmp
+RC_FILE = evo-cubist.rc
+}
+
+unix {
+QMAKE_CXXFLAGS += -fopenmp
+}
 
 SOURCES += main.cpp\
     mainwindow.cpp \
@@ -39,7 +54,8 @@ FORMS += mainwindow.ui \
     optionsform.ui
 
 OTHER_FILES += \
-    HINTS.txt
+    HINTS.txt \
+    evo-cubist.rc
 
 RESOURCES += \
     images.qrc
