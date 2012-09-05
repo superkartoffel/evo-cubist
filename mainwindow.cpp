@@ -226,6 +226,12 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/pointEmergenceProbability", mOptionsForm.pointEmergenceProbability());
     settings.setValue("Options/genomeKillProbability", mOptionsForm.genomeKillProbability());
     settings.setValue("Options/genomeEmergenceProbability", mOptionsForm.genomeEmergenceProbability());
+    settings.setValue("Options/minPointsPerGenome", mOptionsForm.minPointsPerGenome());
+    settings.setValue("Options/maxPointsPerGenome", mOptionsForm.maxPointsPerGenome());
+    settings.setValue("Options/minGenomes", mOptionsForm.minGenomes());
+    settings.setValue("Options/maxGenomes", mOptionsForm.maxGenomes());
+    settings.setValue("Options/minAlpha", mOptionsForm.minAlpha());
+    settings.setValue("Options/maxAlpha", mOptionsForm.maxAlpha());
     settings.setValue("Options/imageSaveDirectory", mOptionsForm.imageSaveDirectory());
     settings.setValue("Options/imageSaveFilenameTemplate", mOptionsForm.imageSaveFilenameTemplate());
     settings.setValue("Options/dnaSaveDirectory", mOptionsForm.dnaSaveDirectory());

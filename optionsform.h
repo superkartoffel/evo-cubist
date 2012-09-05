@@ -43,6 +43,12 @@ public:
     inline int pointKillProbability(void) const { return ui->pointKillProbabilitySpinBox->value(); }
     inline int genomeEmergenceProbability(void) const { return ui->genomeEmergenceProbabilitySpinBox->value(); }
     inline int genomeKillProbability(void) const { return ui->genomeKillProbabilitySpinBox->value(); }
+    inline int minPointsPerGenome(void) const { return ui->minPointsSpinBox->value(); }
+    inline int maxPointsPerGenome(void) const { return ui->maxPointsSpinBox->value(); }
+    inline int minGenomes(void) const { return ui->minGenomesSpinBox->value(); }
+    inline int maxGenomes(void) const { return ui->maxGenomesSpinBox->value(); }
+    inline int minAlpha(void) const { return ui->minAlphaSpinBox->value(); }
+    inline int maxAlpha(void) const { return ui->maxAlphaSpinBox->value(); }
 
     void setColorMutationProbability(int);
     void setPointMutationProbability(int);
