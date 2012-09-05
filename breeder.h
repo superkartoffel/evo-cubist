@@ -11,12 +11,12 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include <limits>
-
 #include "dna.h"
 #include "genome.h"
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
+
+#include <QtOpenGL>
 
 
 class Breeder : public QThread
@@ -29,7 +29,11 @@ public:
     void populate(void);
     void mutate(void);
 
-    const DNA& dna(void);
+    inline const DNA& dna(void) {
+        QMutexLocker locker(&mDNAMutex);
+        return mDNA;
+    }
+
     inline const QImage& image(void) const { return mGenerated; }
     inline const QImage& originalImage(void) const { return mOriginal; }
     inline unsigned long generation(void) const { return mGeneration; }

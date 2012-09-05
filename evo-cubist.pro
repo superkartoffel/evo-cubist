@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 
-QT += core gui xml
+QT += core gui xml opengl
 
 CONFIG += warn_on thread qt
 
@@ -14,7 +14,7 @@ TARGET = evo-cubist
 TEMPLATE = app
 
 win32 {
-QMAKE_CXXFLAGS += /openmp
+# QMAKE_CXXFLAGS += /openmp
 RC_FILE = evo-cubist.rc
 }
 
@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     random/mersenne_twister.cpp \
     optionsform.cpp \
     svgreader.cpp \
-    breedersettings.cpp
+    breedersettings.cpp \
+    glwidget.cpp
 
 HEADERS += mainwindow.h \
     imagewidget.h \
@@ -46,7 +47,8 @@ HEADERS += mainwindow.h \
     random/abstract_random_number_generator.h \
     optionsform.h \
     svgreader.h \
-    breedersettings.h
+    breedersettings.h \
+    glwidget.h
 
 FORMS += mainwindow.ui \
     optionsform.ui

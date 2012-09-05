@@ -14,6 +14,8 @@
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
 
+#include <QGLFormat>
+
 const QString MainWindow::Company = "c't";
 const QString MainWindow::AppName = QObject::tr("Evo Cubist");
 #ifdef QT_NO_DEBUG
@@ -79,6 +81,9 @@ MainWindow::MainWindow(QWidget* parent)
     MT::rng.seed(QDateTime::currentDateTime().toTime_t());
 
     restoreAppSettings();
+
+    qDebug() << "QGLFormat::hasOpenGL() =" << QGLFormat::hasOpenGL();
+    // qDebug() << "OpenGL version " << QGLFormat::majorVersion() << "." << QGLFormat::minorVersion();
 }
 
 
@@ -137,17 +142,19 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitne
 
 void MainWindow::autoSaveGeneratedImage(void)
 {
-    const QCursor oldCursor = cursor();
-    setCursor(Qt::WaitCursor);
-    const QString& imageFilename = mOptionsForm.imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
-    mGenerationWidget->image().save(imageFilename);
-    const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
-    const DNA& dna = mBreeder.dna();
-    mBreeder.dnaMutex()->lock();
-    dna.save(dnaFilename, mBreeder.originalImage().size());
-    mBreeder.dnaMutex()->unlock();
-    statusBar()->showMessage(tr("Automatically saved '%1' and '%2'.").arg(imageFilename).arg(dnaFilename), 3000);
-    setCursor(oldCursor);
+    if (mBreeder.isRunning()) {
+        const QCursor oldCursor = cursor();
+        setCursor(Qt::WaitCursor);
+        const QString& imageFilename = mOptionsForm.imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+        mGenerationWidget->image().save(imageFilename);
+        const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+        const DNA& dna = mBreeder.dna();
+        mBreeder.dnaMutex()->lock();
+        dna.save(dnaFilename, mBreeder.originalImage().size());
+        mBreeder.dnaMutex()->unlock();
+        statusBar()->showMessage(tr("Automatically saved image and DNA.").arg(imageFilename).arg(dnaFilename), 3000);
+        setCursor(oldCursor);
+    }
 }
 
 

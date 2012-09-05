@@ -7,7 +7,6 @@
 #include <QPainter>
 #include <QDateTime>
 #include <QtCore/QDebug>
-#include <limits>
 
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
@@ -30,16 +29,9 @@ void Breeder::setDirty(bool dirty)
 }
 
 
-const DNA& Breeder::dna(void)
-{
-    QMutexLocker locker(&mDNAMutex);
-    return mDNA;
-}
-
-
 void Breeder::setDNA(DNA dna)
 {
-    bool wasRunning = isRunning();
+    const bool wasRunning = isRunning();
     if (wasRunning)
         stop();
     mDNAMutex.lock();
