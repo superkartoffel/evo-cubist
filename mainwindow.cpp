@@ -137,6 +137,8 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitne
 
 void MainWindow::autoSaveGeneratedImage(void)
 {
+    const QCursor oldCursor = cursor();
+    setCursor(Qt::WaitCursor);
     const QString& imageFilename = mOptionsForm.imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     mGenerationWidget->image().save(imageFilename);
     const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
@@ -145,6 +147,7 @@ void MainWindow::autoSaveGeneratedImage(void)
     dna.save(dnaFilename, mBreeder.originalImage().size());
     mBreeder.dnaMutex()->unlock();
     statusBar()->showMessage(tr("Automatically saved '%1' and '%2'.").arg(imageFilename).arg(dnaFilename), 3000);
+    setCursor(oldCursor);
 }
 
 
