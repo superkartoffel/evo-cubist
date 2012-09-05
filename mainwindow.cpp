@@ -144,7 +144,7 @@ void MainWindow::autoSaveGeneratedImage(void)
     mBreeder.dnaMutex()->lock();
     dna.save(dnaFilename, mBreeder.originalImage().size());
     mBreeder.dnaMutex()->unlock();
-    statusBar()->showMessage(tr("Automatically saved '%1' and '%2'.").arg(imageFilename).arg(dnaFilename), 1000);
+    statusBar()->showMessage(tr("Automatically saved '%1' and '%2'.").arg(imageFilename).arg(dnaFilename), 3000);
 }
 
 
@@ -213,7 +213,6 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/windowState", saveState());
     settings.setValue("MainWindow/imageFilename", mImageWidget->imageFileName());
     settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
-    settings.setValue("MainWindow/lastSavedSVG", mLastSavedSVG);
     settings.setValue("Options/geometry", mOptionsForm.saveGeometry());
     settings.setValue("Options/deltaR", ui->redSlider->value());
     settings.setValue("Options/deltaG", ui->greenSlider->value());
@@ -249,6 +248,7 @@ void MainWindow::restoreAppSettings(void)
     QString imageFileName = settings.value("MainWindow/imageFilename").toString();
     if (imageFileName != "")
         mImageWidget->loadImage(imageFileName);
+    mLastSavedDNA = settings.value("MainWindow/lastSavedDNA").toString();
     ui->redSlider->setValue(settings.value("Options/deltaR", 100).toInt());
     ui->greenSlider->setValue(settings.value("Options/deltaG", 100).toInt());
     ui->blueSlider->setValue(settings.value("Options/deltaB", 100).toInt());
@@ -275,13 +275,16 @@ void MainWindow::saveDNA(void)
     const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
     if (dnaFilename.isNull())
         return;
-    bool success = mBreeder.dna().save(dnaFilename, mBreeder.originalImage().size());
+    const DNA& dna = mBreeder.dna();
+    mBreeder.dnaMutex()->lock();
+    bool success = dna.save(dnaFilename, mBreeder.originalImage().size());
+    mBreeder.dnaMutex()->unlock();
     if (success) {
         statusBar()->showMessage(tr("DNA saved as '%1'.").arg(dnaFilename), 5000);
         mLastSavedDNA = dnaFilename;
     }
     else {
-        QMessageBox::warning(this, tr("Error saving DNA"), tr("JSON-formatted DNA could not be saved as '%1'.").arg(dnaFilename));
+        QMessageBox::warning(this, tr("Error saving DNA"), tr("DNA could not be saved as '%1'.").arg(dnaFilename));
     }
     mBreeder.setDirty(false);
 }

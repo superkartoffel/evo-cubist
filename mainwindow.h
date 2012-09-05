@@ -42,7 +42,6 @@ private:
     Breeder mBreeder;
     QDateTime mStartTime;
     QString mLastSavedDNA;
-    QString mLastSavedSVG;
     QString mSaveDirectory;
 
     void saveAppSettings(void);
