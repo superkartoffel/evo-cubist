@@ -76,9 +76,9 @@ void Breeder::populate(void)
 
 inline unsigned long Breeder::deltaE(QRgb c1, QRgb c2)
 {
-    const unsigned int r = qRed(c1) - qRed(c2);
-    const unsigned int g = qGreen(c1) - qGreen(c2);
-    const unsigned int b = qBlue(c1) - qBlue(c2);
+    const int r = qRed(c1) - qRed(c2);
+    const int g = qGreen(c1) - qGreen(c2);
+    const int b = qBlue(c1) - qBlue(c2);
     return r*r + g*g + b*b;
 }
 
