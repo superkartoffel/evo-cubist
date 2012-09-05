@@ -24,6 +24,12 @@ void Breeder::setOriginalImage(const QImage& original)
 }
 
 
+void Breeder::setDirty(bool dirty)
+{
+    mDirty = dirty;
+}
+
+
 const DNA& Breeder::dna(void)
 {
     QMutexLocker locker(&mDNAMutex);

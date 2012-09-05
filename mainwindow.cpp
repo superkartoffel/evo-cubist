@@ -55,6 +55,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
+    QObject::connect(&mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
+    QObject::connect(&mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
+
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetBreeder()));
 
@@ -109,6 +112,7 @@ void MainWindow::closeEvent(QCloseEvent* e)
             return;
         }
     }
+    mOptionsForm.close();
     e->accept();
 }
 
@@ -141,6 +145,28 @@ void MainWindow::autoSaveGeneratedImage(void)
     dna.save(dnaFilename, mBreeder.originalImage().size());
     mBreeder.dnaMutex()->unlock();
     statusBar()->showMessage(tr("Automatically saved '%1' and '%2'.").arg(imageFilename).arg(dnaFilename), 1000);
+}
+
+
+void MainWindow::autoSaveIntervalChanged(int interval)
+{
+    if (mOptionsForm.autoSave()) {
+        mAutoSaveTimer.stop();
+        mAutoSaveTimer.setInterval(1000 * interval);
+        mAutoSaveTimer.start();
+    }
+}
+
+
+void MainWindow::autoSaveToggled(bool enabled)
+{
+    if (enabled) {
+        mAutoSaveTimer.setInterval(1000 * mOptionsForm.saveInterval());
+        mAutoSaveTimer.start();
+    }
+    else {
+        mAutoSaveTimer.stop();
+    }
 }
 
 
@@ -251,6 +277,7 @@ void MainWindow::saveDNA(void)
     else {
         QMessageBox::warning(this, tr("Error saving DNA"), tr("JSON-formatted DNA could not be saved as '%1'.").arg(dnaFilename));
     }
+    mBreeder.setDirty(false);
 }
 
 

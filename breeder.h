@@ -41,6 +41,7 @@ public:
     void stop(void);
     bool isDirty(void) const { return mDirty; }
     void setDNA(DNA);
+    void setDirty(bool);
 
     QMutex* dnaMutex(void) { return &mDNAMutex; }
 

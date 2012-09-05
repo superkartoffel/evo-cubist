@@ -52,7 +52,8 @@ public:
     void setGenomeKillProbability(int);
 
 signals:
-
+    void autoSaveIntervalChanged(int);
+    void autoSaveToggled(bool);
 
 private slots:
     void selectImageSaveDirectory(void);

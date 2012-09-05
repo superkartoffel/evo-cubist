@@ -65,6 +65,8 @@ private slots:
     void about(void);
     void aboutQt(void);
     void autoSaveGeneratedImage(void);
+    void autoSaveIntervalChanged(int);
+    void autoSaveToggled(bool);
 };
 
 #endif // __MAINWINDOW_H_
