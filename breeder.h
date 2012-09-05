@@ -18,8 +18,6 @@
 #include "random/mersenne_twister.h"
 #include "optionsform.h"
 
-using namespace randomtools;
-
 
 class Breeder : public QThread
 {
@@ -40,8 +38,6 @@ public:
     inline unsigned long generation(void) const { return mGeneration; }
     inline unsigned long currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }
-    inline unsigned int random(void) { return mRandom.next(); }
-    inline qreal random1(void) { return (qreal)random() / mRandom.max(); }
 
     void proceed(void);
     void breed(void);
@@ -75,11 +71,12 @@ private:
     int mdB;
     int mdA;
     qreal mdXY;
+    unsigned int mPointKillRate;
+    unsigned int mPointEmergenceRate;
 
     static const int MIN_GENOMES = 200;
     static const int MAX_GENOMES = 400;
 
-    MersenneTwister mRandom;
     QMutex mDNAMutex;
     const OptionsForm* mOptions;
 

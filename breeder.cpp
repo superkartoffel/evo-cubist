@@ -122,7 +122,7 @@ inline unsigned long Breeder::deltaE(QRgb c1, QRgb c2)
 }
 
 
-unsigned long Breeder::fitness(void)
+inline unsigned long Breeder::fitness(void)
 {
     Q_ASSERT(mOriginal.size() == mGenerated.size());
     unsigned long sum = 0;
@@ -137,7 +137,7 @@ unsigned long Breeder::fitness(void)
 }
 
 
-void Breeder::draw(void)
+inline void Breeder::draw(void)
 {
     QPainter p(&mGenerated);
     p.setPen(Qt::transparent);
@@ -157,13 +157,13 @@ inline bool Breeder::willMutate(unsigned int rate) {
 }
 
 
-void Breeder::mutate(void)
+inline void Breeder::mutate(void)
 {
     mMutation = mDNA;
-    if (willMutate(mOptions->genomeEmergenceRate()) && mMutation.size() < MAX_GENOMES) {
+    if (willMutate(mGenomeEmergenceRate) && mMutation.size() < MAX_GENOMES) {
         mMutation.append(Genome(this));
     }
-    if (willMutate(mOptions->genomeKillRate()) && mMutation.size() > MIN_GENOMES) {
+    if (willMutate(mGenomeKillRate) && mMutation.size() > MIN_GENOMES) {
         mMutation.remove(random() % mMutation.size());
     }
     for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)

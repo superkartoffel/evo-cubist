@@ -14,7 +14,7 @@ Genome::Genome(Breeder* breeder)
     const int N = MIN_NUM_POINTS + MT::random() % (MAX_NUM_POINTS - MIN_NUM_POINTS);
     for (int x = 0; x < N; ++x)
         mPolygon.append(QPointF(MT::random1(), MT::random1()));
-    mColor.setRgb(mBreeder->random() % 255, MT::random() % 255, MT::random() % 255, 10 + MT::random() % 50);
+    mColor.setRgb(MT::random() % 255, MT::random() % 255, MT::random() % 255, 10 + MT::random() % 50);
 }
 
 
@@ -29,7 +29,7 @@ void Genome::mutate(void)
         mPolygon.append(QPointF(MT::random1(), MT::random1()));
     }
     if (willMutate() && mPolygon.size() > 3) {
-        mPolygon.remove(mBreeder->random() % mPolygon.size());
+        mPolygon.remove(MT::random() % mPolygon.size());
     }
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate(mPointMutationRate)) {

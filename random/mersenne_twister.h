@@ -6,7 +6,7 @@
 
 #include "abstract_random_number_generator.h"
 
-namespace randomtools {
+namespace MT {
 
     class MersenneTwister : public UIntRandomNumberGenerator
     {
@@ -29,6 +29,10 @@ namespace randomtools {
         void warmup();
     };
 
+    inline unsigned int random(void) { return rng.next(); }
+    inline double random1(void) { return (double)random() / rng.max(); }
+
+    extern MersenneTwister rng;
 }
 
 #endif //  __MERSENNETWISTER_H_
