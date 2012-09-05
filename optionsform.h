@@ -21,13 +21,6 @@ public:
     explicit OptionsForm(QWidget* parent = NULL);
     ~OptionsForm();
 
-    QString imageSaveDirectory(void) const;
-    QString imageSaveFilenameTemplate(void) const;
-    QString dnaSaveDirectory(void) const;
-    QString dnaSaveFilenameTemplate(void) const;
-    int saveInterval(void) const;
-    bool autoSave(void) const;
-
     void setSaveInterval(int);
     void setAutoSave(bool);
     void setImageSaveDirectory(const QString&);
@@ -36,6 +29,13 @@ public:
     void setDNASaveFilenameTemplate(const QString&);
     QString imageFilename(const QString&, unsigned int generations, unsigned int selected);
     QString dnaFilename(const QString&, unsigned int generations, unsigned int selected);
+
+    inline QString imageSaveDirectory(void) const { return ui->imageSaveDirectoryLineEdit->text(); }
+    inline QString imageSaveFilenameTemplate(void) const { return ui->imageFilenameTemplateLineEdit->text(); }
+    inline QString dnaSaveDirectory(void) const { return ui->dnaSaveDirectoryLineEdit->text(); }
+    inline QString dnaSaveFilenameTemplate(void) const { return ui->dnaFilenameTemplateLineEdit->text(); }
+    inline int saveInterval(void) const { return ui->saveIntervalSpinBox->value(); }
+    inline bool autoSave(void) const { return ui->autoSaveCheckBox->isChecked(); }
 
     inline int colorMutationProbability(void) const { return ui->colorMutationProbabilitySpinBox->value(); }
     inline int pointMutationProbability(void) const { return ui->pointMutationProbabilitySpinBox->value(); }

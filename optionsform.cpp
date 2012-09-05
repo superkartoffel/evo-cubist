@@ -22,12 +22,15 @@ OptionsForm::OptionsForm(QWidget* parent)
     , ui(new Ui::OptionsForm)
 {
     ui->setupUi(this);
+
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
 
+    // expose signals from internal UI objects
     QObject::connect(ui->saveIntervalSpinBox, SIGNAL(valueChanged(int)), SIGNAL(autoSaveIntervalChanged(int)));
     QObject::connect(ui->autoSaveCheckBox, SIGNAL(toggled(bool)), SIGNAL(autoSaveToggled(bool)));
 
+    // save form values into global settings object
     QObject::connect(ui->colorMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setColorMutationProbability(int)));
     QObject::connect(ui->pointMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointMutationProbability(int)));
     QObject::connect(ui->pointKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointKillProbability(int)));
@@ -49,18 +52,6 @@ OptionsForm::~OptionsForm()
 }
 
 
-int OptionsForm::saveInterval(void) const
-{
-    return ui->saveIntervalSpinBox->value();
-}
-
-
-bool OptionsForm::autoSave(void) const
-{
-    return ui->autoSaveCheckBox->isChecked();
-}
-
-
 void OptionsForm::selectImageSaveDirectory(void)
 {
     const QString& dirName = QFileDialog::getExistingDirectory(this, tr("Choose image save directory"), ui->imageSaveDirectoryLineEdit->text());
@@ -77,27 +68,51 @@ void OptionsForm::selectDNASaveDirectory(void)
 }
 
 
-QString OptionsForm::imageSaveDirectory(void) const
+void OptionsForm::setColorMutationProbability(int v)
 {
-    return ui->imageSaveDirectoryLineEdit->text();
+    ui->colorMutationProbabilitySpinBox->blockSignals(true);
+    ui->colorMutationProbabilitySpinBox->setValue(v);
+    ui->colorMutationProbabilitySpinBox->blockSignals(false);
 }
 
 
-QString OptionsForm::imageSaveFilenameTemplate(void) const
+void OptionsForm::setPointMutationProbability(int v)
 {
-    return ui->imageFilenameTemplateLineEdit->text();
+    ui->pointMutationProbabilitySpinBox->blockSignals(true);
+    ui->pointMutationProbabilitySpinBox->setValue(v);
+    ui->pointMutationProbabilitySpinBox->blockSignals(false);
 }
 
 
-QString OptionsForm::dnaSaveDirectory(void) const
+void OptionsForm::setPointEmergenceProbability(int v)
 {
-    return ui->dnaSaveDirectoryLineEdit->text();
+    ui->pointEmergenceProbabilitySpinBox->blockSignals(true);
+    ui->pointEmergenceProbabilitySpinBox->setValue(v);
+    ui->pointEmergenceProbabilitySpinBox->blockSignals(false);
 }
 
 
-QString OptionsForm::dnaSaveFilenameTemplate(void) const
+void OptionsForm::setPointKillProbability(int v)
 {
-    return ui->dnaFilenameTemplateLineEdit->text();
+    ui->pointKillProbabilitySpinBox->blockSignals(true);
+    ui->pointKillProbabilitySpinBox->setValue(v);
+    ui->pointKillProbabilitySpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setGenomeEmergenceProbability(int v)
+{
+    ui->genomeEmergenceProbabilitySpinBox->blockSignals(true);
+    ui->genomeEmergenceProbabilitySpinBox->setValue(v);
+    ui->genomeEmergenceProbabilitySpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setGenomeKillProbability(int v)
+{
+    ui->genomeKillProbabilitySpinBox->blockSignals(true);
+    ui->genomeKillProbabilitySpinBox->setValue(v);
+    ui->genomeKillProbabilitySpinBox->blockSignals(false);
 }
 
 
@@ -151,49 +166,3 @@ QString OptionsForm::dnaFilename(const QString& originalImageFilename, unsigned 
 }
 
 
-void OptionsForm::setColorMutationProbability(int v)
-{
-    ui->colorMutationProbabilitySpinBox->blockSignals(true);
-    ui->colorMutationProbabilitySpinBox->setValue(v);
-    ui->colorMutationProbabilitySpinBox->blockSignals(false);
-}
-
-
-void OptionsForm::setPointMutationProbability(int v)
-{
-    ui->pointMutationProbabilitySpinBox->blockSignals(true);
-    ui->pointMutationProbabilitySpinBox->setValue(v);
-    ui->pointMutationProbabilitySpinBox->blockSignals(false);
-}
-
-
-void OptionsForm::setPointEmergenceProbability(int v)
-{
-    ui->pointEmergenceProbabilitySpinBox->blockSignals(true);
-    ui->pointEmergenceProbabilitySpinBox->setValue(v);
-    ui->pointEmergenceProbabilitySpinBox->blockSignals(false);
-}
-
-
-void OptionsForm::setPointKillProbability(int v)
-{
-    ui->pointKillProbabilitySpinBox->blockSignals(true);
-    ui->pointKillProbabilitySpinBox->setValue(v);
-    ui->pointKillProbabilitySpinBox->blockSignals(false);
-}
-
-
-void OptionsForm::setGenomeEmergenceProbability(int v)
-{
-    ui->genomeEmergenceProbabilitySpinBox->blockSignals(true);
-    ui->genomeEmergenceProbabilitySpinBox->setValue(v);
-    ui->genomeEmergenceProbabilitySpinBox->blockSignals(false);
-}
-
-
-void OptionsForm::setGenomeKillProbability(int v)
-{
-    ui->genomeKillProbabilitySpinBox->blockSignals(true);
-    ui->genomeKillProbabilitySpinBox->setValue(v);
-    ui->genomeKillProbabilitySpinBox->blockSignals(false);
-}
