@@ -15,16 +15,17 @@ BreederSettings::BreederSettings(void)
     , mdA(128)
     , mMinA(10)
     , mMaxA(60)
-    , mColorMutationRate(700)
-    , mPointMutationRate(700)
-    , mPointKillRate(700)
-    , mPointEmergenceRate(700)
-    , mGenomeKillRate(700)
-    , mGenomeEmergenceRate(700)
+    , mColorMutationProbability(700)
+    , mPointMutationProbability(700)
+    , mPointKillProbability(700)
+    , mPointEmergenceProbability(700)
+    , mGenomeKillProbability(700)
+    , mGenomeEmergenceProbability(700)
     , mMinPointsPerGenome(3)
     , mMaxPointsPerGenome(9)
     , mMinGenomes(200)
     , mMaxGenomes(400)
+    , mAutoSaveInterval(10)
 {
     // ...
 }
@@ -86,45 +87,45 @@ void BreederSettings::setMaxA(int v)
 }
 
 
-void BreederSettings::setColorMutationRate(int v)
+void BreederSettings::setColorMutationProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mColorMutationRate = v;
+    mColorMutationProbability = v;
 }
 
 
-void BreederSettings::setPointMutationRate(int v)
+void BreederSettings::setPointMutationProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mPointMutationRate = v;
+    mPointMutationProbability = v;
 }
 
 
-void BreederSettings::setPointKillRate(int v)
+void BreederSettings::setPointKillProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mPointKillRate = v;
+    mPointKillProbability = v;
 }
 
 
-void BreederSettings::setPointEmergenceRate(int v)
+void BreederSettings::setPointEmergenceProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mPointEmergenceRate = v;
+    mPointEmergenceProbability = v;
 }
 
 
-void BreederSettings::setGenomeKillRate(int v)
+void BreederSettings::setGenomeKillProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mGenomeKillRate = v;
+    mGenomeKillProbability = v;
 }
 
 
-void BreederSettings::setGenomeEmergenceRate(int v)
+void BreederSettings::setGenomeEmergenceProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mGenomeEmergenceRate = v;
+    mGenomeEmergenceProbability = v;
 }
 
 

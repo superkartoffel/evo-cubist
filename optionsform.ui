@@ -30,14 +30,17 @@
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="colorMutationRateLabel">
+          <widget class="QLabel" name="colorMutationProbabilityLabel">
            <property name="text">
-            <string>Color mutation rate</string>
+            <string>Color mutation probability</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="colorMutationRateSpinBox">
+          <widget class="QSpinBox" name="colorMutationProbabilitySpinBox">
+           <property name="prefix">
+            <string>1/</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -53,14 +56,17 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="pointMutationRateLabel">
+          <widget class="QLabel" name="pointMutationProbabilityLabel">
            <property name="text">
-            <string>Point mutation rate</string>
+            <string>Point mutation probability</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QSpinBox" name="pointMutationRateSpinBox">
+          <widget class="QSpinBox" name="pointMutationProbabilitySpinBox">
+           <property name="prefix">
+            <string>1/</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -76,14 +82,17 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="pointKillRateLabel">
+          <widget class="QLabel" name="pointKillProbabilityLabel">
            <property name="text">
-            <string>Point kill rate</string>
+            <string>Point kill probability</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QSpinBox" name="pointKillRateSpinBox">
+          <widget class="QSpinBox" name="pointKillProbabilitySpinBox">
+           <property name="prefix">
+            <string>1/</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -99,14 +108,17 @@
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="pointEmergenceRateLabel">
+          <widget class="QLabel" name="pointEmergenceProbabilityLabel">
            <property name="text">
-            <string>Point emergence rate</string>
+            <string>Point emergence probability</string>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QSpinBox" name="pointEmergenceRateSpinBox">
+          <widget class="QSpinBox" name="pointEmergenceProbabilitySpinBox">
+           <property name="prefix">
+            <string>1/</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -165,14 +177,17 @@
           </layout>
          </item>
          <item row="5" column="0">
-          <widget class="QLabel" name="genomeKillRateLabel">
+          <widget class="QLabel" name="genomeKillProbabilityLabel">
            <property name="text">
-            <string>Genome kill rate</string>
+            <string>Genome kill probability</string>
            </property>
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QSpinBox" name="genomeKillRateSpinBox">
+          <widget class="QSpinBox" name="genomeKillProbabilitySpinBox">
+           <property name="prefix">
+            <string>1/</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -188,14 +203,17 @@
           </widget>
          </item>
          <item row="6" column="0">
-          <widget class="QLabel" name="genomeEmergenceRateLabel">
+          <widget class="QLabel" name="genomeEmergenceProbabilityLabel">
            <property name="text">
-            <string>Genome emergence rate</string>
+            <string>Genome emergence probability</string>
            </property>
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QSpinBox" name="genomeEmergenceRateSpinBox">
+          <widget class="QSpinBox" name="genomeEmergenceProbabilitySpinBox">
+           <property name="prefix">
+            <string>1/</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>

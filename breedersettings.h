@@ -20,12 +20,12 @@ public:
     int dA(void) const { return mdA; }
     int minA(void) const { return mMinA; }
     int maxA(void) const { return mMaxA; }
-    int colorMutationRate(void) const { return mColorMutationRate; }
-    int pointMutationRate(void) const { return mPointMutationRate; }
-    int pointKillRate(void) const { return mPointKillRate; }
-    int pointEmergenceRate(void) const { return mPointEmergenceRate; }
-    int genomeKillRate(void) const { return mGenomeKillRate; }
-    int genomeEmergenceRate(void) const { return mGenomeEmergenceRate; }
+    int colorMutationProbability(void) const { return mColorMutationProbability; }
+    int pointMutationProbability(void) const { return mPointMutationProbability; }
+    int pointKillProbability(void) const { return mPointKillProbability; }
+    int pointEmergenceProbability(void) const { return mPointEmergenceProbability; }
+    int genomeKillProbability(void) const { return mGenomeKillProbability; }
+    int genomeEmergenceProbability(void) const { return mGenomeEmergenceProbability; }
     int minPointsPerGenome(void) const { return mMinPointsPerGenome; }
     int maxPointsPerGenome(void) const { return mMaxPointsPerGenome; }
     int minGenomes(void) const { return mMinGenomes; }
@@ -39,12 +39,12 @@ public slots:
     void setDeltaA(int);
     void setMinA(int);
     void setMaxA(int);
-    void setColorMutationRate(int);
-    void setPointMutationRate(int);
-    void setPointKillRate(int);
-    void setPointEmergenceRate(int);
-    void setGenomeKillRate(int);
-    void setGenomeEmergenceRate(int);
+    void setColorMutationProbability(int);
+    void setPointMutationProbability(int);
+    void setPointKillProbability(int);
+    void setPointEmergenceProbability(int);
+    void setGenomeKillProbability(int);
+    void setGenomeEmergenceProbability(int);
     void setMinPointsPerGenome(int);
     void setMaxPointsPerGenome(int);
     void setMinGenomes(int);
@@ -58,16 +58,18 @@ private:
     int mdA; // [0..255]
     int mMinA; // [0..255]
     int mMaxA; // [0..255]
-    int mColorMutationRate;
-    int mPointMutationRate;
-    int mPointKillRate;
-    int mPointEmergenceRate;
-    int mGenomeKillRate;
-    int mGenomeEmergenceRate;
+    int mColorMutationProbability;
+    int mPointMutationProbability;
+    int mPointKillProbability;
+    int mPointEmergenceProbability;
+    int mGenomeKillProbability;
+    int mGenomeEmergenceProbability;
     int mMinPointsPerGenome; // [3..n]
     int mMaxPointsPerGenome; // [n..n+x]
     int mMinGenomes;
     int mMaxGenomes;
+    int mAutoSaveInterval; // secs
+
 };
 
 

@@ -115,10 +115,10 @@ inline bool Breeder::willMutate(unsigned int rate) {
 inline void Breeder::mutate(void)
 {
     mMutation = mDNA;
-    if (willMutate(gBreederSettings.genomeEmergenceRate()) && mMutation.size() < gBreederSettings.maxGenomes()) {
+    if (willMutate(gBreederSettings.genomeEmergenceProbability()) && mMutation.size() < gBreederSettings.maxGenomes()) {
         mMutation.append(Genome());
     }
-    if (willMutate(gBreederSettings.genomeKillRate()) && mMutation.size() > gBreederSettings.minGenomes()) {
+    if (willMutate(gBreederSettings.genomeKillProbability()) && mMutation.size() > gBreederSettings.minGenomes()) {
         mMutation.remove(MT::random() % mMutation.size());
     }
     for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)

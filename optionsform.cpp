@@ -25,12 +25,15 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
 
-    QObject::connect(ui->colorMutationRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setColorMutationRate(int)));
-    QObject::connect(ui->pointMutationRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointMutationRate(int)));
-    QObject::connect(ui->pointKillRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointKillRate(int)));
-    QObject::connect(ui->pointEmergenceRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointEmergenceRate(int)));
-    QObject::connect(ui->genomeKillRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeKillRate(int)));
-    QObject::connect(ui->genomeEmergenceRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeEmergenceRate(int)));
+    // QObject::connect(ui->saveIntervalSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT());
+    // QObject::connect(ui->autoSaveCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT());
+
+    QObject::connect(ui->colorMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setColorMutationProbability(int)));
+    QObject::connect(ui->pointMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointMutationProbability(int)));
+    QObject::connect(ui->pointKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointKillProbability(int)));
+    QObject::connect(ui->pointEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointEmergenceProbability(int)));
+    QObject::connect(ui->genomeKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeKillProbability(int)));
+    QObject::connect(ui->genomeEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeEmergenceProbability(int)));
     QObject::connect(ui->minGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinGenomes(int)));
     QObject::connect(ui->maxGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxGenomes(int)));
     QObject::connect(ui->minPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinPointsPerGenome(int)));
@@ -148,49 +151,49 @@ QString OptionsForm::dnaFilename(const QString& originalImageFilename, unsigned 
 }
 
 
-void OptionsForm::setColorMutationRate(int v)
+void OptionsForm::setColorMutationProbability(int v)
 {
-    ui->colorMutationRateSpinBox->blockSignals(true);
-    ui->colorMutationRateSpinBox->setValue(v);
-    ui->colorMutationRateSpinBox->blockSignals(false);
+    ui->colorMutationProbabilitySpinBox->blockSignals(true);
+    ui->colorMutationProbabilitySpinBox->setValue(v);
+    ui->colorMutationProbabilitySpinBox->blockSignals(false);
 }
 
 
-void OptionsForm::setPointMutationRate(int v)
+void OptionsForm::setPointMutationProbability(int v)
 {
-    ui->pointMutationRateSpinBox->blockSignals(true);
-    ui->pointMutationRateSpinBox->setValue(v);
-    ui->pointMutationRateSpinBox->blockSignals(false);
+    ui->pointMutationProbabilitySpinBox->blockSignals(true);
+    ui->pointMutationProbabilitySpinBox->setValue(v);
+    ui->pointMutationProbabilitySpinBox->blockSignals(false);
 }
 
 
-void OptionsForm::setPointEmergenceRate(int v)
+void OptionsForm::setPointEmergenceProbability(int v)
 {
-    ui->pointEmergenceRateSpinBox->blockSignals(true);
-    ui->pointEmergenceRateSpinBox->setValue(v);
-    ui->pointEmergenceRateSpinBox->blockSignals(false);
+    ui->pointEmergenceProbabilitySpinBox->blockSignals(true);
+    ui->pointEmergenceProbabilitySpinBox->setValue(v);
+    ui->pointEmergenceProbabilitySpinBox->blockSignals(false);
 }
 
 
-void OptionsForm::setPointKillRate(int v)
+void OptionsForm::setPointKillProbability(int v)
 {
-    ui->pointKillRateSpinBox->blockSignals(true);
-    ui->pointKillRateSpinBox->setValue(v);
-    ui->pointKillRateSpinBox->blockSignals(false);
+    ui->pointKillProbabilitySpinBox->blockSignals(true);
+    ui->pointKillProbabilitySpinBox->setValue(v);
+    ui->pointKillProbabilitySpinBox->blockSignals(false);
 }
 
 
-void OptionsForm::setGenomeEmergenceRate(int v)
+void OptionsForm::setGenomeEmergenceProbability(int v)
 {
-    ui->genomeEmergenceRateSpinBox->blockSignals(true);
-    ui->genomeEmergenceRateSpinBox->setValue(v);
-    ui->genomeEmergenceRateSpinBox->blockSignals(false);
+    ui->genomeEmergenceProbabilitySpinBox->blockSignals(true);
+    ui->genomeEmergenceProbabilitySpinBox->setValue(v);
+    ui->genomeEmergenceProbabilitySpinBox->blockSignals(false);
 }
 
 
-void OptionsForm::setGenomeKillRate(int v)
+void OptionsForm::setGenomeKillProbability(int v)
 {
-    ui->genomeKillRateSpinBox->blockSignals(true);
-    ui->genomeKillRateSpinBox->setValue(v);
-    ui->genomeKillRateSpinBox->blockSignals(false);
+    ui->genomeKillProbabilitySpinBox->blockSignals(true);
+    ui->genomeKillProbabilitySpinBox->setValue(v);
+    ui->genomeKillProbabilitySpinBox->blockSignals(false);
 }

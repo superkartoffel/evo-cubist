@@ -37,19 +37,19 @@ public:
     QString imageFilename(const QString&, unsigned int generations, unsigned int selected);
     QString dnaFilename(const QString&, unsigned int generations, unsigned int selected);
 
-    inline int colorMutationRate(void) const { return ui->colorMutationRateSpinBox->value(); }
-    inline int pointMutationRate(void) const { return ui->pointMutationRateSpinBox->value(); }
-    inline int pointEmergenceRate(void) const { return ui->pointEmergenceRateSpinBox->value(); }
-    inline int pointKillRate(void) const { return ui->pointKillRateSpinBox->value(); }
-    inline int genomeEmergenceRate(void) const { return ui->genomeEmergenceRateSpinBox->value(); }
-    inline int genomeKillRate(void) const { return ui->genomeKillRateSpinBox->value(); }
+    inline int colorMutationProbability(void) const { return ui->colorMutationProbabilitySpinBox->value(); }
+    inline int pointMutationProbability(void) const { return ui->pointMutationProbabilitySpinBox->value(); }
+    inline int pointEmergenceProbability(void) const { return ui->pointEmergenceProbabilitySpinBox->value(); }
+    inline int pointKillProbability(void) const { return ui->pointKillProbabilitySpinBox->value(); }
+    inline int genomeEmergenceProbability(void) const { return ui->genomeEmergenceProbabilitySpinBox->value(); }
+    inline int genomeKillProbability(void) const { return ui->genomeKillProbabilitySpinBox->value(); }
 
-    void setColorMutationRate(int);
-    void setPointMutationRate(int);
-    void setPointEmergenceRate(int);
-    void setPointKillRate(int);
-    void setGenomeEmergenceRate(int);
-    void setGenomeKillRate(int);
+    void setColorMutationProbability(int);
+    void setPointMutationProbability(int);
+    void setPointEmergenceProbability(int);
+    void setPointKillProbability(int);
+    void setGenomeEmergenceProbability(int);
+    void setGenomeKillProbability(int);
 
 signals:
 

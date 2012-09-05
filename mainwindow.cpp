@@ -194,12 +194,12 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/deltaB", ui->blueSlider->value());
     settings.setValue("Options/deltaA", ui->alphaSlider->value());
     settings.setValue("Options/deltaXY", ui->xySlider->value());
-    settings.setValue("Options/colorMutationRate", mOptionsForm.colorMutationRate());
-    settings.setValue("Options/pointMutationRate", mOptionsForm.pointMutationRate());
-    settings.setValue("Options/pointKillRate", mOptionsForm.pointKillRate());
-    settings.setValue("Options/pointEmergenceRate", mOptionsForm.pointEmergenceRate());
-    settings.setValue("Options/genomeKillRate", mOptionsForm.genomeKillRate());
-    settings.setValue("Options/genomeEmergenceRate", mOptionsForm.genomeEmergenceRate());
+    settings.setValue("Options/colorMutationProbability", mOptionsForm.colorMutationProbability());
+    settings.setValue("Options/pointMutationProbability", mOptionsForm.pointMutationProbability());
+    settings.setValue("Options/pointKillProbability", mOptionsForm.pointKillProbability());
+    settings.setValue("Options/pointEmergenceProbability", mOptionsForm.pointEmergenceProbability());
+    settings.setValue("Options/genomeKillProbability", mOptionsForm.genomeKillProbability());
+    settings.setValue("Options/genomeEmergenceProbability", mOptionsForm.genomeEmergenceProbability());
     settings.setValue("Options/imageSaveDirectory", mOptionsForm.imageSaveDirectory());
     settings.setValue("Options/imageSaveFilenameTemplate", mOptionsForm.imageSaveFilenameTemplate());
     settings.setValue("Options/dnaSaveDirectory", mOptionsForm.dnaSaveDirectory());
@@ -229,12 +229,12 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setDNASaveFilenameTemplate(settings.value("Options/dnaSaveFilenameTemplate", "%1-%2-%3.svg").toString());
     mOptionsForm.setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
     mOptionsForm.setAutoSave(settings.value("Options/autoSave", true).toBool());
-    mOptionsForm.setColorMutationRate(settings.value("Options/colorMutationRate", 700).toInt());
-    mOptionsForm.setPointMutationRate(settings.value("Options/pointMutationRate", 700).toInt());
-    mOptionsForm.setPointKillRate(settings.value("Options/pointKillRate", 700).toInt());
-    mOptionsForm.setPointEmergenceRate(settings.value("Options/pointEmergenceRate", 700).toInt());
-    mOptionsForm.setGenomeKillRate(settings.value("Options/genomeKillRate", 700).toInt());
-    mOptionsForm.setGenomeEmergenceRate(settings.value("Options/genomeEmergenceRate", 700).toInt());
+    mOptionsForm.setColorMutationProbability(settings.value("Options/colorMutationProbability", 700).toInt());
+    mOptionsForm.setPointMutationProbability(settings.value("Options/pointMutationProbability", 700).toInt());
+    mOptionsForm.setPointKillProbability(settings.value("Options/pointKillProbability", 700).toInt());
+    mOptionsForm.setPointEmergenceProbability(settings.value("Options/pointEmergenceProbability", 700).toInt());
+    mOptionsForm.setGenomeKillProbability(settings.value("Options/genomeKillProbability", 700).toInt());
+    mOptionsForm.setGenomeEmergenceProbability(settings.value("Options/genomeEmergenceProbability", 700).toInt());
 }
 
 
