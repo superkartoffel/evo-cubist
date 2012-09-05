@@ -28,7 +28,7 @@ void SVGReader::readPath(void)
         polygon << point;
         d = d.right(d.size() - pos - xy.at(0).size() + 1);
     }
-    mDNA.append(Genome(mBreeder, polygon, color));
+    mDNA.append(Genome(polygon, color));
 
     while (mXml.readNextStartElement()) {
         if (mXml.name() == "path")

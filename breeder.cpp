@@ -11,17 +11,8 @@
 
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
-    , mMutationRate(1)
-    , mMinGenomes(MIN_GENOMES)
-    , mMaxGenomes(MAX_GENOMES)
 {
     reset();
-}
-
-
-void Breeder::setOptions(const OptionsForm* options)
-{
-    mOptions = options;
 }
 
 
@@ -71,45 +62,9 @@ void Breeder::reset(void)
 void Breeder::populate(void)
 {
     QMutexLocker locker(&mDNAMutex);
-    int N = mMinGenomes + random() % (mMaxGenomes - mMinGenomes);
+    int N = gBreederSettings.minGenomes() + MT::random() % (gBreederSettings.maxGenomes() - gBreederSettings.minGenomes());
     for (int i = 0; i < N; ++i)
-        mDNA.append(Genome(this));
-}
-
-
-void Breeder::setDeltaR(int d)
-{
-    mdR = d;
-}
-
-
-void Breeder::setDeltaG(int d)
-{
-    mdG = d;
-}
-
-
-void Breeder::setDeltaB(int d)
-{
-    mdB = d;
-}
-
-
-void Breeder::setDeltaA(int d)
-{
-    mdA = d;
-}
-
-
-void Breeder::setDeltaXY(int d)
-{
-    mdXY = 1e-3 * (qreal) d;
-}
-
-
-void Breeder::setMutationRate(int r)
-{
-    mMutationRate = r;
+        mDNA.append(Genome());
 }
 
 
@@ -160,11 +115,11 @@ inline bool Breeder::willMutate(unsigned int rate) {
 inline void Breeder::mutate(void)
 {
     mMutation = mDNA;
-    if (willMutate(mGenomeEmergenceRate) && mMutation.size() < MAX_GENOMES) {
-        mMutation.append(Genome(this));
+    if (willMutate(gBreederSettings.genomeEmergenceRate()) && mMutation.size() < gBreederSettings.maxGenomes()) {
+        mMutation.append(Genome());
     }
-    if (willMutate(mGenomeKillRate) && mMutation.size() > MIN_GENOMES) {
-        mMutation.remove(random() % mMutation.size());
+    if (willMutate(gBreederSettings.genomeKillRate()) && mMutation.size() > gBreederSettings.minGenomes()) {
+        mMutation.remove(MT::random() % mMutation.size());
     }
     for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)
         genome->mutate();

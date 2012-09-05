@@ -24,7 +24,6 @@ namespace randomtools {
         static VariateType makeSeed(void);
     };
 
-    typedef RandomNumberGenerator<unsigned long long> UInt64RandomNumberGenerator;
     typedef RandomNumberGenerator<unsigned int> UIntRandomNumberGenerator;
 
 }

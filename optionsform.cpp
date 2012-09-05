@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QtCore/QDebug>
 
+#include "breedersettings.h"
 #include "optionsform.h"
 #include "ui_optionsform.h"
 
@@ -23,6 +24,19 @@ OptionsForm::OptionsForm(QWidget* parent)
     ui->setupUi(this);
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
+
+    QObject::connect(ui->colorMutationRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setColorMutationRate(int)));
+    QObject::connect(ui->pointMutationRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointMutationRate(int)));
+    QObject::connect(ui->pointKillRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointKillRate(int)));
+    QObject::connect(ui->pointEmergenceRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointEmergenceRate(int)));
+    QObject::connect(ui->genomeKillRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeKillRate(int)));
+    QObject::connect(ui->genomeEmergenceRateSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeEmergenceRate(int)));
+    QObject::connect(ui->minGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinGenomes(int)));
+    QObject::connect(ui->maxGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxGenomes(int)));
+    QObject::connect(ui->minPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinPointsPerGenome(int)));
+    QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxPointsPerGenome(int)));
+    QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinA(int)));
+    QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxA(int)));
 }
 
 
@@ -131,4 +145,52 @@ QString OptionsForm::dnaFilename(const QString& originalImageFilename, unsigned 
 {
     QFileInfo fileInfo(originalImageFilename);
     return ui->dnaSaveDirectoryLineEdit->text() + "/" + QString(ui->dnaFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
+}
+
+
+void OptionsForm::setColorMutationRate(int v)
+{
+    ui->colorMutationRateSpinBox->blockSignals(true);
+    ui->colorMutationRateSpinBox->setValue(v);
+    ui->colorMutationRateSpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setPointMutationRate(int v)
+{
+    ui->pointMutationRateSpinBox->blockSignals(true);
+    ui->pointMutationRateSpinBox->setValue(v);
+    ui->pointMutationRateSpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setPointEmergenceRate(int v)
+{
+    ui->pointEmergenceRateSpinBox->blockSignals(true);
+    ui->pointEmergenceRateSpinBox->setValue(v);
+    ui->pointEmergenceRateSpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setPointKillRate(int v)
+{
+    ui->pointKillRateSpinBox->blockSignals(true);
+    ui->pointKillRateSpinBox->setValue(v);
+    ui->pointKillRateSpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setGenomeEmergenceRate(int v)
+{
+    ui->genomeEmergenceRateSpinBox->blockSignals(true);
+    ui->genomeEmergenceRateSpinBox->setValue(v);
+    ui->genomeEmergenceRateSpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setGenomeKillRate(int v)
+{
+    ui->genomeKillRateSpinBox->blockSignals(true);
+    ui->genomeKillRateSpinBox->setValue(v);
+    ui->genomeKillRateSpinBox->blockSignals(false);
 }

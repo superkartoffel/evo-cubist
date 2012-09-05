@@ -12,14 +12,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "random/mersenne_twister.h"
-
+#include "breedersettings.h"
 
 const QString MainWindow::Company = "c't";
 const QString MainWindow::AppName = QObject::tr("Evo Cubist");
 #ifdef QT_NO_DEBUG
-const QString MainWindow::AppVersion = "0.1";
+const QString MainWindow::AppVersion = "0.2";
 #else
-const QString MainWindow::AppVersion = "0.1 [DEBUG]";
+const QString MainWindow::AppVersion = "0.2 [DEBUG]";
 #endif
 
 
@@ -58,11 +58,11 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetBreeder()));
 
-    QObject::connect(ui->redSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaR(int)));
-    QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaG(int)));
-    QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaB(int)));
-    QObject::connect(ui->alphaSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaA(int)));
-    QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaXY(int)));
+    QObject::connect(ui->redSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaR(int)));
+    QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaG(int)));
+    QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaB(int)));
+    QObject::connect(ui->alphaSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaA(int)));
+    QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaXY(int)));
 
     QObject::connect(ui->actionSaveDNA, SIGNAL(triggered()), SLOT(saveDNA()));
     QObject::connect(ui->actionOpenDNA, SIGNAL(triggered()), SLOT(openDNA()));
@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(aboutQt()));
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), &mOptionsForm, SLOT(show()));
 
-    rng.seed(QDateTime::currentDateTime().toTime_t());
+    MT::rng.seed(QDateTime::currentDateTime().toTime_t());
 
     restoreAppSettings();
 }
@@ -113,21 +113,21 @@ void MainWindow::closeEvent(QCloseEvent* e)
 }
 
 
+void MainWindow::proceeded(unsigned int generation)
+{
+    ui->generationLineEdit->setText(QString("%1").arg(generation));
+    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
+}
+
+
 void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitness, unsigned int selected, unsigned generation)
 {
     mGenerationWidget->setImage(image);
     ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
-    ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation, 4, 'g', 4));
+    ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
     ui->pointsLineEdit->setText(QString("%1").arg(dna.points()));
-}
-
-
-void MainWindow::proceeded(unsigned int generation)
-{
-    ui->generationLineEdit->setText(QString("%1").arg(generation));
-    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
 }
 
 
@@ -186,14 +186,20 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/geometry", saveGeometry());
     settings.setValue("MainWindow/windowState", saveState());
     settings.setValue("MainWindow/imageFilename", mImageWidget->imageFileName());
-    settings.setValue("MainWindow/deltaR", ui->redSlider->value());
-    settings.setValue("MainWindow/deltaG", ui->greenSlider->value());
-    settings.setValue("MainWindow/deltaB", ui->blueSlider->value());
-    settings.setValue("MainWindow/deltaA", ui->alphaSlider->value());
-    settings.setValue("MainWindow/deltaXY", ui->xySlider->value());
     settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
     settings.setValue("MainWindow/lastSavedSVG", mLastSavedSVG);
     settings.setValue("Options/geometry", mOptionsForm.saveGeometry());
+    settings.setValue("Options/deltaR", ui->redSlider->value());
+    settings.setValue("Options/deltaG", ui->greenSlider->value());
+    settings.setValue("Options/deltaB", ui->blueSlider->value());
+    settings.setValue("Options/deltaA", ui->alphaSlider->value());
+    settings.setValue("Options/deltaXY", ui->xySlider->value());
+    settings.setValue("Options/colorMutationRate", mOptionsForm.colorMutationRate());
+    settings.setValue("Options/pointMutationRate", mOptionsForm.pointMutationRate());
+    settings.setValue("Options/pointKillRate", mOptionsForm.pointKillRate());
+    settings.setValue("Options/pointEmergenceRate", mOptionsForm.pointEmergenceRate());
+    settings.setValue("Options/genomeKillRate", mOptionsForm.genomeKillRate());
+    settings.setValue("Options/genomeEmergenceRate", mOptionsForm.genomeEmergenceRate());
     settings.setValue("Options/imageSaveDirectory", mOptionsForm.imageSaveDirectory());
     settings.setValue("Options/imageSaveFilenameTemplate", mOptionsForm.imageSaveFilenameTemplate());
     settings.setValue("Options/dnaSaveDirectory", mOptionsForm.dnaSaveDirectory());
@@ -211,11 +217,11 @@ void MainWindow::restoreAppSettings(void)
     QString imageFileName = settings.value("MainWindow/imageFilename").toString();
     if (imageFileName != "")
         mImageWidget->loadImage(imageFileName);
-    ui->redSlider->setValue(settings.value("MainWindow/deltaR").toInt());
-    ui->greenSlider->setValue(settings.value("MainWindow/deltaG").toInt());
-    ui->blueSlider->setValue(settings.value("MainWindow/deltaB").toInt());
-    ui->alphaSlider->setValue(settings.value("MainWindow/deltaA").toInt());
-    ui->xySlider->setValue(settings.value("MainWindow/deltaXY").toInt());
+    ui->redSlider->setValue(settings.value("Options/deltaR", 100).toInt());
+    ui->greenSlider->setValue(settings.value("Options/deltaG", 100).toInt());
+    ui->blueSlider->setValue(settings.value("Options/deltaB", 100).toInt());
+    ui->alphaSlider->setValue(settings.value("Options/deltaA", 100).toInt());
+    ui->xySlider->setValue(settings.value("Options/deltaXY", 230).toInt());
     mOptionsForm.restoreGeometry(settings.value("Options/geometry").toByteArray());
     mOptionsForm.setImageSaveDirectory(settings.value("Options/imageSaveDirectory", QDir::homePath()).toString());
     mOptionsForm.setImageSaveFilenameTemplate(settings.value("Options/imageSaveFilenameTemplate", "%1-%2-%3.png").toString());
@@ -273,7 +279,7 @@ void MainWindow::loadDNA(const QString& filename)
 {
     if (filename != "") {
         DNA dna;
-        bool success = dna.load(filename, &mBreeder);
+        bool success = dna.load(filename);
         if (success) {
             stopBreeding();
             mBreeder.setDNA(dna);

@@ -16,7 +16,7 @@
 #include "dna.h"
 #include "genome.h"
 #include "random/mersenne_twister.h"
-#include "optionsform.h"
+#include "breedersettings.h"
 
 
 class Breeder : public QThread
@@ -24,10 +24,7 @@ class Breeder : public QThread
     Q_OBJECT
 
 public:
-    friend class Genome;
-
     Breeder(QThread* parent = NULL);
-    void setOptions(const OptionsForm* options);
     void reset(void);
     void populate(void);
     void mutate(void);
@@ -66,19 +63,7 @@ private:
     DNA mDNA;
     DNA mMutation;
 
-    int mdR;
-    int mdG;
-    int mdB;
-    int mdA;
-    qreal mdXY;
-    unsigned int mPointKillRate;
-    unsigned int mPointEmergenceRate;
-
-    static const int MIN_GENOMES = 200;
-    static const int MAX_GENOMES = 400;
-
     QMutex mDNAMutex;
-    const OptionsForm* mOptions;
 
 signals:
     void evolved(const QImage&, const DNA&, unsigned int, unsigned int, unsigned int);
@@ -86,11 +71,6 @@ signals:
     
 public slots:
     void setOriginalImage(const QImage&);
-    void setDeltaR(int);
-    void setDeltaG(int);
-    void setDeltaB(int);
-    void setDeltaA(int);
-    void setDeltaXY(int);
 };
 
 #endif // __BREEDER_H_

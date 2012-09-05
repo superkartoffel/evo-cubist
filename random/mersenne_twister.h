@@ -8,7 +8,7 @@
 
 namespace MT {
 
-    class MersenneTwister : public UIntRandomNumberGenerator
+    class MersenneTwister : public randomtools::UIntRandomNumberGenerator
     {
     public:
         MersenneTwister(void) {}
@@ -29,10 +29,11 @@ namespace MT {
         void warmup();
     };
 
+    extern MersenneTwister rng;
+
     inline unsigned int random(void) { return rng.next(); }
     inline double random1(void) { return (double)random() / rng.max(); }
 
-    extern MersenneTwister rng;
 }
 
 #endif //  __MERSENNETWISTER_H_

@@ -2,7 +2,7 @@
 
 QT += core gui xml
 
-# QMAKE_CXXFLAGS += /openmp
+QMAKE_CXXFLAGS += /openmp
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     qt-json/json.cpp \
     random/mersenne_twister.cpp \
     optionsform.cpp \
-    svgreader.cpp
+    svgreader.cpp \
+    breedersettings.cpp
 
 HEADERS += mainwindow.h \
     imagewidget.h \
@@ -31,7 +32,8 @@ HEADERS += mainwindow.h \
     random/mersenne_twister.h \
     random/abstract_random_number_generator.h \
     optionsform.h \
-    svgreader.h
+    svgreader.h \
+    breedersettings.h
 
 FORMS += mainwindow.ui \
     optionsform.ui

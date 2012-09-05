@@ -5,6 +5,7 @@
 #define __OPTIONSFORM_H_
 
 #include <QWidget>
+#include "breedersettings.h"
 #include "ui_optionsform.h"
 
 
@@ -36,19 +37,22 @@ public:
     QString imageFilename(const QString&, unsigned int generations, unsigned int selected);
     QString dnaFilename(const QString&, unsigned int generations, unsigned int selected);
 
-    inline unsigned int colorMutationRate(void) const { return (unsigned int)ui->colorMutationRateSpinBox->value(); }
-    inline unsigned int pointMutationRate(void) const { return (unsigned int)ui->pointMutationRateSpinBox->value(); }
-    inline unsigned int pointEmergenceRate(void) const { return (unsigned int)ui->pointEmergenceRateSpinBox->value(); }
-    inline unsigned int pointKillRate(void) const { return (unsigned int)ui->pointKillRateSpinBox->value(); }
-    inline unsigned int genomeEmergenceRate(void) const { return (unsigned int)ui->genomeEmergenceRateSpinBox->value(); }
-    inline unsigned int genomeKillRate(void) const { return (unsigned int)ui->genomeKillRateSpinBox->value(); }
+    inline int colorMutationRate(void) const { return ui->colorMutationRateSpinBox->value(); }
+    inline int pointMutationRate(void) const { return ui->pointMutationRateSpinBox->value(); }
+    inline int pointEmergenceRate(void) const { return ui->pointEmergenceRateSpinBox->value(); }
+    inline int pointKillRate(void) const { return ui->pointKillRateSpinBox->value(); }
+    inline int genomeEmergenceRate(void) const { return ui->genomeEmergenceRateSpinBox->value(); }
+    inline int genomeKillRate(void) const { return ui->genomeKillRateSpinBox->value(); }
 
-    inline void setColorMutationRate(unsigned int r) { ui->colorMutationRateSpinBox->setValue(r); }
-    inline void setPointMutationRate(unsigned int r) { ui->pointMutationRateSpinBox->setValue(r); }
-    inline void setPointEmergenceRate(unsigned int r) { ui->pointEmergenceRateSpinBox->setValue(r); }
-    inline void setPointKillRate(unsigned int r) { ui->pointKillRateSpinBox->setValue(r); }
-    inline void setGenomeEmergenceRate(unsigned int r) { ui->genomeEmergenceRateSpinBox->setValue(r); }
-    inline void setGenomeKillRate(unsigned int r) { ui->genomeKillRateSpinBox->setValue(r); }
+    void setColorMutationRate(int);
+    void setPointMutationRate(int);
+    void setPointEmergenceRate(int);
+    void setPointKillRate(int);
+    void setGenomeEmergenceRate(int);
+    void setGenomeKillRate(int);
+
+signals:
+
 
 private slots:
     void selectImageSaveDirectory(void);

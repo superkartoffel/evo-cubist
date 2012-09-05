@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>884</width>
-    <height>417</height>
+    <width>353</width>
+    <height>367</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -481,7 +481,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>884</width>
+     <width>353</width>
      <height>21</height>
     </rect>
    </property>
@@ -546,7 +546,7 @@
     <string>DNA ...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionOpenDNA">

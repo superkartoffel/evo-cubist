@@ -16,17 +16,15 @@ class Breeder;
 class Genome
 {
 public:
-    inline Genome(void)
-        : mBreeder(NULL) { /* ... */ }
+    Genome(void);
     inline Genome(const Genome& o)
-        : mBreeder(o.mBreeder)
-        , mPolygon(o.mPolygon)
-        , mColor(o.mColor) { /* ... */ }
-    inline Genome(Breeder* breeder, QPolygonF polygon, QColor color)
-        : mBreeder(breeder)
-        , mPolygon(polygon)
-        , mColor(color) { /* ... */ }
-    Genome(Breeder*);
+        : mPolygon(o.mPolygon)
+        , mColor(o.mColor)
+    { /* ... */ }
+    inline Genome(QPolygonF polygon, QColor color)
+        : mPolygon(polygon)
+        , mColor(color)
+    { /* ... */ }
 
     inline const QColor& color(void) const { return mColor; }
     inline const QPolygonF& polygon(void) const { return mPolygon; }
@@ -35,27 +33,13 @@ public:
     void setColor(const QColor&);
     void setPolygon(const QPolygonF&);
 
-    inline void setColorMutationRate(unsigned int r) { mColorMutationRate = r; }
-    inline void setPointMutationRate(unsigned int r) { mPointMutationRate = r; }
-    inline void setPointKillRate(unsigned int r) { mPointKillRate = r; }
-    inline void setPointEmergenceRate(unsigned int r) { mPointEmergenceRate = r; }
-
-    static const int MIN_NUM_POINTS = 3;
-    static const int MAX_NUM_POINTS = 9;
-
     void mutate(void);
 
 private:
-    Breeder* mBreeder;
     QPolygonF mPolygon;
     QColor mColor;
 
-    unsigned int mColorMutationRate;
-    unsigned int mPointMutationRate;
-    unsigned int mPointKillRate;
-    unsigned int mPointEmergenceRate;
-
-    bool willMutate(unsigned int rate) const;
+    bool willMutate(int rate) const;
 };
 
 

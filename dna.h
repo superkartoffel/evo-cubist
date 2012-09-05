@@ -24,7 +24,7 @@ public:
     inline DNA(const DNA &v) : DNAType(v) {}
 
     bool save(const QString& filename, const QSize& size) const;
-    bool load(const QString& filename, Breeder* breeder);
+    bool load(const QString& filename);
 
     unsigned int points(void) const;
     const QSize& originalSize(void) const { return mSize; }

@@ -3,47 +3,46 @@
 
 #include "random/mersenne_twister.h"
 #include "genome.h"
-#include "breeder.h"
+#include "breedersettings.h"
 #include <QtGlobal>
 #include <QtCore/QDebug>
 
-Genome::Genome(Breeder* breeder)
-    : mBreeder(breeder)
+
+Genome::Genome(void)
 {
-    Q_ASSERT(mBreeder != NULL);
-    const int N = MIN_NUM_POINTS + MT::random() % (MAX_NUM_POINTS - MIN_NUM_POINTS);
+    const int N = gBreederSettings.minPointsPerGenome() + MT::random() % (gBreederSettings.maxPointsPerGenome() - gBreederSettings.minPointsPerGenome());
     for (int x = 0; x < N; ++x)
         mPolygon.append(QPointF(MT::random1(), MT::random1()));
-    mColor.setRgb(MT::random() % 255, MT::random() % 255, MT::random() % 255, 10 + MT::random() % 50);
+    mColor.setRgb(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
 }
 
 
-inline bool Genome::willMutate(unsigned int rate) const {
+inline bool Genome::willMutate(int rate) const {
     return (MT::random() % rate) == 0;
 }
 
 
 void Genome::mutate(void)
 {
-    if (willMutate() && mPolygon.size() < 9) {
+    if (willMutate(gBreederSettings.pointEmergenceRate()) && mPolygon.size() < gBreederSettings.maxPointsPerGenome()) {
         mPolygon.append(QPointF(MT::random1(), MT::random1()));
     }
-    if (willMutate() && mPolygon.size() > 3) {
+    if (willMutate(gBreederSettings.pointKillRate()) && mPolygon.size() > gBreederSettings.minPointsPerGenome()) {
         mPolygon.remove(MT::random() % mPolygon.size());
     }
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
-        if (willMutate(mPointMutationRate)) {
-            qreal x2 = p->x() + mBreeder->mdXY * (MT::random1() - 0.5);
-            qreal y2 = p->y() + mBreeder->mdXY * (MT::random1() - 0.5);
+        if (willMutate(gBreederSettings.pointMutationRate())) {
+            qreal x2 = p->x() + gBreederSettings.dXY() * (MT::random1() - 0.5);
+            qreal y2 = p->y() + gBreederSettings.dXY() * (MT::random1() - 0.5);
             p->setX((x2 < 0.0)? 0.0 : ((x2 > 1.0)? 1.0 : x2));
             p->setY((y2 < 0.0)? 0.0 : ((y2 > 1.0)? 1.0 : y2));
         }
     }
-    if (willMutate(mColorMutationRate)) {
-        const int r = 0xff & (MT::random() % mBreeder->mdR + mColor.red());
-        const int g = 0xff & (MT::random() % mBreeder->mdG + mColor.green());
-        const int b = 0xff & (MT::random() % mBreeder->mdB + mColor.blue());
-        const int a = MT::random() % mBreeder->mdA + mColor.alpha();
+    if (willMutate(gBreederSettings.colorMutationRate())) {
+        const int r = 0xff & (MT::random() % gBreederSettings.dR() + mColor.red());
+        const int g = 0xff & (MT::random() % gBreederSettings.dG() + mColor.green());
+        const int b = 0xff & (MT::random() % gBreederSettings.dB() + mColor.blue());
+        const int a = MT::random() % gBreederSettings.dA() + mColor.alpha();
         mColor.setRgb(r, g, b, (a < 10)? 10 : ((a > 60)? 60 : a));
     }
 }

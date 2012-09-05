@@ -16,12 +16,7 @@
 class SVGReader
 {
 public:
-    SVGReader(Breeder* breeder)
-        : mBreeder(breeder)
-    {
-        Q_ASSERT(breeder != NULL);
-        // ...
-    }
+    SVGReader(void) { /* ... */ }
     const DNA& dna(void) const { return mDNA; }
     const QSize& size(void) const { return mSize; }
     bool readSVG(QIODevice*);

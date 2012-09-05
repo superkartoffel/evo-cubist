@@ -59,7 +59,7 @@ bool DNA::save(const QString& filename, const QSize& size) const
 
 
 // XXX: move method to Breeder
-bool DNA::load(const QString& filename, Breeder* breeder)
+bool DNA::load(const QString& filename)
 {
     bool rc;
     QFile file(filename);
@@ -88,12 +88,12 @@ bool DNA::load(const QString& filename, Breeder* breeder)
                     const QVariantMap& p = point->toMap();
                     polygon << QPointF(p["x"].toDouble(), p["y"].toDouble());
                 }
-                this->append(Genome(breeder, polygon, color));
+                this->append(Genome(polygon, color));
             }
         }
     }
     else if (filename.endsWith(".svg")) {
-        SVGReader xml(breeder);
+        SVGReader xml;
         ok = xml.readSVG(&file);
         if (ok) {
             clear();
