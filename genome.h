@@ -9,6 +9,7 @@
 #include <QPointF>
 #include <QPolygonF>
 #include <QTextStream>
+#include "random/mersenne_twister.h"
 
 class Breeder;
 
@@ -34,6 +35,11 @@ public:
     void setColor(const QColor&);
     void setPolygon(const QPolygonF&);
 
+    inline void setColorMutationRate(unsigned int r) { mColorMutationRate = r; }
+    inline void setPointMutationRate(unsigned int r) { mPointMutationRate = r; }
+    inline void setPointKillRate(unsigned int r) { mPointKillRate = r; }
+    inline void setPointEmergenceRate(unsigned int r) { mPointEmergenceRate = r; }
+
     static const int MIN_NUM_POINTS = 3;
     static const int MAX_NUM_POINTS = 9;
 
@@ -44,7 +50,12 @@ private:
     QPolygonF mPolygon;
     QColor mColor;
 
-    bool willMutate(void);
+    unsigned int mColorMutationRate;
+    unsigned int mPointMutationRate;
+    unsigned int mPointKillRate;
+    unsigned int mPointEmergenceRate;
+
+    bool willMutate(unsigned int rate) const;
 };
 
 

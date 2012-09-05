@@ -7,9 +7,11 @@
 #include <QtCore/QDebug>
 #include <QSettings>
 #include <QFileDialog>
+#include <QDir>
 #include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "random/mersenne_twister.h"
 
 
 const QString MainWindow::Company = "c't";
@@ -60,7 +62,6 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaG(int)));
     QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaB(int)));
     QObject::connect(ui->alphaSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaA(int)));
-    QObject::connect(ui->rateSlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setMutationRate(int)));
     QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &mBreeder, SLOT(setDeltaXY(int)));
 
     QObject::connect(ui->actionSaveDNA, SIGNAL(triggered()), SLOT(saveDNA()));
@@ -71,6 +72,8 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
     QObject::connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(aboutQt()));
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), &mOptionsForm, SLOT(show()));
+
+    rng.seed(QDateTime::currentDateTime().toTime_t());
 
     restoreAppSettings();
 }
@@ -188,7 +191,6 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/deltaB", ui->blueSlider->value());
     settings.setValue("MainWindow/deltaA", ui->alphaSlider->value());
     settings.setValue("MainWindow/deltaXY", ui->xySlider->value());
-    settings.setValue("MainWindow/mutationRate", ui->rateSlider->value());
     settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
     settings.setValue("MainWindow/lastSavedSVG", mLastSavedSVG);
     settings.setValue("Options/geometry", mOptionsForm.saveGeometry());
@@ -214,14 +216,19 @@ void MainWindow::restoreAppSettings(void)
     ui->blueSlider->setValue(settings.value("MainWindow/deltaB").toInt());
     ui->alphaSlider->setValue(settings.value("MainWindow/deltaA").toInt());
     ui->xySlider->setValue(settings.value("MainWindow/deltaXY").toInt());
-    ui->rateSlider->setValue(settings.value("MainWindow/mutationRate").toInt());
     mOptionsForm.restoreGeometry(settings.value("Options/geometry").toByteArray());
-    mOptionsForm.setImageSaveDirectory(settings.value("Options/imageSaveDirectory").toString());
-    mOptionsForm.setImageSaveFilenameTemplate(settings.value("Options/imageSaveFilenameTemplate").toString());
-    mOptionsForm.setDNASaveDirectory(settings.value("Options/dnaSaveDirectory").toString());
-    mOptionsForm.setDNASaveFilenameTemplate(settings.value("Options/dnaSaveFilenameTemplate").toString());
-    mOptionsForm.setSaveInterval(settings.value("Options/saveInterval").toInt());
-    mOptionsForm.setAutoSave(settings.value("Options/autoSave").toBool());
+    mOptionsForm.setImageSaveDirectory(settings.value("Options/imageSaveDirectory", QDir::homePath()).toString());
+    mOptionsForm.setImageSaveFilenameTemplate(settings.value("Options/imageSaveFilenameTemplate", "%1-%2-%3.png").toString());
+    mOptionsForm.setDNASaveDirectory(settings.value("Options/dnaSaveDirectory", QDir::homePath()).toString());
+    mOptionsForm.setDNASaveFilenameTemplate(settings.value("Options/dnaSaveFilenameTemplate", "%1-%2-%3.svg").toString());
+    mOptionsForm.setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
+    mOptionsForm.setAutoSave(settings.value("Options/autoSave", true).toBool());
+    mOptionsForm.setColorMutationRate(settings.value("Options/colorMutationRate", 700).toInt());
+    mOptionsForm.setPointMutationRate(settings.value("Options/pointMutationRate", 700).toInt());
+    mOptionsForm.setPointKillRate(settings.value("Options/pointKillRate", 700).toInt());
+    mOptionsForm.setPointEmergenceRate(settings.value("Options/pointEmergenceRate", 700).toInt());
+    mOptionsForm.setGenomeKillRate(settings.value("Options/genomeKillRate", 700).toInt());
+    mOptionsForm.setGenomeEmergenceRate(settings.value("Options/genomeEmergenceRate", 700).toInt());
 }
 
 

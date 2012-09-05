@@ -16,7 +16,12 @@ Breeder::Breeder(QThread* parent)
     , mMaxGenomes(MAX_GENOMES)
 {
     reset();
-    mRandom.seed(QDateTime::currentDateTime().toTime_t());
+}
+
+
+void Breeder::setOptions(const OptionsForm* options)
+{
+    mOptions = options;
 }
 
 
@@ -147,18 +152,18 @@ void Breeder::draw(void)
 }
 
 
-inline bool Breeder::willMutate(void) {
-    return (random() % mMutationRate) == 0;
+inline bool Breeder::willMutate(unsigned int rate) {
+    return (MT::random() % rate) == 0;
 }
 
 
 void Breeder::mutate(void)
 {
     mMutation = mDNA;
-    if (willMutate() && mMutation.size() < MAX_GENOMES) {
+    if (willMutate(mOptions->genomeEmergenceRate()) && mMutation.size() < MAX_GENOMES) {
         mMutation.append(Genome(this));
     }
-    if (willMutate() && mMutation.size() > MIN_GENOMES) {
+    if (willMutate(mOptions->genomeKillRate()) && mMutation.size() > MIN_GENOMES) {
         mMutation.remove(random() % mMutation.size());
     }
     for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)

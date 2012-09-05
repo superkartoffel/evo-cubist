@@ -3,7 +3,6 @@
 
 #include "mersenne_twister.h"
 
-
 namespace randomtools {
 
 
@@ -55,4 +54,12 @@ namespace randomtools {
 
 
     const unsigned int MersenneTwister::A[2] = { 0, 0x9908b0df };
+
+
+    inline unsigned int random(void) { return rng.next(); }
+    inline qreal random1(void) { return (qreal)random() / rng.max(); }
+
+    MersenneTwister rng;
+
 }
+

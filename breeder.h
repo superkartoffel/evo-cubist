@@ -16,6 +16,7 @@
 #include "dna.h"
 #include "genome.h"
 #include "random/mersenne_twister.h"
+#include "optionsform.h"
 
 using namespace randomtools;
 
@@ -28,6 +29,7 @@ public:
     friend class Genome;
 
     Breeder(QThread* parent = NULL);
+    void setOptions(const OptionsForm* options);
     void reset(void);
     void populate(void);
     void mutate(void);
@@ -56,7 +58,7 @@ private:
     unsigned long fitness(void);
     static unsigned long deltaE(QRgb c1, QRgb c2);
     void draw(void);
-    bool willMutate(void);
+    bool willMutate(unsigned int rate);
 
     bool mDirty;
     bool mStopped;
@@ -73,15 +75,13 @@ private:
     int mdB;
     int mdA;
     qreal mdXY;
-    int mMutationRate;
-    int mMinGenomes;
-    int mMaxGenomes;
 
     static const int MIN_GENOMES = 200;
     static const int MAX_GENOMES = 400;
 
     MersenneTwister mRandom;
     QMutex mDNAMutex;
+    const OptionsForm* mOptions;
 
 signals:
     void evolved(const QImage&, const DNA&, unsigned int, unsigned int, unsigned int);
@@ -94,8 +94,6 @@ public slots:
     void setDeltaB(int);
     void setDeltaA(int);
     void setDeltaXY(int);
-    void setMutationRate(int);
-
 };
 
 #endif // __BREEDER_H_
