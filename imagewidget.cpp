@@ -30,7 +30,18 @@ void ImageWidget::setImage(const QImage& image)
 void ImageWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
-    p.drawImage(0, 0, mImage);
+    qreal windowAspectRatio = (qreal) width() / height();
+    qreal imageAspectRatio = (qreal) mImage.width() / mImage.height();
+    QRect destRect;
+    if (windowAspectRatio < imageAspectRatio) {
+        const int h = int(width() / imageAspectRatio);
+        destRect = QRect(0, (height()-h)/2, width(), h);
+    }
+    else {
+        const int w = int(height() * imageAspectRatio);
+        destRect = QRect((width()-w)/2, 0, w, height());
+    }
+    p.drawImage(destRect, mImage);
 }
 
 
