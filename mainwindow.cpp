@@ -138,9 +138,7 @@ void MainWindow::proceeded(unsigned int generation)
 void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitness, unsigned int selected, unsigned generation)
 {
     mGenerationWidget->setImage(image);
-    mGLWidget->setDNA(dna);
-    mGLWidget->setSize(image.size());
-    mGLWidget->update();
+    mGLWidget->setData(dna, image.size());
     ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
     ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation));
