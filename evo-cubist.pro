@@ -55,7 +55,9 @@ FORMS += mainwindow.ui \
 
 OTHER_FILES += \
     HINTS.txt \
-    evo-cubist.rc
+    evo-cubist.rc \
+    shaders/diff-fshader.glsl
 
 RESOURCES += \
-    images.qrc
+    images.qrc \
+    shaders.qrc

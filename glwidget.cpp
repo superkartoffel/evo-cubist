@@ -38,8 +38,8 @@ void GLWidget::initializeGL()
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
     glClearDepth(1.0f);
     glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
     // gluOrtho2D(-1, 1, -1, 1);
+    glLoadIdentity();
 }
 
 
@@ -51,8 +51,8 @@ void GLWidget::resizeGL(int w, int h)
 
 void GLWidget::paintGL(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glTranslatef(-1.0f, -1.0f, 0);
     glScalef(2.0f, 2.0f, 1.0f);
     for (DNAType::const_iterator genome = mDNA.constBegin(); genome != mDNA.constEnd(); ++genome) {
