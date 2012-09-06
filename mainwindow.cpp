@@ -259,8 +259,9 @@ void MainWindow::restoreAppSettings(void)
     QSettings settings(MainWindow::Company, MainWindow::AppName);
     restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
     restoreState(settings.value("MainWindow/windowState").toByteArray());
-    QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/Mona-Lisa-256x256.png").toString();
-    mImageWidget->loadImage(imageFileName);
+    QString imageFileName = settings.value("MainWindow/imageFilename", "qrc:///testimages/Mona-Lisa-256x256.png").toString();
+    qDebug() << mImageWidget->loadImage(":/testimages/Mona-Lisa-256x256.png");
+    // mImageWidget->loadImage(imageFileName);
     mLastSavedDNA = settings.value("MainWindow/lastSavedDNA").toString();
     ui->redSlider->setValue(settings.value("Options/deltaR", 100).toInt());
     ui->greenSlider->setValue(settings.value("Options/deltaG", 100).toInt());
@@ -305,7 +306,7 @@ void MainWindow::saveDNA(void)
 
 void MainWindow::openOriginalImage(void)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Load original picture"));
+    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load original picture"));
     loadOriginalImage(filename);
 }
 
@@ -343,7 +344,7 @@ void MainWindow::loadDNA(const QString& filename)
 
 void MainWindow::openDNA(void)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
+    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
     loadDNA(filename);
 }
 

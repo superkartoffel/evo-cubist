@@ -54,7 +54,7 @@ void GLWidget::paintGL(void)
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glTranslatef(-1.0f, -1.0f, 0);
-    glScalef(2.0f, 2.0f, 1.0f);
+    glScalef(-2.0f, -2.0f, 1.0f);
     for (DNAType::const_iterator genome = mDNA.constBegin(); genome != mDNA.constEnd(); ++genome) {
         glBegin(GL_POLYGON);
         glColor4f(genome->color().redF(), genome->color().greenF(), genome->color().blueF(), genome->color().alphaF());
