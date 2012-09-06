@@ -94,8 +94,7 @@ inline void Breeder::draw(void)
 {
     QPainter p(&mGenerated);
     p.setPen(Qt::transparent);
-    p.setBrush(Qt::white);
-    p.drawRect(0, 0, mGenerated.width(), mGenerated.height());
+    p.fillRect(0, 0, mGenerated.width(), mGenerated.height(), QBrush(Qt::white));
     p.setRenderHint(QPainter::Antialiasing);
     p.scale(mGenerated.width(), mGenerated.height());
     for (DNAType::const_iterator genome = mMutation.constBegin(); genome != mMutation.constEnd(); ++genome) {

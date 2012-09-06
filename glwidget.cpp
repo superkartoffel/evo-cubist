@@ -24,6 +24,7 @@ void GLWidget::setDNA(const DNA& dna)
 void GLWidget::setSize(const QSize& size)
 {
     mSize = size;
+    setMinimumSize(mSize);
 }
 
 
@@ -33,7 +34,7 @@ void GLWidget::paintEvent(QPaintEvent* event)
     p.begin(this);
     p.setPen(Qt::transparent);
     p.setRenderHint(QPainter::Antialiasing);
-    p.fillRect(event->rect(), QBrush(Qt::black));
+    p.fillRect(event->rect(), QBrush(Qt::white));
     p.setRenderHint(QPainter::Antialiasing);
     p.scale(mSize.width(), mSize.height());
     for (DNAType::const_iterator genome = mDNA.constBegin(); genome != mDNA.constEnd(); ++genome) {

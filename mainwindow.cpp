@@ -49,8 +49,14 @@ MainWindow::MainWindow(QWidget* parent)
 
     mGenerationWidget = new GenerationWidget;
     QHBoxLayout* hbox2 = new QHBoxLayout;
-    hbox2->addWidget(mGenerationWidget);
     ui->generatedGroupBox->setLayout(hbox2);
+    hbox2->addWidget(mGenerationWidget);
+
+    mGLWidget = new GLWidget;
+    QHBoxLayout* hbox3 = new QHBoxLayout;
+    ui->glGroupBox->setLayout(hbox3);
+    hbox3->addWidget(mGLWidget);
+
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
@@ -132,6 +138,9 @@ void MainWindow::proceeded(unsigned int generation)
 void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitness, unsigned int selected, unsigned generation)
 {
     mGenerationWidget->setImage(image);
+    mGLWidget->setDNA(dna);
+    mGLWidget->setSize(image.size());
+    mGLWidget->update();
     ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
     ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation));

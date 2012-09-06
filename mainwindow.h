@@ -9,6 +9,7 @@
 #include <QString>
 #include <QTimer>
 
+#include "glwidget.h"
 #include "imagewidget.h"
 #include "generationwidget.h"
 #include "breeder.h"
@@ -39,6 +40,7 @@ private:
     OptionsForm mOptionsForm;
     ImageWidget* mImageWidget;
     GenerationWidget* mGenerationWidget;
+    GLWidget* mGLWidget;
     Breeder mBreeder;
     QDateTime mStartTime;
     QString mLastSavedDNA;
