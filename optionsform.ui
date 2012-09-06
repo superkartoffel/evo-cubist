@@ -21,7 +21,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="autoSaveTabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="breeding">
       <attribute name="title">
@@ -168,13 +168,13 @@
               <number>3</number>
              </property>
              <property name="maximum">
-              <number>9</number>
+              <number>20</number>
              </property>
              <property name="singleStep">
               <number>1</number>
              </property>
              <property name="value">
-              <number>9</number>
+              <number>6</number>
              </property>
             </widget>
            </item>
@@ -244,16 +244,16 @@
            <item>
             <widget class="QSpinBox" name="minGenomesSpinBox">
              <property name="minimum">
-              <number>100</number>
+              <number>1</number>
              </property>
              <property name="maximum">
               <number>100000</number>
              </property>
              <property name="singleStep">
-              <number>50</number>
+              <number>10</number>
              </property>
              <property name="value">
-              <number>200</number>
+              <number>40</number>
              </property>
             </widget>
            </item>
@@ -269,7 +269,7 @@
               <number>50</number>
              </property>
              <property name="value">
-              <number>400</number>
+              <number>60</number>
              </property>
             </widget>
            </item>
@@ -289,7 +289,7 @@
               <number>5</number>
              </property>
              <property name="value">
-              <number>10</number>
+              <number>5</number>
              </property>
             </widget>
            </item>
@@ -305,7 +305,7 @@
               <number>5</number>
              </property>
              <property name="value">
-              <number>60</number>
+              <number>50</number>
              </property>
             </widget>
            </item>

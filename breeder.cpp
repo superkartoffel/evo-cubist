@@ -12,7 +12,7 @@
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
 {
-    reset();
+    // reset();
 }
 
 
@@ -44,7 +44,11 @@ void Breeder::setDNA(DNA dna)
         stop();
     mDNAMutex.lock();
     mDNA = dna;
+    mMutation = dna;
     mDNAMutex.unlock();
+    mFitness = ULONG_MAX;
+    // mFitness = fitness();
+    draw();
     if (wasRunning)
         breed();
 }
@@ -57,16 +61,18 @@ void Breeder::reset(void)
     mSelected = 0;
     mDirty = false;
     mStopped = false;
-    mMutation.clear();
     mDNAMutex.lock();
     mDNA.clear();
     mDNAMutex.unlock();
     populate();
+    mMutation = mDNA;
+    draw();
 }
 
 
 void Breeder::populate(void)
 {
+    qDebug() << gBreederSettings.minGenomes() << gBreederSettings.maxGenomes();
     QMutexLocker locker(&mDNAMutex);
     int N = gBreederSettings.minGenomes() + MT::random() % (gBreederSettings.maxGenomes() - gBreederSettings.minGenomes());
     for (int i = 0; i < N; ++i)

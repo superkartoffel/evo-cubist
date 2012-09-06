@@ -2,9 +2,11 @@
 // All rights reserved.
 
 #include "breedersettings.h"
+#include <QtCore/QDebug>
 
 /// global settings object
 BreederSettings gBreederSettings;
+
 
 BreederSettings::BreederSettings(void)
     : QObject(NULL)
@@ -75,6 +77,7 @@ void BreederSettings::setMinA(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
+    qDebug() << "BreederSettings::setMinA(" << v << ")";
     mMinA = v;
 }
 
@@ -83,6 +86,7 @@ void BreederSettings::setMaxA(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
+    qDebug() << "BreederSettings::setMaxA(" << v << ")";
     mMaxA = v;
 }
 
@@ -141,7 +145,6 @@ void BreederSettings::setMaxPointsPerGenome(int v)
 {
     Q_ASSERT(v >= mMinPointsPerGenome);
     mMaxPointsPerGenome = v;
-
 }
 
 

@@ -56,6 +56,13 @@ public:
     void setPointKillProbability(int);
     void setGenomeEmergenceProbability(int);
     void setGenomeKillProbability(int);
+    void setMinPointsPerGenome(int);
+    void setMaxPointsPerGenome(int);
+    void setMinGenomes(int);
+    void setMaxGenomes(int);
+    void setMinAlpha(int);
+    void setMaxAlpha(int);
+
 
 signals:
     void autoSaveIntervalChanged(int);

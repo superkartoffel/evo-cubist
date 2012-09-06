@@ -80,6 +80,9 @@ MainWindow::MainWindow(QWidget* parent)
     MT::rng.seed(QDateTime::currentDateTime().toTime_t());
 
     restoreAppSettings();
+
+    proceeded(1);
+    evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
 }
 
 
@@ -177,7 +180,6 @@ void MainWindow::autoSaveToggled(bool enabled)
 void MainWindow::startBreeding(void)
 {
     statusBar()->showMessage(tr("Starting ..."), 3000);
-    ui->startStopPushButton->setText(tr("Pause"));
     mStartTime = QDateTime::currentDateTime();
     QObject::connect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), Qt::BlockingQueuedConnection);
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)), Qt::BlockingQueuedConnection);
@@ -185,7 +187,10 @@ void MainWindow::startBreeding(void)
     if (mOptionsForm.autoSave()) {
         mAutoSaveTimer.setInterval(1000 * mOptionsForm.saveInterval());
         mAutoSaveTimer.start();
+        if (ui->startStopPushButton->text() == tr("Start"))
+            autoSaveGeneratedImage();
     }
+    ui->startStopPushButton->setText(tr("Pause"));
 }
 
 
@@ -193,7 +198,7 @@ void MainWindow::stopBreeding(void)
 {
     QObject::disconnect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), this, SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)));
     QObject::disconnect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)));
-    ui->startStopPushButton->setText(tr("Start"));
+    ui->startStopPushButton->setText(tr("Resume"));
     mAutoSaveTimer.stop();
     mBreeder.stop();
 }
@@ -201,7 +206,7 @@ void MainWindow::stopBreeding(void)
 
 void MainWindow::startStop(void)
 {
-    if (ui->startStopPushButton->text() == tr("Start")) {
+    if (ui->startStopPushButton->text() == tr("Start") || ui->startStopPushButton->text() == tr("Resume")) {
         startBreeding();
     }
     else {
@@ -270,6 +275,13 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setPointEmergenceProbability(settings.value("Options/pointEmergenceProbability", 700).toInt());
     mOptionsForm.setGenomeKillProbability(settings.value("Options/genomeKillProbability", 700).toInt());
     mOptionsForm.setGenomeEmergenceProbability(settings.value("Options/genomeEmergenceProbability", 700).toInt());
+    mOptionsForm.setMinPointsPerGenome(settings.value("Options/minPointsPerGenome", 3).toInt());
+    mOptionsForm.setMaxPointsPerGenome(settings.value("Options/maxPointsPerGenome", 6).toInt());
+    mOptionsForm.setMinGenomes(settings.value("Options/minGenomes", 50).toInt());
+    mOptionsForm.setMaxGenomes(settings.value("Options/maxGenomes", 100).toInt());
+    mOptionsForm.setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
+    mOptionsForm.setMaxAlpha(settings.value("Options/maxAlpha", 50).toInt());
+    mBreeder.reset();
 }
 
 
@@ -322,6 +334,7 @@ void MainWindow::loadDNA(const QString& filename)
         if (success) {
             stopBreeding();
             mBreeder.setDNA(dna);
+            evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
         }
         else {
@@ -343,6 +356,8 @@ void MainWindow::resetBreeder(void)
     if (QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?")) == QMessageBox::Ok) {
         stopBreeding();
         mBreeder.reset();
+        evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
+        ui->startStopPushButton->setText(tr("Start"));
     }
 }
 

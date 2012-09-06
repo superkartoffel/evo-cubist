@@ -72,49 +72,73 @@ void OptionsForm::selectDNASaveDirectory(void)
 
 void OptionsForm::setColorMutationProbability(int v)
 {
-    ui->colorMutationProbabilitySpinBox->blockSignals(true);
     ui->colorMutationProbabilitySpinBox->setValue(v);
-    ui->colorMutationProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setPointMutationProbability(int v)
 {
-    ui->pointMutationProbabilitySpinBox->blockSignals(true);
     ui->pointMutationProbabilitySpinBox->setValue(v);
-    ui->pointMutationProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setPointEmergenceProbability(int v)
 {
-    ui->pointEmergenceProbabilitySpinBox->blockSignals(true);
     ui->pointEmergenceProbabilitySpinBox->setValue(v);
-    ui->pointEmergenceProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setPointKillProbability(int v)
 {
-    ui->pointKillProbabilitySpinBox->blockSignals(true);
     ui->pointKillProbabilitySpinBox->setValue(v);
-    ui->pointKillProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setGenomeEmergenceProbability(int v)
 {
-    ui->genomeEmergenceProbabilitySpinBox->blockSignals(true);
     ui->genomeEmergenceProbabilitySpinBox->setValue(v);
-    ui->genomeEmergenceProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setGenomeKillProbability(int v)
 {
-    ui->genomeKillProbabilitySpinBox->blockSignals(true);
     ui->genomeKillProbabilitySpinBox->setValue(v);
-    ui->genomeKillProbabilitySpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setMinPointsPerGenome(int v)
+{
+    ui->minPointsSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMaxPointsPerGenome(int v)
+{
+    ui->maxPointsSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMinGenomes(int v)
+{
+    ui->minGenomesSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMaxGenomes(int v)
+{
+    ui->maxGenomesSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMinAlpha(int v)
+{
+    ui->minAlphaSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMaxAlpha(int v)
+{
+    ui->maxAlphaSpinBox->setValue(v);
 }
 
 
@@ -166,5 +190,6 @@ QString OptionsForm::dnaFilename(const QString& originalImageFilename, unsigned 
     QFileInfo fileInfo(originalImageFilename);
     return ui->dnaSaveDirectoryLineEdit->text() + "/" + QString(ui->dnaFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
 }
+
 
 
