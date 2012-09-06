@@ -4,6 +4,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QtCore/QDebug>
+#include <QThread>
 
 #include "breedersettings.h"
 #include "optionsform.h"
@@ -23,6 +24,14 @@ OptionsForm::OptionsForm(QWidget* parent)
 {
     ui->setupUi(this);
 
+    ui->priorityComboBox->addItem(tr("highest"), QThread::HighestPriority);
+    ui->priorityComboBox->addItem(tr("high"), QThread::HighPriority);
+    ui->priorityComboBox->addItem(tr("normal"), QThread::NormalPriority);
+    ui->priorityComboBox->addItem(tr("low"), QThread::LowPriority);
+    ui->priorityComboBox->addItem(tr("lowest"), QThread::LowestPriority);
+    ui->priorityComboBox->setCurrentIndex(2);
+
+    QObject::connect(ui->priorityComboBox, SIGNAL(currentIndexChanged(int)), SLOT(priorityChanged(int)));
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
 
@@ -36,6 +45,7 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->pointKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointKillProbability(int)));
     QObject::connect(ui->pointEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointEmergenceProbability(int)));
     QObject::connect(ui->genomeKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeKillProbability(int)));
+    QObject::connect(ui->genomeMoveProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeMoveProbability(int)));
     QObject::connect(ui->genomeEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeEmergenceProbability(int)));
     QObject::connect(ui->minGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinGenomes(int)));
     QObject::connect(ui->maxGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxGenomes(int)));
@@ -51,6 +61,20 @@ OptionsForm::OptionsForm(QWidget* parent)
 OptionsForm::~OptionsForm()
 {
     delete ui;
+}
+
+
+void OptionsForm::priorityChanged(int index)
+{
+    Q_ASSERT(index >= 0 && index < 5);
+    static const QThread::Priority mapping[5] = {
+        QThread::HighestPriority,
+        QThread::HighPriority,
+        QThread::NormalPriority,
+        QThread::LowPriority,
+        QThread::LowestPriority
+    };
+    emit priorityChanged(mapping[index]);
 }
 
 
@@ -72,49 +96,79 @@ void OptionsForm::selectDNASaveDirectory(void)
 
 void OptionsForm::setColorMutationProbability(int v)
 {
-    ui->colorMutationProbabilitySpinBox->blockSignals(true);
     ui->colorMutationProbabilitySpinBox->setValue(v);
-    ui->colorMutationProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setPointMutationProbability(int v)
 {
-    ui->pointMutationProbabilitySpinBox->blockSignals(true);
     ui->pointMutationProbabilitySpinBox->setValue(v);
-    ui->pointMutationProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setPointEmergenceProbability(int v)
 {
-    ui->pointEmergenceProbabilitySpinBox->blockSignals(true);
     ui->pointEmergenceProbabilitySpinBox->setValue(v);
-    ui->pointEmergenceProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setPointKillProbability(int v)
 {
-    ui->pointKillProbabilitySpinBox->blockSignals(true);
     ui->pointKillProbabilitySpinBox->setValue(v);
-    ui->pointKillProbabilitySpinBox->blockSignals(false);
 }
 
 
 void OptionsForm::setGenomeEmergenceProbability(int v)
 {
-    ui->genomeEmergenceProbabilitySpinBox->blockSignals(true);
     ui->genomeEmergenceProbabilitySpinBox->setValue(v);
-    ui->genomeEmergenceProbabilitySpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setGenomeMoveProbability(int v)
+{
+    ui->genomeMoveProbabilitySpinBox->setValue(v);
 }
 
 
 void OptionsForm::setGenomeKillProbability(int v)
 {
-    ui->genomeKillProbabilitySpinBox->blockSignals(true);
     ui->genomeKillProbabilitySpinBox->setValue(v);
-    ui->genomeKillProbabilitySpinBox->blockSignals(false);
+}
+
+
+void OptionsForm::setMinPointsPerGenome(int v)
+{
+    ui->minPointsSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMaxPointsPerGenome(int v)
+{
+    ui->maxPointsSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMinGenomes(int v)
+{
+    ui->minGenomesSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMaxGenomes(int v)
+{
+    ui->maxGenomesSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMinAlpha(int v)
+{
+    ui->minAlphaSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setMaxAlpha(int v)
+{
+    ui->maxAlphaSpinBox->setValue(v);
 }
 
 
@@ -166,5 +220,6 @@ QString OptionsForm::dnaFilename(const QString& originalImageFilename, unsigned 
     QFileInfo fileInfo(originalImageFilename);
     return ui->dnaSaveDirectoryLineEdit->text() + "/" + QString(ui->dnaFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
 }
+
 
 

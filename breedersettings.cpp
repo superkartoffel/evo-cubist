@@ -2,9 +2,11 @@
 // All rights reserved.
 
 #include "breedersettings.h"
+#include <QtCore/QDebug>
 
 /// global settings object
 BreederSettings gBreederSettings;
+
 
 BreederSettings::BreederSettings(void)
     : QObject(NULL)
@@ -65,7 +67,7 @@ void BreederSettings::setDeltaA(int v)
 
 void BreederSettings::setDeltaXY(int v)
 {
-    mdXY = 1e-3 * v;
+    mdXY = 1e-4 * v;
     Q_ASSERT(mdXY >= 0.0);
     Q_ASSERT(mdXY < 1.0);
 }
@@ -122,6 +124,13 @@ void BreederSettings::setGenomeKillProbability(int v)
 }
 
 
+void BreederSettings::setGenomeMoveProbability(int v)
+{
+    Q_ASSERT(v > 0);
+    mGenomeMoveProbability = v;
+}
+
+
 void BreederSettings::setGenomeEmergenceProbability(int v)
 {
     Q_ASSERT(v > 0);
@@ -141,7 +150,6 @@ void BreederSettings::setMaxPointsPerGenome(int v)
 {
     Q_ASSERT(v >= mMinPointsPerGenome);
     mMaxPointsPerGenome = v;
-
 }
 
 

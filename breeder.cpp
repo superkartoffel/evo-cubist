@@ -11,7 +11,7 @@
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
 {
-    reset();
+    // reset();
 }
 
 
@@ -36,9 +36,26 @@ void Breeder::setDNA(DNA dna)
         stop();
     mDNAMutex.lock();
     mDNA = dna;
+    mMutation = dna;
     mDNAMutex.unlock();
+    mFitness = ULONG_MAX;
+    draw();
     if (wasRunning)
-        breed();
+        breed(priority());
+}
+
+
+void Breeder::setGeneration(unsigned long generation)
+{
+    qDebug() << "Breeder::setGeneration(" << generation << ")";
+    mGeneration = generation;
+}
+
+
+void Breeder::setSelected(unsigned long selected)
+{
+    qDebug() << "Breeder::setSelected(" << selected << ")";
+    mSelected = selected;
 }
 
 
@@ -49,29 +66,38 @@ void Breeder::reset(void)
     mSelected = 0;
     mDirty = false;
     mStopped = false;
-    mMutation.clear();
     mDNAMutex.lock();
     mDNA.clear();
     mDNAMutex.unlock();
     populate();
+    mMutation = mDNA;
+    draw();
 }
 
 
 void Breeder::populate(void)
 {
     QMutexLocker locker(&mDNAMutex);
-    int N = gBreederSettings.minGenomes() + MT::random() % (gBreederSettings.maxGenomes() - gBreederSettings.minGenomes());
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < gBreederSettings.minGenomes(); ++i)
         mDNA.append(Genome());
 }
 
 
 inline unsigned long Breeder::deltaE(QRgb c1, QRgb c2)
 {
+#ifdef USE_RGB_DIFFERENCE
     const int r = qRed(c1) - qRed(c2);
     const int g = qGreen(c1) - qGreen(c2);
     const int b = qBlue(c1) - qBlue(c2);
     return r*r + g*g + b*b;
+#else
+    const QColor& o = QColor(c1).toHsv();
+    const QColor& g = QColor(c2).toHsv();
+    const int h = o.hue() - g.hue();
+    const int s = o.saturation() - g.saturation();
+    const int v = o.value() - g.value();
+    return h*h + s*s + v*v;
+#endif
 }
 
 
@@ -118,6 +144,16 @@ inline void Breeder::mutate(void)
     // maybe kill a genome
     if (willMutate(gBreederSettings.genomeKillProbability()) && mMutation.size() > gBreederSettings.minGenomes())
         mMutation.remove(MT::random() % mMutation.size());
+    if (willMutate(gBreederSettings.genomeMoveProbability())) {
+        const int oldIndex = MT::random() % mMutation.size();
+        const int newIndex = MT::random() % mMutation.size();
+        if (oldIndex != newIndex) {
+            const Genome genome = mMutation.at(oldIndex);
+            mMutation.remove(oldIndex);
+            mMutation.insert(newIndex, genome);
+            qDebug() << "MOVE" << mMutation.size();
+        }
+    }
     // mutate all contained genomes
     for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)
         genome->mutate();
@@ -152,10 +188,10 @@ void Breeder::stop(void)
 }
 
 
-void Breeder::breed(void)
+void Breeder::breed(QThread::Priority priority)
 {
     mStopped = false;
-    start();
+    start(priority);
 }
 
 

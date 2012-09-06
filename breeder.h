@@ -41,11 +41,13 @@ public:
     inline unsigned long selected(void) const { return mSelected; }
 
     void proceed(void);
-    void breed(void);
+    void breed(QThread::Priority = QThread::InheritPriority);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
     void setDNA(DNA);
     void setDirty(bool);
+    void setGeneration(unsigned long);
+    void setSelected(unsigned long);
 
     QMutex* dnaMutex(void) { return &mDNAMutex; }
 

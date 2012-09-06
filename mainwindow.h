@@ -45,6 +45,7 @@ private:
     QDateTime mStartTime;
     QString mLastSavedDNA;
     QString mSaveDirectory;
+    QThread::Priority mPriority;
 
     void saveAppSettings(void);
     void restoreAppSettings(void);
@@ -68,6 +69,7 @@ private slots:
     void autoSaveGeneratedImage(void);
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
+    void priorityChanged(QThread::Priority);
 };
 
 #endif // __MAINWINDOW_H_
