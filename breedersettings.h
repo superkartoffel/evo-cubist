@@ -49,6 +49,8 @@ public slots:
     void setMaxPointsPerGenome(int);
     void setMinGenomes(int);
     void setMaxGenomes(int);
+    void setParallelComputing(bool);
+    void setGPUComputing(bool);
 
 private:
     double mdXY; // [0..1)
@@ -69,7 +71,8 @@ private:
     int mMinGenomes;
     int mMaxGenomes;
     int mAutoSaveInterval; // secs
-
+    bool mParallelComputing;
+    bool mGPUComputing;
 };
 
 

@@ -25,7 +25,8 @@ bool DNA::save(const QString& filename, const QSize& size) const
         return false;
     QTextStream out(&file);
     if (filename.endsWith(".json") || filename.endsWith(".dna")) {
-        out << "{ \"size\": { \"x\": " << size.width() << ", \"y\": " << size.height() << " },"
+        out << "{\n"
+            << " \"size\": { \"width\": " << size.width() << ", \"height\": " << size.height() << " },\n"
             << " \"dna\": [\n";
         for (DNAType::const_iterator genome = this->constBegin(); genome != this->constEnd(); ++genome) {
             out << *genome;

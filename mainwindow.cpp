@@ -75,6 +75,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
     QObject::connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(aboutQt()));
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), &mOptionsForm, SLOT(show()));
+    QObject::connect(ui->actionOptions, SIGNAL(triggered()), &mOptionsForm, SLOT(raise()));
 
     MT::rng.seed(QDateTime::currentDateTime().toTime_t());
 
@@ -176,7 +177,7 @@ void MainWindow::autoSaveToggled(bool enabled)
 void MainWindow::startBreeding(void)
 {
     statusBar()->showMessage(tr("Starting ..."), 3000);
-    ui->startStopPushButton->setText(tr("Stop"));
+    ui->startStopPushButton->setText(tr("Pause"));
     mStartTime = QDateTime::currentDateTime();
     QObject::connect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), Qt::BlockingQueuedConnection);
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)), Qt::BlockingQueuedConnection);
@@ -248,9 +249,8 @@ void MainWindow::restoreAppSettings(void)
     QSettings settings(MainWindow::Company, MainWindow::AppName);
     restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
     restoreState(settings.value("MainWindow/windowState").toByteArray());
-    QString imageFileName = settings.value("MainWindow/imageFilename").toString();
-    if (imageFileName != "")
-        mImageWidget->loadImage(imageFileName);
+    QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/Mona-Lisa-256x256.png").toString();
+    mImageWidget->loadImage(imageFileName);
     mLastSavedDNA = settings.value("MainWindow/lastSavedDNA").toString();
     ui->redSlider->setValue(settings.value("Options/deltaR", 100).toInt());
     ui->greenSlider->setValue(settings.value("Options/deltaG", 100).toInt());

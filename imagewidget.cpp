@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QMimeData>
 #include <QUrl>
+#include <QtCore/QDebug>
 
 #include "imagewidget.h"
 
@@ -65,6 +66,10 @@ void ImageWidget::dropEvent(QDropEvent* e)
 
 bool ImageWidget::loadImage(const QString& fileName)
 {
+    if (fileName.isEmpty()) {
+        qWarning() << "ImageWidget::loadImage(): fileName is empty.";
+        return false;
+    }
     QImage image = QImage(fileName);
     if (!image.isNull()) {
         setImage(image);

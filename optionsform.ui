@@ -7,17 +7,21 @@
     <x>0</x>
     <y>0</y>
     <width>427</width>
-    <height>358</height>
+    <height>336</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Options</string>
+   <string>Evo Cubist - Options</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="images.qrc">
+    <normaloff>:/icons/icons/evo-cubist.ico</normaloff>:/icons/icons/evo-cubist.ico</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QTabWidget" name="autoSaveTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="breeding">
       <attribute name="title">
@@ -560,10 +564,49 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Miscellaneous</string>
+      </attribute>
+      <widget class="QCheckBox" name="parallelComputingCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>181</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Enable parallel computing</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="gpuComputingCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>181</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Enable GPU computing</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>

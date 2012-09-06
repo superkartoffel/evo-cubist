@@ -8,7 +8,8 @@ f = open(filename, "r")
 dna = json.loads(f.read())
 f.close()
 print "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
-print " <g transform=\"scale(%d,%d)\">" % (dna["size"]["width"], dna["size"]["height"])
+print " <title>Mutation</title>"
+print " <g transform=\"scale(%d, %d)\">" % (dna["size"]["width"], dna["size"]["height"])
 for genome in dna["dna"]:
     c = genome["color"]
     vertices = genome["vertices"]
