@@ -67,7 +67,7 @@ void BreederSettings::setDeltaA(int v)
 
 void BreederSettings::setDeltaXY(int v)
 {
-    mdXY = 1e-3 * v;
+    mdXY = 1e-4 * v;
     Q_ASSERT(mdXY >= 0.0);
     Q_ASSERT(mdXY < 1.0);
 }
@@ -77,7 +77,6 @@ void BreederSettings::setMinA(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-    qDebug() << "BreederSettings::setMinA(" << v << ")";
     mMinA = v;
 }
 
@@ -86,7 +85,6 @@ void BreederSettings::setMaxA(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-    qDebug() << "BreederSettings::setMaxA(" << v << ")";
     mMaxA = v;
 }
 
@@ -123,6 +121,13 @@ void BreederSettings::setGenomeKillProbability(int v)
 {
     Q_ASSERT(v > 0);
     mGenomeKillProbability = v;
+}
+
+
+void BreederSettings::setGenomeMoveProbability(int v)
+{
+    Q_ASSERT(v > 0);
+    mGenomeMoveProbability = v;
 }
 
 

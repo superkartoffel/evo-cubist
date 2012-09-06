@@ -24,12 +24,10 @@ inline bool Genome::willMutate(int rate) const {
 
 void Genome::mutate(void)
 {
-    if (willMutate(gBreederSettings.pointEmergenceProbability()) && mPolygon.size() < gBreederSettings.maxPointsPerGenome()) {
+    if (willMutate(gBreederSettings.pointEmergenceProbability()) && mPolygon.size() < gBreederSettings.maxPointsPerGenome())
         mPolygon.append(QPointF(MT::random1(), MT::random1()));
-    }
-    if (willMutate(gBreederSettings.pointKillProbability()) && mPolygon.size() > gBreederSettings.minPointsPerGenome()) {
+    if (willMutate(gBreederSettings.pointKillProbability()) && mPolygon.size() > gBreederSettings.minPointsPerGenome())
         mPolygon.remove(MT::random() % mPolygon.size());
-    }
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate(gBreederSettings.pointMutationProbability())) {
             qreal x2 = p->x() + gBreederSettings.dXY() * (MT::random1() - 0.5);
@@ -42,8 +40,8 @@ void Genome::mutate(void)
         const int r = 0xff & (MT::random() % gBreederSettings.dR() + mColor.red());
         const int g = 0xff & (MT::random() % gBreederSettings.dG() + mColor.green());
         const int b = 0xff & (MT::random() % gBreederSettings.dB() + mColor.blue());
-        const int a = MT::random() % gBreederSettings.dA() + mColor.alpha();
-        mColor.setRgb(r, g, b, (a < 10)? 10 : ((a > 60)? 60 : a));
+        const int a = gBreederSettings.minA() + (MT::random() % gBreederSettings.dA() + mColor.alpha()) % (gBreederSettings.maxA() - gBreederSettings.minA());
+        mColor.setRgb(r, g, b, a);
     }
 }
 

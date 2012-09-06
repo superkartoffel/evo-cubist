@@ -4,6 +4,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QtCore/QDebug>
+#include <QThread>
 
 #include "breedersettings.h"
 #include "optionsform.h"
@@ -23,6 +24,14 @@ OptionsForm::OptionsForm(QWidget* parent)
 {
     ui->setupUi(this);
 
+    ui->priorityComboBox->addItem(tr("highest"), QThread::HighestPriority);
+    ui->priorityComboBox->addItem(tr("high"), QThread::HighPriority);
+    ui->priorityComboBox->addItem(tr("normal"), QThread::NormalPriority);
+    ui->priorityComboBox->addItem(tr("low"), QThread::LowPriority);
+    ui->priorityComboBox->addItem(tr("lowest"), QThread::LowestPriority);
+    ui->priorityComboBox->setCurrentIndex(2);
+
+    QObject::connect(ui->priorityComboBox, SIGNAL(currentIndexChanged(int)), SLOT(priorityChanged(int)));
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
 
@@ -36,6 +45,7 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->pointKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointKillProbability(int)));
     QObject::connect(ui->pointEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointEmergenceProbability(int)));
     QObject::connect(ui->genomeKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeKillProbability(int)));
+    QObject::connect(ui->genomeMoveProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeMoveProbability(int)));
     QObject::connect(ui->genomeEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeEmergenceProbability(int)));
     QObject::connect(ui->minGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinGenomes(int)));
     QObject::connect(ui->maxGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxGenomes(int)));
@@ -51,6 +61,20 @@ OptionsForm::OptionsForm(QWidget* parent)
 OptionsForm::~OptionsForm()
 {
     delete ui;
+}
+
+
+void OptionsForm::priorityChanged(int index)
+{
+    Q_ASSERT(index >= 0 && index < 5);
+    static const QThread::Priority mapping[5] = {
+        QThread::HighestPriority,
+        QThread::HighPriority,
+        QThread::NormalPriority,
+        QThread::LowPriority,
+        QThread::LowestPriority
+    };
+    emit priorityChanged(mapping[index]);
 }
 
 
@@ -97,6 +121,12 @@ void OptionsForm::setPointKillProbability(int v)
 void OptionsForm::setGenomeEmergenceProbability(int v)
 {
     ui->genomeEmergenceProbabilitySpinBox->setValue(v);
+}
+
+
+void OptionsForm::setGenomeMoveProbability(int v)
+{
+    ui->genomeMoveProbabilitySpinBox->setValue(v);
 }
 
 

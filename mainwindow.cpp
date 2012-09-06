@@ -9,6 +9,9 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QMessageBox>
+#include <QThread>
+#include <QRegExp>
+#include <QStringList>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "random/mersenne_twister.h"
@@ -17,15 +20,16 @@
 const QString MainWindow::Company = "c't";
 const QString MainWindow::AppName = QObject::tr("Evo Cubist");
 #ifdef QT_NO_DEBUG
-const QString MainWindow::AppVersion = "0.2";
+const QString MainWindow::AppVersion = "0.3";
 #else
-const QString MainWindow::AppVersion = "0.2 [DEBUG]";
+const QString MainWindow::AppVersion = "0.3 [DEBUG]";
 #endif
 
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , mPriority(QThread::InheritPriority)
 {
     QCoreApplication::setOrganizationName(MainWindow::Company);
     QCoreApplication::setOrganizationDomain(MainWindow::Company);
@@ -55,6 +59,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
+    QObject::connect(&mOptionsForm, SIGNAL(priorityChanged(QThread::Priority)), SLOT(priorityChanged(QThread::Priority)));
     QObject::connect(&mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
     QObject::connect(&mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
 
@@ -121,6 +126,16 @@ void MainWindow::closeEvent(QCloseEvent* e)
 }
 
 
+void MainWindow::priorityChanged(QThread::Priority priority)
+{
+    mPriority = priority;
+    bool wasRunning = mBreeder.isRunning();
+    mBreeder.stop();
+    if (wasRunning)
+        mBreeder.breed(mPriority);
+}
+
+
 void MainWindow::proceeded(unsigned int generation)
 {
     ui->generationLineEdit->setText(QString("%1").arg(generation));
@@ -183,7 +198,7 @@ void MainWindow::startBreeding(void)
     mStartTime = QDateTime::currentDateTime();
     QObject::connect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), Qt::BlockingQueuedConnection);
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)), Qt::BlockingQueuedConnection);
-    mBreeder.breed();
+    mBreeder.breed(mPriority);
     if (mOptionsForm.autoSave()) {
         mAutoSaveTimer.setInterval(1000 * mOptionsForm.saveInterval());
         mAutoSaveTimer.start();
@@ -233,6 +248,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/pointKillProbability", mOptionsForm.pointKillProbability());
     settings.setValue("Options/pointEmergenceProbability", mOptionsForm.pointEmergenceProbability());
     settings.setValue("Options/genomeKillProbability", mOptionsForm.genomeKillProbability());
+    settings.setValue("Options/genomeMoveProbability", mOptionsForm.genomeMoveProbability());
     settings.setValue("Options/genomeEmergenceProbability", mOptionsForm.genomeEmergenceProbability());
     settings.setValue("Options/minPointsPerGenome", mOptionsForm.minPointsPerGenome());
     settings.setValue("Options/maxPointsPerGenome", mOptionsForm.maxPointsPerGenome());
@@ -274,6 +290,7 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setPointKillProbability(settings.value("Options/pointKillProbability", 700).toInt());
     mOptionsForm.setPointEmergenceProbability(settings.value("Options/pointEmergenceProbability", 700).toInt());
     mOptionsForm.setGenomeKillProbability(settings.value("Options/genomeKillProbability", 700).toInt());
+    mOptionsForm.setGenomeMoveProbability(settings.value("Options/genomeMoveProbability", 700).toInt());
     mOptionsForm.setGenomeEmergenceProbability(settings.value("Options/genomeEmergenceProbability", 700).toInt());
     mOptionsForm.setMinPointsPerGenome(settings.value("Options/minPointsPerGenome", 3).toInt());
     mOptionsForm.setMaxPointsPerGenome(settings.value("Options/maxPointsPerGenome", 6).toInt());
@@ -333,7 +350,13 @@ void MainWindow::loadDNA(const QString& filename)
         bool success = dna.load(filename);
         if (success) {
             stopBreeding();
+            QRegExp re(".*(\\d{10}).*(\\d{9})");
+            re.indexIn(filename);
+            const QStringList& n = re.capturedTexts();
+            mBreeder.setGeneration(n.at(1).toULong());
+            mBreeder.setSelected(n.at(2).toULong());
             mBreeder.setDNA(dna);
+            proceeded(mBreeder.generation());
             evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
         }

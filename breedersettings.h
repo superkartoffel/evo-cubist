@@ -25,6 +25,7 @@ public:
     int pointKillProbability(void) const { return mPointKillProbability; }
     int pointEmergenceProbability(void) const { return mPointEmergenceProbability; }
     int genomeKillProbability(void) const { return mGenomeKillProbability; }
+    int genomeMoveProbability(void) const { return mGenomeMoveProbability; }
     int genomeEmergenceProbability(void) const { return mGenomeEmergenceProbability; }
     int minPointsPerGenome(void) const { return mMinPointsPerGenome; }
     int maxPointsPerGenome(void) const { return mMaxPointsPerGenome; }
@@ -44,6 +45,7 @@ public slots:
     void setPointKillProbability(int);
     void setPointEmergenceProbability(int);
     void setGenomeKillProbability(int);
+    void setGenomeMoveProbability(int);
     void setGenomeEmergenceProbability(int);
     void setMinPointsPerGenome(int);
     void setMaxPointsPerGenome(int);
@@ -65,6 +67,7 @@ private:
     int mPointKillProbability;
     int mPointEmergenceProbability;
     int mGenomeKillProbability;
+    int mGenomeMoveProbability;
     int mGenomeEmergenceProbability;
     int mMinPointsPerGenome; // [3..n]
     int mMaxPointsPerGenome; // [n..n+x]

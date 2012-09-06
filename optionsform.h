@@ -5,6 +5,7 @@
 #define __OPTIONSFORM_H_
 
 #include <QWidget>
+#include <QThread>
 #include "breedersettings.h"
 #include "ui_optionsform.h"
 
@@ -42,6 +43,7 @@ public:
     inline int pointEmergenceProbability(void) const { return ui->pointEmergenceProbabilitySpinBox->value(); }
     inline int pointKillProbability(void) const { return ui->pointKillProbabilitySpinBox->value(); }
     inline int genomeEmergenceProbability(void) const { return ui->genomeEmergenceProbabilitySpinBox->value(); }
+    inline int genomeMoveProbability(void) const { return ui->genomeMoveProbabilitySpinBox->value(); }
     inline int genomeKillProbability(void) const { return ui->genomeKillProbabilitySpinBox->value(); }
     inline int minPointsPerGenome(void) const { return ui->minPointsSpinBox->value(); }
     inline int maxPointsPerGenome(void) const { return ui->maxPointsSpinBox->value(); }
@@ -55,6 +57,7 @@ public:
     void setPointEmergenceProbability(int);
     void setPointKillProbability(int);
     void setGenomeEmergenceProbability(int);
+    void setGenomeMoveProbability(int);
     void setGenomeKillProbability(int);
     void setMinPointsPerGenome(int);
     void setMaxPointsPerGenome(int);
@@ -67,10 +70,12 @@ public:
 signals:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
+    void priorityChanged(QThread::Priority);
 
 private slots:
     void selectImageSaveDirectory(void);
     void selectDNASaveDirectory(void);
+    void priorityChanged(int);
 
 private:
     static const QString SaveFilenameTemplate;
