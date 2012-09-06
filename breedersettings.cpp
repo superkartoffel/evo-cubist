@@ -157,3 +157,15 @@ void BreederSettings::setMaxGenomes(int v)
     Q_ASSERT(v > 0);
     mMaxGenomes = v;
 }
+
+
+void BreederSettings::setParallelComputing(bool enabled)
+{
+    mParallelComputing = enabled;
+}
+
+
+void BreederSettings::setGPUComputing(bool enabled)
+{
+    mGPUComputing = enabled;
+}

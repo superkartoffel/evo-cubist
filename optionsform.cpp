@@ -43,6 +43,8 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxPointsPerGenome(int)));
     QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinA(int)));
     QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxA(int)));
+    QObject::connect(ui->parallelComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setParallelComputing(bool)));
+    QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setGPUComputing(bool)));
 }
 
 

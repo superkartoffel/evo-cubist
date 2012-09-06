@@ -112,12 +112,13 @@ inline bool Breeder::willMutate(unsigned int rate) {
 inline void Breeder::mutate(void)
 {
     mMutation = mDNA;
-    if (willMutate(gBreederSettings.genomeEmergenceProbability()) && mMutation.size() < gBreederSettings.maxGenomes()) {
+    // maybe spawn a new genome
+    if (willMutate(gBreederSettings.genomeEmergenceProbability()) && mMutation.size() < gBreederSettings.maxGenomes())
         mMutation.append(Genome());
-    }
-    if (willMutate(gBreederSettings.genomeKillProbability()) && mMutation.size() > gBreederSettings.minGenomes()) {
+    // maybe kill a genome
+    if (willMutate(gBreederSettings.genomeKillProbability()) && mMutation.size() > gBreederSettings.minGenomes())
         mMutation.remove(MT::random() % mMutation.size());
-    }
+    // mutate all contained genomes
     for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)
         genome->mutate();
 }
@@ -136,6 +137,7 @@ void Breeder::proceed(void)
         mDNA = mMutation;
         mDNAMutex.unlock();
         ++mSelected;
+        mDirty = true;
         emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration+1);
     }
     ++mGeneration;
@@ -153,7 +155,6 @@ void Breeder::stop(void)
 void Breeder::breed(void)
 {
     mStopped = false;
-    mDirty = true;
     start();
 }
 

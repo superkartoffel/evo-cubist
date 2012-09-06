@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QMimeData>
 #include <QUrl>
+#include <QtCore/QDebug>
 
 #include "imagewidget.h"
 
@@ -29,7 +30,18 @@ void ImageWidget::setImage(const QImage& image)
 void ImageWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
-    p.drawImage(0, 0, mImage);
+    qreal windowAspectRatio = (qreal) width() / height();
+    qreal imageAspectRatio = (qreal) mImage.width() / mImage.height();
+    QRect destRect;
+    if (windowAspectRatio < imageAspectRatio) {
+        const int h = int(width() / imageAspectRatio);
+        destRect = QRect(0, (height()-h)/2, width(), h);
+    }
+    else {
+        const int w = int(height() * imageAspectRatio);
+        destRect = QRect((width()-w)/2, 0, w, height());
+    }
+    p.drawImage(destRect, mImage);
 }
 
 
@@ -65,6 +77,10 @@ void ImageWidget::dropEvent(QDropEvent* e)
 
 bool ImageWidget::loadImage(const QString& fileName)
 {
+    if (fileName.isEmpty()) {
+        qWarning() << "ImageWidget::loadImage(): fileName is empty.";
+        return false;
+    }
     QImage image = QImage(fileName);
     if (!image.isNull()) {
         setImage(image);

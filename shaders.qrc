@@ -1,3 +1,5 @@
 <RCC>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file>shaders/diff-fshader.glsl</file>
+    </qresource>
 </RCC>

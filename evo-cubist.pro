@@ -56,7 +56,8 @@ FORMS += mainwindow.ui \
 OTHER_FILES += \
     HINTS.txt \
     evo-cubist.rc \
-    shaders/diff-fshader.glsl
+    shaders/diff-fshader.glsl \
+    tools/dna2svg.py
 
 RESOURCES += \
     images.qrc \
