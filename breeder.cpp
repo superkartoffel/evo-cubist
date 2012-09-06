@@ -47,14 +47,12 @@ void Breeder::setDNA(DNA dna)
 
 void Breeder::setGeneration(unsigned long generation)
 {
-    qDebug() << "Breeder::setGeneration(" << generation << ")";
     mGeneration = generation;
 }
 
 
 void Breeder::setSelected(unsigned long selected)
 {
-    qDebug() << "Breeder::setSelected(" << selected << ")";
     mSelected = selected;
 }
 
@@ -151,7 +149,6 @@ inline void Breeder::mutate(void)
             const Genome genome = mMutation.at(oldIndex);
             mMutation.remove(oldIndex);
             mMutation.insert(newIndex, genome);
-            qDebug() << "MOVE" << mMutation.size();
         }
     }
     // mutate all contained genomes
