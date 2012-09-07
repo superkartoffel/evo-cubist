@@ -14,7 +14,7 @@ TARGET = evo-cubist
 TEMPLATE = app
 
 win32 {
-# QMAKE_CXXFLAGS += /openmp
+QMAKE_CXXFLAGS += /openmp
 RC_FILE = evo-cubist.rc
 }
 

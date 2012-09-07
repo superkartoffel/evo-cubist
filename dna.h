@@ -17,19 +17,14 @@ typedef QVector<Genome> DNAType;
 class DNA : public DNAType
 {
 public:
-    enum Format { JSON, SVG };
+    inline explicit DNA(void) { /* ... */ }
+    inline ~DNA() { /* ... */ }
+    inline DNA(const DNA &v) : DNAType(v) { /* ... */ }
 
-    inline explicit DNA(void) {}
-    inline ~DNA() {}
-    inline DNA(const DNA &v) : DNAType(v) {}
-
-    bool save(const QString& filename, const QSize& size) const;
+    bool save(const QString& filename, const QSize& size, unsigned int generation, unsigned int selected) const;
     bool load(const QString& filename);
 
     unsigned int points(void) const;
-    const QSize& originalSize(void) const { return mSize; }
-
-    QString errorString(void) const;
 
 private:
     QSize mSize;
