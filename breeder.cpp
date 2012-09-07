@@ -97,13 +97,6 @@ inline unsigned long Breeder::deltaE(QRgb c1, QRgb c2)
     const int g = qGreen(c1) - qGreen(c2);
     const int b = qBlue(c1) - qBlue(c2);
     return r*r + g*g + b*b;
-    /* Farbvergleich über HSV führt zu flauen, schlecht konvergierenden Bildern
-//    const QColor& o = QColor(c1).toHsv();
-//    const QColor& g = QColor(c2).toHsv();
-//    const int h = o.hue() - g.hue();
-//    const int s = o.saturation() - g.saturation();
-//    const int v = o.value() - g.value();
-//    return h*h + s*s + v*v;
 }
 
 
