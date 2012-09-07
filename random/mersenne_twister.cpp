@@ -9,10 +9,10 @@ namespace MT {
     void MersenneTwister::seed(unsigned int _Seed)
     {
         unsigned int r = _Seed;
-        unsigned int s = 3402;
+        unsigned int s = 3402U;
         for (int i = 0; i < N; ++i) {
-            r = 509845221 * r + 3;
-            s *= s + 1;
+            r = 509845221U * r + 3U;
+            s *= s + 1U;
             y[i] = s + (r >> 10);
         }
         index = 0;

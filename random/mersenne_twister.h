@@ -14,13 +14,13 @@ namespace MT {
         MersenneTwister(void) {}
         unsigned int operator()();
         inline unsigned int next(void) { return (*this)(); }
-        void seed(unsigned int _Seed = 9);
+        void seed(unsigned int _Seed = 9U);
 
     private:
         static const int N = 624;
         static const int M = 397;
-        static const unsigned int LO = 0x7fffffff;
-        static const unsigned int HI = 0x80000000;
+        static const unsigned int LO = 0x7fffffffU;
+        static const unsigned int HI = 0x80000000U;
         static const unsigned int A[2];
         unsigned int y[N];
         int index;
