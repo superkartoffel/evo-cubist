@@ -51,6 +51,7 @@ public:
     inline int maxGenomes(void) const { return ui->maxGenomesSpinBox->value(); }
     inline int minAlpha(void) const { return ui->minAlphaSpinBox->value(); }
     inline int maxAlpha(void) const { return ui->maxAlphaSpinBox->value(); }
+    inline int startDistribution(void) const { return ui->startDistributionComboBox->currentIndex(); }
 
     void setColorMutationProbability(int);
     void setPointMutationProbability(int);
@@ -65,7 +66,7 @@ public:
     void setMaxGenomes(int);
     void setMinAlpha(int);
     void setMaxAlpha(int);
-
+    void setStartDistribution(int);
 
 signals:
     void autoSaveIntervalChanged(int);

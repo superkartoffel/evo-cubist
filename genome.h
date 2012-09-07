@@ -16,7 +16,7 @@ class Breeder;
 class Genome
 {
 public:
-    Genome(void);
+    Genome(bool randomize = false);
     inline Genome(const Genome& o)
         : mPolygon(o.mPolygon)
         , mColor(o.mColor)

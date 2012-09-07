@@ -8,12 +8,14 @@
 #include <QtCore/QDebug>
 
 
-Genome::Genome(void)
+Genome::Genome(bool randomize)
 {
-    const int N = gBreederSettings.minPointsPerGenome() + MT::random() % (gBreederSettings.maxPointsPerGenome() - gBreederSettings.minPointsPerGenome());
-    for (int x = 0; x < N; ++x)
-        mPolygon.append(QPointF(MT::random1(), MT::random1()));
-    mColor.setRgb(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
+    if (randomize) {
+        const int N = gBreederSettings.minPointsPerGenome() + MT::random() % (gBreederSettings.maxPointsPerGenome() - gBreederSettings.minPointsPerGenome());
+        for (int x = 0; x < N; ++x)
+            mPolygon.append(QPointF(MT::random1(), MT::random1()));
+        mColor.setRgb(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
+    }
 }
 
 

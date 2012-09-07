@@ -14,23 +14,24 @@ public:
     BreederSettings(void);
 
     double dXY(void) const { return mdXY; }
-    int dR(void) const { return mdR; }
-    int dG(void) const { return mdG; }
-    int dB(void) const { return mdB; }
-    int dA(void) const { return mdA; }
-    int minA(void) const { return mMinA; }
-    int maxA(void) const { return mMaxA; }
-    int colorMutationProbability(void) const { return mColorMutationProbability; }
-    int pointMutationProbability(void) const { return mPointMutationProbability; }
-    int pointKillProbability(void) const { return mPointKillProbability; }
-    int pointEmergenceProbability(void) const { return mPointEmergenceProbability; }
-    int genomeKillProbability(void) const { return mGenomeKillProbability; }
-    int genomeMoveProbability(void) const { return mGenomeMoveProbability; }
-    int genomeEmergenceProbability(void) const { return mGenomeEmergenceProbability; }
-    int minPointsPerGenome(void) const { return mMinPointsPerGenome; }
-    int maxPointsPerGenome(void) const { return mMaxPointsPerGenome; }
-    int minGenomes(void) const { return mMinGenomes; }
-    int maxGenomes(void) const { return mMaxGenomes; }
+    inline int dR(void) const { return mdR; }
+    inline int dG(void) const { return mdG; }
+    inline int dB(void) const { return mdB; }
+    inline int dA(void) const { return mdA; }
+    inline int minA(void) const { return mMinA; }
+    inline int maxA(void) const { return mMaxA; }
+    inline int colorMutationProbability(void) const { return mColorMutationProbability; }
+    inline int pointMutationProbability(void) const { return mPointMutationProbability; }
+    inline int pointKillProbability(void) const { return mPointKillProbability; }
+    inline int pointEmergenceProbability(void) const { return mPointEmergenceProbability; }
+    inline int genomeKillProbability(void) const { return mGenomeKillProbability; }
+    inline int genomeMoveProbability(void) const { return mGenomeMoveProbability; }
+    inline int genomeEmergenceProbability(void) const { return mGenomeEmergenceProbability; }
+    inline int minPointsPerGenome(void) const { return mMinPointsPerGenome; }
+    inline int maxPointsPerGenome(void) const { return mMaxPointsPerGenome; }
+    inline int minGenomes(void) const { return mMinGenomes; }
+    inline int maxGenomes(void) const { return mMaxGenomes; }
+    inline int startDistribution(void) const {  return mStartDistribution; }
 
 public slots:
     void setDeltaXY(int);
@@ -53,6 +54,7 @@ public slots:
     void setMaxGenomes(int);
     void setParallelComputing(bool);
     void setGPUComputing(bool);
+    void setStartDistribution(int);
 
 private:
     double mdXY; // [0..1)
@@ -76,6 +78,7 @@ private:
     int mAutoSaveInterval; // secs
     bool mParallelComputing;
     bool mGPUComputing;
+    int mStartDistribution;
 };
 
 

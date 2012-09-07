@@ -7,6 +7,8 @@
 #include <QPainter>
 #include <QDateTime>
 #include <QtCore/QDebug>
+#include <limits>
+#include <qmath.h>
 
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
@@ -64,9 +66,6 @@ void Breeder::reset(void)
     mSelected = 0;
     mDirty = false;
     mStopped = false;
-    mDNAMutex.lock();
-    mDNA.clear();
-    mDNAMutex.unlock();
     populate();
     mMutation = mDNA;
     draw();
@@ -76,26 +75,56 @@ void Breeder::reset(void)
 void Breeder::populate(void)
 {
     QMutexLocker locker(&mDNAMutex);
-    for (int i = 0; i < gBreederSettings.minGenomes(); ++i)
-        mDNA.append(Genome());
+    mDNA.clear();
+    qDebug() << "gBreederSettings.startDistribution() =" << gBreederSettings.startDistribution();
+    switch (gBreederSettings.startDistribution()) {
+    case 0: // random
+    {
+        qDebug() << "making random start distribution ...";
+        for (int i = 0; i < gBreederSettings.minGenomes(); ++i)
+            mDNA.append(Genome(true));
+        break;
+    }
+    case 1: // tiled
+        // fall-through
+    case 2: // tiled with color hint
+    {
+        qDebug() << "making tiled start distribution ...";
+        const qreal N = qSqrt(gBreederSettings.minGenomes() + (gBreederSettings.maxGenomes() - gBreederSettings.minGenomes()) / 2);
+        const qreal stepX = 1.0 / N;
+        const qreal stepY = 1.0 / N;
+        for (qreal y = 0; y < 1.0; y += stepY) {
+            for (qreal x = 0; x < 1.0; x += stepX) {
+                QPolygonF polygon;
+                polygon << QPointF(x, y) << QPointF(x +  stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
+                QColor color;
+                if (gBreederSettings.startDistribution() == 1) {
+                    color = QColor(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
+                }
+                else {
+                    const int px = (int)(x * mOriginal.width());
+                    const int py = (int)(y * mOriginal.height());
+                    color = QColor(mOriginal.pixel(px, py));
+                    color.setAlpha(color.alpha() % gBreederSettings.maxA());
+                }
+                mDNA.append(Genome(polygon, color));
+            }
+        }
+        break;
+    }
+    default:
+        qWarning() << "bad start distribution:" << gBreederSettings.startDistribution();
+        break;
+    }
 }
 
 
 inline unsigned long Breeder::deltaE(QRgb c1, QRgb c2)
 {
-#ifdef USE_RGB_DIFFERENCE
     const int r = qRed(c1) - qRed(c2);
     const int g = qGreen(c1) - qGreen(c2);
     const int b = qBlue(c1) - qBlue(c2);
     return r*r + g*g + b*b;
-#else
-    const QColor& o = QColor(c1).toHsv();
-    const QColor& g = QColor(c2).toHsv();
-    const int h = o.hue() - g.hue();
-    const int s = o.saturation() - g.saturation();
-    const int v = o.value() - g.value();
-    return h*h + s*s + v*v;
-#endif
 }
 
 
@@ -149,6 +178,7 @@ inline void Breeder::mutate(void)
             const Genome genome = mMutation.at(oldIndex);
             mMutation.remove(oldIndex);
             mMutation.insert(newIndex, genome);
+            qDebug() << "MOVE " << oldIndex << ">" << newIndex;
         }
     }
     // mutate all contained genomes

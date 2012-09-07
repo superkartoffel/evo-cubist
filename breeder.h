@@ -18,6 +18,7 @@
 
 #include <QtOpenGL>
 
+#define USE_RGB_DIFFERENCE 1
 
 class Breeder : public QThread
 {
