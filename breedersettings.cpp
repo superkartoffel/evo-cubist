@@ -22,6 +22,7 @@ BreederSettings::BreederSettings(void)
     , mPointKillProbability(700)
     , mPointEmergenceProbability(700)
     , mGenomeKillProbability(700)
+    , mGenomeMoveProbability(700)
     , mGenomeEmergenceProbability(700)
     , mMinPointsPerGenome(3)
     , mMaxPointsPerGenome(9)
@@ -177,3 +178,4 @@ void BreederSettings::setGPUComputing(bool enabled)
 {
     mGPUComputing = enabled;
 }
+
