@@ -54,7 +54,8 @@ FORMS += mainwindow.ui \
 OTHER_FILES += \
     HINTS.txt \
     evo-cubist.rc \
-    tools/dna2svg.py
+    tools/dna2svg.py \
+    TODO.txt
 
 RESOURCES += \
     images.qrc

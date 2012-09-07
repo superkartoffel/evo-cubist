@@ -156,6 +156,7 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitne
 
 void MainWindow::autoSaveGeneratedImage(void)
 {
+    // TODO: as long as this function runs the breeder thread has to wait
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
     const QString& imageFilename = mOptionsForm.imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());

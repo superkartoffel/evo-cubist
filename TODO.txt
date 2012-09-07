@@ -1,0 +1,1 @@
+[ ] Die gespeicherte DNA (SVG) entspricht optisch manchmal nicht dem dargestellten generierten Bild.
