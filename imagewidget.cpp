@@ -29,6 +29,8 @@ void ImageWidget::setImage(const QImage& image)
 
 void ImageWidget::paintEvent(QPaintEvent*)
 {
+    if (mImage.isNull())
+        return;
     QPainter p(this);
     qreal windowAspectRatio = (qreal) width() / height();
     qreal imageAspectRatio = (qreal) mImage.width() / mImage.height();

@@ -18,7 +18,7 @@ class SVGReader
 public:
     SVGReader(void) { /* ... */ }
     const DNA& dna(void) const { return mDNA; }
-    const QSize& size(void) const { return mSize; }
+    DNA& dna(void) { return mDNA; }
     bool readSVG(QIODevice*);
     QString errorString(void) const;
 
@@ -26,7 +26,6 @@ private:
     QXmlStreamReader mXml;
     DNA mDNA;
     Breeder* mBreeder;
-    QSize mSize;
 
     void readSVG(void);
     void readGroup(void);

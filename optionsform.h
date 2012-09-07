@@ -52,6 +52,7 @@ public:
     inline int minAlpha(void) const { return ui->minAlphaSpinBox->value(); }
     inline int maxAlpha(void) const { return ui->maxAlphaSpinBox->value(); }
     inline int startDistribution(void) const { return ui->startDistributionComboBox->currentIndex(); }
+    inline qreal scatterFactor(void) const { return ui->scatterFactorSpinBox->value(); }
 
     void setColorMutationProbability(int);
     void setPointMutationProbability(int);
@@ -67,6 +68,7 @@ public:
     void setMinAlpha(int);
     void setMaxAlpha(int);
     void setStartDistribution(int);
+    void setScatterFactor(qreal);
 
 signals:
     void autoSaveIntervalChanged(int);

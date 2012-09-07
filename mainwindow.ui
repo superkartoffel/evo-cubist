@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Evo Cubist</string>
   </property>
   <property name="windowIcon">
    <iconset resource="images.qrc">
-    <normaloff>:/icons/icons/evo-cubist.ico</normaloff>:/icons/icons/evo-cubist.ico</iconset>
+    <normaloff>:/icons/icons/evo-cubist.ico.png</normaloff>:/icons/icons/evo-cubist.ico.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">

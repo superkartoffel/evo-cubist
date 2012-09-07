@@ -8,8 +8,6 @@
 #include <QImage>
 #include <QRgb>
 #include <QThread>
-#include <QMutex>
-#include <QMutexLocker>
 
 #include <limits>
 
@@ -30,7 +28,7 @@ public:
     void populate(void);
     void mutate(void);
 
-    const DNA& dna(void);
+    DNA dna(void);
     inline const QImage& image(void) const { return mGenerated; }
     inline const QImage& originalImage(void) const { return mOriginal; }
     inline unsigned long generation(void) const { return mGeneration; }
@@ -45,8 +43,6 @@ public:
     void setDirty(bool);
     void setGeneration(unsigned long);
     void setSelected(unsigned long);
-
-    QMutex* dnaMutex(void) { return &mDNAMutex; }
 
 protected:
     virtual void run(void);
@@ -66,8 +62,6 @@ private:
     QImage mGenerated;
     DNA mDNA;
     DNA mMutation;
-
-    QMutex mDNAMutex;
 
 signals:
     void evolved(const QImage&, const DNA&, unsigned int, unsigned int, unsigned int);

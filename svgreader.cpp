@@ -47,7 +47,7 @@ void SVGReader::readGroup(void)
     QRegExp re("(\\d+),\\s*(\\d+)");
     re.indexIn(transform);
     QStringList scales = re.capturedTexts();
-    mSize = QSize(scales.at(1).toInt(), scales.at(2).toInt());
+    mDNA.setScale(QSize(scales.at(1).toInt(), scales.at(2).toInt()));
     while (mXml.readNextStartElement()) {
         if (mXml.name() == "path")
             readPath();

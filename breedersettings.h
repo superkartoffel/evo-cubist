@@ -32,6 +32,7 @@ public:
     inline int minGenomes(void) const { return mMinGenomes; }
     inline int maxGenomes(void) const { return mMaxGenomes; }
     inline int startDistribution(void) const {  return mStartDistribution; }
+    inline qreal scatterFactor(void) const { return mScatterFactor; }
 
 public slots:
     void setDeltaXY(int);
@@ -55,6 +56,7 @@ public slots:
     void setParallelComputing(bool);
     void setGPUComputing(bool);
     void setStartDistribution(int);
+    void setScatterFactor(double);
 
 private:
     double mdXY; // [0..1)
@@ -75,10 +77,11 @@ private:
     int mMaxPointsPerGenome; // [n..n+x]
     int mMinGenomes;
     int mMaxGenomes;
+    int mStartDistribution;
+    qreal mScatterFactor;
     int mAutoSaveInterval; // secs
     bool mParallelComputing;
     bool mGPUComputing;
-    int mStartDistribution;
 };
 
 

@@ -28,6 +28,8 @@ BreederSettings::BreederSettings(void)
     , mMaxPointsPerGenome(9)
     , mMinGenomes(200)
     , mMaxGenomes(400)
+    , mStartDistribution(0)
+    , mScatterFactor(0.5)
     , mAutoSaveInterval(10)
 {
     // ...
@@ -165,6 +167,13 @@ void BreederSettings::setMaxGenomes(int v)
 {
     Q_ASSERT(v > 0);
     mMaxGenomes = v;
+}
+
+
+void BreederSettings::setScatterFactor(double v)
+{
+    Q_ASSERT(v > 0);
+    mScatterFactor = v;
 }
 
 

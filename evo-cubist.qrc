@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/translations">
+        <file>evo-cubist_de.qm</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="KWA10.jpg">test/images/KWA10.jpg</file>
+        <file alias="Lego-Tactical-Guy.jpg">test/images/Lego-Tactical-Guy.jpg</file>
+        <file alias="Mona-Lisa-256x256.png">test/images/Mona-Lisa-256x256.jpg</file>
+        <file alias="Mona-Lisa-400x600.jpg">test/images/Mona-Lisa-400x600.jpg</file>
+        <file alias="Pacman-Ghost.png">test/images/Pacman-Ghost.png</file>
+        <file alias="Toad.png">test/images/Pilzmaennchen.png</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>icons/evo-cubist.ico.png</file>
+        <file>icons/evo-cubist.ico</file>
+    </qresource>
+</RCC>

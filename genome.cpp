@@ -19,6 +19,16 @@ Genome::Genome(bool randomize)
 }
 
 
+//Genome Genome::operator=(Genome& other) {
+//    QPolygonF polygon;
+//    polygon.reserve(other.polygon().size());
+//    qDebug() << "Genome::clone() " << mPolygon.size() << "elements";
+//    for (QPolygonF::const_iterator p = mPolygon.constBegin(); p != mPolygon.constEnd(); ++p)
+//        polygon.append(*p);
+//    return Genome(polygon, mColor);
+//}
+
+
 inline bool Genome::willMutate(int rate) const {
     return (MT::random() % rate) == 0;
 }

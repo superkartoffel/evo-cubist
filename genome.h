@@ -16,7 +16,7 @@ class Breeder;
 class Genome
 {
 public:
-    Genome(bool randomize = false);
+    explicit Genome(bool randomize = false);
     inline Genome(const Genome& o)
         : mPolygon(o.mPolygon)
         , mColor(o.mColor)
@@ -28,12 +28,13 @@ public:
 
     inline const QColor& color(void) const { return mColor; }
     inline const QPolygonF& polygon(void) const { return mPolygon; }
-    inline unsigned int size(void) const { return polygon().size(); }
 
     void setColor(const QColor&);
     void setPolygon(const QPolygonF&);
 
     void mutate(void);
+
+//    Genome operator=(Genome&);
 
 private:
     QPolygonF mPolygon;

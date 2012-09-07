@@ -15,9 +15,25 @@
 using namespace QtJson;
 
 
-// XXX: move method to Breeder
-bool DNA::save(const QString& filename, const QSize& size, unsigned int generation, unsigned int selected) const
+/// deep copy
+DNA DNA::operator=(DNA& dna)
 {
+    QMutexLocker locker(&mMutex);
+    DNA clone;
+    clone.reserve(dna.data().size());
+    for (DNAType::const_iterator genome = dna.constBegin(); genome != dna.constEnd(); ++genome) {
+        Genome genomeClone = *genome;
+        dna.append(genomeClone);
+    }
+    clone.setScale(dna.scale());
+    return clone;
+}
+
+
+// XXX: move method to Breeder
+bool DNA::save(const QString& filename, const QSize& size, unsigned int generation, unsigned int selected)
+{
+    QMutexLocker locker(&mMutex);
     bool rc;
     QFile file(filename);
     rc = file.open(QIODevice::WriteOnly);
@@ -101,7 +117,6 @@ bool DNA::load(const QString& filename)
         if (ok) {
             clear();
             *this = xml.dna();
-            mSize = xml.size();
         }
     }
     else {
@@ -118,6 +133,6 @@ unsigned int DNA::points(void) const
 {
     unsigned int sum = 0;
     for (DNAType::const_iterator genome = constBegin(); genome != constEnd(); ++genome)
-        sum += genome->size();
+        sum += genome->polygon().size();
     return sum;
 }

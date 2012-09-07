@@ -28,6 +28,8 @@ void GenerationWidget::setImage(const QImage& image)
 
 void GenerationWidget::paintEvent(QPaintEvent*)
 {
+    if (mImage.isNull())
+        return;
     QPainter p(this);
     qreal windowAspectRatio = (qreal) width() / height();
     qreal imageAspectRatio = (qreal) mImage.width() / mImage.height();

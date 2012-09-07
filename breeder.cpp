@@ -21,6 +21,7 @@ void Breeder::setOriginalImage(const QImage& original)
 {
     mOriginal = original;
     mGenerated = QImage(mOriginal.size(), mOriginal.format());
+    mDNA.setScale(mOriginal.size());
     reset();
 }
 
@@ -31,9 +32,8 @@ void Breeder::setDirty(bool dirty)
 }
 
 
-const DNA& Breeder::dna(void)
+DNA Breeder::dna(void)
 {
-    QMutexLocker locker(&mDNAMutex);
     return mDNA;
 }
 
@@ -43,10 +43,8 @@ void Breeder::setDNA(DNA dna)
     bool wasRunning = isRunning();
     if (wasRunning)
         stop();
-    mDNAMutex.lock();
     mDNA = dna;
     mMutation = dna;
-    mDNAMutex.unlock();
     mFitness = ULONG_MAX;
     draw();
     if (wasRunning)
@@ -74,20 +72,16 @@ void Breeder::reset(void)
     mDirty = false;
     mStopped = false;
     populate();
-    mMutation = mDNA;
     draw();
 }
 
 
 void Breeder::populate(void)
 {
-    QMutexLocker locker(&mDNAMutex);
     mDNA.clear();
-    qDebug() << "gBreederSettings.startDistribution() =" << gBreederSettings.startDistribution();
     switch (gBreederSettings.startDistribution()) {
     case 0: // random
     {
-        qDebug() << "making random start distribution ...";
         for (int i = 0; i < gBreederSettings.minGenomes(); ++i)
             mDNA.append(Genome(true));
         break;
@@ -96,7 +90,6 @@ void Breeder::populate(void)
         // fall-through
     case 2: // tiled with color hint
     {
-        qDebug() << "making tiled start distribution ...";
         const qreal N = qSqrt(gBreederSettings.minGenomes() + (gBreederSettings.maxGenomes() - gBreederSettings.minGenomes()) / 2);
         const qreal stepX = 1.0 / N;
         const qreal stepY = 1.0 / N;
@@ -119,10 +112,26 @@ void Breeder::populate(void)
         }
         break;
     }
+    case 3: // scattered
+    {
+        for (int i = 0; i < gBreederSettings.minGenomes(); ++i) {
+            QPolygonF polygon;
+            const QPointF mid(MT::random1(), MT::random1());
+            for (int j = 0; j < gBreederSettings.minPointsPerGenome(); ++j) {
+                const qreal xoff = (MT::random1()-0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
+                const qreal yoff = (MT::random1()-0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
+                polygon << (mid + QPointF(xoff, yoff));
+            }
+            QColor color(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
+            mDNA.append(Genome(polygon, color));
+        }
+        break;
+    }
     default:
         qWarning() << "bad start distribution:" << gBreederSettings.startDistribution();
         break;
     }
+    mMutation = mDNA;
 }
 
 
@@ -186,7 +195,6 @@ inline void Breeder::mutate(void)
             const Genome genome = mMutation.at(oldIndex);
             mMutation.remove(oldIndex);
             mMutation.insert(newIndex, genome);
-            qDebug() << "MOVE " << oldIndex << ">" << newIndex;
         }
     }
     // mutate all contained genomes
@@ -204,9 +212,7 @@ void Breeder::proceed(void)
     const unsigned long f = fitness();
     if (f < mFitness) {
         mFitness = f;
-        mDNAMutex.lock();
         mDNA = mMutation;
-        mDNAMutex.unlock();
         ++mSelected;
         mDirty = true;
         emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration+1);

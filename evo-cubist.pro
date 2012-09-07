@@ -4,7 +4,7 @@ QT += core gui xml
 
 CONFIG += warn_on thread qt
 
-# TRANSLATIONS = evo-cubist_de.ts
+TRANSLATIONS = evo-cubist_de.ts
 
 CODECFORTR = UTF-8
 
@@ -58,4 +58,4 @@ OTHER_FILES += \
     TODO.txt
 
 RESOURCES += \
-    images.qrc
+    evo-cubist.qrc

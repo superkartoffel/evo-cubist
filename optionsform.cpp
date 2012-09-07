@@ -53,9 +53,11 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxPointsPerGenome(int)));
     QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinA(int)));
     QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxA(int)));
+    QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gBreederSettings, SLOT(setStartDistribution(int)));
+    QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gBreederSettings, SLOT(setScatterFactor(double)));
+
     QObject::connect(ui->parallelComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setParallelComputing(bool)));
     QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setGPUComputing(bool)));
-    QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gBreederSettings, SLOT(setStartDistribution(int)));
 }
 
 
@@ -173,9 +175,17 @@ void OptionsForm::setMaxAlpha(int v)
 }
 
 
+void OptionsForm::setScatterFactor(qreal v)
+{
+    Q_ASSERT(v > 0);
+    ui->scatterFactorSpinBox->setValue(v);
+}
+
+
 void OptionsForm::setStartDistribution(int index)
 {
     Q_ASSERT(index >= 0);
+    qDebug() << "OptionsForm::setStartDistribution(" << index << ")";
     ui->startDistributionComboBox->setCurrentIndex(index);
 }
 

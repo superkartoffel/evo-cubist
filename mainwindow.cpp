@@ -162,11 +162,12 @@ void MainWindow::autoSaveGeneratedImage(void)
     const QString& imageFilename = mOptionsForm.imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     mGenerationWidget->image().save(imageFilename);
     const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
-    mBreeder.dnaMutex()->lock();
     DNA dna = mBreeder.dna();
-    mBreeder.dnaMutex()->unlock();
-    dna.save(dnaFilename, mBreeder.originalImage().size(), mBreeder.generation(), mBreeder.selected());
-    statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.generation()), 3000);
+    bool success = dna.save(dnaFilename, mBreeder.originalImage().size(), mBreeder.generation(), mBreeder.selected());
+    if (success)
+        statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.generation()), 3000);
+    else
+        statusBar()->showMessage(tr("Automatic saving failed."), 3000);
     setCursor(oldCursor);
 }
 
@@ -264,6 +265,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/saveInterval", mOptionsForm.saveInterval());
     settings.setValue("Options/autoSave", mOptionsForm.autoSave());
     settings.setValue("Options/startDistribution", mOptionsForm.startDistribution());
+    settings.setValue("Options/scatterFactor", mOptionsForm.scatterFactor());
 }
 
 
@@ -288,6 +290,7 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
     mOptionsForm.setAutoSave(settings.value("Options/autoSave", true).toBool());
     mOptionsForm.setStartDistribution(settings.value("Options/startDistribution", 0).toInt());
+    mOptionsForm.setScatterFactor(settings.value("Options/scatterFactor", 0.5).toDouble());
     mOptionsForm.setColorMutationProbability(settings.value("Options/colorMutationProbability", 700).toInt());
     mOptionsForm.setPointMutationProbability(settings.value("Options/pointMutationProbability", 700).toInt());
     mOptionsForm.setPointKillProbability(settings.value("Options/pointKillProbability", 700).toInt());
@@ -311,9 +314,7 @@ void MainWindow::saveDNA(void)
     if (dnaFilename.isNull())
         return;
     DNA dna = mBreeder.dna();
-    mBreeder.dnaMutex()->lock();
     bool success = dna.save(dnaFilename, mBreeder.originalImage().size(), mBreeder.generation(), mBreeder.selected());
-    mBreeder.dnaMutex()->unlock();
     if (success) {
         statusBar()->showMessage(tr("DNA saved as '%1'.").arg(dnaFilename), 5000);
         mLastSavedDNA = dnaFilename;
@@ -364,7 +365,7 @@ void MainWindow::loadDNA(const QString& filename)
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
         }
         else {
-            QMessageBox::warning(this, tr("Error loading DNA"), tr("JSON-formatted DNA could not be loaded."));
+            QMessageBox::warning(this, tr("Error loading DNA"), tr("DNA could not be loaded."));
         }
     }
 }
@@ -379,7 +380,10 @@ void MainWindow::openDNA(void)
 
 void MainWindow::resetBreeder(void)
 {
-    if (QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?")) == QMessageBox::Ok) {
+    bool ok = !mBreeder.isDirty();
+    if (!ok)
+        ok = QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?")) == QMessageBox::Ok;
+    if (ok) {
         stopBreeding();
         mBreeder.reset();
         evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
