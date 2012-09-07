@@ -179,3 +179,8 @@ void BreederSettings::setGPUComputing(bool enabled)
     mGPUComputing = enabled;
 }
 
+void BreederSettings::setStartDistribution(int index)
+{
+    qDebug() << "BreederSettings::setStartDistribution(" << index << ")";
+    mStartDistribution = index;
+}

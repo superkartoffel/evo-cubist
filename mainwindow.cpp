@@ -262,6 +262,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/dnaSaveFilenameTemplate", mOptionsForm.dnaSaveFilenameTemplate());
     settings.setValue("Options/saveInterval", mOptionsForm.saveInterval());
     settings.setValue("Options/autoSave", mOptionsForm.autoSave());
+    settings.setValue("Options/startDistribution", mOptionsForm.startDistribution());
 }
 
 
@@ -298,6 +299,7 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setMaxGenomes(settings.value("Options/maxGenomes", 100).toInt());
     mOptionsForm.setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
     mOptionsForm.setMaxAlpha(settings.value("Options/maxAlpha", 50).toInt());
+    mOptionsForm.setStartDistribution(settings.value("Options/startDistribution", 0).toInt());
     mBreeder.reset();
 }
 

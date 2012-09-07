@@ -21,7 +21,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="autoSaveTabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="breeding">
       <attribute name="title">
@@ -625,12 +625,17 @@
           <widget class="QComboBox" name="startDistributionComboBox">
            <item>
             <property name="text">
+             <string>random</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>tiled</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>random</string>
+             <string>tiled w/ color hint</string>
             </property>
            </item>
           </widget>

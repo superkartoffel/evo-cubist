@@ -55,6 +55,7 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxA(int)));
     QObject::connect(ui->parallelComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setParallelComputing(bool)));
     QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setGPUComputing(bool)));
+    QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gBreederSettings, SLOT(setStartDistribution(int)));
 }
 
 
@@ -169,6 +170,13 @@ void OptionsForm::setMinAlpha(int v)
 void OptionsForm::setMaxAlpha(int v)
 {
     ui->maxAlphaSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setStartDistribution(int index)
+{
+    Q_ASSERT(index >= 0);
+    ui->startDistributionComboBox->setCurrentIndex(index);
 }
 
 
