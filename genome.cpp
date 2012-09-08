@@ -19,14 +19,22 @@ Genome::Genome(bool randomize)
 }
 
 
-//Genome Genome::operator=(Genome& other) {
-//    QPolygonF polygon;
-//    polygon.reserve(other.polygon().size());
-//    qDebug() << "Genome::clone() " << mPolygon.size() << "elements";
-//    for (QPolygonF::const_iterator p = mPolygon.constBegin(); p != mPolygon.constEnd(); ++p)
-//        polygon.append(*p);
-//    return Genome(polygon, mColor);
-//}
+Genome::Genome(QPolygonF polygon, QColor color)
+    : mColor(color)
+{
+    mPolygon.reserve(polygon.size());
+    for (QPolygonF::const_iterator p = polygon.constBegin(); p != polygon.constEnd(); ++p)
+        mPolygon.append(*p);
+}
+
+
+Genome::Genome(const Genome& other)
+    : mColor(other.mColor)
+{
+    mPolygon.reserve(other.mPolygon.size());
+    for (QPolygonF::const_iterator p = other.mPolygon.constBegin(); p != other.mPolygon.constEnd(); ++p)
+        mPolygon.append(*p);
+}
 
 
 inline bool Genome::willMutate(int rate) const {

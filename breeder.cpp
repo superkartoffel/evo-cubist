@@ -13,7 +13,7 @@
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
 {
-    // reset();
+    /*...*/
 }
 
 
@@ -113,6 +113,8 @@ void Breeder::populate(void)
         break;
     }
     case 3: // scattered
+        // fall-through
+    case 4: // scattered with color hint
     {
         for (int i = 0; i < gBreederSettings.minGenomes(); ++i) {
             QPolygonF polygon;
@@ -122,20 +124,29 @@ void Breeder::populate(void)
                 const qreal yoff = (MT::random1()-0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
                 polygon << (mid + QPointF(xoff, yoff));
             }
-            QColor color(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
+            QColor color;
+            if (gBreederSettings.startDistribution() == 3) {
+                color = QColor(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
+            }
+            else {
+                const int px = (int)(mid.x() * mOriginal.width());
+                const int py = (int)(mid.y() * mOriginal.height());
+                color = QColor(mOriginal.pixel(px, py));
+                color.setAlpha(color.alpha() % gBreederSettings.maxA());
+            }
             mDNA.append(Genome(polygon, color));
         }
         break;
     }
     default:
-        qWarning() << "bad start distribution:" << gBreederSettings.startDistribution();
+        qWarning() << "unknown start distribution:" << gBreederSettings.startDistribution();
         break;
     }
     mMutation = mDNA;
 }
 
 
-inline unsigned long Breeder::deltaE(QRgb c1, QRgb c2)
+inline unsigned int Breeder::rgbDelta(QRgb c1, QRgb c2)
 {
     const int r = qRed(c1) - qRed(c2);
     const int g = qGreen(c1) - qGreen(c2);
@@ -153,7 +164,7 @@ inline unsigned long Breeder::fitness(void)
         const QRgb* o = reinterpret_cast<QRgb*>(mOriginal.scanLine(y));
         const QRgb* g = reinterpret_cast<QRgb*>(mGenerated.scanLine(y));
         for (int x = 0; x < mOriginal.width(); ++x)
-            sum += deltaE(*o++, *g++);
+            sum += rgbDelta(*o++, *g++);
     }
     return sum;
 }
@@ -174,40 +185,12 @@ inline void Breeder::draw(void)
 }
 
 
-inline bool Breeder::willMutate(unsigned int rate) {
-    return (MT::random() % rate) == 0;
-}
-
-
-inline void Breeder::mutate(void)
-{
-    mMutation = mDNA;
-    // maybe spawn a new genome
-    if (willMutate(gBreederSettings.genomeEmergenceProbability()) && mMutation.size() < gBreederSettings.maxGenomes())
-        mMutation.append(Genome());
-    // maybe kill a genome
-    if (willMutate(gBreederSettings.genomeKillProbability()) && mMutation.size() > gBreederSettings.minGenomes())
-        mMutation.remove(MT::random() % mMutation.size());
-    if (willMutate(gBreederSettings.genomeMoveProbability())) {
-        const int oldIndex = MT::random() % mMutation.size();
-        const int newIndex = MT::random() % mMutation.size();
-        if (oldIndex != newIndex) {
-            const Genome genome = mMutation.at(oldIndex);
-            mMutation.remove(oldIndex);
-            mMutation.insert(newIndex, genome);
-        }
-    }
-    // mutate all contained genomes
-    for (DNAType::iterator genome = mMutation.begin(); genome != mMutation.end(); ++genome)
-        genome->mutate();
-}
-
-
 void Breeder::proceed(void)
 {
     if (mOriginal.isNull() || mGenerated.isNull())
         return;
-    mutate();
+    mMutation = mDNA;
+    mMutation.mutate();
     draw();
     const unsigned long f = fitness();
     if (f < mFitness) {

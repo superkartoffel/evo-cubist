@@ -26,7 +26,6 @@ public:
     Breeder(QThread* parent = NULL);
     void reset(void);
     void populate(void);
-    void mutate(void);
 
     DNA dna(void);
     inline const QImage& image(void) const { return mGenerated; }
@@ -49,9 +48,8 @@ protected:
     
 private:
     unsigned long fitness(void);
-    static unsigned long deltaE(QRgb c1, QRgb c2);
+    static unsigned int rgbDelta(QRgb c1, QRgb c2);
     void draw(void);
-    bool willMutate(unsigned int rate);
 
     bool mDirty;
     bool mStopped;

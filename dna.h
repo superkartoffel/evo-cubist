@@ -15,16 +15,16 @@
 
 typedef QVector<Genome> DNAType;
 
-
 class DNA
 {
 public:
     inline explicit DNA(void) { /* ... */ }
     inline ~DNA() { /* ... */ }
-    inline DNA(const DNA& dna) : mDNA(dna.mDNA) { /* ... */ }
-    inline DNA(const DNAType& dna) : mDNA(dna) { /* ... */ }
+    /// deep copy constructor
+    DNA(const DNA& dna);
 
-    bool save(const QString& filename, const QSize& size, unsigned int generation, unsigned int selected);
+    void mutate(void);
+    bool save(const QString& filename, unsigned int generation, unsigned int selected);
     bool load(const QString& filename);
 
     unsigned int points(void) const;
@@ -37,8 +37,8 @@ public:
     inline void remove(int index) { mDNA.remove(index); }
     inline void insert(int index, const Genome& genome) { mDNA.insert(index, genome); }
     inline void reserve(int size) { mDNA.reserve(size); }
-    inline const Genome& at(int index) const { return mDNA.at(index); }
-    inline DNAType::const_iterator constBegin(void) const { return mDNA.constBegin(); }
+    inline const Genome& at(int index) { return mDNA.at(index); }
+    inline DNAType::const_iterator constBegin(void) const  { return mDNA.constBegin(); }
     inline DNAType::const_iterator constEnd(void) const { return mDNA.constEnd(); }
     inline DNAType::iterator begin(void) { return mDNA.begin(); }
     inline DNAType::iterator end(void) { return mDNA.end(); }
@@ -46,15 +46,11 @@ public:
     inline const DNAType& data(void) const { return mDNA; }
     inline const QSize& scale(void) const { return mSize; }
 
-    QMutex* mutex(void) { return &mMutex; }
-
-    DNA operator=(DNA& dna);
-
-    private:
+private:
     QSize mSize;
-    QMutex mMutex;
     DNAType mDNA;
 
+    bool willMutate(unsigned int probability);
 };
 
 

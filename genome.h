@@ -17,14 +17,8 @@ class Genome
 {
 public:
     explicit Genome(bool randomize = false);
-    inline Genome(const Genome& o)
-        : mPolygon(o.mPolygon)
-        , mColor(o.mColor)
-    { /* ... */ }
-    inline Genome(QPolygonF polygon, QColor color)
-        : mPolygon(polygon)
-        , mColor(color)
-    { /* ... */ }
+    Genome(const Genome& other);
+    Genome(QPolygonF polygon, QColor color);
 
     inline const QColor& color(void) const { return mColor; }
     inline const QPolygonF& polygon(void) const { return mPolygon; }
@@ -33,8 +27,6 @@ public:
     void setPolygon(const QPolygonF&);
 
     void mutate(void);
-
-//    Genome operator=(Genome&);
 
 private:
     QPolygonF mPolygon;

@@ -378,6 +378,11 @@
                <string>scattered</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>scattered w/ color hint</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>

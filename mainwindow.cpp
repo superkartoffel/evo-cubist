@@ -156,14 +156,13 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitne
 
 void MainWindow::autoSaveGeneratedImage(void)
 {
-    // TODO: as long as this function runs the breeder thread has to wait
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
     const QString& imageFilename = mOptionsForm.imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     mGenerationWidget->image().save(imageFilename);
     const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
-    DNA dna = mBreeder.dna();
-    bool success = dna.save(dnaFilename, mBreeder.originalImage().size(), mBreeder.generation(), mBreeder.selected());
+    DNA dna = mBreeder.dna(); // gives a clone
+    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected());
     if (success)
         statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.generation()), 3000);
     else
@@ -314,7 +313,7 @@ void MainWindow::saveDNA(void)
     if (dnaFilename.isNull())
         return;
     DNA dna = mBreeder.dna();
-    bool success = dna.save(dnaFilename, mBreeder.originalImage().size(), mBreeder.generation(), mBreeder.selected());
+    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected());
     if (success) {
         statusBar()->showMessage(tr("DNA saved as '%1'.").arg(dnaFilename), 5000);
         mLastSavedDNA = dnaFilename;
