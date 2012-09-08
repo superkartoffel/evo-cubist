@@ -1,16 +1,20 @@
 // Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 // All rights reserved.
 
+#include <QPolygonF>
+#include <QRegExp>
+#include <QSize>
+#include <QStringList>
+#include <QtCore/QDebug>
+
 #include "svgreader.h"
 #include "genome.h"
-#include <QRegExp>
-#include <QtCore/QDebug>
 
 
 void SVGReader::readPath(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "path");
-    bool ok;
+    bool ok = false;
     QString fill = mXml.attributes().value("fill").toString();
     // <path fill="rgb(14,9,206)" fill-opacity="0.230442" d="M 0.845225 0.845225 L 0.431106 0.585496 L 0.0788198 0.4925 L 0.0861273 0.692974 Z" />
     QRegExp fill_re("(\\d+),\\s*(\\d+),\\s*(\\d+)");
@@ -68,12 +72,19 @@ void SVGReader::readPath(void)
 void SVGReader::readGroup(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "g");
+    bool ok = false;
     QString transform = mXml.attributes().value("transform").toString();
     // <g transform="scale(371, 371)">
     QRegExp re("(\\d+),\\s*(\\d+)");
     re.indexIn(transform);
     QStringList scales = re.capturedTexts();
-    mDNA.setScale(QSize(scales.at(1).toInt(), scales.at(2).toInt()));
+    const int xs = scales.at(1).toInt(&ok);
+    if (!ok)
+        mXml.raiseError(QObject::tr("invalid x scale factor in \"%1\"").arg(scales.at(0)));
+    const int ys = scales.at(2).toInt(&ok);
+    if (!ok)
+        mXml.raiseError(QObject::tr("invalid y scale factor in \"%1\"").arg(scales.at(0)));
+    mDNA.setScale(QSize(xs, ys));
     while (mXml.readNextStartElement()) {
         if (mXml.name() == "path")
             readPath();

@@ -5,10 +5,9 @@
 #define __SVGREADER_H_
 
 #include <QString>
-#include <QSize>
+#include <QIODevice>
 #include <QXmlStreamReader>
 #include "dna.h"
-#include "breeder.h"
 
 ///
 /// Read SVG file as DNA object
@@ -18,14 +17,12 @@ class SVGReader
 public:
     SVGReader(void) { /* ... */ }
     const DNA& dna(void) const { return mDNA; }
-    DNA& dna(void) { return mDNA; }
     bool readSVG(QIODevice*);
     QString errorString(void) const;
 
 private:
     QXmlStreamReader mXml;
     DNA mDNA;
-    Breeder* mBreeder;
 
     void readSVG(void);
     void readGroup(void);
