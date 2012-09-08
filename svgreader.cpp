@@ -16,16 +16,25 @@ void SVGReader::readPath(void)
     QRegExp fill_re("(\\d+),\\s*(\\d+),\\s*(\\d+)");
     fill_re.indexIn(fill);
     const QStringList& rgba = fill_re.capturedTexts();
-    QColor color(rgba.at(1).toInt(), rgba.at(2).toInt(), rgba.at(3).toInt());
+    const int r = rgba.at(1).toInt(&ok);
+    if (!ok)
+        mXml.raiseError(QObject::tr("invalid red component in \"%1\"").arg(fill));
+    const int g = rgba.at(2).toInt(&ok);
+    if (!ok)
+        mXml.raiseError(QObject::tr("invalid green component in \"%1\"").arg(fill));
+    const int b = rgba.at(3).toInt(&ok);
+    if (!ok)
+        mXml.raiseError(QObject::tr("invalid blue component in \"%1\"").arg(fill));
+    QColor color(r, g, b);
     qreal alpha = mXml.attributes().value("fill-opacity").toString().toDouble(&ok);
     if (!ok) { // try finding "fill-opacity" in "style" attribute
         // <path fill="rgb(103,81,97)" style="fill-opacity:0.215686" ... />
         const QString& style = mXml.attributes().value("style").toString();
-        QRegExp fo_re("fill-opacity:\\s*([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
+        QRegExp fo_re("fill-opacity\\s*:\\s*([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
         fo_re.indexIn(style);
         alpha = fo_re.capturedTexts().at(1).toDouble(&ok);
         if (!ok)
-            mXml.raiseError(QObject::tr("fill-opacity not found"));
+            mXml.raiseError(QObject::tr("fill-opacity not found or invalid"));
     }
     color.setAlphaF(alpha);
 
@@ -42,8 +51,7 @@ void SVGReader::readPath(void)
         const qreal y = xy.at(3).toDouble(&ok);
         if (!ok)
             mXml.raiseError(QObject::tr("invalid y coordinate in \"%1\"").arg(xy.at(0)));
-        QPointF point(x, y);
-        polygon << point;
+        polygon << QPointF(x, y);
         d = d.right(d.size() - pos - xy.at(0).size() + 1);
     }
     mDNA.append(Genome(polygon, color));
