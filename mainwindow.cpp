@@ -17,12 +17,16 @@
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
 
+#if _OPENMP >= 200203
+#include <omp.h>
+#endif
+
 const QString MainWindow::Company = "c't";
 const QString MainWindow::AppName = QObject::tr("Evo Cubist");
 #ifdef QT_NO_DEBUG
-const QString MainWindow::AppVersion = "0.3";
+const QString MainWindow::AppVersion = "0.4";
 #else
-const QString MainWindow::AppVersion = "0.3 [DEBUG]";
+const QString MainWindow::AppVersion = "0.4 [DEBUG]";
 #endif
 
 

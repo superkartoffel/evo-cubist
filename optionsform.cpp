@@ -185,7 +185,6 @@ void OptionsForm::setScatterFactor(qreal v)
 void OptionsForm::setStartDistribution(int index)
 {
     Q_ASSERT(index >= 0);
-    qDebug() << "OptionsForm::setStartDistribution(" << index << ")";
     ui->startDistributionComboBox->setCurrentIndex(index);
 }
 

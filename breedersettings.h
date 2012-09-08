@@ -11,7 +11,32 @@ class BreederSettings : public QObject
     Q_OBJECT
 
 public:
-    BreederSettings(void);
+    BreederSettings::BreederSettings(void)
+        : QObject(NULL)
+        , mdXY(0.5)
+        , mdR(128)
+        , mdG(128)
+        , mdB(128)
+        , mdA(128)
+        , mMinA(10)
+        , mMaxA(60)
+        , mColorMutationProbability(700)
+        , mPointMutationProbability(700)
+        , mPointKillProbability(700)
+        , mPointEmergenceProbability(700)
+        , mGenomeKillProbability(700)
+        , mGenomeMoveProbability(700)
+        , mGenomeEmergenceProbability(700)
+        , mMinPointsPerGenome(3)
+        , mMaxPointsPerGenome(9)
+        , mMinGenomes(200)
+        , mMaxGenomes(400)
+        , mStartDistribution(0)
+        , mScatterFactor(0.5)
+        , mAutoSaveInterval(10)
+    {
+        // ...
+    }
 
     double dXY(void) const { return mdXY; }
     inline int dR(void) const { return mdR; }

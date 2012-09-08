@@ -16,7 +16,6 @@
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
 
-#define USE_RGB_DIFFERENCE 1
 
 class Breeder : public QThread
 {

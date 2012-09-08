@@ -1,2 +1,3 @@
 [ ] Die gespeicherte DNA (SVG) entspricht optisch manchmal nicht dem dargestellten generierten Bild.
 [ ] Wenn die eingestellten Speicherverzeichnisse nicht vorhanden sind, Meldung ausgeben und den Nutzer zum Einstellungsdialog dirigieren
+[ ] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
