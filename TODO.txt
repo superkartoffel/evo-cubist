@@ -1,4 +1,10 @@
-[ ] Wenn die eingestellten Speicherverzeichnisse nicht vorhanden sind, Meldung ausgeben und den Nutzer zum Einstellungsdialog dirigieren
-[ ] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
+BUGS
+
+[ ] Umschalten der Prozesspriorität lässt Programm einfrieren
+
+FEATURES
+
 [ ] Log schreiben (Zeitstempel, Generation, Selected, Points, Genomes, Fitness)
-[?] Die gespeicherte DNA (SVG) entspricht optisch manchmal nicht dem dargestellten generierten Bild.
+[ ] Wenn die eingestellten Speicherverzeichnisse nicht vorhanden sind, Meldung ausgeben und den Nutzer zum Einstellungsdialog dirigieren
+[ ] Parallelisierung mit QtConcurrent (Hints: QThread::idealThreadCount())
+[?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
