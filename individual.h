@@ -9,15 +9,6 @@
 #include "dna.h"
 
 
-inline unsigned int rgbDelta(QRgb c1, QRgb c2)
-{
-    const int r = qRed(c1) - qRed(c2);
-    const int g = qGreen(c1) - qGreen(c2);
-    const int b = qBlue(c1) - qBlue(c2);
-    return r*r + g*g + b*b;
-}
-
-
 class Individual {
 public:
     Individual(void)
@@ -36,6 +27,14 @@ public:
     inline const DNA& dna(void) const { return mDNA; }
     inline unsigned long fitness(void) const { return mFitness; }
     inline void operator()(Individual& individual) { individual.evolve(); }
+
+    inline unsigned int rgbDelta(QRgb c1, QRgb c2)
+    {
+        const int r = qRed(c1) - qRed(c2);
+        const int g = qGreen(c1) - qGreen(c2);
+        const int b = qBlue(c1) - qBlue(c2);
+        return r*r + g*g + b*b;
+    }
 
     inline void evolve(void) {
         mDNA.mutate();
