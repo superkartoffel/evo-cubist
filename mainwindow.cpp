@@ -17,10 +17,6 @@
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
 
-#if _OPENMP >= 200203
-#include <omp.h>
-#endif
-
 const QString MainWindow::Company = "c't";
 const QString MainWindow::AppName = QObject::tr("Evo Cubist");
 #ifdef QT_NO_DEBUG
@@ -41,12 +37,7 @@ MainWindow::MainWindow(QWidget* parent)
     QSettings::setDefaultFormat(QSettings::NativeFormat);
 
     ui->setupUi(this);
-
-#if _OPENMP >= 200203
-    setWindowTitle(tr("%1 %2 MP").arg(MainWindow::AppName).arg(MainWindow::AppVersion));
-#else
     setWindowTitle(tr("%1 %2").arg(MainWindow::AppName).arg(MainWindow::AppVersion));
-#endif
 
     mImageWidget = new ImageWidget;
     QHBoxLayout* hbox1 = new QHBoxLayout;

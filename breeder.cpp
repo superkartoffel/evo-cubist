@@ -6,7 +6,9 @@
 #include <QColor>
 #include <QPainter>
 #include <QDateTime>
+#include <QtCore>
 #include <QtCore/QDebug>
+#include <QVector>
 #include <limits>
 #include <qmath.h>
 
@@ -146,30 +148,6 @@ void Breeder::populate(void)
 }
 
 
-inline unsigned int Breeder::rgbDelta(QRgb c1, QRgb c2)
-{
-    const int r = qRed(c1) - qRed(c2);
-    const int g = qGreen(c1) - qGreen(c2);
-    const int b = qBlue(c1) - qBlue(c2);
-    return r*r + g*g + b*b;
-}
-
-
-inline unsigned long Breeder::fitness(void)
-{
-    Q_ASSERT(mOriginal.size() == mGenerated.size());
-    unsigned long sum = 0;
-#pragma omp parallel for reduction(+ : sum)
-    for (int y = 0; y < mOriginal.height(); ++y) {
-        const QRgb* o = reinterpret_cast<QRgb*>(mOriginal.scanLine(y));
-        const QRgb* g = reinterpret_cast<QRgb*>(mGenerated.scanLine(y));
-        for (int x = 0; x < mOriginal.width(); ++x)
-            sum += rgbDelta(*o++, *g++);
-    }
-    return sum;
-}
-
-
 inline void Breeder::draw(void)
 {
     QPainter p(&mGenerated);
@@ -182,26 +160,6 @@ inline void Breeder::draw(void)
         p.setBrush(genome->color());
         p.drawPolygon(genome->polygon());
     }
-}
-
-
-void Breeder::proceed(void)
-{
-    if (mOriginal.isNull() || mGenerated.isNull())
-        return;
-    mMutation = mDNA;
-    mMutation.mutate();
-    draw();
-    const unsigned long f = fitness();
-    if (f < mFitness) {
-        mFitness = f;
-        mDNA = mMutation;
-        ++mSelected;
-        mDirty = true;
-        emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration+1);
-    }
-    ++mGeneration;
-    emit proceeded(mGeneration);
 }
 
 
@@ -219,9 +177,92 @@ void Breeder::breed(QThread::Priority priority)
 }
 
 
+inline unsigned int rgbDelta(QRgb c1, QRgb c2)
+{
+    const int r = qRed(c1) - qRed(c2);
+    const int g = qGreen(c1) - qGreen(c2);
+    const int b = qBlue(c1) - qBlue(c2);
+    return r*r + g*g + b*b;
+}
+
+
+class Individual {
+public:
+    Individual(void)
+        : mOriginal(NULL)
+        , mFitness(ULONG_MAX)
+    { /* ... */ }
+
+    Individual(DNA dna, const QImage& original)
+        : mDNA(dna)
+        , mOriginal(&original)
+        , mFitness(ULONG_MAX)
+        , mGenerated(original.size(), original.format())
+    { /* ... */ }
+
+    inline QImage& generated(void) { return mGenerated; }
+    inline const DNA& dna(void) const { return mDNA; }
+    inline unsigned long fitness(void) const { return mFitness; }
+    inline void mutate(void) {
+        mDNA.mutate();
+        QPainter p(&mGenerated);
+        p.setPen(Qt::transparent);
+        p.setBrush(Qt::white);
+        p.drawRect(0, 0, mGenerated.width(), mGenerated.height());
+        p.setRenderHint(QPainter::Antialiasing);
+        p.scale(mGenerated.width(), mGenerated.height());
+        for (DNAType::const_iterator genome = mDNA.constBegin(); genome != mDNA.constEnd(); ++genome) {
+            p.setBrush(genome->color());
+            p.drawPolygon(genome->polygon());
+        }
+        mFitness = 0;
+        for (int y = 0; y < mOriginal->height(); ++y) {
+            const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->scanLine(y));
+            const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.scanLine(y));
+            for (int x = 0; x < mOriginal->width(); ++x)
+                mFitness += rgbDelta(*o++, *g++);
+        }
+    }
+
+private:
+    DNA mDNA;
+    const QImage* mOriginal;
+    unsigned long mFitness;
+    QImage mGenerated;
+};
+
+
+void evolve(Individual& individual) {
+    individual.mutate();
+}
+
+
 void Breeder::run(void)
 {
+    const int N = QThread::idealThreadCount();
+    qDebug() << "QThread::idealThreadCount() =" << N;
+    // generate N mutations
+    QVector<Individual> population(N);
     while (!mStopped) {
-        proceed();
+        for (int i = 0; i < N; ++i)
+            population[i] = Individual(mDNA, mOriginal);
+        QtConcurrent::blockingMap(population, evolve);
+        // find fittest mutation
+        QVector<Individual>::iterator best = NULL;
+        for (QVector<Individual>::iterator mutation = population.begin(); mutation != population.end(); ++mutation) {
+            if (mutation->fitness() < mFitness)
+                best = mutation;
+        }
+        // select fittest mutation
+        if (best) {
+            mFitness = best->fitness();
+            mDNA = best->dna();
+            mGenerated = best->generated();
+            ++mSelected;
+            mDirty = true;
+            emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration+N);
+        }
+        mGeneration += N;
+        emit proceeded(mGeneration);
     }
 }

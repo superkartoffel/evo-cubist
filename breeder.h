@@ -33,7 +33,7 @@ public:
     inline unsigned long currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }
 
-    void proceed(void);
+    // void proceed(void);
     void breed(QThread::Priority = QThread::InheritPriority);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
@@ -46,8 +46,6 @@ protected:
     virtual void run(void);
     
 private:
-    unsigned long fitness(void);
-    static unsigned int rgbDelta(QRgb c1, QRgb c2);
     void draw(void);
 
     bool mDirty;
