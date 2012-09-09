@@ -35,7 +35,9 @@ public:
     inline QImage& generated(void) { return mGenerated; }
     inline const DNA& dna(void) const { return mDNA; }
     inline unsigned long fitness(void) const { return mFitness; }
-    inline void mutate(void) {
+    inline void operator()(Individual& individual) { individual.evolve(); }
+
+    inline void evolve(void) {
         mDNA.mutate();
         QPainter p(&mGenerated);
         p.setPen(Qt::transparent);
@@ -62,9 +64,6 @@ private:
     unsigned long mFitness;
     QImage mGenerated;
 };
-
-
-extern void evolve(Individual& individual);
 
 
 #endif // __INDIVIDUAL_H_

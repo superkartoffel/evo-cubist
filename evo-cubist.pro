@@ -28,8 +28,7 @@ SOURCES += main.cpp\
     random/mersenne_twister.cpp \
     optionsform.cpp \
     svgreader.cpp \
-    breedersettings.cpp \
-    individual.cpp
+    breedersettings.cpp
 
 HEADERS += mainwindow.h \
     imagewidget.h \

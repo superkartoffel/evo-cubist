@@ -186,7 +186,7 @@ void Breeder::run(void)
         QVector<Individual> population(N);
         for (int i = 0; i < N; ++i)
             population[i] = Individual(mDNA, mOriginal);
-        QtConcurrent::blockingMap(population, evolve);
+        QtConcurrent::blockingMap(population, Individual());
         // find fittest mutation
         QVector<Individual>::iterator best = NULL;
         for (QVector<Individual>::iterator mutation = population.begin(); mutation != population.end(); ++mutation) {
