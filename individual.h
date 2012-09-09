@@ -48,12 +48,12 @@ public:
             p.drawPolygon(genome->polygon());
         }
         mFitness = 0;
-        for (int y = 0; y < mOriginal->height(); ++y) {
-            const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->scanLine(y));
-            const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.scanLine(y));
-            for (int x = 0; x < mOriginal->width(); ++x)
-                mFitness += rgbDelta(*o++, *g++);
-        }
+        const int N = mOriginal->height() * mOriginal->width();
+        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
+        const QRgb* const oEnd  = o + N;
+        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
+        while (o < oEnd)
+            mFitness += rgbDelta(*o++, *g++);
     }
 
 private:

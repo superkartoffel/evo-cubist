@@ -180,10 +180,10 @@ void Breeder::breed(QThread::Priority priority)
 
 void Breeder::run(void)
 {
-    const int N = gBreederSettings.cores();
     // generate N mutations
-    QVector<Individual> population(N);
     while (!mStopped) {
+        const int N = gBreederSettings.cores();
+        QVector<Individual> population(N);
         for (int i = 0; i < N; ++i)
             population[i] = Individual(mDNA, mOriginal);
         QtConcurrent::blockingMap(population, evolve);
@@ -193,7 +193,7 @@ void Breeder::run(void)
             if (mutation->fitness() < mFitness)
                 best = mutation;
         }
-        // select fittest mutation
+        // select fittest mutation if any
         if (best) {
             mFitness = best->fitness();
             mDNA = best->dna();
