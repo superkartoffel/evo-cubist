@@ -154,6 +154,16 @@ void BreederSettings::setGPUComputing(bool enabled)
     mGPUComputing = enabled;
 }
 
+
+void BreederSettings::setCores(int v)
+{
+    Q_ASSERT(v > 0);
+    mCores = v;
+}
+
+
+
+
 void BreederSettings::setStartDistribution(int index)
 {
     mStartDistribution = index;

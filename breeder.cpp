@@ -180,8 +180,7 @@ void Breeder::breed(QThread::Priority priority)
 
 void Breeder::run(void)
 {
-    const int N = QThread::idealThreadCount();
-    qDebug() << "QThread::idealThreadCount() =" << N;
+    const int N = gBreederSettings.cores();
     // generate N mutations
     QVector<Individual> population(N);
     while (!mStopped) {
@@ -199,9 +198,8 @@ void Breeder::run(void)
             mFitness = best->fitness();
             mDNA = best->dna();
             mGenerated = best->generated();
-            ++mSelected;
             mDirty = true;
-            emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration+N);
+            emit evolved(mGenerated, mDNA, mFitness, ++mSelected, mGeneration+N);
         }
         mGeneration += N;
         emit proceeded(mGeneration);
