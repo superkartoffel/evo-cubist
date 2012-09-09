@@ -149,12 +149,6 @@ void BreederSettings::setScatterFactor(double v)
 }
 
 
-void BreederSettings::setParallelComputing(bool enabled)
-{
-    mParallelComputing = enabled;
-}
-
-
 void BreederSettings::setGPUComputing(bool enabled)
 {
     mGPUComputing = enabled;

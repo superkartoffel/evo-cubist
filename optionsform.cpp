@@ -56,8 +56,10 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gBreederSettings, SLOT(setStartDistribution(int)));
     QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gBreederSettings, SLOT(setScatterFactor(double)));
 
-    QObject::connect(ui->parallelComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setParallelComputing(bool)));
     QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setGPUComputing(bool)));
+    QObject::connect(ui->coresSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setCores(int)));
+
+    ui->coresSpinBox->setValue(QThread::idealThreadCount());
 }
 
 
@@ -179,6 +181,13 @@ void OptionsForm::setScatterFactor(qreal v)
 {
     Q_ASSERT(v > 0);
     ui->scatterFactorSpinBox->setValue(v);
+}
+
+
+void OptionsForm::setCores(int v)
+{
+    Q_ASSERT(v > 0);
+    ui->coresSpinBox->setValue(v);
 }
 
 

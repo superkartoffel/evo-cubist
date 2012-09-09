@@ -260,6 +260,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/autoSave", mOptionsForm.autoSave());
     settings.setValue("Options/startDistribution", mOptionsForm.startDistribution());
     settings.setValue("Options/scatterFactor", mOptionsForm.scatterFactor());
+    settings.setValue("Options/cores", mOptionsForm.cores());
 }
 
 
@@ -283,6 +284,7 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setDNASaveFilenameTemplate(settings.value("Options/dnaSaveFilenameTemplate", "%1-%2-%3.svg").toString());
     mOptionsForm.setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
     mOptionsForm.setAutoSave(settings.value("Options/autoSave", true).toBool());
+    mOptionsForm.setCores(settings.value("Options/cores", QThread::idealThreadCount()).toInt());
     mOptionsForm.setStartDistribution(settings.value("Options/startDistribution", 0).toInt());
     mOptionsForm.setScatterFactor(settings.value("Options/scatterFactor", 0.5).toDouble());
     mOptionsForm.setColorMutationProbability(settings.value("Options/colorMutationProbability", 700).toInt());
