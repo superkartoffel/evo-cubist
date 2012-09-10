@@ -193,6 +193,22 @@ void MainWindow::autoSaveToggled(bool enabled)
 
 void MainWindow::startBreeding(void)
 {
+    QFileInfo info;
+    // check if DNA save directory exists
+    info.setFile(mOptionsForm.dnaSaveDirectory());
+    if (!info.exists() || !info.isWritable() || !info.isDir()) {
+        QMessageBox::warning(this, tr("DNA save directory missing"), tr("The selected DNA save directory does not exist. Please go to the options dialog and choose one. Then try starting again."));
+        mOptionsForm.go("Autosave", "dnaSaveDirectory");
+        return;
+    }
+    // check if image save directory exists
+    info.setFile(mOptionsForm.imageSaveDirectory());
+    if (!info.exists() || !info.isWritable() || !info.isDir()) {
+        QMessageBox::warning(this, tr("Image save directory missing"), tr("The selected image save directory does not exist. Please go to the options dialog and choose one. Then try starting again."));
+        mOptionsForm.go("Autosave", "imageSaveDirectory");
+        return;
+    }
+
     statusBar()->showMessage(tr("Starting ..."), 3000);
     if (!mOptionsForm.logFile().isEmpty()) {
         mLog.setFileName(mOptionsForm.logFile());

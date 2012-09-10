@@ -6,7 +6,6 @@ BUGS
 
 FEATURES
 
-[ ] Wenn die eingestellten Speicherverzeichnisse nicht vorhanden sind, Meldung ausgeben und den Nutzer zum Einstellungsdialog dirigieren
 [ ] Wenn die eingestellte Log-Datei über den Pfad nicht erreichbar ist, Meldung ausgeben und den Nutzer zum Einstellungsdialog dirigieren
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert

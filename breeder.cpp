@@ -180,6 +180,7 @@ void Breeder::breed(QThread::Priority priority)
 
 void Breeder::run(void)
 {
+    qDebug() << "Breeder has started.";
     // generate N mutations
     while (!mStopped) {
         const int N = gBreederSettings.cores();

@@ -74,6 +74,22 @@ OptionsForm::~OptionsForm()
 }
 
 
+void OptionsForm::go(const QString& where, const QString& what)
+{
+    show();
+    raise();
+    if (where == "Autosave") {
+        ui->autoSaveTabWidget->setCurrentIndex(1);
+        if (what == "imageSaveDirectory") {
+            // TODO: show tooltip for field or otherwise highlight it
+        }
+        else if ((what == "dnaSaveDirectory")) {
+            // TODO: show tooltip for field or otherwise highlight it
+        }
+    }
+}
+
+
 void OptionsForm::resetToDefaults(void)
 {
     if (QMessageBox::question(this, tr("Reset parameters to defaults?"), tr("Do you really want to reset all parameters to their defaults?")) != QMessageBox::Ok)
