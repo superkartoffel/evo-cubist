@@ -197,15 +197,22 @@ void MainWindow::startBreeding(void)
     // check if DNA save directory exists
     info.setFile(mOptionsForm.dnaSaveDirectory());
     if (!info.exists() || !info.isWritable() || !info.isDir()) {
-        QMessageBox::warning(this, tr("DNA save directory missing"), tr("The selected DNA save directory does not exist. Please go to the options dialog and choose one. Then try starting again."));
+        QMessageBox::warning(this, tr("DNA save directory missing"), tr("The selected DNA save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again."));
         mOptionsForm.go("Autosave", "dnaSaveDirectory");
         return;
     }
     // check if image save directory exists
     info.setFile(mOptionsForm.imageSaveDirectory());
     if (!info.exists() || !info.isWritable() || !info.isDir()) {
-        QMessageBox::warning(this, tr("Image save directory missing"), tr("The selected image save directory does not exist. Please go to the options dialog and choose one. Then try starting again."));
+        QMessageBox::warning(this, tr("Image save directory missing"), tr("The selected image save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again."));
         mOptionsForm.go("Autosave", "imageSaveDirectory");
+        return;
+    }
+    // check if log file is writable
+    info.setFile(mOptionsForm.logFile());
+    if (!info.exists() || !info.isWritable()) {
+        QMessageBox::warning(this, tr("Log file not writable missing"), tr("The selected log file is not writable. Please go to the options dialog and choose a new one. Then try starting again."));
+        mOptionsForm.go("Autosave", "logFile");
         return;
     }
 

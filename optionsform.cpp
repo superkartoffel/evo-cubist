@@ -86,6 +86,9 @@ void OptionsForm::go(const QString& where, const QString& what)
         else if ((what == "dnaSaveDirectory")) {
             // TODO: show tooltip for field or otherwise highlight it
         }
+        else if ((what == "logFile")) {
+            // TODO: show tooltip for field or otherwise highlight it
+        }
     }
 }
 
