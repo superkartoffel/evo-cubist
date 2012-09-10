@@ -38,6 +38,9 @@ public:
     inline int saveInterval(void) const { return ui->saveIntervalSpinBox->value(); }
     inline bool autoSave(void) const { return ui->autoSaveCheckBox->isChecked(); }
 
+    void setLogFile(const QString&);
+    QString logFile(void) const { return ui->logFileLineEdit->text(); }
+
     inline int colorMutationProbability(void) const { return ui->colorMutationProbabilitySpinBox->value(); }
     inline int pointMutationProbability(void) const { return ui->pointMutationProbabilitySpinBox->value(); }
     inline int pointEmergenceProbability(void) const { return ui->pointEmergenceProbabilitySpinBox->value(); }
@@ -75,11 +78,13 @@ public:
 signals:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
+    void logFileChanged(const QString&);
     void priorityChanged(QThread::Priority);
 
 private slots:
     void selectImageSaveDirectory(void);
     void selectDNASaveDirectory(void);
+    void selectLogFile(void);
     void priorityChanged(int);
 
 private:

@@ -35,6 +35,8 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
 
+    QObject::connect(ui->selectLogFilePushButton, SIGNAL(clicked()), SLOT(selectLogFile()));
+
     // expose signals from internal UI objects
     QObject::connect(ui->saveIntervalSpinBox, SIGNAL(valueChanged(int)), SIGNAL(autoSaveIntervalChanged(int)));
     QObject::connect(ui->autoSaveCheckBox, SIGNAL(toggled(bool)), SIGNAL(autoSaveToggled(bool)));
@@ -96,6 +98,14 @@ void OptionsForm::selectDNASaveDirectory(void)
     const QString& dirName = QFileDialog::getExistingDirectory(this, tr("Choose DNA save directory"), ui->dnaSaveDirectoryLineEdit->text());
     if (dirName != "")
         setDNASaveDirectory(dirName);
+}
+
+
+void OptionsForm::selectLogFile(void)
+{
+    const QString& fileName = QFileDialog::getOpenFileName(this, tr("Choose log file"), ui->logFileLineEdit->text());
+    if (fileName != "")
+        setLogFile(fileName);
 }
 
 
@@ -231,6 +241,12 @@ void OptionsForm::setImageSaveFilenameTemplate(const QString& filenameTemplate)
 void OptionsForm::setDNASaveFilenameTemplate(const QString& filenameTemplate)
 {
     ui->dnaFilenameTemplateLineEdit->setText(filenameTemplate);
+}
+
+
+void OptionsForm::setLogFile(const QString& filename)
+{
+    ui->logFileLineEdit->setText(filename);
 }
 
 

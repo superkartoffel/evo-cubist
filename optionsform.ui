@@ -554,7 +554,7 @@
                <number>2</number>
               </property>
               <property name="value">
-               <number>10</number>
+               <number>60</number>
               </property>
              </widget>
             </item>
@@ -638,17 +638,50 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="minimumSize">
           <size>
-           <width>20</width>
-           <height>5</height>
+           <width>0</width>
+           <height>100</height>
           </size>
          </property>
-        </spacer>
+         <property name="title">
+          <string>Logging</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <layout class="QFormLayout" name="formLayout_4">
+            <item row="0" column="0">
+             <widget class="QLabel" name="logToFileLabel">
+              <property name="text">
+               <string>Log to file</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QLineEdit" name="logFileLineEdit"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="selectLogFilePushButton">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>23</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Choose ...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>

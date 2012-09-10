@@ -140,12 +140,23 @@ void MainWindow::proceeded(unsigned int generation)
 
 void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitness, unsigned int selected, unsigned generation)
 {
+    const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
     ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
     ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
-    ui->pointsLineEdit->setText(QString("%1").arg(dna.points()));
+    ui->pointsLineEdit->setText(QString("%1").arg(numPoints));
+    if (mLog.isOpen()) {
+        QTextStream log(&mLog);
+        // (Zeitstempel, Generation, Selected, Points, Genomes, Fitness)
+        log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " <<
+               generation << " " <<
+               selected << " " <<
+               numPoints << " " <<
+               dna.size() << " " <<
+               fitness << "\n";
+    }
 }
 
 
@@ -191,6 +202,14 @@ void MainWindow::autoSaveToggled(bool enabled)
 void MainWindow::startBreeding(void)
 {
     statusBar()->showMessage(tr("Starting ..."), 3000);
+    if (!mOptionsForm.logFile().isEmpty()) {
+        mLog.setFileName(mOptionsForm.logFile());
+        mLog.open(QIODevice::Append | QIODevice::Text);
+        if (mLog.isOpen()) {
+            QTextStream log(&mLog);
+            log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "START.";
+        }
+    }
     mStartTime = QDateTime::currentDateTime();
     QObject::connect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), Qt::BlockingQueuedConnection);
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)), Qt::BlockingQueuedConnection);
@@ -212,6 +231,10 @@ void MainWindow::stopBreeding(void)
     ui->startStopPushButton->setText(tr("Resume"));
     mAutoSaveTimer.stop();
     mBreeder.stop();
+    if (mLog.isOpen()) {
+        QTextStream log(&mLog);
+        log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "STOP.";
+    }
 }
 
 
@@ -256,6 +279,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/imageSaveFilenameTemplate", mOptionsForm.imageSaveFilenameTemplate());
     settings.setValue("Options/dnaSaveDirectory", mOptionsForm.dnaSaveDirectory());
     settings.setValue("Options/dnaSaveFilenameTemplate", mOptionsForm.dnaSaveFilenameTemplate());
+    settings.setValue("Options/logFile", mOptionsForm.logFile());
     settings.setValue("Options/saveInterval", mOptionsForm.saveInterval());
     settings.setValue("Options/autoSave", mOptionsForm.autoSave());
     settings.setValue("Options/startDistribution", mOptionsForm.startDistribution());
@@ -284,6 +308,7 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setDNASaveFilenameTemplate(settings.value("Options/dnaSaveFilenameTemplate", "%1-%2-%3.svg").toString());
     mOptionsForm.setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
     mOptionsForm.setAutoSave(settings.value("Options/autoSave", true).toBool());
+    mOptionsForm.setLogFile(settings.value("Options/logFile").toString());
     mOptionsForm.setCores(settings.value("Options/cores", QThread::idealThreadCount()).toInt());
     mOptionsForm.setStartDistribution(settings.value("Options/startDistribution", 0).toInt());
     mOptionsForm.setScatterFactor(settings.value("Options/scatterFactor", 0.5).toDouble());

@@ -8,6 +8,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QTimer>
+#include <QFile>
 
 #include "imagewidget.h"
 #include "generationwidget.h"
@@ -44,6 +45,7 @@ private:
     QString mLastSavedDNA;
     QString mSaveDirectory;
     QThread::Priority mPriority;
+    QFile mLog;
 
     void saveAppSettings(void);
     void restoreAppSettings(void);
