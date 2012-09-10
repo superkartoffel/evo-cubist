@@ -11,6 +11,7 @@
 
 static const QString Company = "c't";
 static const QString AppName = QObject::tr("Evo Cubist");
+static const QString AppUrl = "http://evo-cubist.googlecode.com/";
 #ifdef QT_NO_DEBUG
 static const QString AppVersion = "0.5";
 #else

@@ -447,9 +447,9 @@ void MainWindow::resetBreeder(void)
 
 void MainWindow::about(void)
 {
-    QMessageBox::about(this, tr("About Evo Cubist"),
-                       tr("<p><b>Evo Cubist</b> calculates vector images from bitmaps by using genetic algorithms. "
-                          "See <a href=\"http://evo-cubist.googlecode.com/\">http://evo-cubist.googlecode.com/</a> for more info.</p>"
+    QMessageBox::about(this, tr("About %1 %2").arg(AppName).arg(AppVersion),
+                       tr("<p><b>%1</b> calculates vector images from bitmaps by using genetic algorithms. "
+                          "See <a href=\"%1\">%1</a> for more info.</p>"
                           "<p>Copyright &copy; 2012 Oliver Lau &lt;oliver@von-und-fuer.lau.de&gt;</p>"
                           "<p>Licensed under the Apache License, Version 2.0 (the \"License\"); "
                           "you may not use this file except in compliance with the License. "
@@ -459,7 +459,7 @@ void MainWindow::about(void)
                           "distributed under the License is distributed on an \"AS IS\" BASIS, "
                           "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. "
                           "See the License for the specific language governing permissions and "
-                          "limitations under the License."));
+                          "limitations under the License.").arg(AppName).arg(AppUrl).arg(AppUrl));
 }
 
 

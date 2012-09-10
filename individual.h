@@ -23,7 +23,7 @@ public:
         , mGenerated(original.size(), original.format())
     { /* ... */ }
 
-    inline QImage& generated(void) { return mGenerated; }
+    inline const QImage& generated(void) const { return mGenerated; }
     inline const DNA& dna(void) const { return mDNA; }
     inline unsigned long fitness(void) const { return mFitness; }
     inline void operator()(Individual& individual) { individual.evolve(); }
