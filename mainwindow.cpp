@@ -160,7 +160,7 @@ void MainWindow::autoSaveGeneratedImage(void)
     mGenerationWidget->image().save(imageFilename);
     const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
-    bool success = dna.save(dnaFilename, mBreeder.generation()-1, mBreeder.selected(), mBreeder.currentFitness());
+    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness());
     if (success)
         statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.generation()), 3000);
     else

@@ -18,7 +18,7 @@ class Genome
 public:
     explicit Genome(bool randomize = false);
     Genome(const Genome& other);
-    Genome(QPolygonF polygon, QColor color);
+    Genome(const QPolygonF& polygon,  const QColor& color);
 
     inline const QColor& color(void) const { return mColor; }
     inline const QPolygonF& polygon(void) const { return mPolygon; }
@@ -30,6 +30,8 @@ private:
     QColor mColor;
 
     bool willMutate(int rate) const;
+
+    void copy(const QPolygonF& polygon,  const QColor& color);
 };
 
 

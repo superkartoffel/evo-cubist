@@ -19,21 +19,24 @@ Genome::Genome(bool randomize)
 }
 
 
-Genome::Genome(QPolygonF polygon, QColor color)
-    : mColor(color)
+Genome::Genome(const QPolygonF& polygon, const QColor& color)
 {
-    mPolygon.reserve(polygon.size());
-    for (QPolygonF::const_iterator p = polygon.constBegin(); p != polygon.constEnd(); ++p)
-        mPolygon.append(*p);
+    copy(polygon, color);
 }
 
 
 Genome::Genome(const Genome& other)
-    : mColor(other.mColor)
 {
-    mPolygon.reserve(other.mPolygon.size());
-    for (QPolygonF::const_iterator p = other.mPolygon.constBegin(); p != other.mPolygon.constEnd(); ++p)
+    copy(other.polygon(), other.color());
+}
+
+
+void Genome::copy(const QPolygonF& polygon, const QColor& color)
+{
+    mPolygon.reserve(polygon.size());
+    for (QPolygonF::const_iterator p = polygon.constBegin(); p != polygon.constEnd(); ++p)
         mPolygon.append(*p);
+    mColor = color;
 }
 
 
