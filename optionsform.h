@@ -22,6 +22,8 @@ public:
     explicit OptionsForm(QWidget* parent = NULL);
     ~OptionsForm();
 
+    void resetToDefaults(void);
+
     void setSaveInterval(int);
     void setAutoSave(bool);
     void setImageSaveDirectory(const QString&);

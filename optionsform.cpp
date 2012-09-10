@@ -61,13 +61,36 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setGPUComputing(bool)));
     QObject::connect(ui->coresSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setCores(int)));
 
-    ui->coresSpinBox->setValue(QThread::idealThreadCount());
+    QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetToDefaults()));
+
+
 }
 
 
 OptionsForm::~OptionsForm()
 {
     delete ui;
+}
+
+
+void OptionsForm::resetToDefaults(void)
+{
+    ui->colorMutationProbabilitySpinBox->setValue(1000);
+    ui->pointMutationProbabilitySpinBox->setValue(1000);
+    ui->pointKillProbabilitySpinBox->setValue(1000);
+    ui->pointEmergenceProbabilitySpinBox->setValue(1000);
+    ui->genomeKillProbabilitySpinBox->setValue(1000);
+    ui->genomeMoveProbabilitySpinBox->setValue(1000);
+    ui->genomeEmergenceProbabilitySpinBox->setValue(10000);
+    ui->minGenomesSpinBox->setValue(150);
+    ui->maxGenomesSpinBox->setValue(500);
+    ui->minPointsSpinBox->setValue(3);
+    ui->maxPointsSpinBox->setValue(6);
+    ui->minAlphaSpinBox->setValue(5);
+    ui->maxAlphaSpinBox->setValue(45);
+    ui->startDistributionComboBox->setCurrentIndex(4);
+    ui->scatterFactorSpinBox->setValue(0.5);
+    ui->coresSpinBox->setValue(QThread::idealThreadCount());
 }
 
 

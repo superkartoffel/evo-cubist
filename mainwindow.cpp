@@ -207,7 +207,7 @@ void MainWindow::startBreeding(void)
         mLog.open(QIODevice::Append | QIODevice::Text);
         if (mLog.isOpen()) {
             QTextStream log(&mLog);
-            log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "START.";
+            log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "START.\n";
         }
     }
     mStartTime = QDateTime::currentDateTime();
@@ -233,7 +233,7 @@ void MainWindow::stopBreeding(void)
     mBreeder.stop();
     if (mLog.isOpen()) {
         QTextStream log(&mLog);
-        log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "STOP.";
+        log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "STOP.\n";
     }
 }
 
@@ -296,10 +296,10 @@ void MainWindow::restoreAppSettings(void)
     QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/Mona-Lisa-256x256.png").toString();
     mImageWidget->loadImage(imageFileName);
     mLastSavedDNA = settings.value("MainWindow/lastSavedDNA").toString();
-    ui->redSlider->setValue(settings.value("Options/deltaR", 100).toInt());
-    ui->greenSlider->setValue(settings.value("Options/deltaG", 100).toInt());
-    ui->blueSlider->setValue(settings.value("Options/deltaB", 100).toInt());
-    ui->alphaSlider->setValue(settings.value("Options/deltaA", 100).toInt());
+    ui->redSlider->setValue(settings.value("Options/deltaR", 50).toInt());
+    ui->greenSlider->setValue(settings.value("Options/deltaG", 50).toInt());
+    ui->blueSlider->setValue(settings.value("Options/deltaB", 50).toInt());
+    ui->alphaSlider->setValue(settings.value("Options/deltaA", 50).toInt());
     ui->xySlider->setValue(settings.value("Options/deltaXY", 230).toInt());
     mOptionsForm.restoreGeometry(settings.value("Options/geometry").toByteArray());
     mOptionsForm.setImageSaveDirectory(settings.value("Options/imageSaveDirectory", QDir::homePath()).toString());
@@ -310,21 +310,21 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setAutoSave(settings.value("Options/autoSave", true).toBool());
     mOptionsForm.setLogFile(settings.value("Options/logFile").toString());
     mOptionsForm.setCores(settings.value("Options/cores", QThread::idealThreadCount()).toInt());
-    mOptionsForm.setStartDistribution(settings.value("Options/startDistribution", 0).toInt());
+    mOptionsForm.setStartDistribution(settings.value("Options/startDistribution", 4).toInt());
     mOptionsForm.setScatterFactor(settings.value("Options/scatterFactor", 0.5).toDouble());
-    mOptionsForm.setColorMutationProbability(settings.value("Options/colorMutationProbability", 700).toInt());
-    mOptionsForm.setPointMutationProbability(settings.value("Options/pointMutationProbability", 700).toInt());
-    mOptionsForm.setPointKillProbability(settings.value("Options/pointKillProbability", 700).toInt());
-    mOptionsForm.setPointEmergenceProbability(settings.value("Options/pointEmergenceProbability", 700).toInt());
-    mOptionsForm.setGenomeKillProbability(settings.value("Options/genomeKillProbability", 700).toInt());
-    mOptionsForm.setGenomeMoveProbability(settings.value("Options/genomeMoveProbability", 700).toInt());
-    mOptionsForm.setGenomeEmergenceProbability(settings.value("Options/genomeEmergenceProbability", 700).toInt());
+    mOptionsForm.setColorMutationProbability(settings.value("Options/colorMutationProbability", 1000).toInt());
+    mOptionsForm.setPointMutationProbability(settings.value("Options/pointMutationProbability", 1000).toInt());
+    mOptionsForm.setPointKillProbability(settings.value("Options/pointKillProbability", 1000).toInt());
+    mOptionsForm.setPointEmergenceProbability(settings.value("Options/pointEmergenceProbability", 1000).toInt());
+    mOptionsForm.setGenomeKillProbability(settings.value("Options/genomeKillProbability", 1000).toInt());
+    mOptionsForm.setGenomeMoveProbability(settings.value("Options/genomeMoveProbability", 5000).toInt());
+    mOptionsForm.setGenomeEmergenceProbability(settings.value("Options/genomeEmergenceProbability", 1000).toInt());
     mOptionsForm.setMinPointsPerGenome(settings.value("Options/minPointsPerGenome", 3).toInt());
-    mOptionsForm.setMaxPointsPerGenome(settings.value("Options/maxPointsPerGenome", 6).toInt());
-    mOptionsForm.setMinGenomes(settings.value("Options/minGenomes", 50).toInt());
-    mOptionsForm.setMaxGenomes(settings.value("Options/maxGenomes", 100).toInt());
+    mOptionsForm.setMaxPointsPerGenome(settings.value("Options/maxPointsPerGenome", 5).toInt());
+    mOptionsForm.setMinGenomes(settings.value("Options/minGenomes", 150).toInt());
+    mOptionsForm.setMaxGenomes(settings.value("Options/maxGenomes", 500).toInt());
     mOptionsForm.setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
-    mOptionsForm.setMaxAlpha(settings.value("Options/maxAlpha", 50).toInt());
+    mOptionsForm.setMaxAlpha(settings.value("Options/maxAlpha", 45).toInt());
     mBreeder.reset();
 }
 
