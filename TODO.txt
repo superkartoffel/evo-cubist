@@ -1,16 +1,19 @@
 BUGS
 
 [ ] Umschalten der Prozesspriorität lässt Programm einfrieren
-[ ] Beenden des Programms, während die Generierung läuft, lässt das Programm einfrieren. Manchmal geschieht das auch, selbst wenn der Hintergrundthread nicht aktiv ist.
 [ ] Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.
 [ ] Die Lokalisierungen werden nicht eingebunden.
 
 FEATURES
 
+[ ] SVGs mit Clip-Region versehen.
 [ ] Wenn die eingestellten Speicherverzeichnisse nicht vorhanden sind, Meldung ausgeben und den Nutzer zum Einstellungsdialog dirigieren
+[ ] Wenn die eingestellte Log-Datei über den Pfad nicht erreichbar ist, Meldung ausgeben und den Nutzer zum Einstellungsdialog dirigieren
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
+[ ] zufällige Translation, Skalierung und Rotation von Polygonen beim Mutieren
 
 POSSIBLE SPEED-UPS
 
 [ ] Jedes Individuum (Klasse Individual) bekommt einen eigenen Zufallszahlengenerator, um Thread-übergreifende Speicherzugriffe auf das globale MersenneTwister-Objekt zu verhindern.
+[ ] Polygone per OpenGL in Framebuffer zeichnen. RGB-Differenz zwischen Framebuffer und Originalbild mit Hilfe von Shadern berechnen.

@@ -167,7 +167,7 @@ inline void Breeder::draw(void)
 void Breeder::stop(void)
 {
     mStopped = true;
-    wait();
+    wait(500);
 }
 
 
@@ -204,4 +204,5 @@ void Breeder::run(void)
         mGeneration += N;
         emit proceeded(mGeneration);
     }
+    qDebug() << "Breeder::run() is about to return.";
 }

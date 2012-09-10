@@ -24,7 +24,7 @@ public:
     DNA(const DNA& dna);
 
     void mutate(void);
-    bool save(const QString& filename, unsigned int generation, unsigned int selected);
+    bool save(const QString& filename, unsigned int generation, unsigned int selected, unsigned int fitness);
     bool load(const QString& filename);
 
     unsigned int points(void) const;

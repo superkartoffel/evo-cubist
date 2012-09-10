@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QtCore/QDebug>
 #include <QThread>
+#include <QMessageBox>
 
 #include "breedersettings.h"
 #include "optionsform.h"
@@ -75,6 +76,8 @@ OptionsForm::~OptionsForm()
 
 void OptionsForm::resetToDefaults(void)
 {
+    if (QMessageBox::question(this, tr("Reset parameters to defaults?"), tr("Do you really want to reset all parameters to their defaults?")) != QMessageBox::Ok)
+        return;
     ui->colorMutationProbabilitySpinBox->setValue(1000);
     ui->pointMutationProbabilitySpinBox->setValue(1000);
     ui->pointKillProbabilitySpinBox->setValue(1000);
@@ -126,7 +129,7 @@ void OptionsForm::selectDNASaveDirectory(void)
 
 void OptionsForm::selectLogFile(void)
 {
-    const QString& fileName = QFileDialog::getOpenFileName(this, tr("Choose log file"), ui->logFileLineEdit->text());
+    const QString& fileName = QFileDialog::getSaveFileName(this, tr("Choose log file"), ui->logFileLineEdit->text());
     if (fileName != "")
         setLogFile(fileName);
 }

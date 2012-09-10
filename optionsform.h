@@ -22,8 +22,6 @@ public:
     explicit OptionsForm(QWidget* parent = NULL);
     ~OptionsForm();
 
-    void resetToDefaults(void);
-
     void setSaveInterval(int);
     void setAutoSave(bool);
     void setImageSaveDirectory(const QString&);
@@ -88,6 +86,7 @@ private slots:
     void selectDNASaveDirectory(void);
     void selectLogFile(void);
     void priorityChanged(int);
+    void resetToDefaults(void);
 
 private:
     static const QString SaveFilenameTemplate;

@@ -2,11 +2,21 @@
 // All rights reserved.
 
 #include <QApplication>
-#include <QResource>
 #include <QLocale>
 #include <QTranslator>
 #include <QtCore/QDebug>
 #include "mainwindow.h"
+#include "main.h"
+
+
+static const QString Company = "c't";
+static const QString AppName = QObject::tr("Evo Cubist");
+#ifdef QT_NO_DEBUG
+static const QString AppVersion = "0.5";
+#else
+static const QString AppVersion = "0.5 [DEBUG]";
+#endif
+
 
 int main(int argc, char* argv[])
 {

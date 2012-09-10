@@ -23,9 +23,6 @@ public:
     inline const QColor& color(void) const { return mColor; }
     inline const QPolygonF& polygon(void) const { return mPolygon; }
 
-    void setColor(const QColor&);
-    void setPolygon(const QPolygonF&);
-
     void mutate(void);
 
 private:

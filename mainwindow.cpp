@@ -4,7 +4,6 @@
 #include <QtGlobal>
 #include <QHBoxLayout>
 #include <QTextStream>
-#include <QtCore/QDebug>
 #include <QSettings>
 #include <QFileDialog>
 #include <QDir>
@@ -16,28 +15,20 @@
 #include "ui_mainwindow.h"
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
-
-const QString MainWindow::Company = "c't";
-const QString MainWindow::AppName = QObject::tr("Evo Cubist");
-#ifdef QT_NO_DEBUG
-const QString MainWindow::AppVersion = "0.4";
-#else
-const QString MainWindow::AppVersion = "0.4 [DEBUG]";
-#endif
-
+#include "main.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , mPriority(QThread::InheritPriority)
 {
-    QCoreApplication::setOrganizationName(MainWindow::Company);
-    QCoreApplication::setOrganizationDomain(MainWindow::Company);
-    QCoreApplication::setApplicationName(MainWindow::AppName);
+    QCoreApplication::setOrganizationName(Company);
+    QCoreApplication::setOrganizationDomain(Company);
+    QCoreApplication::setApplicationName(AppName);
     QSettings::setDefaultFormat(QSettings::NativeFormat);
 
     ui->setupUi(this);
-    setWindowTitle(tr("%1 %2").arg(MainWindow::AppName).arg(MainWindow::AppVersion));
+    setWindowTitle(tr("%1 %2").arg(AppName).arg(AppVersion));
 
     mImageWidget = new ImageWidget;
     QHBoxLayout* hbox1 = new QHBoxLayout;
@@ -83,6 +74,8 @@ MainWindow::MainWindow(QWidget* parent)
 
     proceeded(1);
     evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
+
+    QObject::connect(&mBreeder, SIGNAL(finished()), SLOT(breederFinished()));
 }
 
 
@@ -94,29 +87,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent* e)
 {
+    stopBreeding();
     saveAppSettings();
-    if (mBreeder.isRunning()) {
-        stopBreeding();
-    }
-    if (mBreeder.isDirty()) {
-        QMessageBox msgBox;
-        msgBox.setText(tr("<b>DNA has been modified.</b>"));
-        msgBox.setInformativeText(tr("You have unsaved DNA. Do you want to save it?"));
-        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        msgBox.setDefaultButton(QMessageBox::Save);
-        int ret = msgBox.exec();
-        switch (ret) {
-        case QMessageBox::Save:
-            saveDNA();
-            break;
-        case QMessageBox::Discard:
-            break;
-        case QMessageBox::Cancel:
-            e->ignore();
-            return;
-        }
-    }
     mOptionsForm.close();
+    if (!mBreeder.isDirty())
+        return;
+
+    QMessageBox msgBox;
+    msgBox.setText(tr("<b>DNA has been modified.</b>"));
+    msgBox.setInformativeText(tr("You have unsaved DNA. Do you want to save it?"));
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+    switch (ret) {
+    case QMessageBox::Save:
+        saveDNA();
+        break;
+    case QMessageBox::Cancel:
+        e->ignore();
+        return;
+    case QMessageBox::Discard:
+        break;
+    }
     e->accept();
 }
 
@@ -168,7 +160,7 @@ void MainWindow::autoSaveGeneratedImage(void)
     mGenerationWidget->image().save(imageFilename);
     const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
-    bool success = dna.save(dnaFilename, mBreeder.generation()-1, mBreeder.selected());
+    bool success = dna.save(dnaFilename, mBreeder.generation()-1, mBreeder.selected(), mBreeder.currentFitness());
     if (success)
         statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.generation()), 3000);
     else
@@ -211,8 +203,16 @@ void MainWindow::startBreeding(void)
         }
     }
     mStartTime = QDateTime::currentDateTime();
-    QObject::connect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), Qt::BlockingQueuedConnection);
-    QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)), Qt::BlockingQueuedConnection);
+    QObject::connect(&mBreeder,
+                     SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)),
+                     this,
+                     SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)),
+                     Qt::BlockingQueuedConnection);
+    QObject::connect(&mBreeder,
+                     SIGNAL(proceeded(unsigned int)),
+                     this,
+                     SLOT(proceeded(unsigned int)),
+                     Qt::BlockingQueuedConnection);
     mBreeder.breed(mPriority);
     if (mOptionsForm.autoSave()) {
         mAutoSaveTimer.setInterval(1000 * mOptionsForm.saveInterval());
@@ -226,14 +226,23 @@ void MainWindow::startBreeding(void)
 
 void MainWindow::stopBreeding(void)
 {
-    QObject::disconnect(&mBreeder, SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)), this, SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)));
-    QObject::disconnect(&mBreeder, SIGNAL(proceeded(unsigned int)), this, SLOT(proceeded(unsigned int)));
+    if (!mBreeder.isRunning())
+        return;
     ui->startStopPushButton->setText(tr("Resume"));
     mAutoSaveTimer.stop();
     mBreeder.stop();
+    QObject::disconnect(&mBreeder,
+                        SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)),
+                        this,
+                        SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)));
+    QObject::disconnect(&mBreeder,
+                        SIGNAL(proceeded(unsigned int)),
+                        this,
+                        SLOT(proceeded(unsigned int)));
     if (mLog.isOpen()) {
         QTextStream log(&mLog);
         log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "STOP.\n";
+        mLog.close();
     }
 }
 
@@ -251,7 +260,7 @@ void MainWindow::startStop(void)
 
 void MainWindow::saveAppSettings(void)
 {
-    QSettings settings(MainWindow::Company, MainWindow::AppName);
+    QSettings settings(Company, AppName);
     settings.setValue("MainWindow/geometry", saveGeometry());
     settings.setValue("MainWindow/windowState", saveState());
     settings.setValue("MainWindow/imageFilename", mImageWidget->imageFileName());
@@ -290,7 +299,7 @@ void MainWindow::saveAppSettings(void)
 
 void MainWindow::restoreAppSettings(void)
 {
-    QSettings settings(MainWindow::Company, MainWindow::AppName);
+    QSettings settings(Company, AppName);
     restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
     restoreState(settings.value("MainWindow/windowState").toByteArray());
     QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/Mona-Lisa-256x256.png").toString();
@@ -335,7 +344,7 @@ void MainWindow::saveDNA(void)
     if (dnaFilename.isNull())
         return;
     DNA dna = mBreeder.dna();
-    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected());
+    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness());
     if (success) {
         statusBar()->showMessage(tr("DNA saved as '%1'.").arg(dnaFilename), 5000);
         mLastSavedDNA = dnaFilename;

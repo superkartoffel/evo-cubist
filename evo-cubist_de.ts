@@ -57,8 +57,8 @@
     <message>
         <location filename="mainwindow.ui" line="238"/>
         <location filename="mainwindow.cpp" line="220"/>
-        <location filename="mainwindow.cpp" line="243"/>
-        <location filename="mainwindow.cpp" line="411"/>
+        <location filename="mainwindow.cpp" line="252"/>
+        <location filename="mainwindow.cpp" line="420"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
@@ -152,7 +152,7 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="584"/>
-        <location filename="mainwindow.cpp" line="418"/>
+        <location filename="mainwindow.cpp" line="427"/>
         <source>About Evo Cubist</source>
         <translation>Über Eco Cubist</translation>
     </message>
@@ -167,32 +167,32 @@
         <translation>Optionen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="40"/>
+        <location filename="mainwindow.cpp" line="31"/>
         <source>%1 %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="103"/>
+        <location filename="mainwindow.cpp" line="97"/>
         <source>&lt;b&gt;DNA has been modified.&lt;/b&gt;</source>
         <translation>&lt;b&gt;DNA wurde geändert.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="104"/>
+        <location filename="mainwindow.cpp" line="98"/>
         <source>You have unsaved DNA. Do you want to save it?</source>
         <translation>Sie haben ungespeicherte DNA. Möchten Sie sie jetzt speichern?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="173"/>
+        <location filename="mainwindow.cpp" line="165"/>
         <source>Automatically saved mutation %1 out of %2 generations.</source>
         <translation>Mutation %1 von %2 Generationen automatisch gespeichert.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="175"/>
+        <location filename="mainwindow.cpp" line="167"/>
         <source>Automatic saving failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="204"/>
+        <location filename="mainwindow.cpp" line="196"/>
         <source>Starting ...</source>
         <translation>Starten ...</translation>
     </message>
@@ -203,88 +203,88 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="231"/>
-        <location filename="mainwindow.cpp" line="243"/>
+        <location filename="mainwindow.cpp" line="252"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="334"/>
+        <location filename="mainwindow.cpp" line="343"/>
         <source>Save DNA</source>
         <translation>DNA speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="334"/>
-        <location filename="mainwindow.cpp" line="397"/>
+        <location filename="mainwindow.cpp" line="343"/>
+        <location filename="mainwindow.cpp" line="406"/>
         <source>DNA files (*.svg; *.json; *.dna)</source>
         <translation>DNA-Dateien (*.svg; *.json; *.dna)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="340"/>
+        <location filename="mainwindow.cpp" line="349"/>
         <source>DNA saved as &apos;%1&apos;.</source>
         <translation>DNA gespeichert unter &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="344"/>
+        <location filename="mainwindow.cpp" line="353"/>
         <source>Error saving DNA</source>
         <translation>Fehler beim Speichern der DNA</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="344"/>
+        <location filename="mainwindow.cpp" line="353"/>
         <source>DNA could not be saved as &apos;%1&apos;.</source>
         <translation>DNA konnte nicht unter &apos;%1&apos; gespeichert werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="352"/>
+        <location filename="mainwindow.cpp" line="361"/>
         <source>Load original picture</source>
         <translation>Laden des Originalbildes</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="362"/>
+        <location filename="mainwindow.cpp" line="371"/>
         <source>Original picture &apos;%1&apos; loaded.</source>
         <translation>Originalbild &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="365"/>
+        <location filename="mainwindow.cpp" line="374"/>
         <source>Error loading the original picture.</source>
         <translation>Fehler beim Laden des Originalbildes.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="365"/>
+        <location filename="mainwindow.cpp" line="374"/>
         <source>Original picture could not be loaded.</source>
         <translation>Originalbild konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="386"/>
+        <location filename="mainwindow.cpp" line="395"/>
         <source>DNA &apos;%1&apos; loaded.</source>
         <translation>DNA &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="389"/>
+        <location filename="mainwindow.cpp" line="398"/>
         <source>Error loading DNA</source>
         <translation>Fehler beim Laden der DNA</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="389"/>
+        <location filename="mainwindow.cpp" line="398"/>
         <source>DNA could not be loaded.</source>
         <translation>DNA konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="397"/>
+        <location filename="mainwindow.cpp" line="406"/>
         <source>Load DNA</source>
         <translation>DNA laden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="406"/>
+        <location filename="mainwindow.cpp" line="415"/>
         <source>Really reset breeder?</source>
         <translation>Den Brutkasten wirklich zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="406"/>
+        <location filename="mainwindow.cpp" line="415"/>
         <source>Do you really want to reset the breeder?</source>
         <translation>Wollen Sie den Brutkasten wirklich zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="419"/>
+        <location filename="mainwindow.cpp" line="428"/>
         <source>&lt;p&gt;&lt;b&gt;Evo Cubist&lt;/b&gt; calculates vector images from bitmaps by using genetic algorithms. See &lt;a href=&quot;http://evo-cubist.googlecode.com/&quot;&gt;http://evo-cubist.googlecode.com/&lt;/a&gt; for more info.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 Oliver Lau &amp;lt;oliver@von-und-fuer.lau.de&amp;gt;&lt;/p&gt;&lt;p&gt;Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at&lt;/p&gt;&lt;p style=&quot;margin: 3ex 0 3ex 3em;&quot;&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/p&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</source>
         <translation>&lt;p&gt;&lt;b&gt;Evo Cubist&lt;/b&gt; berechnet Vektorgrafiken auf Pixelgrafiken mit Hilfe genetischer Algorithmen. Siehe &lt;a href=&quot;http://evo-cubist.googlecode.com/&quot;&gt;http://evo-cubist.googlecode.com/&lt;/a&gt; für weitere Informationen.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 Oliver Lau &amp;lt;oliver@von-und-fuer.lau.de&amp;gt;&lt;/p&gt;&lt;p&gt;Die Software steht unter der Apache-Lizenz, Version 2.0 (die &quot;Lizenz&quot;). Sie diese Software unter der Lizenz frei in jedem Umfeld verwenden, modifizieren und verteilen. Sie finden die Lizenz in englischer Sprache unter&lt;/p&gt;&lt;p style=&quot;margin: 3ex 0 3ex 3em;&quot;&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/p&gt;Die Software &lt;b&gt;Evo Cubist&lt;/b&gt; wurde zu Lehr- und Demonstrationszwecken geschaffen und ist nicht für den produktiven Einsatz vorgesehen. Der Autor haftet daher nicht für Schäden, die aus der Nutzung der Software entstehen, und übernimmt keine Gewähr für ihre Vollständigkeit, Fehlerfreiheit und Eignung für einen bestimmten Zweck.</translation>
     </message>
@@ -369,13 +369,13 @@
     </message>
     <message>
         <location filename="optionsform.ui" line="429"/>
+        <location filename="optionsform.ui" line="432"/>
         <source>Reset to defaults</source>
         <translation>Auf Voreinstellungen zurücksetzen</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="432"/>
         <source>Reset</source>
-        <translation>Zurücksetzen</translation>
+        <translation type="obsolete">Zurücksetzen</translation>
     </message>
     <message>
         <location filename="optionsform.ui" line="455"/>
@@ -457,7 +457,8 @@
     </message>
     <message>
         <location filename="optionsform.ui" line="724"/>
-        <source>Cores used</source>
+        <source>Use # cores</source>
+        <oldsource>Cores used</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -495,42 +496,52 @@
         <translation>GPU-Berechnungen einschalten</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="27"/>
+        <location filename="optionsform.cpp" line="28"/>
         <source>highest</source>
         <translation>höchste</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="28"/>
+        <location filename="optionsform.cpp" line="29"/>
         <source>high</source>
         <translation>hoch</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="29"/>
+        <location filename="optionsform.cpp" line="30"/>
         <source>normal</source>
         <translation>mittel</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="30"/>
+        <location filename="optionsform.cpp" line="31"/>
         <source>low</source>
         <translation>niedrig</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="31"/>
+        <location filename="optionsform.cpp" line="32"/>
         <source>lowest</source>
         <translation>niedrigste</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="90"/>
+        <location filename="optionsform.cpp" line="79"/>
+        <source>Reset parameters to defaults?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="optionsform.cpp" line="79"/>
+        <source>Do you really want to reset all parameters to their defaults?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="optionsform.cpp" line="116"/>
         <source>Choose image save directory</source>
         <translation>Verzeichnis zum Speichern der generierten Bilder auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="98"/>
+        <location filename="optionsform.cpp" line="124"/>
         <source>Choose DNA save directory</source>
         <translation>Verzeichnis zum Speichern der DNS auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="106"/>
+        <location filename="optionsform.cpp" line="132"/>
         <source>Choose log file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -538,7 +549,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="mainwindow.cpp" line="21"/>
+        <location filename="main.cpp" line="13"/>
         <source>Evo Cubist</source>
         <translation>Evo Cubist</translation>
     </message>

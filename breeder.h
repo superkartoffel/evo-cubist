@@ -49,7 +49,7 @@ private:
     void draw(void);
 
     bool mDirty;
-    bool mStopped;
+    volatile bool mStopped;
     unsigned long mGeneration;
     unsigned long mFitness;
     unsigned long mSelected;

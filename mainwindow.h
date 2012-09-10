@@ -9,6 +9,7 @@
 #include <QString>
 #include <QTimer>
 #include <QFile>
+#include <QtCore/QDebug>
 
 #include "imagewidget.h"
 #include "generationwidget.h"
@@ -28,9 +29,6 @@ public:
     explicit MainWindow(QWidget* parent = NULL);
     ~MainWindow();
 
-    static const QString Company;
-    static const QString AppName;
-    static const QString AppVersion;
 
 protected:
     void closeEvent(QCloseEvent*);
@@ -70,6 +68,8 @@ private slots:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
     void priorityChanged(QThread::Priority);
+
+    void breederFinished(void) { qDebug() << "breeder has finished"; }
 };
 
 #endif // __MAINWINDOW_H_

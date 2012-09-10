@@ -42,7 +42,8 @@ HEADERS += mainwindow.h \
     optionsform.h \
     svgreader.h \
     breedersettings.h \
-    individual.h
+    individual.h \
+    main.h
 
 FORMS += mainwindow.ui \
     optionsform.ui
