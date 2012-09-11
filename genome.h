@@ -19,13 +19,15 @@ public:
     explicit Genome(bool randomize = false);
 
     Genome::Genome(const QPolygonF& polygon, const QColor& color)
+        : mColor(color)
     {
-        deepCopy(polygon, color);
+        deepCopy(polygon);
     }
 
     Genome::Genome(const Genome& other)
+        : mColor(other.mColor)
     {
-        deepCopy(other.polygon(), other.color());
+        deepCopy(other.polygon());
     }
 
     inline const QColor& color(void) const { return mColor; }
@@ -39,7 +41,7 @@ private:
 
     bool willMutate(int rate) const;
 
-    void deepCopy(const QPolygonF& polygon,  const QColor& color);
+    void deepCopy(const QPolygonF& polygon);
 };
 
 

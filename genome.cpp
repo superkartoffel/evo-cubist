@@ -19,12 +19,11 @@ Genome::Genome(bool randomize)
 }
 
 
-void Genome::deepCopy(const QPolygonF& polygon, const QColor& color)
+void Genome::deepCopy(const QPolygonF& polygon)
 {
     mPolygon.reserve(polygon.size());
     for (QPolygonF::const_iterator p = polygon.constBegin(); p != polygon.constEnd(); ++p)
         mPolygon.append(*p);
-    mColor = color;
 }
 
 

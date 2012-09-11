@@ -52,7 +52,7 @@ void ImageWidget::dragEnterEvent(QDragEnterEvent* e)
 {
     const QMimeData* d = e->mimeData();
     if (d->hasUrls()) {
-        if (d->urls().first().toString().contains(QRegExp("\\.(png|jpg)$"))) {
+        if (d->urls().first().toString().contains(QRegExp("\\.(png|jpg|gif|ico|mng|tga|tiff?)$"))) {
             e->acceptProposedAction();
             setStyleSheet("background-color: #22dd22;");
         }
@@ -78,7 +78,7 @@ void ImageWidget::dropEvent(QDropEvent* e)
     const QMimeData* d = e->mimeData();
     if (d->hasUrls()) {
         QString fileUrl = d->urls().first().toString();
-        if (fileUrl.contains(QRegExp("file://.*\\.(png|jpg)$")))
+        if (fileUrl.contains(QRegExp("file://.*\\.(png|jpg|gif|ico|mng|tga|tiff?)$")))
             loadImage(fileUrl.remove("file:///"));
     }
     setStyleSheet("background-color: #222222;");
