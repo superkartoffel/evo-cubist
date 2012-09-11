@@ -8,7 +8,6 @@ FEATURES
 
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
-[ ] zufällige Translation, Skalierung und Rotation von Polygonen beim Mutieren
 
 POSSIBLE SPEED-UPS
 
