@@ -35,7 +35,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-    OptionsForm mOptionsForm;
+    OptionsForm* mOptionsForm;
     ImageWidget* mImageWidget;
     GenerationWidget* mGenerationWidget;
     Breeder mBreeder;

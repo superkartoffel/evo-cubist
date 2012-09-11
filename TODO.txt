@@ -1,12 +1,12 @@
 BUGS
 
+[ ] Gesamtzeit eines geladenen SVG wird versehentlich verdoppelt beim Speichern der nächsten erfolgreichen Mutation?
 [ ] Umschalten der Prozesspriorität lässt Programm einfrieren
 [ ] Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.
 [ ] Die Lokalisierungen werden nicht eingebunden.
 
 FEATURES
 
-[ ] Gesamtzeit der bisherigen Berechnung in d:hh:mm:ss anzeigen
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
 

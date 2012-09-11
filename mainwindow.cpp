@@ -3,6 +3,7 @@
 
 #include <QtGlobal>
 #include <QHBoxLayout>
+#include <QDockWidget>
 #include <QTextStream>
 #include <QSettings>
 #include <QFileDialog>
@@ -31,6 +32,8 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
     setWindowTitle(tr("%1 %2").arg(AppName).arg(AppVersion));
 
+    mOptionsForm = new OptionsForm;
+
     mImageWidget = new ImageWidget;
     QHBoxLayout* hbox1 = new QHBoxLayout;
     hbox1->addWidget(mImageWidget);
@@ -47,9 +50,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
-    QObject::connect(&mOptionsForm, SIGNAL(priorityChanged(QThread::Priority)), SLOT(priorityChanged(QThread::Priority)));
-    QObject::connect(&mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
-    QObject::connect(&mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
+    QObject::connect(mOptionsForm, SIGNAL(priorityChanged(QThread::Priority)), SLOT(priorityChanged(QThread::Priority)));
+    QObject::connect(mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
+    QObject::connect(mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
 
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetBreeder()));
@@ -67,8 +70,8 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionExit, SIGNAL(triggered()), SLOT(close()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
     QObject::connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(aboutQt()));
-    QObject::connect(ui->actionOptions, SIGNAL(triggered()), &mOptionsForm, SLOT(show()));
-    QObject::connect(ui->actionOptions, SIGNAL(triggered()), &mOptionsForm, SLOT(raise()));
+    QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(show()));
+    QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(raise()));
 
     MT::rng.seed(QDateTime::currentDateTime().toTime_t());
 
@@ -82,6 +85,9 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow()
 {
+    delete mOptionsForm;
+    delete mImageWidget;
+    delete mGenerationWidget;
     delete ui;
 }
 
@@ -90,7 +96,7 @@ void MainWindow::closeEvent(QCloseEvent* e)
 {
     stopBreeding();
     saveAppSettings();
-    mOptionsForm.close();
+    mOptionsForm->close();
     if (!mBreeder.isDirty())
         return;
 
@@ -134,9 +140,19 @@ quint64 MainWindow::totalSeconds(void) const {
 
 void MainWindow::proceeded(unsigned long generation)
 {
-    const quint64 totalseconds = totalSeconds();
+    quint64 totalseconds = totalSeconds();
     ui->generationLineEdit->setText(QString("%1").arg(generation));
-    ui->totalTimeLineEdit->setText(QString("%1 s").arg(totalseconds));
+    const unsigned int days = totalseconds / 60 / 60 / 24;
+    totalseconds -= days * 24 * 60 * 60;
+    const unsigned int hours = totalseconds / 60 / 60;
+    totalseconds -= hours * 60 * 60;
+    const unsigned int minutes = totalseconds / 60;
+    totalseconds -= minutes * 60;
+    const unsigned int seconds = totalseconds;
+    QString t = QString("%1:%2:%3").arg(hours, 2, 10, QChar('0')).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
+    if (days > 0)
+        t.prepend(tr("%1 %2 ").arg(days).arg(days > 1? tr("days") : tr("day")));
+    ui->totalTimeLineEdit->setText(t);
     ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / totalseconds));
 }
 
@@ -170,9 +186,9 @@ void MainWindow::autoSaveGeneratedImage(void)
 {
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
-    const QString& imageFilename = mOptionsForm.imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     mGenerationWidget->image().save(imageFilename);
-    const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    const QString& dnaFilename = mOptionsForm->dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
     bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
     if (success)
@@ -185,7 +201,7 @@ void MainWindow::autoSaveGeneratedImage(void)
 
 void MainWindow::autoSaveIntervalChanged(int interval)
 {
-    if (mOptionsForm.autoSave()) {
+    if (mOptionsForm->autoSave()) {
         mAutoSaveTimer.stop();
         mAutoSaveTimer.setInterval(1000 * interval);
         mAutoSaveTimer.start();
@@ -196,7 +212,7 @@ void MainWindow::autoSaveIntervalChanged(int interval)
 void MainWindow::autoSaveToggled(bool enabled)
 {
     if (enabled) {
-        mAutoSaveTimer.setInterval(1000 * mOptionsForm.saveInterval());
+        mAutoSaveTimer.setInterval(1000 * mOptionsForm->saveInterval());
         mAutoSaveTimer.start();
     }
     else {
@@ -209,33 +225,33 @@ void MainWindow::startBreeding(void)
 {
     QFileInfo info;
     // check if DNA save directory exists
-    info.setFile(mOptionsForm.dnaSaveDirectory());
+    info.setFile(mOptionsForm->dnaSaveDirectory());
     if (!info.exists() || !info.isWritable() || !info.isDir()) {
         QMessageBox::warning(this, tr("DNA save directory missing"), tr("The selected DNA save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again."));
-        mOptionsForm.go("Autosave", "dnaSaveDirectory");
+        mOptionsForm->go("Autosave", "dnaSaveDirectory");
         return;
     }
     // check if image save directory exists
-    info.setFile(mOptionsForm.imageSaveDirectory());
+    info.setFile(mOptionsForm->imageSaveDirectory());
     if (!info.exists() || !info.isWritable() || !info.isDir()) {
         QMessageBox::warning(this, tr("Image save directory missing"), tr("The selected image save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again."));
-        mOptionsForm.go("Autosave", "imageSaveDirectory");
+        mOptionsForm->go("Autosave", "imageSaveDirectory");
         return;
     }
     // check if log file is writable
-    if (!mOptionsForm.logFile().isEmpty()) {
-        info.setFile(mOptionsForm.logFile());
+    if (!mOptionsForm->logFile().isEmpty()) {
+        info.setFile(mOptionsForm->logFile());
         QFileInfo dirInfo(info.absolutePath());
         if (!dirInfo.isDir() || !dirInfo.isWritable()) {
             QMessageBox::warning(this, tr("Log file is not writable"), tr("The selected log file is not writable. Please go to the options dialog and choose a new one. Then try starting again."));
-            mOptionsForm.go("Autosave", "logFile");
+            mOptionsForm->go("Autosave", "logFile");
             return;
         }
     }
 
     statusBar()->showMessage(tr("Starting ..."), 3000);
-    if (!mOptionsForm.logFile().isEmpty()) {
-        mLog.setFileName(mOptionsForm.logFile());
+    if (!mOptionsForm->logFile().isEmpty()) {
+        mLog.setFileName(mOptionsForm->logFile());
         mLog.open(QIODevice::Append | QIODevice::Text);
         if (mLog.isOpen()) {
             QTextStream log(&mLog);
@@ -254,8 +270,8 @@ void MainWindow::startBreeding(void)
                      SLOT(proceeded(unsigned long)),
                      Qt::BlockingQueuedConnection);
     mBreeder.breed(mPriority);
-    if (mOptionsForm.autoSave()) {
-        mAutoSaveTimer.setInterval(1000 * mOptionsForm.saveInterval());
+    if (mOptionsForm->autoSave()) {
+        mAutoSaveTimer.setInterval(1000 * mOptionsForm->saveInterval());
         mAutoSaveTimer.start();
         if (ui->startStopPushButton->text() == tr("Start"))
             autoSaveGeneratedImage();
@@ -306,35 +322,35 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/windowState", saveState());
     settings.setValue("MainWindow/imageFilename", mImageWidget->imageFileName());
     settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
-    settings.setValue("Options/geometry", mOptionsForm.saveGeometry());
+    settings.setValue("Options/geometry", mOptionsForm->saveGeometry());
     settings.setValue("Options/deltaR", ui->redSlider->value());
     settings.setValue("Options/deltaG", ui->greenSlider->value());
     settings.setValue("Options/deltaB", ui->blueSlider->value());
     settings.setValue("Options/deltaA", ui->alphaSlider->value());
     settings.setValue("Options/deltaXY", ui->xySlider->value());
-    settings.setValue("Options/colorMutationProbability", mOptionsForm.colorMutationProbability());
-    settings.setValue("Options/pointMutationProbability", mOptionsForm.pointMutationProbability());
-    settings.setValue("Options/pointKillProbability", mOptionsForm.pointKillProbability());
-    settings.setValue("Options/pointEmergenceProbability", mOptionsForm.pointEmergenceProbability());
-    settings.setValue("Options/genomeKillProbability", mOptionsForm.genomeKillProbability());
-    settings.setValue("Options/genomeMoveProbability", mOptionsForm.genomeMoveProbability());
-    settings.setValue("Options/genomeEmergenceProbability", mOptionsForm.genomeEmergenceProbability());
-    settings.setValue("Options/minPointsPerGenome", mOptionsForm.minPointsPerGenome());
-    settings.setValue("Options/maxPointsPerGenome", mOptionsForm.maxPointsPerGenome());
-    settings.setValue("Options/minGenomes", mOptionsForm.minGenomes());
-    settings.setValue("Options/maxGenomes", mOptionsForm.maxGenomes());
-    settings.setValue("Options/minAlpha", mOptionsForm.minAlpha());
-    settings.setValue("Options/maxAlpha", mOptionsForm.maxAlpha());
-    settings.setValue("Options/imageSaveDirectory", mOptionsForm.imageSaveDirectory());
-    settings.setValue("Options/imageSaveFilenameTemplate", mOptionsForm.imageSaveFilenameTemplate());
-    settings.setValue("Options/dnaSaveDirectory", mOptionsForm.dnaSaveDirectory());
-    settings.setValue("Options/dnaSaveFilenameTemplate", mOptionsForm.dnaSaveFilenameTemplate());
-    settings.setValue("Options/logFile", mOptionsForm.logFile());
-    settings.setValue("Options/saveInterval", mOptionsForm.saveInterval());
-    settings.setValue("Options/autoSave", mOptionsForm.autoSave());
-    settings.setValue("Options/startDistribution", mOptionsForm.startDistribution());
-    settings.setValue("Options/scatterFactor", mOptionsForm.scatterFactor());
-    settings.setValue("Options/cores", mOptionsForm.cores());
+    settings.setValue("Options/colorMutationProbability", mOptionsForm->colorMutationProbability());
+    settings.setValue("Options/pointMutationProbability", mOptionsForm->pointMutationProbability());
+    settings.setValue("Options/pointKillProbability", mOptionsForm->pointKillProbability());
+    settings.setValue("Options/pointEmergenceProbability", mOptionsForm->pointEmergenceProbability());
+    settings.setValue("Options/genomeKillProbability", mOptionsForm->genomeKillProbability());
+    settings.setValue("Options/genomeMoveProbability", mOptionsForm->genomeMoveProbability());
+    settings.setValue("Options/genomeEmergenceProbability", mOptionsForm->genomeEmergenceProbability());
+    settings.setValue("Options/minPointsPerGenome", mOptionsForm->minPointsPerGenome());
+    settings.setValue("Options/maxPointsPerGenome", mOptionsForm->maxPointsPerGenome());
+    settings.setValue("Options/minGenomes", mOptionsForm->minGenomes());
+    settings.setValue("Options/maxGenomes", mOptionsForm->maxGenomes());
+    settings.setValue("Options/minAlpha", mOptionsForm->minAlpha());
+    settings.setValue("Options/maxAlpha", mOptionsForm->maxAlpha());
+    settings.setValue("Options/imageSaveDirectory", mOptionsForm->imageSaveDirectory());
+    settings.setValue("Options/imageSaveFilenameTemplate", mOptionsForm->imageSaveFilenameTemplate());
+    settings.setValue("Options/dnaSaveDirectory", mOptionsForm->dnaSaveDirectory());
+    settings.setValue("Options/dnaSaveFilenameTemplate", mOptionsForm->dnaSaveFilenameTemplate());
+    settings.setValue("Options/logFile", mOptionsForm->logFile());
+    settings.setValue("Options/saveInterval", mOptionsForm->saveInterval());
+    settings.setValue("Options/autoSave", mOptionsForm->autoSave());
+    settings.setValue("Options/startDistribution", mOptionsForm->startDistribution());
+    settings.setValue("Options/scatterFactor", mOptionsForm->scatterFactor());
+    settings.setValue("Options/cores", mOptionsForm->cores());
 }
 
 
@@ -351,30 +367,30 @@ void MainWindow::restoreAppSettings(void)
     ui->blueSlider->setValue(settings.value("Options/deltaB", 50).toInt());
     ui->alphaSlider->setValue(settings.value("Options/deltaA", 50).toInt());
     ui->xySlider->setValue(settings.value("Options/deltaXY", 2300).toInt());
-    mOptionsForm.restoreGeometry(settings.value("Options/geometry").toByteArray());
-    mOptionsForm.setImageSaveDirectory(settings.value("Options/imageSaveDirectory", QDir::homePath()).toString());
-    mOptionsForm.setImageSaveFilenameTemplate(settings.value("Options/imageSaveFilenameTemplate", "%1-%2-%3.png").toString());
-    mOptionsForm.setDNASaveDirectory(settings.value("Options/dnaSaveDirectory", QDir::homePath()).toString());
-    mOptionsForm.setDNASaveFilenameTemplate(settings.value("Options/dnaSaveFilenameTemplate", "%1-%2-%3.svg").toString());
-    mOptionsForm.setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
-    mOptionsForm.setAutoSave(settings.value("Options/autoSave", true).toBool());
-    mOptionsForm.setLogFile(settings.value("Options/logFile").toString());
-    mOptionsForm.setCores(settings.value("Options/cores", QThread::idealThreadCount()).toInt());
-    mOptionsForm.setStartDistribution(settings.value("Options/startDistribution", 4).toInt());
-    mOptionsForm.setScatterFactor(settings.value("Options/scatterFactor", 0.45).toDouble());
-    mOptionsForm.setColorMutationProbability(settings.value("Options/colorMutationProbability", 1000).toInt());
-    mOptionsForm.setPointMutationProbability(settings.value("Options/pointMutationProbability", 1000).toInt());
-    mOptionsForm.setPointKillProbability(settings.value("Options/pointKillProbability", 1000).toInt());
-    mOptionsForm.setPointEmergenceProbability(settings.value("Options/pointEmergenceProbability", 1000).toInt());
-    mOptionsForm.setGenomeKillProbability(settings.value("Options/genomeKillProbability", 1000).toInt());
-    mOptionsForm.setGenomeMoveProbability(settings.value("Options/genomeMoveProbability", 5000).toInt());
-    mOptionsForm.setGenomeEmergenceProbability(settings.value("Options/genomeEmergenceProbability", 1000).toInt());
-    mOptionsForm.setMinPointsPerGenome(settings.value("Options/minPointsPerGenome", 3).toInt());
-    mOptionsForm.setMaxPointsPerGenome(settings.value("Options/maxPointsPerGenome", 5).toInt());
-    mOptionsForm.setMinGenomes(settings.value("Options/minGenomes", 150).toInt());
-    mOptionsForm.setMaxGenomes(settings.value("Options/maxGenomes", 500).toInt());
-    mOptionsForm.setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
-    mOptionsForm.setMaxAlpha(settings.value("Options/maxAlpha", 45).toInt());
+    mOptionsForm->restoreGeometry(settings.value("Options/geometry").toByteArray());
+    mOptionsForm->setImageSaveDirectory(settings.value("Options/imageSaveDirectory", QDir::homePath()).toString());
+    mOptionsForm->setImageSaveFilenameTemplate(settings.value("Options/imageSaveFilenameTemplate", "%1-%2-%3.png").toString());
+    mOptionsForm->setDNASaveDirectory(settings.value("Options/dnaSaveDirectory", QDir::homePath()).toString());
+    mOptionsForm->setDNASaveFilenameTemplate(settings.value("Options/dnaSaveFilenameTemplate", "%1-%2-%3.svg").toString());
+    mOptionsForm->setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
+    mOptionsForm->setAutoSave(settings.value("Options/autoSave", true).toBool());
+    mOptionsForm->setLogFile(settings.value("Options/logFile").toString());
+    mOptionsForm->setCores(settings.value("Options/cores", QThread::idealThreadCount()).toInt());
+    mOptionsForm->setStartDistribution(settings.value("Options/startDistribution", 4).toInt());
+    mOptionsForm->setScatterFactor(settings.value("Options/scatterFactor", 0.45).toDouble());
+    mOptionsForm->setColorMutationProbability(settings.value("Options/colorMutationProbability", 1000).toInt());
+    mOptionsForm->setPointMutationProbability(settings.value("Options/pointMutationProbability", 1000).toInt());
+    mOptionsForm->setPointKillProbability(settings.value("Options/pointKillProbability", 1000).toInt());
+    mOptionsForm->setPointEmergenceProbability(settings.value("Options/pointEmergenceProbability", 1000).toInt());
+    mOptionsForm->setGenomeKillProbability(settings.value("Options/genomeKillProbability", 1000).toInt());
+    mOptionsForm->setGenomeMoveProbability(settings.value("Options/genomeMoveProbability", 5000).toInt());
+    mOptionsForm->setGenomeEmergenceProbability(settings.value("Options/genomeEmergenceProbability", 1000).toInt());
+    mOptionsForm->setMinPointsPerGenome(settings.value("Options/minPointsPerGenome", 3).toInt());
+    mOptionsForm->setMaxPointsPerGenome(settings.value("Options/maxPointsPerGenome", 5).toInt());
+    mOptionsForm->setMinGenomes(settings.value("Options/minGenomes", 150).toInt());
+    mOptionsForm->setMaxGenomes(settings.value("Options/maxGenomes", 500).toInt());
+    mOptionsForm->setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
+    mOptionsForm->setMaxAlpha(settings.value("Options/maxAlpha", 45).toInt());
     mBreeder.reset();
 }
 

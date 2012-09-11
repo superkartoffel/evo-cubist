@@ -35,7 +35,7 @@ public:
     inline quint64 currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }
 
-    void breed(QThread::Priority = QThread::InheritPriority);
+    void breed(QThread::Priority = QThread::LowPriority);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
     void setDNA(const DNA&);
