@@ -184,7 +184,7 @@ void SVGReader::readSVG(void)
         if (mXml.name() == "g") {
             readGroup();
         }
-        else if (mXml.name() == "desc" && mXml.attributes().value("version") == "0.5") {
+        else if (mXml.name() == "desc" && mXml.attributes().value("version").toString().toDouble() > 0.4) {
             readDesc();
         }
         else {
