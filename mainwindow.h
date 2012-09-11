@@ -50,6 +50,7 @@ private:
     void startBreeding(void);
     void stopBreeding(void);
     void loadOriginalImage(const QString& filename);
+    quint64 totalSeconds(void) const;
 
     QTimer mAutoSaveTimer;
 
@@ -57,7 +58,7 @@ private slots:
     void loadDNA(const QString& filename);
     void evolved(const QImage&, const DNA&, quint64 fitness, unsigned long selected, unsigned long generation);
     void imageDropped(const QImage&);
-    void proceeded(unsigned long);
+    void proceeded(unsigned long generation);
     void startStop(void);
     void saveDNA(void);
     void openDNA(void);
@@ -69,8 +70,6 @@ private slots:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
     void priorityChanged(QThread::Priority);
-
-    void breederFinished(void) { qDebug() << "breeder has finished"; }
 };
 
 #endif // __MAINWINDOW_H_

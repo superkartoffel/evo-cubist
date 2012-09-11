@@ -9,6 +9,9 @@
 extern const QString Company;
 extern const QString AppName;
 extern const QString AppUrl;
+extern const QString AppAuthor;
+extern const QString AppAuthorMail;
 extern const QString AppVersion;
+extern const QString AppVersionNoDebug;
 
 #endif // __MAIN_H_

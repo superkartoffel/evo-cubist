@@ -35,20 +35,17 @@ void Breeder::setDirty(bool dirty)
 }
 
 
-DNA Breeder::dna(void)
-{
-    return mDNA;
-}
-
-
-void Breeder::setDNA(DNA dna)
+void Breeder::setDNA(const DNA& dna)
 {
     bool wasRunning = isRunning();
     if (wasRunning)
         stop();
     mDNA = dna;
     mMutation = dna;
-    mFitness = std::numeric_limits<quint64>::max();
+    mFitness = dna.fitness();
+    mGeneration = dna.generation();
+    mSelected = dna.selected();
+    mTotalSeconds = dna.totalSeconds();
     draw();
     if (wasRunning)
         breed(priority());
@@ -74,6 +71,7 @@ void Breeder::reset(void)
     mSelected = 1;
     mDirty = false;
     mStopped = false;
+    mTotalSeconds = 0;
     populate();
     draw();
     emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration);

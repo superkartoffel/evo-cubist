@@ -21,22 +21,13 @@ public:
     bool readSVG(QIODevice*);
     QString errorString(void) const;
 
-    quint64 fitness(void) const { return mFitness; }
-    unsigned long selected(void) const { return mSelected; }
-    unsigned long generation(void) const { return mGeneration; }
-    const QDateTime& dateTime(void) const { return mDate; }
-
 private:
     QXmlStreamReader mXml;
     DNA mDNA;
-    quint64 mFitness;
-    unsigned long mSelected;
-    unsigned long mGeneration;
-    QDateTime mDate;
 
     void readSVG(void);
     void readDesc(void);
-    void readDateTime(void);
+    void readTotalSeconds(void);
     void readGeneration(void);
     void readSelected(void);
     void readFitness(void);

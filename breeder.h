@@ -8,6 +8,7 @@
 #include <QImage>
 #include <QRgb>
 #include <QThread>
+#include <QtCore/QDebug>
 
 #include <limits>
 
@@ -26,21 +27,23 @@ public:
     void reset(void);
     void populate(void);
 
-    DNA dna(void);
+    DNA dna(void) { return mDNA; }
+    const DNA& constDNA(void) const { return mDNA; }
     inline const QImage& image(void) const { return mGenerated; }
     inline const QImage& originalImage(void) const { return mOriginal; }
     inline unsigned long generation(void) const { return mGeneration; }
     inline quint64 currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }
 
-    // void proceed(void);
     void breed(QThread::Priority = QThread::InheritPriority);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
-    void setDNA(DNA);
+    void setDNA(const DNA&);
     void setDirty(bool);
     void setGeneration(unsigned long);
     void setSelected(unsigned long);
+    void addTotalSeconds(quint64 s) { mTotalSeconds += s; }
+    quint64 totalSeconds(void) const { return mTotalSeconds; }
 
 protected:
     virtual void run(void);
@@ -53,6 +56,7 @@ private:
     unsigned long mGeneration;
     quint64 mFitness;
     unsigned long mSelected;
+    quint64 mTotalSeconds;
     QImage mOriginal;
     QImage mGenerated;
     DNA mDNA;

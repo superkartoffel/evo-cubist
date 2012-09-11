@@ -12,10 +12,13 @@
 static const QString Company = "c't";
 static const QString AppName = QObject::tr("Evo Cubist");
 static const QString AppUrl = "http://evo-cubist.googlecode.com/";
+static const QString AppAuthor = "Oliver Lau";
+static const QString AppAuthorMail = "oliver@von-und-fuer-lau.de";
+static const QString AppVersionNoDebug = "0.6";
 #ifdef QT_NO_DEBUG
-static const QString AppVersion = "0.5";
+static const QString AppVersion = AppVersionNoDebug;
 #else
-static const QString AppVersion = "0.5 [DEBUG]";
+static const QString AppVersion = AppVersionNoDebug + " [DEBUG]";
 #endif
 
 

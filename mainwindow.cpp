@@ -16,6 +16,7 @@
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
 #include "main.h"
+#include <limits>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -73,10 +74,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     restoreAppSettings();
 
+    mStartTime = QDateTime::currentDateTime();
     proceeded(1);
     evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
-
-    QObject::connect(&mBreeder, SIGNAL(finished()), SLOT(breederFinished()));
 }
 
 
@@ -124,10 +124,20 @@ void MainWindow::priorityChanged(QThread::Priority priority)
 }
 
 
+quint64 MainWindow::totalSeconds(void) const {
+    quint64 totalseconds = mBreeder.totalSeconds() + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t();
+    if (totalseconds == 0)
+        totalseconds = 1;
+    return totalseconds;
+}
+
+
 void MainWindow::proceeded(unsigned long generation)
 {
+    const quint64 totalseconds = totalSeconds();
     ui->generationLineEdit->setText(QString("%1").arg(generation));
-    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
+    ui->totalTimeLineEdit->setText(QString("%1 s").arg(totalseconds));
+    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / totalseconds));
 }
 
 
@@ -135,7 +145,10 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, u
 {
     const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
-    ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
+    if (fitness == std::numeric_limits<quint64>::max())
+        ui->fitnessLineEdit->setText(tr("n/a"));
+    else
+        ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
     ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
@@ -161,7 +174,7 @@ void MainWindow::autoSaveGeneratedImage(void)
     mGenerationWidget->image().save(imageFilename);
     const QString& dnaFilename = mOptionsForm.dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
-    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness());
+    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
     if (success)
         statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.generation()), 3000);
     else
@@ -256,6 +269,7 @@ void MainWindow::stopBreeding(void)
     ui->startStopPushButton->setText(tr("Resume"));
     mAutoSaveTimer.stop();
     mBreeder.stop();
+    mBreeder.addTotalSeconds(QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t());
     QObject::disconnect(&mBreeder,
                         SIGNAL(evolved(QImage, DNA, quint64, unsigned long, unsigned long)),
                         this,
@@ -369,7 +383,7 @@ void MainWindow::saveDNA(void)
     if (dnaFilename.isNull())
         return;
     DNA dna = mBreeder.dna();
-    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness());
+    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
     if (success) {
         statusBar()->showMessage(tr("DNA saved as '%1'.").arg(dnaFilename), 5000);
         mLastSavedDNA = dnaFilename;
@@ -383,8 +397,7 @@ void MainWindow::saveDNA(void)
 
 void MainWindow::imageDropped(const QImage& image)
 {
-    Q_UNUSED(image);
-    evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
+    evolved(image, mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
 }
 
 
@@ -416,14 +429,21 @@ void MainWindow::loadDNA(const QString& filename)
         bool success = dna.load(filename);
         if (success) {
             stopBreeding();
-            QRegExp re(".*(\\d{10}).*(\\d{9})");
-            re.indexIn(filename);
-            const QStringList& n = re.capturedTexts();
-            mBreeder.setGeneration(n.at(1).toULong());
-            mBreeder.setSelected(n.at(2).toULong());
             mBreeder.setDNA(dna);
+            if (dna.generation() == 0 || dna.selected() == 0) { // evaluation of metadata section failed
+                QRegExp re("(\\d{10}).+(\\d{9})");
+                const int pos = re.indexIn(filename);
+                if (-1 != pos) {
+                    const QStringList& n = re.capturedTexts();
+                    mBreeder.setGeneration(n.at(1).toULong());
+                    mBreeder.setSelected(n.at(2).toULong());
+                }
+                else {
+                    qWarning() << "MainWindow::loadDNA(" << filename << ") Cannot determine generation and selected from filename or metadata. Tried metadata first.";
+                }
+            }
             proceeded(mBreeder.generation());
-            evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
+            evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
         }
         else {
@@ -447,8 +467,10 @@ void MainWindow::resetBreeder(void)
         ok = QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?")) == QMessageBox::Ok;
     if (ok) {
         stopBreeding();
+        mStartTime = QDateTime::currentDateTime();
         mBreeder.reset();
-        evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
+        proceeded(1);
+        evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
         ui->startStopPushButton->setText(tr("Start"));
     }
 }
@@ -456,10 +478,10 @@ void MainWindow::resetBreeder(void)
 
 void MainWindow::about(void)
 {
-    QMessageBox::about(this, tr("About %1 %2").arg(AppName).arg(AppVersion),
+    QMessageBox::about(this, tr("About %1 %2").arg(AppName).arg(AppVersionNoDebug),
                        tr("<p><b>%1</b> calculates vector images from bitmaps by using genetic algorithms. "
-                          "See <a href=\"%1\">%1</a> for more info.</p>"
-                          "<p>Copyright &copy; 2012 Oliver Lau &lt;oliver@von-und-fuer.lau.de&gt;</p>"
+                          "See <a href=\"%2\" title=\"%1 project homepage\">%2</a> for more info.</p>"
+                          "<p>Copyright &copy; 2012 %3 &lt;%4&gt;</p>"
                           "<p>Licensed under the Apache License, Version 2.0 (the \"License\"); "
                           "you may not use this file except in compliance with the License. "
                           "You may obtain a copy of the License at</p>"
@@ -468,7 +490,7 @@ void MainWindow::about(void)
                           "distributed under the License is distributed on an \"AS IS\" BASIS, "
                           "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. "
                           "See the License for the specific language governing permissions and "
-                          "limitations under the License.").arg(AppName).arg(AppUrl).arg(AppUrl));
+                          "limitations under the License.").arg(AppName).arg(AppUrl).arg(AppAuthor).arg(AppAuthorMail));
 }
 
 

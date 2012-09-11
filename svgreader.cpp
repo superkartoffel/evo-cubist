@@ -35,17 +35,12 @@ void SVGReader::readPath(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "path");
     QColor color;
+    int pos;
 
     bool ok = false;
     const QString& style = mXml.attributes().value("style").toString();
 
     // <path style="fill-opacity:0.230442;fill:rgb(14,9,206)" d="M 0.845225 0.845225 L 0.431106 0.585496 L 0.0788198 0.4925 L 0.0861273 0.692974 Z" />
-
-    QRegExp fo_re("fill-opacity\\s*:\\s*([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
-    fo_re.indexIn(style);
-    qreal alpha = fo_re.capturedTexts().at(1).toDouble(&ok);
-    if (!ok)
-        mXml.raiseError(QObject::tr("fill-opacity (%1): not found or invalid").arg(fo_re.capturedTexts().at(1)));
 
     color = getRGB(QRegExp("fill\\s*:\\s*rgb\\((\\d+),\\s*(\\d+),\\s*(\\d+)\\)"), style, mXml, &ok);
     if (!color.isValid()) { // fallback to v0.4 format
@@ -55,13 +50,24 @@ void SVGReader::readPath(void)
     if (!ok)
         mXml.raiseError(QObject::tr("fill not found or invalid"));
 
+    QRegExp fo_re("fill-opacity\\s*:\\s*([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
+    pos = fo_re.indexIn(style);
+    qreal alpha;
+    if (-1 != pos) {
+        alpha = fo_re.capturedTexts().at(1).toDouble(&ok);
+        if (!ok) {
+
+        }
+    }
+    if (!ok)
+        mXml.raiseError(QObject::tr("fill-opacity (%1): not found or invalid").arg(fo_re.capturedTexts().at(1)));
     color.setAlphaF(alpha);
 
     QPolygonF polygon;
     // ... 0.0788198 0.4925 ... 3.687e-4 -0.91112 ...
     QRegExp coords_re("([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)\\s+([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
     QString d = mXml.attributes().value("d").toString();
-    int pos = 0;
+    pos = 0;
     while ((pos = coords_re.indexIn(d)) >= 0) {
         const QStringList& xy = coords_re.capturedTexts();
         const qreal x = xy.at(1).toDouble(&ok);
@@ -84,13 +90,16 @@ void SVGReader::readPath(void)
 }
 
 
-void SVGReader::readDateTime(void)
+void SVGReader::readTotalSeconds(void)
 {
-    Q_ASSERT(mXml.isStartElement() && mXml.name() == "datetime");
-    const QString& date = mXml.readElementText();
-    mDate = QDateTime::fromString(date, "yyyy-MM-dd hh:mm:ss.zzz");
-    if (!mDate.isValid())
-        mXml.raiseError(QObject::tr("invalid date/time: %1").arg(date));
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "totalseconds");
+    const QString& secondsStrings = mXml.readElementText();
+    bool ok = false;
+    const quint64 duration = secondsStrings.toULongLong(&ok);
+    if (ok)
+        mDNA.setTotalSeconds(duration);
+    else
+        mXml.raiseError(QObject::tr("invalid total seconds: %1").arg(secondsStrings));
 }
 
 
@@ -99,7 +108,7 @@ void SVGReader::readGeneration(void)
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "generation");
     bool ok = false;
     const QString& gen = mXml.readElementText();
-    mGeneration = gen.toULong(&ok);
+    mDNA.setGeneration(gen.toULong(&ok));
     if (!ok)
         mXml.raiseError(QObject::tr("invalid generation: %1").arg(gen));
 }
@@ -110,7 +119,7 @@ void SVGReader::readSelected(void)
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "selected");
     bool ok = false;
     const QString& sel = mXml.readElementText();
-    mSelected = sel.toULong(&ok);
+    mDNA.setSelected(sel.toULong(&ok));
     if (!ok)
         mXml.raiseError(QObject::tr("invalid selected: %1").arg(sel));
 }
@@ -121,7 +130,7 @@ void SVGReader::readFitness(void)
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "fitness");
     bool ok = false;
     const QString& fit = mXml.readElementText();
-    mFitness = fit.toULongLong(&ok);
+    mDNA.setFitness(fit.toULongLong(&ok));
     if (!ok)
         mXml.raiseError(QObject::tr("invalid fitness: %1").arg(fit));
 }
@@ -129,10 +138,10 @@ void SVGReader::readFitness(void)
 
 void SVGReader::readDesc(void)
 {
-    Q_ASSERT(mXml.isStartElement() && mXml.name() == "desc" && mXml.attributes().value("version") == "0.5");
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "desc" && mXml.attributes().value("version").toString().toDouble() > 0.4);
     while (mXml.readNextStartElement()) {
-        if (mXml.name() == "datetime") {
-            readDateTime();
+        if (mXml.name() == "totalseconds") {
+            readTotalSeconds();
         }
         else if (mXml.name() == "generation") {
             readGeneration();

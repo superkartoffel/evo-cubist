@@ -5,26 +5,34 @@
 #define __DNA_H_
 
 #include <QString>
+#include <QDateTime>
 #include <QVector>
 #include <QIODevice>
 #include <QMutex>
 #include <QMutexLocker>
 #include <QXmlStreamReader>
+#include <QtCore/QDebug>
+#include <limits>
 #include "genome.h"
-
 
 typedef QVector<Genome> DNAType;
 
 class DNA
 {
 public:
-    inline explicit DNA(void) { /* ... */ }
+    inline explicit DNA(void)
+        : mVersion(0.0)
+        , mGeneration(0)
+        , mSelected(0)
+        , mFitness(std::numeric_limits<quint64>::max())
+        , mTotalSeconds(0)
+    { /* ... */ }
     inline ~DNA() { /* ... */ }
     /// deep copy constructor
     DNA(const DNA& dna);
 
     void mutate(void);
-    bool save(const QString& filename, unsigned long generation, unsigned long selected, quint64 fitness);
+    bool save(const QString& filename, unsigned long generation, unsigned long selected, quint64 fitness, quint64 duration);
     bool load(const QString& filename);
     const QString& errorString(void) const { return mErrorString; }
 
@@ -47,10 +55,26 @@ public:
     inline const DNAType& data(void) const { return mDNA; }
     inline const QSize& scale(void) const { return mSize; }
 
+    inline unsigned long generation(void) const { return mGeneration; }
+    inline unsigned long selected(void) const { return mSelected; }
+    inline quint64 fitness(void) const { return mFitness; }
+    inline qreal version(void) const { return mVersion; }
+    inline quint64 totalSeconds(void) const { return mTotalSeconds; }
+
+    inline void setGeneration(unsigned long v) { mGeneration = v; }
+    inline void setSelected(unsigned long v) { mSelected = v; }
+    inline void setFitness(quint64 v) { mFitness = v; }
+    inline void setTotalSeconds(quint64 v) { mTotalSeconds = v; }
+
 private:
     QSize mSize;
     DNAType mDNA;
     QString mErrorString;
+    qreal mVersion;
+    unsigned long mGeneration;
+    unsigned long mSelected;
+    quint64 mFitness;
+    quint64 mTotalSeconds;
 
     bool willMutate(unsigned int probability);
 };
