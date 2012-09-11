@@ -6,7 +6,7 @@ BUGS
 
 FEATURES
 
-[ ] Gesamtzeit der bisherigen Berechnung anzeigen
+[ ] Gesamtzeit der bisherigen Berechnung in d:hh:mm:ss anzeigen
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
 
