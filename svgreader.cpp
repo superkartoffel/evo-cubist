@@ -84,6 +84,72 @@ void SVGReader::readPath(void)
 }
 
 
+void SVGReader::readDateTime(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "datetime");
+    const QString& date = mXml.readElementText();
+    mDate = QDateTime::fromString(date, "yyyy-MM-dd hh:mm:ss.zzz");
+    if (!mDate.isValid())
+        mXml.raiseError(QObject::tr("invalid date/time: %1").arg(date));
+}
+
+
+void SVGReader::readGeneration(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "generation");
+    bool ok = false;
+    const QString& gen = mXml.readElementText();
+    mGeneration = gen.toULong(&ok);
+    if (!ok)
+        mXml.raiseError(QObject::tr("invalid generation: %1").arg(gen));
+}
+
+
+void SVGReader::readSelected(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "selected");
+    bool ok = false;
+    const QString& sel = mXml.readElementText();
+    mSelected = sel.toULong(&ok);
+    if (!ok)
+        mXml.raiseError(QObject::tr("invalid selected: %1").arg(sel));
+}
+
+
+void SVGReader::readFitness(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "fitness");
+    bool ok = false;
+    const QString& fit = mXml.readElementText();
+    mFitness = fit.toULong(&ok);
+    if (!ok)
+        mXml.raiseError(QObject::tr("invalid fitness: %1").arg(fit));
+}
+
+
+void SVGReader::readDesc(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "desc" && mXml.attributes().value("version") == "0.5");
+    while (mXml.readNextStartElement()) {
+        if (mXml.name() == "datetime") {
+            readDateTime();
+        }
+        else if (mXml.name() == "generation") {
+            readGeneration();
+        }
+        else if (mXml.name() == "selected") {
+            readSelected();
+        }
+        else if (mXml.name() == "fitness") {
+            readFitness();
+        }
+        else {
+            mXml.skipCurrentElement();
+        }
+    }
+}
+
+
 void SVGReader::readGroup(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "g");
@@ -101,10 +167,12 @@ void SVGReader::readGroup(void)
         mXml.raiseError(QObject::tr("invalid y scale factor in \"%1\"").arg(scales.at(0)));
     mDNA.setScale(QSize(xs, ys));
     while (mXml.readNextStartElement()) {
-        if (mXml.name() == "path")
+        if (mXml.name() == "path") {
             readPath();
-        else
+        }
+        else {
             mXml.skipCurrentElement();
+        }
     }
 }
 
@@ -113,10 +181,15 @@ void SVGReader::readSVG(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "svg");
     while (mXml.readNextStartElement()) {
-        if (mXml.name() == "g")
+        if (mXml.name() == "g") {
             readGroup();
-        else
+        }
+        else if (mXml.name() == "desc" && mXml.attributes().value("version") == "0.5") {
+            readDesc();
+        }
+        else {
             mXml.skipCurrentElement();
+        }
     }
 }
 
@@ -126,10 +199,12 @@ bool SVGReader::readSVG(QIODevice* device)
     mDNA.clear();
     mXml.setDevice(device);
     if (mXml.readNextStartElement()) {
-        if (mXml.name() == "svg" && mXml.attributes().value("version") == "1.1")
+        if (mXml.name() == "svg" && mXml.attributes().value("version") == "1.1") {
             readSVG();
-        else
+        }
+        else {
             mXml.raiseError(QObject::tr("The file is not an SVG version 1.1 file."));
+        }
     }
     return !mXml.error();
 }

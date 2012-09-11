@@ -7,6 +7,7 @@
 #include <QString>
 #include <QIODevice>
 #include <QXmlStreamReader>
+#include <QDateTime>
 #include "dna.h"
 
 ///
@@ -20,11 +21,25 @@ public:
     bool readSVG(QIODevice*);
     QString errorString(void) const;
 
+    unsigned long fitness(void) const { return mFitness; }
+    unsigned long selected(void) const { return mSelected; }
+    unsigned long generation(void) const { return mGeneration; }
+    const QDateTime& dateTime(void) const { return mDate; }
+
 private:
     QXmlStreamReader mXml;
     DNA mDNA;
+    unsigned long mFitness;
+    unsigned long mSelected;
+    unsigned long mGeneration;
+    QDateTime mDate;
 
     void readSVG(void);
+    void readDesc(void);
+    void readDateTime(void);
+    void readGeneration(void);
+    void readSelected(void);
+    void readFitness(void);
     void readGroup(void);
     void readPath(void);
 

@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>353</width>
-    <height>367</height>
+    <width>746</width>
+    <height>372</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Evo Cubist</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="images.qrc">
+   <iconset resource="evo-cubist.qrc">
     <normaloff>:/icons/icons/evo-cubist.ico.png</normaloff>:/icons/icons/evo-cubist.ico.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -488,7 +488,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>353</width>
+     <width>746</width>
      <height>21</height>
     </rect>
    </property>
@@ -508,6 +508,7 @@
       <string>Save</string>
      </property>
      <addaction name="actionSaveDNA"/>
+     <addaction name="actionSaveSettings"/>
     </widget>
     <addaction name="menuOpen"/>
     <addaction name="menuSave"/>
@@ -594,10 +595,18 @@
     <string>Options</string>
    </property>
   </action>
+  <action name="actionSaveSettings">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Settings ...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="images.qrc"/>
+  <include location="evo-cubist.qrc"/>
  </resources>
  <connections/>
 </ui>
