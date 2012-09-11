@@ -56,6 +56,9 @@ void ImageWidget::dragEnterEvent(QDragEnterEvent* e)
             e->acceptProposedAction();
             setStyleSheet("background-color: #22dd22;");
         }
+        else {
+            e->ignore();
+        }
     }
     else {
         e->ignore();
