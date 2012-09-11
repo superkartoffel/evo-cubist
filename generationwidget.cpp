@@ -14,7 +14,7 @@ GenerationWidget::GenerationWidget(QFrame* parent)
     sizePolicy.setHeightForWidth(true);
     setSizePolicy(sizePolicy);
     setAcceptDrops(true);
-    setStyleSheet("background-color: #333;");
+    setStyleSheet("background-color: #333333;");
 }
 
 
@@ -28,9 +28,10 @@ void GenerationWidget::setImage(const QImage& image)
 
 void GenerationWidget::paintEvent(QPaintEvent*)
 {
+    QPainter p(this);
+    p.fillRect(rect(), Qt::black);
     if (mImage.isNull())
         return;
-    QPainter p(this);
     qreal windowAspectRatio = (qreal) width() / height();
     qreal imageAspectRatio = (qreal) mImage.width() / mImage.height();
     QRect destRect;

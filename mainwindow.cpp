@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->generatedGroupBox->setLayout(hbox2);
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
+    QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
@@ -376,6 +377,13 @@ void MainWindow::saveDNA(void)
         QMessageBox::warning(this, tr("Error saving DNA"), tr("DNA could not be saved as '%1'.").arg(dnaFilename));
     }
     mBreeder.setDirty(false);
+}
+
+
+void MainWindow::imageDropped(const QImage& image)
+{
+    Q_UNUSED(image);
+    evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
 }
 
 

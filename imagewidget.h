@@ -19,6 +19,7 @@ public:
     void setImage(const QImage&);
     const QString& imageFileName(void) const { return mImageFileName; }
     bool loadImage(const QString& fileName);
+    const QImage& image(void) const { return mImage; }
     virtual QSize minimumSizeHint(void) const { return QSize(256, 256); }
 
 signals:

@@ -69,13 +69,15 @@ void Breeder::setSelected(unsigned long selected)
 
 void Breeder::reset(void)
 {
-    mGeneration = 0;
+    mGeneration = 1;
     mFitness = ULONG_MAX;
-    mSelected = 0;
+    mSelected = 1;
     mDirty = false;
     mStopped = false;
     populate();
     draw();
+    emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration);
+    emit proceeded(mGeneration);
 }
 
 

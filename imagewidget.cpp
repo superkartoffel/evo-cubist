@@ -32,6 +32,7 @@ void ImageWidget::paintEvent(QPaintEvent*)
     if (mImage.isNull())
         return;
     QPainter p(this);
+    p.fillRect(rect(), Qt::black);
     qreal windowAspectRatio = (qreal) width() / height();
     qreal imageAspectRatio = (qreal) mImage.width() / mImage.height();
     QRect destRect;
@@ -84,11 +85,10 @@ bool ImageWidget::loadImage(const QString& fileName)
         return false;
     }
     QImage image = QImage(fileName);
-    if (!image.isNull()) {
-        setImage(image);
-        mImageFileName = fileName;
-        emit imageDropped(mImage);
-        return true;
-    }
-    return false;
+    if (image.isNull())
+        return false;
+    setImage(image);
+    mImageFileName = fileName;
+    emit imageDropped(mImage);
+    return true;
 }
