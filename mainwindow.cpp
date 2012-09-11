@@ -350,7 +350,7 @@ void MainWindow::restoreAppSettings(void)
     ui->greenSlider->setValue(settings.value("Options/deltaG", 50).toInt());
     ui->blueSlider->setValue(settings.value("Options/deltaB", 50).toInt());
     ui->alphaSlider->setValue(settings.value("Options/deltaA", 50).toInt());
-    ui->xySlider->setValue(settings.value("Options/deltaXY", 230).toInt());
+    ui->xySlider->setValue(settings.value("Options/deltaXY", 2300).toInt());
     mOptionsForm.restoreGeometry(settings.value("Options/geometry").toByteArray());
     mOptionsForm.setImageSaveDirectory(settings.value("Options/imageSaveDirectory", QDir::homePath()).toString());
     mOptionsForm.setImageSaveFilenameTemplate(settings.value("Options/imageSaveFilenameTemplate", "%1-%2-%3.png").toString());
@@ -361,7 +361,7 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm.setLogFile(settings.value("Options/logFile").toString());
     mOptionsForm.setCores(settings.value("Options/cores", QThread::idealThreadCount()).toInt());
     mOptionsForm.setStartDistribution(settings.value("Options/startDistribution", 4).toInt());
-    mOptionsForm.setScatterFactor(settings.value("Options/scatterFactor", 0.5).toDouble());
+    mOptionsForm.setScatterFactor(settings.value("Options/scatterFactor", 0.45).toDouble());
     mOptionsForm.setColorMutationProbability(settings.value("Options/colorMutationProbability", 1000).toInt());
     mOptionsForm.setPointMutationProbability(settings.value("Options/pointMutationProbability", 1000).toInt());
     mOptionsForm.setPointKillProbability(settings.value("Options/pointKillProbability", 1000).toInt());
