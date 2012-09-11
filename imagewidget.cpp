@@ -52,10 +52,14 @@ void ImageWidget::dragEnterEvent(QDragEnterEvent* e)
 {
     const QMimeData* d = e->mimeData();
     if (d->hasUrls()) {
-        if (d->urls().first().toString().contains(QRegExp("\\.(png|jpg)$")))
+        if (d->urls().first().toString().contains(QRegExp("\\.(png|jpg)$"))) {
             e->acceptProposedAction();
+            setStyleSheet("background-color: #22dd22;");
+        }
     }
-    setStyleSheet("background-color: #22dd22;");
+    else {
+        e->ignore();
+    }
 }
 
 
