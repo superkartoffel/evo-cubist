@@ -65,7 +65,6 @@ public:
     inline void setSelected(unsigned long v) { mSelected = v; }
     inline void setFitness(quint64 v) { mFitness = v; }
     inline void setTotalSeconds(quint64 v) { mTotalSeconds = v; }
-
 private:
     QSize mSize;
     DNAType mDNA;

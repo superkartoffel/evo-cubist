@@ -141,6 +141,7 @@ quint64 MainWindow::totalSeconds(void) const {
 void MainWindow::proceeded(unsigned long generation)
 {
     quint64 totalseconds = totalSeconds();
+    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / totalseconds));
     ui->generationLineEdit->setText(QString("%1").arg(generation));
     const unsigned int days = totalseconds / 60 / 60 / 24;
     totalseconds -= days * 24 * 60 * 60;
@@ -153,7 +154,6 @@ void MainWindow::proceeded(unsigned long generation)
     if (days > 0)
         t.prepend(tr("%1 %2 ").arg(days).arg(days > 1? tr("days") : tr("day")));
     ui->totalTimeLineEdit->setText(t);
-    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / totalseconds));
 }
 
 
