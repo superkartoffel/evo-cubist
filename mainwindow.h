@@ -55,9 +55,9 @@ private:
 
 private slots:
     void loadDNA(const QString& filename);
-    void evolved(const QImage&, const DNA&, unsigned int fitness, unsigned int selected, unsigned int generation);
+    void evolved(const QImage&, const DNA&, quint64 fitness, unsigned long selected, unsigned long generation);
     void imageDropped(const QImage&);
-    void proceeded(unsigned int);
+    void proceeded(unsigned long);
     void startStop(void);
     void saveDNA(void);
     void openDNA(void);

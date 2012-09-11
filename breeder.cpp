@@ -22,7 +22,7 @@ Breeder::Breeder(QThread* parent)
 
 void Breeder::setOriginalImage(const QImage& original)
 {
-    mOriginal = original;
+    mOriginal = original.convertToFormat(QImage::Format_ARGB32);;
     mGenerated = QImage(mOriginal.size(), mOriginal.format());
     mDNA.setScale(mOriginal.size());
     reset();
@@ -48,7 +48,7 @@ void Breeder::setDNA(DNA dna)
         stop();
     mDNA = dna;
     mMutation = dna;
-    mFitness = ULONG_MAX;
+    mFitness = std::numeric_limits<quint64>::max();
     draw();
     if (wasRunning)
         breed(priority());
@@ -70,7 +70,7 @@ void Breeder::setSelected(unsigned long selected)
 void Breeder::reset(void)
 {
     mGeneration = 1;
-    mFitness = ULONG_MAX;
+    mFitness = std::numeric_limits<quint64>::max();
     mSelected = 1;
     mDirty = false;
     mStopped = false;
@@ -182,7 +182,6 @@ void Breeder::breed(QThread::Priority priority)
 
 void Breeder::run(void)
 {
-    qDebug() << "Breeder has started.";
     // generate N mutations
     while (!mStopped) {
         const int N = gBreederSettings.cores();
@@ -207,5 +206,4 @@ void Breeder::run(void)
         mGeneration += N;
         emit proceeded(mGeneration);
     }
-    qDebug() << "Breeder::run() is about to return.";
 }

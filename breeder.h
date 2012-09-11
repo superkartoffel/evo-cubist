@@ -30,7 +30,7 @@ public:
     inline const QImage& image(void) const { return mGenerated; }
     inline const QImage& originalImage(void) const { return mOriginal; }
     inline unsigned long generation(void) const { return mGeneration; }
-    inline unsigned long currentFitness(void) const { return mFitness; }
+    inline quint64 currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }
 
     // void proceed(void);
@@ -51,7 +51,7 @@ private:
     bool mDirty;
     volatile bool mStopped;
     unsigned long mGeneration;
-    unsigned long mFitness;
+    quint64 mFitness;
     unsigned long mSelected;
     QImage mOriginal;
     QImage mGenerated;
@@ -59,8 +59,8 @@ private:
     DNA mMutation;
 
 signals:
-    void evolved(const QImage&, const DNA&, unsigned int, unsigned int, unsigned int);
-    void proceeded(unsigned int);
+    void evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long);
+    void proceeded(unsigned long);
     
 public slots:
     void setOriginalImage(const QImage&);

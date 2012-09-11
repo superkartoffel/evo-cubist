@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget* parent)
     restoreAppSettings();
 
     proceeded(1);
-    evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
+    evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
 
     QObject::connect(&mBreeder, SIGNAL(finished()), SLOT(breederFinished()));
 }
@@ -124,14 +124,14 @@ void MainWindow::priorityChanged(QThread::Priority priority)
 }
 
 
-void MainWindow::proceeded(unsigned int generation)
+void MainWindow::proceeded(unsigned long generation)
 {
     ui->generationLineEdit->setText(QString("%1").arg(generation));
     ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / (1 + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t())));
 }
 
 
-void MainWindow::evolved(const QImage& image, const DNA& dna, unsigned int fitness, unsigned int selected, unsigned generation)
+void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, unsigned long selected, unsigned long generation)
 {
     const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
@@ -228,14 +228,14 @@ void MainWindow::startBreeding(void)
     }
     mStartTime = QDateTime::currentDateTime();
     QObject::connect(&mBreeder,
-                     SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)),
+                     SIGNAL(evolved(QImage, DNA, quint64, unsigned long, unsigned long)),
                      this,
-                     SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)),
+                     SLOT(evolved(QImage, DNA, quint64, unsigned long, unsigned long)),
                      Qt::BlockingQueuedConnection);
     QObject::connect(&mBreeder,
-                     SIGNAL(proceeded(unsigned int)),
+                     SIGNAL(proceeded(unsigned long)),
                      this,
-                     SLOT(proceeded(unsigned int)),
+                     SLOT(proceeded(unsigned long)),
                      Qt::BlockingQueuedConnection);
     mBreeder.breed(mPriority);
     if (mOptionsForm.autoSave()) {
@@ -256,13 +256,13 @@ void MainWindow::stopBreeding(void)
     mAutoSaveTimer.stop();
     mBreeder.stop();
     QObject::disconnect(&mBreeder,
-                        SIGNAL(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)),
+                        SIGNAL(evolved(QImage, DNA, quint64, unsigned long, unsigned long)),
                         this,
-                        SLOT(evolved(QImage, DNA, unsigned int, unsigned int, unsigned int)));
+                        SLOT(evolved(QImage, DNA, quint64, unsigned long, unsigned long)));
     QObject::disconnect(&mBreeder,
-                        SIGNAL(proceeded(unsigned int)),
+                        SIGNAL(proceeded(unsigned long)),
                         this,
-                        SLOT(proceeded(unsigned int)));
+                        SLOT(proceeded(unsigned long)));
     if (mLog.isOpen()) {
         QTextStream log(&mLog);
         log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "STOP.\n";
@@ -383,7 +383,7 @@ void MainWindow::saveDNA(void)
 void MainWindow::imageDropped(const QImage& image)
 {
     Q_UNUSED(image);
-    evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
+    evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
 }
 
 
@@ -422,7 +422,7 @@ void MainWindow::loadDNA(const QString& filename)
             mBreeder.setSelected(n.at(2).toULong());
             mBreeder.setDNA(dna);
             proceeded(mBreeder.generation());
-            evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
+            evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
         }
         else {
@@ -447,7 +447,7 @@ void MainWindow::resetBreeder(void)
     if (ok) {
         stopBreeding();
         mBreeder.reset();
-        evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation()+1);
+        evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
         ui->startStopPushButton->setText(tr("Start"));
     }
 }

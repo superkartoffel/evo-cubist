@@ -56,7 +56,7 @@ void DNA::mutate(void)
 
 
 // XXX: move method to Breeder
-bool DNA::save(const QString& filename, unsigned int generation, unsigned int selected, unsigned int fitness)
+bool DNA::save(const QString& filename, unsigned long generation, unsigned long selected, quint64 fitness)
 {
     bool rc;
     QFile file(filename);

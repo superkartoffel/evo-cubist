@@ -6,6 +6,7 @@
 
 #include <QImage>
 #include <QPainter>
+#include <QtCore/QDebug>
 #include "dna.h"
 
 
@@ -13,19 +14,19 @@ class Individual {
 public:
     Individual(void)
         : mOriginal(NULL)
-        , mFitness(ULONG_MAX)
+        , mFitness(std::numeric_limits<quint64>::max())
     { /* ... */ }
 
     Individual(DNA dna, const QImage& original)
         : mDNA(dna)
         , mOriginal(&original)
-        , mFitness(ULONG_MAX)
+        , mFitness(std::numeric_limits<quint64>::max())
         , mGenerated(original.size(), original.format())
     { /* ... */ }
 
     inline const QImage& generated(void) const { return mGenerated; }
     inline const DNA& dna(void) const { return mDNA; }
-    inline unsigned long fitness(void) const { return mFitness; }
+    inline quint64 fitness(void) const { return mFitness; }
     inline void operator()(Individual& individual) { individual.evolve(); }
 
     inline unsigned int rgbDelta(QRgb c1, QRgb c2)
@@ -49,9 +50,8 @@ public:
             p.drawPolygon(genome->polygon());
         }
         mFitness = 0;
-        const int N = mOriginal->height() * mOriginal->width();
         const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
-        const QRgb* const oEnd  = o + N;
+        const QRgb* const oEnd  = o + mOriginal->byteCount() / sizeof(QRgb);
         const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
         while (o < oEnd)
             mFitness += rgbDelta(*o++, *g++);
@@ -60,7 +60,7 @@ public:
 private:
     DNA mDNA;
     const QImage* mOriginal;
-    unsigned long mFitness;
+    quint64 mFitness;
     QImage mGenerated;
 };
 

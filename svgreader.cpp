@@ -121,7 +121,7 @@ void SVGReader::readFitness(void)
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "fitness");
     bool ok = false;
     const QString& fit = mXml.readElementText();
-    mFitness = fit.toULong(&ok);
+    mFitness = fit.toULongLong(&ok);
     if (!ok)
         mXml.raiseError(QObject::tr("invalid fitness: %1").arg(fit));
 }

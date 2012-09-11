@@ -21,7 +21,7 @@ public:
     bool readSVG(QIODevice*);
     QString errorString(void) const;
 
-    unsigned long fitness(void) const { return mFitness; }
+    quint64 fitness(void) const { return mFitness; }
     unsigned long selected(void) const { return mSelected; }
     unsigned long generation(void) const { return mGeneration; }
     const QDateTime& dateTime(void) const { return mDate; }
@@ -29,7 +29,7 @@ public:
 private:
     QXmlStreamReader mXml;
     DNA mDNA;
-    unsigned long mFitness;
+    quint64 mFitness;
     unsigned long mSelected;
     unsigned long mGeneration;
     QDateTime mDate;
