@@ -211,8 +211,9 @@ void MainWindow::startBreeding(void)
     }
     // check if log file is writable
     info.setFile(mOptionsForm.logFile());
-    if (!info.exists() || !info.isWritable()) {
-        QMessageBox::warning(this, tr("Log file not writable missing"), tr("The selected log file is not writable. Please go to the options dialog and choose a new one. Then try starting again."));
+    QFileInfo dirInfo(info.absolutePath());
+    if (!dirInfo.isDir() || !dirInfo.isWritable()) {
+        QMessageBox::warning(this, tr("Log file is not writable"), tr("The selected log file is not writable. Please go to the options dialog and choose a new one. Then try starting again."));
         mOptionsForm.go("Autosave", "logFile");
         return;
     }
