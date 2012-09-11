@@ -155,6 +155,10 @@ bool DNA::load(const QString& filename)
             clear();
             *this = xml.dna();
         }
+        else {
+            mErrorString = xml.errorString();
+            qWarning() << xml.errorString();
+        }
     }
     else {
         qWarning() << "DNA::load() unknown file format";

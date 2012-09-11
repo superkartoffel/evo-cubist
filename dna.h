@@ -26,6 +26,7 @@ public:
     void mutate(void);
     bool save(const QString& filename, unsigned int generation, unsigned int selected, unsigned int fitness);
     bool load(const QString& filename);
+    const QString& errorString(void) const { return mErrorString; }
 
     unsigned int points(void) const;
 
@@ -49,6 +50,7 @@ public:
 private:
     QSize mSize;
     DNAType mDNA;
+    QString mErrorString;
 
     bool willMutate(unsigned int probability);
 };

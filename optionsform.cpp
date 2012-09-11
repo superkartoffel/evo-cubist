@@ -95,7 +95,7 @@ void OptionsForm::go(const QString& where, const QString& what)
 
 void OptionsForm::resetToDefaults(void)
 {
-    if (QMessageBox::question(this, tr("Reset parameters to defaults?"), tr("Do you really want to reset all parameters to their defaults?")) != QMessageBox::Ok)
+    if (QMessageBox::question(this, tr("Reset parameters to defaults?"), tr("Do you really want to reset all parameters to their defaults?"), QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Cancel)
         return;
     ui->colorMutationProbabilitySpinBox->setValue(1000);
     ui->pointMutationProbabilitySpinBox->setValue(1000);

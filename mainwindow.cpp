@@ -418,7 +418,7 @@ void MainWindow::loadDNA(const QString& filename)
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
         }
         else {
-            QMessageBox::warning(this, tr("Error loading DNA"), tr("DNA could not be loaded."));
+            QMessageBox::warning(this, tr("Error loading DNA"), tr("DNA could not be loaded. Reason: %1").arg(dna.errorString()));
         }
     }
 }

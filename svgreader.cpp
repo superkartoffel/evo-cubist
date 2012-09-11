@@ -11,35 +11,50 @@
 #include "genome.h"
 
 
+QColor getRGB(const QRegExp& re, const QString& text, QXmlStreamReader& xml, bool* ok)
+{
+    if (-1 == re.indexIn(text)) {
+        ok = false;
+        return QColor();
+    }
+    const QStringList& rgba = re.capturedTexts();
+    const int r = rgba.at(1).toInt(ok);
+    if (!*ok)
+        xml.raiseError(QObject::tr("fill: invalid red component (%2) in \"%1\"").arg(text).arg(rgba.at(1)));
+    const int g = rgba.at(2).toInt(ok);
+    if (!*ok)
+        xml.raiseError(QObject::tr("fill: invalid green component (%2) in \"%1\"").arg(text).arg(rgba.at(2)));
+    const int b = rgba.at(3).toInt(ok);
+    if (!*ok)
+        xml.raiseError(QObject::tr("fill: invalid blue component (%2) in \"%1\"").arg(text).arg(rgba.at(3)));
+    return QColor(r, g, b);
+}
+
+
 void SVGReader::readPath(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "path");
+    QColor color;
+
     bool ok = false;
-    QString fill = mXml.attributes().value("fill").toString();
-    // <path fill="rgb(14,9,206)" fill-opacity="0.230442" d="M 0.845225 0.845225 L 0.431106 0.585496 L 0.0788198 0.4925 L 0.0861273 0.692974 Z" />
-    QRegExp fill_re("(\\d+),\\s*(\\d+),\\s*(\\d+)");
-    fill_re.indexIn(fill);
-    const QStringList& rgba = fill_re.capturedTexts();
-    const int r = rgba.at(1).toInt(&ok);
+    const QString& style = mXml.attributes().value("style").toString();
+
+    // <path style="fill-opacity:0.230442;fill:rgb(14,9,206)" d="M 0.845225 0.845225 L 0.431106 0.585496 L 0.0788198 0.4925 L 0.0861273 0.692974 Z" />
+
+    QRegExp fo_re("fill-opacity\\s*:\\s*([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
+    fo_re.indexIn(style);
+    qreal alpha = fo_re.capturedTexts().at(1).toDouble(&ok);
     if (!ok)
-        mXml.raiseError(QObject::tr("invalid red component in \"%1\"").arg(fill));
-    const int g = rgba.at(2).toInt(&ok);
-    if (!ok)
-        mXml.raiseError(QObject::tr("invalid green component in \"%1\"").arg(fill));
-    const int b = rgba.at(3).toInt(&ok);
-    if (!ok)
-        mXml.raiseError(QObject::tr("invalid blue component in \"%1\"").arg(fill));
-    QColor color(r, g, b);
-    qreal alpha = mXml.attributes().value("fill-opacity").toString().toDouble(&ok);
-    if (!ok) { // try finding "fill-opacity" in "style" attribute
-        // <path fill="rgb(103,81,97)" style="fill-opacity:0.215686" ... />
-        const QString& style = mXml.attributes().value("style").toString();
-        QRegExp fo_re("fill-opacity\\s*:\\s*([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
-        fo_re.indexIn(style);
-        alpha = fo_re.capturedTexts().at(1).toDouble(&ok);
-        if (!ok)
-            mXml.raiseError(QObject::tr("fill-opacity not found or invalid"));
+        mXml.raiseError(QObject::tr("fill-opacity (%1): not found or invalid").arg(fo_re.capturedTexts().at(1)));
+
+    color = getRGB(QRegExp("fill\\s*:\\s*rgb\\((\\d+),\\s*(\\d+),\\s*(\\d+)\\)"), style, mXml, &ok);
+    if (!color.isValid()) { // fallback to v0.4 format
+        const QString& fill = mXml.attributes().value("fill").toString();
+        color = getRGB(QRegExp("(\\d+),\\s*(\\d+),\\s*(\\d+)"), fill, mXml, &ok);
     }
+    if (!ok)
+        mXml.raiseError(QObject::tr("fill not found or invalid"));
+
     color.setAlphaF(alpha);
 
     QPolygonF polygon;
@@ -122,8 +137,5 @@ bool SVGReader::readSVG(QIODevice* device)
 
 QString SVGReader::errorString() const
 {
-    return QObject::tr("%1\nLine %2, column %3")
-            .arg(mXml.errorString())
-            .arg(mXml.lineNumber())
-            .arg(mXml.columnNumber());
+    return QObject::tr("%1 (line %2, column %3)").arg(mXml.errorString()).arg(mXml.lineNumber()).arg(mXml.columnNumber());
 }
