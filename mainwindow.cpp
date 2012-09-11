@@ -395,9 +395,9 @@ void MainWindow::saveDNA(void)
 }
 
 
-void MainWindow::imageDropped(const QImage& image)
+void MainWindow::imageDropped(const QImage&)
 {
-    evolved(image, mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
+    evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
 }
 
 
@@ -442,6 +442,7 @@ void MainWindow::loadDNA(const QString& filename)
                     qWarning() << "MainWindow::loadDNA(" << filename << ") Cannot determine generation and selected from filename or metadata. Tried metadata first.";
                 }
             }
+            mStartTime = QDateTime::currentDateTime();
             proceeded(mBreeder.generation());
             evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
