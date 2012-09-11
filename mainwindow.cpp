@@ -223,12 +223,14 @@ void MainWindow::startBreeding(void)
         return;
     }
     // check if log file is writable
-    info.setFile(mOptionsForm.logFile());
-    QFileInfo dirInfo(info.absolutePath());
-    if (!dirInfo.isDir() || !dirInfo.isWritable()) {
-        QMessageBox::warning(this, tr("Log file is not writable"), tr("The selected log file is not writable. Please go to the options dialog and choose a new one. Then try starting again."));
-        mOptionsForm.go("Autosave", "logFile");
-        return;
+    if (!mOptionsForm.logFile().isEmpty()) {
+        info.setFile(mOptionsForm.logFile());
+        QFileInfo dirInfo(info.absolutePath());
+        if (!dirInfo.isDir() || !dirInfo.isWritable()) {
+            QMessageBox::warning(this, tr("Log file is not writable"), tr("The selected log file is not writable. Please go to the options dialog and choose a new one. Then try starting again."));
+            mOptionsForm.go("Autosave", "logFile");
+            return;
+        }
     }
 
     statusBar()->showMessage(tr("Starting ..."), 3000);
