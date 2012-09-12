@@ -4,7 +4,6 @@
 #ifndef __DNA_H_
 #define __DNA_H_
 
-#include <QObject>
 #include <QString>
 #include <QDateTime>
 #include <QVector>

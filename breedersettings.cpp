@@ -1,8 +1,8 @@
 // Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 // All rights reserved.
 
-#include "breedersettings.h"
 #include <QtCore/QDebug>
+#include "breedersettings.h"
 
 /// global settings object
 BreederSettings gBreederSettings;
@@ -103,6 +103,13 @@ void BreederSettings::setGenomeMoveProbability(int v)
 {
     Q_ASSERT(v > 0);
     mGenomeMoveProbability = v;
+}
+
+
+void BreederSettings::setGenomeSliceProbability(int v)
+{
+    Q_ASSERT(v > 0);
+    mGenomeSliceProbability = v;
 }
 
 

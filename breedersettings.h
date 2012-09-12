@@ -26,6 +26,7 @@ public:
         , mPointEmergenceProbability(700)
         , mGenomeKillProbability(700)
         , mGenomeMoveProbability(700)
+        , mGenomeSliceProbability(7000)
         , mGenomeEmergenceProbability(700)
         , mMinPointsPerGenome(3)
         , mMaxPointsPerGenome(9)
@@ -52,6 +53,7 @@ public:
     inline int pointEmergenceProbability(void) const { return mPointEmergenceProbability; }
     inline int genomeKillProbability(void) const { return mGenomeKillProbability; }
     inline int genomeMoveProbability(void) const { return mGenomeMoveProbability; }
+    inline int genomeSliceProbability(void) const { return mGenomeSliceProbability; }
     inline int genomeEmergenceProbability(void) const { return mGenomeEmergenceProbability; }
     inline int minPointsPerGenome(void) const { return mMinPointsPerGenome; }
     inline int maxPointsPerGenome(void) const { return mMaxPointsPerGenome; }
@@ -75,6 +77,7 @@ public slots:
     void setPointEmergenceProbability(int);
     void setGenomeKillProbability(int);
     void setGenomeMoveProbability(int);
+    void setGenomeSliceProbability(int);
     void setGenomeEmergenceProbability(int);
     void setMinPointsPerGenome(int);
     void setMaxPointsPerGenome(int);
@@ -99,6 +102,7 @@ private:
     int mPointEmergenceProbability;
     int mGenomeKillProbability;
     int mGenomeMoveProbability;
+    int mGenomeSliceProbability;
     int mGenomeEmergenceProbability;
     int mMinPointsPerGenome; // [3..n]
     int mMaxPointsPerGenome; // [n..n+x]

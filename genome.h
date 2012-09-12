@@ -18,13 +18,13 @@ class Genome
 public:
     explicit Genome(bool randomize = false);
 
-    Genome::Genome(const QPolygonF& polygon, const QColor& color)
+    Genome(const QPolygonF& polygon, const QColor& color)
         : mColor(color)
     {
         deepCopy(polygon);
     }
 
-    Genome::Genome(const Genome& other)
+    Genome(const Genome& other)
         : mColor(other.mColor)
     {
         deepCopy(other.polygon());
@@ -35,6 +35,9 @@ public:
 
     void mutate(void);
 
+    QVector<Genome> bisect(void) const;
+    QVector<Genome> triangulize(void) const;
+
 private:
     QPolygonF mPolygon;
     QColor mColor;
@@ -42,6 +45,7 @@ private:
     bool willMutate(int rate) const;
 
     void deepCopy(const QPolygonF& polygon);
+
 };
 
 

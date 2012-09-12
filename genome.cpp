@@ -1,12 +1,12 @@
 // Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 // All rights reserved.
 
-#include "random/mersenne_twister.h"
+#include <QtGlobal>
+#include <QtCore/QDebug>
+#include <limits>
 #include "genome.h"
 #include "breedersettings.h"
 #include "random/rnd.h"
-#include <QtGlobal>
-#include <QtCore/QDebug>
 
 
 Genome::Genome(bool randomize)
@@ -25,6 +25,42 @@ void Genome::deepCopy(const QPolygonF& polygon)
     mPolygon.reserve(polygon.size());
     for (QPolygonF::const_iterator p = polygon.constBegin(); p != polygon.constEnd(); ++p)
         mPolygon.append(*p);
+}
+
+
+/// cut triangle in halves
+QVector<Genome> Genome::bisect(void) const
+{
+    Q_ASSERT(mPolygon.size() == 3);
+    QVector<Genome> result;
+    QPolygonF triangle = mPolygon;
+    triangle.append(mPolygon.first());
+    triangle.prepend(mPolygon.last());
+    // find longest leg
+    QPolygonF::const_iterator p0 = NULL;
+    qreal longestLength = std::numeric_limits<qreal>::max();
+    for (QPolygonF::const_iterator p = mPolygon.constBegin()+1; p != mPolygon.constEnd()-1; ++p) {
+        qreal l = QLineF(*p, *(p+1)).length();
+        if (l < longestLength) {
+            longestLength = l;
+            p0 = p;
+        }
+    }
+    QPointF mid = (*p0 + *(p0+1)) / 2;
+    QPolygonF triangle1;
+    triangle1 << mid << *(p0-1) << *p0;
+    QPolygonF triangle2;
+    triangle2 << mid << *(p0-1) << *(p0+1);
+    result << Genome(triangle1, mColor) << Genome(triangle2, mColor);
+    return result;
+}
+
+
+/// cut polygon into triangles
+QVector<Genome> Genome::triangulize(void) const
+{
+    QVector<Genome> result;
+    return result;
 }
 
 

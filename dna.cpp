@@ -54,6 +54,13 @@ void DNA::mutate(void)
             mDNA.insert(newIndex, genome);
         }
     }
+//    if (willMutate(gBreederSettings.genomeSliceProbability())) {
+//        if (genome->polygon().size() == 3) {
+//            QVector<Genome> offsprings = genome->bisect();
+//            *genome = offsprings.at(0);
+//            mDNA.insert(genome, offsprings.at(1));
+//        }
+//    }
     // mutate all contained genomes
     for (DNAType::iterator genome = mDNA.begin(); genome != mDNA.end(); ++genome)
         genome->mutate();

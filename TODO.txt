@@ -6,7 +6,7 @@ BUGS
 
 FEATURES
 
-[ ] Klick ins GenerationWidget halbiert neues Genom an der angeklickten Position.
+[ ] Klick ins GenerationWidget zerteilt das Genom an der angeklickten Position.
 [ ] Werte der RGBA/xy-Schieber in DNA-Datei auslesen.
 [ ] Werte der RGBA/xy-Schieber in GUI anzeigen.
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
