@@ -7,8 +7,10 @@ CONFIG += console qtestlib
 CONFIG -= app_bundle
 TEMPLATE = app
 SOURCES += main.cpp \
-    ../random/mersenne_twister.cpp
+    ../random/mersenne_twister.cpp \
+    ../random/rnd.cpp
 
 HEADERS += \
     ../random/mersenne_twister.h \
-    ../random/abstract_random_number_generator.h
+    ../random/abstract_random_number_generator.h \
+    ../random/rnd.h

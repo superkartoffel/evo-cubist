@@ -54,7 +54,4 @@ namespace MT {
 
 
     const unsigned int MersenneTwister::A[2] = { 0, 0x9908b0df };
-
-    MersenneTwister rng;
 }
-

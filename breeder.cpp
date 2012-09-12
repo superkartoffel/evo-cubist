@@ -1,7 +1,6 @@
 // Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 // All rights reserved.
 
-#include "breeder.h"
 #include <QBrush>
 #include <QColor>
 #include <QPainter>
@@ -11,7 +10,9 @@
 #include <QVector>
 #include <limits>
 #include <qmath.h>
+#include "breeder.h"
 #include "individual.h"
+#include "random/rnd.h"
 
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
@@ -102,13 +103,13 @@ void Breeder::populate(void)
                 polygon << QPointF(x, y) << QPointF(x +  stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
                 QColor color;
                 if (gBreederSettings.startDistribution() == 1) {
-                    color = QColor(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
+                    color = QColor(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
                 }
                 else {
                     const int px = (int)(x * mOriginal.width());
                     const int py = (int)(y * mOriginal.height());
                     color = QColor(mOriginal.pixel(px, py));
-                    color.setAlpha(color.alpha() % gBreederSettings.maxA());
+                    color.setAlpha(random(gBreederSettings.minA(), gBreederSettings.maxA()));
                 }
                 mDNA.append(Genome(polygon, color));
             }
@@ -121,15 +122,15 @@ void Breeder::populate(void)
     {
         for (int i = 0; i < gBreederSettings.minGenomes(); ++i) {
             QPolygonF polygon;
-            const QPointF mid(MT::random1(), MT::random1());
+            const QPointF mid(random1(), random1());
             for (int j = 0; j < gBreederSettings.minPointsPerGenome(); ++j) {
-                const qreal xoff = (MT::random1()-0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
-                const qreal yoff = (MT::random1()-0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
+                const qreal xoff = random1(-0.5, 0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
+                const qreal yoff = random1(-0.5, 0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
                 polygon << (mid + QPointF(xoff, yoff));
             }
             QColor color;
             if (gBreederSettings.startDistribution() == 3) {
-                color = QColor(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
+                color = QColor(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
             }
             else {
                 const int px = (int)(mid.x() * mOriginal.width());

@@ -6,61 +6,84 @@
 #include <QDateTime>
 #include <QTest>
 
-#include "../random/mersenne_twister.h"
+#include "../random/rnd.h"
 
 class RNGTest: public QObject
- {
-     Q_OBJECT
+{
+    Q_OBJECT
+
+private:
+    static const int N = 100000;
 
 private slots:
-     void initTestCase()
-     {
-         MT::rng.seed(QDateTime::currentDateTime().toTime_t());
-     }
-     void cleanupTestCase()
-     {
-     }
+    void initTestCase()
+    {
+        qDebug() << "Seeding random number generator ...";
+        rng.seed(QDateTime::currentDateTime().toTime_t());
+        qDebug() << N << "iterations per test.";
+    }
 
-     void random1()
-     {
-         for (int i = 0; i < 10000; ++i) {
-             qreal v = MT::random1();
-             QVERIFY2(v < 1.0, "v above upper boundary");
-             QVERIFY2(v >= 0.0, "v below lower boundary");
-         }
+//    void cleanupTestCase()
+//    {
+//    }
 
-     }
+    void tRandom()
+    {
+        for (int i = 0; i < N; ++i) {
+            unsigned int v = random(256);
+            QVERIFY2(v < 256, "v above upper boundary");
+            QVERIFY2(v >= 0, "v below lower boundary");
+        }
+    }
 
-     void random1WithBounds()
-     {
-         for (int i = 0; i < 10000; ++i) {
-             qreal v = MT::random1(-0.5, 0.5);
-             QVERIFY2(v <= +0.5, "v above upper boundary");
-             QVERIFY2(v >= -0.5, "v below lower boundary");
-         }
+    void tRandomWithBounds()
+    {
+        for (int i = 0; i < N; ++i) {
+            unsigned int v = random(10, 20);
+            QVERIFY2(v <= 20, "v above upper boundary");
+            QVERIFY2(v >= 10, "v below lower boundary");
+        }
+    }
 
-     }
+    void tRandom1()
+    {
+        for (int i = 0; i < N; ++i) {
+            qreal v = random1();
+            QVERIFY2(v < 1.0, "v above upper boundary");
+            QVERIFY2(v >= 0.0, "v below lower boundary");
+        }
+    }
 
-     void deviater()
-     {
-         for (int i = 0; i < 10000; ++i) {
-             qreal v = MT::deviater(0.5, 1.0);
-             QVERIFY2(v <= +1.5, "v above upper boundary");
-             QVERIFY2(v >= -0.5, "v below lower boundary");
-         }
-     }
+    void tRandom1WithBounds()
+    {
+        for (int i = 0; i < N; ++i) {
+            qreal v = random1(-0.5, 0.5);
+            QVERIFY2(v <= +0.5, "v above upper boundary");
+            QVERIFY2(v >= -0.5, "v below lower boundary");
+        }
+    }
 
-     void deviaterWithBounds()
-     {
-         for (int i = 0; i < 10000; ++i) {
-             qreal v = MT::deviater(0.5, 1.0, 0.2, 0.3);
-             QVERIFY2(v <= 0.7, "v above upper boundary");
-             QVERIFY2(v >= 0.2, "v below lower boundary");
-         }
-     }
- };
+    void tdReal()
+    {
+        for (int i = 0; i < N; ++i) {
+            qreal v = dReal(0.5, 1.0);
+            QVERIFY2(v <= +1.5, "v above upper boundary");
+            QVERIFY2(v >= -0.5, "v below lower boundary");
+        }
+    }
+
+    void tdRealWithBounds()
+    {
+        for (int i = 0; i < N; ++i) {
+            qreal v = dReal(0.5, 1.0, 0.2, 0.3);
+            QVERIFY2(v <= 0.7, "v above upper boundary");
+            QVERIFY2(v >= 0.2, "v below lower boundary");
+        }
+    }
+};
 
 #include "main.moc"
+
 
 int main(int argc, char* argv[])
 {

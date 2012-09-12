@@ -14,7 +14,7 @@
 #include <QStringList>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "random/mersenne_twister.h"
+#include "random/rnd.h"
 #include "breedersettings.h"
 #include "main.h"
 #include <limits>
@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(show()));
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(raise()));
 
-    MT::rng.seed(QDateTime::currentDateTime().toTime_t());
+    rng.seed(QDateTime::currentDateTime().toTime_t());
 
     restoreAppSettings();
 

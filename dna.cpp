@@ -13,6 +13,7 @@
 #include "svgreader.h"
 #include "breedersettings.h"
 #include "main.h"
+#include "random/rnd.h"
 
 using namespace QtJson;
 
@@ -32,7 +33,7 @@ DNA::DNA(const DNA& other)
 
 
 inline bool DNA::willMutate(unsigned int rate) {
-    return (MT::random() % rate) == 0;
+    return (random() % rate) == 0;
 }
 
 
@@ -43,10 +44,10 @@ void DNA::mutate(void)
         mDNA.append(Genome(true));
     // maybe kill a genome
     if (willMutate(gBreederSettings.genomeKillProbability()) && mDNA.size() > gBreederSettings.minGenomes())
-        mDNA.remove(MT::random() % mDNA.size());
+        mDNA.remove(random(mDNA.size()));
     if (willMutate(gBreederSettings.genomeMoveProbability())) {
-        const int oldIndex = MT::random() % mDNA.size();
-        const int newIndex = MT::random() % mDNA.size();
+        const int oldIndex = random(mDNA.size());
+        const int newIndex = random(mDNA.size());
         if (oldIndex != newIndex) {
             const Genome genome = mDNA.at(oldIndex);
             mDNA.remove(oldIndex);

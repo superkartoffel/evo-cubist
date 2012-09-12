@@ -1,59 +1,7 @@
-# Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
+TEMPLATE = subdirs
+SUBDIRS = evo-cubist-main \
+    evo-cubist-test
 
-QT += core gui xml
+evo-cubist-main.file = evo-cubist-main.pro
+evo-cubist-test.file = evo-cubist-test/evo-cubist-test.pro
 
-CONFIG += warn_on thread qt
-
-TRANSLATIONS = evo-cubist_de.ts
-
-CODECFORTR = UTF-8
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-TARGET = evo-cubist
-TEMPLATE = app
-
-win32 {
-RC_FILE = evo-cubist.rc
-QMAKE_CXXFLAGS = /W4
-}
-
-SOURCES += main.cpp\
-    mainwindow.cpp \
-    imagewidget.cpp \
-    generationwidget.cpp \
-    breeder.cpp \
-    genome.cpp \
-    dna.cpp \
-    qt-json/json.cpp \
-    random/mersenne_twister.cpp \
-    optionsform.cpp \
-    svgreader.cpp \
-    breedersettings.cpp
-
-HEADERS += mainwindow.h \
-    imagewidget.h \
-    generationwidget.h \
-    breeder.h \
-    genome.h \
-    dna.h \
-    qt-json/json.h \
-    random/mersenne_twister.h \
-    random/abstract_random_number_generator.h \
-    optionsform.h \
-    svgreader.h \
-    breedersettings.h \
-    individual.h \
-    main.h
-
-FORMS += mainwindow.ui \
-    optionsform.ui
-
-OTHER_FILES += \
-    HINTS.txt \
-    evo-cubist.rc \
-    tools/dna2svg.py \
-    TODO.txt
-
-RESOURCES += \
-    evo-cubist.qrc
