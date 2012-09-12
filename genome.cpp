@@ -56,12 +56,13 @@ QVector<Genome> Genome::bisect(void) const
 }
 
 
-/// cut polygon into triangles
+/// convert point cloud to triangles
+/// see http://de.wikipedia.org/wiki/Delaunay-Triangulation
 QVector<Genome> Genome::triangulize(void) const
 {
     QVector<Genome> result;
-    QPolygonF Q = convexHull();
-
+    QPolygonF Q = mPolygon;
+    // TODO ...
     return result;
 }
 
