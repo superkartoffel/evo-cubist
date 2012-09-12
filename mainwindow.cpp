@@ -202,9 +202,11 @@ void MainWindow::autoSaveGeneratedImage(void)
 void MainWindow::autoSaveIntervalChanged(int interval)
 {
     if (mOptionsForm->autoSave()) {
+        bool wasActive = mAutoSaveTimer.isActive();
         mAutoSaveTimer.stop();
         mAutoSaveTimer.setInterval(1000 * interval);
-        mAutoSaveTimer.start();
+        if (wasActive)
+            mAutoSaveTimer.start();
     }
 }
 
@@ -212,8 +214,10 @@ void MainWindow::autoSaveIntervalChanged(int interval)
 void MainWindow::autoSaveToggled(bool enabled)
 {
     if (enabled) {
+        bool wasActive = mAutoSaveTimer.isActive();
         mAutoSaveTimer.setInterval(1000 * mOptionsForm->saveInterval());
-        mAutoSaveTimer.start();
+        if (wasActive)
+            mAutoSaveTimer.start();
     }
     else {
         mAutoSaveTimer.stop();
