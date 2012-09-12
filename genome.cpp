@@ -11,7 +11,7 @@
 Genome::Genome(bool randomize)
 {
     if (randomize) {
-        const int N = gBreederSettings.minPointsPerGenome() + MT::random() % (gBreederSettings.maxPointsPerGenome() - gBreederSettings.minPointsPerGenome());
+        const int N = gBreederSettings.minPointsPerGenome() + MT::random() % (1 + gBreederSettings.maxPointsPerGenome() - gBreederSettings.minPointsPerGenome());
         for (int x = 0; x < N; ++x)
             mPolygon.append(QPointF(MT::random1(), MT::random1()));
         mColor.setRgb(MT::random() % 255, MT::random() % 255, MT::random() % 255, gBreederSettings.minA() + MT::random() % (gBreederSettings.maxA() - gBreederSettings.minA()));
@@ -40,17 +40,15 @@ void Genome::mutate(void)
         mPolygon.remove(MT::random() % mPolygon.size());
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate(gBreederSettings.pointMutationProbability())) {
-            qreal x2 = p->x() + gBreederSettings.dXY() * (MT::random1() - 0.5);
-            qreal y2 = p->y() + gBreederSettings.dXY() * (MT::random1() - 0.5);
-            p->setX((x2 < 0.0)? 0.0 : ((x2 > 1.0)? 1.0 : x2));
-            p->setY((y2 < 0.0)? 0.0 : ((y2 > 1.0)? 1.0 : y2));
+            p->setX(MT::deviater(p->x(), gBreederSettings.dXY(), 0.0, 1.0));
+            p->setY(MT::deviater(p->y(), gBreederSettings.dXY(), 0.0, 1.0));
         }
     }
     if (willMutate(gBreederSettings.colorMutationProbability())) {
-        const int r = (mColor.red()   + (MT::random() % gBreederSettings.dR()) - gBreederSettings.dR()/2) % 255;
-        const int g = (mColor.green() + (MT::random() % gBreederSettings.dG()) - gBreederSettings.dG()/2) % 255;
-        const int b = (mColor.blue()  + (MT::random() % gBreederSettings.dB()) - gBreederSettings.dB()/2) % 255;
-        const int a = (gBreederSettings.minA() + (mColor.alpha() + MT::random() % gBreederSettings.dA()) % (gBreederSettings.maxA() - gBreederSettings.minA())) % 255;
+        const int r = MT::deviatei(mColor.red(), gBreederSettings.dR(), 0, 255);
+        const int g = MT::deviatei(mColor.green(), gBreederSettings.dR(), 0, 255);
+        const int b = MT::deviatei(mColor.blue(), gBreederSettings.dR(), 0, 255);
+        const int a = MT::deviatei(mColor.alpha(), gBreederSettings.dA(), gBreederSettings.minA(), gBreederSettings.maxA());
         mColor.setRgb(r, g, b, a);
     }
 }

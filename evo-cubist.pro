@@ -15,6 +15,7 @@ TEMPLATE = app
 
 win32 {
 RC_FILE = evo-cubist.rc
+QMAKE_CXXFLAGS = /W4
 }
 
 SOURCES += main.cpp\
