@@ -35,6 +35,7 @@ public:
 
     void mutate(void);
 
+    QPolygonF convexHull(void) const;
     QVector<Genome> bisect(void) const;
     QVector<Genome> triangulize(void) const;
 

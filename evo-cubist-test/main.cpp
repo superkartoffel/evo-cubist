@@ -82,14 +82,6 @@ private slots:
         }
     }
 
-//    void tBisectGenome()
-//    {
-//        QPolygonF triangle;
-//        triangle << QPointF(1, 1) << QPointF(6, 1) << QPointF(4, 3);
-//        Genome genome(triangle, QColor(Qt::black));
-//        QVector<Genome> sisters = genome.bisect();
-//        qDebug() << sisters.first().polygon() << sisters.last().polygon();
-//    }
 };
 
 #include "main.moc"

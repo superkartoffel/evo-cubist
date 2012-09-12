@@ -7,7 +7,9 @@ BUGS
 FEATURES
 
 [ ] Klick ins GenerationWidget zerteilt das Genom an der angeklickten Position.
-[ ] Werte der RGBA/xy-Schieber in DNA-Datei auslesen.
+    http://www.scribd.com/doc/99436807/The-Algorithm-Design-Manual#page=579
+    http://www.scribd.com/doc/99436807/The-Algorithm-Design-Manual#page=583
+[ ] Werte der RGBA/xy-Schieber aus DNA-Datei auslesen und Schieber darauf einstellen.
 [ ] Werte der RGBA/xy-Schieber in GUI anzeigen.
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
