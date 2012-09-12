@@ -1,15 +1,15 @@
 NUTZUNGSHINWEISE
 
 Die Software "Evo Cubist" wurde zu Lehr- und Demonstrationszwecken
-geschaffen und ist nicht fÃ¼r den produktiven Einsatz
-vorgesehen. Der Autor haftet daher nicht fÃ¼r SchÃ¤den, die aus
-der Nutzung der Software entstehen, und Ã¼bernimmt keine GewÃ¤hr
-fÃ¼r ihre VollstÃ¤ndigkeit, Fehlerfreiheit und Eignung fÃ¼r
-einen bestimmten Zweck.
+geschaffen und ist nicht für den produktiven Einsatz vorgesehen.
+Der Autor und der Heise Zeitschriften Verlag haften nicht für
+Schäden, die aus der Nutzung der Software entstehen, und übernehmen
+keine Gewähr für ihre VollstÃ¤ndigkeit, Fehlerfreiheit und Eignung
+für einen bestimmten Zweck.
 
 Falls Sie beabsichtigen, den Code in eigenen Produkten zu verwenden,
-so ist das im Rahmen der Apache-Lizenz 2.0 kostenfrei gestattet (siehe
-die Datei LICENSE.txt fÃ¼r weitere Informationen).
+so ist das im Rahmen der GPL v3 kostenfrei gestattet (siehe die
+Datei LICENSE.txt für weitere Informationen).
 
 
-Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
+Copyright (c) 2012 Oliver Lau <ola@ct.de>, Heise Zeitschriften Verlag

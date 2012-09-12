@@ -57,7 +57,9 @@ OTHER_FILES += \
     HINTS.txt \
     evo-cubist.rc \
     tools/dna2svg.py \
-    TODO.txt
+    TODO.txt \
+    LICENSE.txt \
+    README.txt
 
 RESOURCES += \
     evo-cubist.qrc
