@@ -94,13 +94,13 @@ void Breeder::populate(void)
         // fall-through
     case 2: // tiled with color hint
     {
-        const qreal N = qSqrt(gBreederSettings.minGenomes() + (gBreederSettings.maxGenomes() - gBreederSettings.minGenomes()) / 2);
+        const int N = qFloor(qSqrt(gBreederSettings.minGenomes()));
         const qreal stepX = 1.0 / N;
         const qreal stepY = 1.0 / N;
-        for (qreal y = 0; y < 1.0; y += stepY) {
-            for (qreal x = 0; x < 1.0; x += stepX) {
+        for (qreal y = 0; y < 1.0-stepY; y += stepY) {
+            for (qreal x = 0; x < 1.0-stepX; x += stepX) {
                 QPolygonF polygon;
-                polygon << QPointF(x, y) << QPointF(x +  stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
+                polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
                 QColor color;
                 if (gBreederSettings.startDistribution() == 1) {
                     color = QColor(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
@@ -136,7 +136,7 @@ void Breeder::populate(void)
                 const int px = (int)(mid.x() * mOriginal.width());
                 const int py = (int)(mid.y() * mOriginal.height());
                 color = QColor(mOriginal.pixel(px, py));
-                color.setAlpha(color.alpha() % gBreederSettings.maxA());
+                color.setAlpha(random(gBreederSettings.minA(), gBreederSettings.maxA()));
             }
             mDNA.append(Genome(polygon, color));
         }

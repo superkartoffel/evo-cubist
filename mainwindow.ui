@@ -295,6 +295,9 @@
                 <height>32</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>alpha delta (for min/max see options)</string>
+              </property>
               <property name="minimum">
                <number>10</number>
               </property>
@@ -322,6 +325,9 @@
                 <width>0</width>
                 <height>32</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>green delta [0..255]</string>
               </property>
               <property name="minimum">
                <number>1</number>
@@ -360,6 +366,9 @@
                 <width>0</width>
                 <height>32</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>red delta [0..255]</string>
               </property>
               <property name="minimum">
                <number>1</number>
@@ -412,6 +421,9 @@
                 <height>32</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>blue delta [0..255]</string>
+              </property>
               <property name="minimum">
                <number>1</number>
               </property>
@@ -459,6 +471,9 @@
                 <width>0</width>
                 <height>32</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>delta for point translation ]0..1[</string>
               </property>
               <property name="minimum">
                <number>1</number>

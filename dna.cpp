@@ -76,6 +76,11 @@ bool DNA::save(const QString& filename, unsigned long generation, unsigned long 
             << " \"generation\": " << generation << ",\n"
             << " \"selected\": " << selected << ",\n"
             << " \"fitness\": " << fitness << ",\n"
+            << " \"deltared\": " << gBreederSettings.dR() << ",\n"
+            << " \"deltagreen\": " << gBreederSettings.dG() << ",\n"
+            << " \"deltablue\": " << gBreederSettings.dB() << ",\n"
+            << " \"deltaalpha\": " << gBreederSettings.dA() << ",\n"
+            << " \"deltaxy\": " << gBreederSettings.dXY() << ",\n"
             << " \"size\": { \"width\": " << mSize.width() << ", \"height\": " << mSize.height() << " },\n"
             << " \"dna\": [\n";
         for (DNAType::const_iterator genome = mDNA.constBegin(); genome != mDNA.constEnd(); ++genome) {
@@ -95,6 +100,11 @@ bool DNA::save(const QString& filename, unsigned long generation, unsigned long 
             << " <evocubist:generation>" << generation << "</evocubist:generation>\n"
             << " <evocubist:selected>" << selected << "</evocubist:selected>\n"
             << " <evocubist:fitness>" << fitness << "</evocubist:fitness>\n"
+            << " <evocubist:deltared>" << gBreederSettings.dR() << "</evocubist:deltared>\n"
+            << " <evocubist:deltagreen>" << gBreederSettings.dG() << "</evocubist:deltagreen>\n"
+            << " <evocubist:deltablue>" << gBreederSettings.dB() << "</evocubist:deltablue>\n"
+            << " <evocubist:deltaalpha>" << gBreederSettings.dA() << "</evocubist:deltaalpha>\n"
+            << " <evocubist:deltaxy>" << gBreederSettings.dXY() << "</evocubist:deltaxy>\n"
             << "</desc>\n"
             << " <g transform=\"scale(" << mSize.width() << ", " << mSize.height() << ")\">\n";
         for (DNAType::const_iterator genome = mDNA.constBegin(); genome != mDNA.constEnd(); ++genome) {

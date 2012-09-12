@@ -8,6 +8,7 @@
 #include <QtCore/QDebug>
 
 #include "svgreader.h"
+#include "breedersettings.h"
 #include "genome.h"
 
 
@@ -136,6 +137,72 @@ void SVGReader::readFitness(void)
 }
 
 
+void SVGReader::readDeltaRed(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "deltared");
+    bool ok = false;
+    const QString& redString = mXml.readElementText();
+    const int r = redString.toInt(&ok);
+    if (ok)
+        emit deltaR(r);
+    else
+        mXml.raiseError(QObject::tr("invalid delta red: %1").arg(redString));
+}
+
+
+void SVGReader::readDeltaGreen(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "deltagreen");
+    bool ok = false;
+    const QString& greenString = mXml.readElementText();
+    const int g = greenString.toInt(&ok);
+    if (ok)
+        emit deltaG(g);
+    else
+        mXml.raiseError(QObject::tr("invalid delta green: %1").arg(greenString));
+}
+
+
+void SVGReader::readDeltaBlue(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "deltablue");
+    bool ok = false;
+    const QString& blueString = mXml.readElementText();
+    const int b = blueString.toInt(&ok);
+    if (ok)
+        emit deltaB(b);
+    else
+        mXml.raiseError(QObject::tr("invalid delta blue: %1").arg(blueString));
+}
+
+
+void SVGReader::readDeltaAlpha(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "deltaalpha");
+    bool ok = false;
+    const QString& alphaString = mXml.readElementText();
+    const int a = alphaString.toInt(&ok);
+    if (ok)
+        emit deltaA(a);
+    else
+        mXml.raiseError(QObject::tr("invalid delta alpha: %1").arg(alphaString));
+}
+
+
+void SVGReader::readDeltaXY(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "deltaxy");
+    bool ok = false;
+    const QString& xyString = mXml.readElementText();
+    const qreal xy = xyString.toDouble(&ok);
+    if (ok)
+        emit deltaXY(1e4 * xy);
+    else
+        mXml.raiseError(QObject::tr("invalid delta XY: %1").arg(xyString));
+
+}
+
+
 void SVGReader::readDesc(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "desc" && mXml.attributes().value("version").toString().toDouble() > 0.4);
@@ -151,6 +218,21 @@ void SVGReader::readDesc(void)
         }
         else if (mXml.name() == "fitness") {
             readFitness();
+        }
+        else if (mXml.name() == "deltared") {
+            readDeltaRed();
+        }
+        else if (mXml.name() == "deltagreen") {
+            readDeltaGreen();
+        }
+        else if (mXml.name() == "deltablue") {
+            readDeltaBlue();
+        }
+        else if (mXml.name() == "deltaalpha") {
+            readDeltaAlpha();
+        }
+        else if (mXml.name() == "deltaxy") {
+            readDeltaXY();
         }
         else {
             mXml.skipCurrentElement();

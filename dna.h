@@ -4,6 +4,7 @@
 #ifndef __DNA_H_
 #define __DNA_H_
 
+#include <QObject>
 #include <QString>
 #include <QDateTime>
 #include <QVector>
@@ -15,7 +16,9 @@
 #include <limits>
 #include "genome.h"
 
+
 typedef QVector<Genome> DNAType;
+
 
 class DNA
 {
@@ -65,6 +68,7 @@ public:
     inline void setSelected(unsigned long v) { mSelected = v; }
     inline void setFitness(quint64 v) { mFitness = v; }
     inline void setTotalSeconds(quint64 v) { mTotalSeconds = v; }
+
 private:
     QSize mSize;
     DNAType mDNA;
