@@ -23,7 +23,7 @@ Circle::Circle(const QPointF& p1, const QPointF& p2, const QPointF& p3) {
 }
 
 
-qreal Circle::from3Points(const QPointF& p1, const QPointF& p2, const QPointF& p3)
+void Circle::from3Points(const QPointF& p1, const QPointF& p2, const QPointF& p3)
 {
     const qreal yda = p2.y() - p1.y();
     const qreal xda = p2.x() - p1.x();
@@ -32,16 +32,18 @@ qreal Circle::from3Points(const QPointF& p1, const QPointF& p2, const QPointF& p
     if (qFuzzyIsNull(xda) && qFuzzyIsNull(ydb)) {
         mCenter = QPointF((p2.x() + p3.x()) / 2, (p1.y() + p2.y()) / 2);
         mRadius = QLineF(mCenter, p1).length();
-        return mRadius;
+        return;
     }
     const qreal aSlope = yda / xda;
     const qreal bSlope = ydb / xdb;
-    if (qFuzzyIsNull(aSlope-bSlope))
-        return -1;
-    mCenter.setX((aSlope * bSlope * (p1.y() - p3.y()) + bSlope * (p1.x() + p2.x()) - aSlope*(p2.x() + p3.x())) / (2 * (bSlope - aSlope)));
-    mCenter.setY(-(mCenter.x() - (p1.x() + p2.x()) / 2) / aSlope + (p1.y() + p2.y()) / 2);
-    mRadius = QLineF(mCenter, p1).length();
-    return mRadius;
+    if (!qFuzzyIsNull(aSlope - bSlope)) {
+        mCenter.setX((aSlope * bSlope * (p1.y() - p3.y()) + bSlope * (p1.x() + p2.x()) - aSlope*(p2.x() + p3.x())) / (2 * (bSlope - aSlope)));
+        mCenter.setY(-(mCenter.x() - (p1.x() + p2.x()) / 2) / aSlope + (p1.y() + p2.y()) / 2);
+        mRadius = QLineF(mCenter, p1).length();
+    }
+    else {
+        mRadius = -1;
+    }
 }
 
 bool Circle::isPerpendicular(const QPointF& p1, const QPointF& p2, const QPointF& p3)
