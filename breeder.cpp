@@ -97,8 +97,8 @@ void Breeder::populate(void)
         const int N = qFloor(qSqrt(gBreederSettings.maxGenomes()));
         const qreal stepX = 1.0 / N;
         const qreal stepY = 1.0 / N;
-        for (qreal y = 0; y < 1.0-stepY; y += stepY) {
-            for (qreal x = 0; x < 1.0-stepX; x += stepX) {
+        for (qreal y = 0; y < 1.0; y += stepY) {
+            for (qreal x = 0; x < 1.0; x += stepX) {
                 QPolygonF polygon;
                 polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
                 QColor color;
@@ -106,8 +106,8 @@ void Breeder::populate(void)
                     color = QColor(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
                 }
                 else {
-                    const int px = (int)(x * mOriginal.width());
-                    const int py = (int)(y * mOriginal.height());
+                    const int px = (int)((x + stepX/2) * mOriginal.width());
+                    const int py = (int)((y + stepY/2) * mOriginal.height());
                     color = QColor(mOriginal.pixel(px, py));
                     color.setAlpha(random(gBreederSettings.minA(), gBreederSettings.maxA()));
                 }
