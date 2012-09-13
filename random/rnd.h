@@ -22,7 +22,7 @@ inline unsigned int random(int a)
 
 inline int random(int a, int b)
 {
-    Q_ASSERT(b > a);
+    Q_ASSERT(b >= a);
     return a + random(1 + b - a);
 }
 
@@ -33,7 +33,7 @@ inline double random1(void)
 
 inline double random1(qreal a, qreal b)
 {
-    Q_ASSERT(b > a);
+    Q_ASSERT(b >= a);
     return a + random1() * (b - a);
 }
 

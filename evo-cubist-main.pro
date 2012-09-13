@@ -31,7 +31,8 @@ SOURCES += \
     optionsform.cpp \
     svgreader.cpp \
     breedersettings.cpp \
-    helper.cpp
+    helper.cpp \
+    circle.cpp
 
 HEADERS += \
     qt-json/json.h \
@@ -49,7 +50,8 @@ HEADERS += \
     svgreader.h \
     breedersettings.h \
     individual.h \
-    helper.h
+    helper.h \
+    circle.h
 
 FORMS += mainwindow.ui \
     optionsform.ui

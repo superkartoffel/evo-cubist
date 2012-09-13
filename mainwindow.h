@@ -70,6 +70,12 @@ private slots:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
     void priorityChanged(QThread::Priority);
+
+    void setDeltaR(int);
+    void setDeltaG(int);
+    void setDeltaB(int);
+    void setDeltaA(int);
+    void setDeltaXY(int);
 };
 
 #endif // __MAINWINDOW_H_

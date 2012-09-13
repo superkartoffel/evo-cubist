@@ -62,7 +62,7 @@ QVector<Gene> Gene::triangulize(void) const
 {
     QVector<Gene> result;
     QPolygonF Q = mPolygon;
-    // TODO ...
+
     return result;
 }
 
