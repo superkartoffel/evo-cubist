@@ -89,6 +89,7 @@ private slots:
     void selectLogFile(void);
     void priorityChanged(int);
     void resetToDefaults(void);
+    void startDistributionChanged(int);
 
 private:
     static const QString SaveFilenameTemplate;

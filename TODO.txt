@@ -1,8 +1,9 @@
 BUGS
 
+[ ] Die Lokalisierungen werden nicht eingebunden.
+[ ] Startverteilung "tiled w/ color hint" füllt nicht die ganze Fläche aus.
 [ ] Umschalten der Prozesspriorität lässt Programm einfrieren
 [ ] Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.
-[ ] Die Lokalisierungen werden nicht eingebunden.
 
 FEATURES
 
