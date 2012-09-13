@@ -14,6 +14,7 @@
 #include "individual.h"
 #include "random/rnd.h"
 
+
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
 {

@@ -3,3 +3,7 @@ bin/*
 opt/*
 tmp/*
 deploy/*
+evo-cubist-test/Makefile*
+evo-cubist-test/debug/*
+evo-cubist-test/release/*
+evo-cubist-test/*.pdb

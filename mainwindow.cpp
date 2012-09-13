@@ -62,6 +62,11 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaB(int)));
     QObject::connect(ui->alphaSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaA(int)));
     QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaXY(int)));
+    QObject::connect(ui->redSlider, SIGNAL(valueChanged(int)), SLOT(setDeltaR(int)));
+    QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), SLOT(setDeltaG(int)));
+    QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), SLOT(setDeltaB(int)));
+    QObject::connect(ui->alphaSlider, SIGNAL(valueChanged(int)), SLOT(setDeltaA(int)));
+    QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), SLOT(setDeltaXY(int)));
 
     QObject::connect(ui->actionSaveDNA, SIGNAL(triggered()), SLOT(saveDNA()));
     QObject::connect(ui->actionOpenDNA, SIGNAL(triggered()), SLOT(openDNA()));
@@ -117,6 +122,36 @@ void MainWindow::closeEvent(QCloseEvent* e)
         break;
     }
     e->accept();
+}
+
+
+void MainWindow::setDeltaR(int v)
+{
+    ui->rLineEdit->setText(QString("%1").arg(v));
+}
+
+
+void MainWindow::setDeltaG(int v)
+{
+    ui->gLineEdit->setText(QString("%1").arg(v));
+}
+
+
+void MainWindow::setDeltaB(int v)
+{
+    ui->bLineEdit->setText(QString("%1").arg(v));
+}
+
+
+void MainWindow::setDeltaA(int v)
+{
+    ui->aLineEdit->setText(QString("%1").arg(v));
+}
+
+
+void MainWindow::setDeltaXY(int v)
+{
+    ui->xyLineEdit->setText(QString("%1").arg(1e-4*(qreal)v));
 }
 
 
