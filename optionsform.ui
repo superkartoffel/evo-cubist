@@ -387,6 +387,9 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="scatterFactorSpinBox">
+             <property name="toolTip">
+              <string>scatter factor (the higher the less coverage)</string>
+             </property>
              <property name="minimum">
               <double>0.010000000000000</double>
              </property>

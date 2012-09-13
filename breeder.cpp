@@ -94,7 +94,7 @@ void Breeder::populate(void)
         // fall-through
     case 2: // tiled with color hint
     {
-        const int N = qFloor(qSqrt(gBreederSettings.minGenomes()));
+        const int N = qFloor(qSqrt(gBreederSettings.maxGenomes()));
         const qreal stepX = 1.0 / N;
         const qreal stepY = 1.0 / N;
         for (qreal y = 0; y < 1.0-stepY; y += stepY) {

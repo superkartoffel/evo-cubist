@@ -14,7 +14,7 @@ class RNGTest: public QObject
     Q_OBJECT
 
 private:
-    static const int N = 10000;
+    static const int N = 100000;
 
 private slots:
     void initTestCase()
@@ -22,7 +22,6 @@ private slots:
         qDebug() << "Seeding random number generator ...";
         rng.seed(QDateTime::currentDateTime().toTime_t());
         qDebug() << N << "iterations per test.";
-        qDebug() << "rng.max() =" << rng.max();
     }
 
 //    void cleanupTestCase()

@@ -57,6 +57,7 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinA(int)));
     QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxA(int)));
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gBreederSettings, SLOT(setStartDistribution(int)));
+    QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), SLOT(startDistributionChanged(int)));
     QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gBreederSettings, SLOT(setScatterFactor(double)));
 
     QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setGPUComputing(bool)));
@@ -90,6 +91,11 @@ void OptionsForm::go(const QString& where, const QString& what)
             // TODO: show tooltip for field or otherwise highlight it
         }
     }
+}
+
+void OptionsForm::startDistributionChanged(int index)
+{
+    ui->scatterFactorSpinBox->setEnabled(index == 3 || index == 4);
 }
 
 
