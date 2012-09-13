@@ -14,7 +14,7 @@ class RNGTest: public QObject
     Q_OBJECT
 
 private:
-    static const int N = 100000;
+    static const int N = 10000;
 
 private slots:
     void initTestCase()
@@ -22,6 +22,7 @@ private slots:
         qDebug() << "Seeding random number generator ...";
         rng.seed(QDateTime::currentDateTime().toTime_t());
         qDebug() << N << "iterations per test.";
+        qDebug() << "rng.max() =" << rng.max();
     }
 
 //    void cleanupTestCase()
@@ -46,10 +47,32 @@ private slots:
         }
     }
 
+    void tDInt()
+    {
+        for (int i = 0; i < N; ++i) {
+            qreal v = dInt(20, 50);
+            QVERIFY2(v <= 70, "v above upper boundary");
+            QVERIFY2(v >= -30, "v below lower boundary");
+        }
+
+    }
+
+    void tDIntWithBoundy()
+    {
+        for (int i = 0; i < N; ++i) {
+            qreal v = dInt(20, 50, 0, 30);
+            QVERIFY2(v <= 30, "v above upper boundary");
+            QVERIFY2(v >= 0, "v below lower boundary");
+        }
+
+    }
+
     void tRandom1()
     {
         for (int i = 0; i < N; ++i) {
             qreal v = random1();
+            if (v<0)
+                qDebug() << v;
             QVERIFY2(v < 1.0, "v above upper boundary");
             QVERIFY2(v >= 0.0, "v below lower boundary");
         }

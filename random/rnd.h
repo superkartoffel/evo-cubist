@@ -14,13 +14,13 @@ inline unsigned int random(void)
     return rng.next();
 }
 
-inline unsigned int random(unsigned int a)
+inline unsigned int random(int a)
 {
     Q_ASSERT(a != 0);
     return rng.next() % a;
 }
 
-inline unsigned int random(int a, int b)
+inline int random(int a, int b)
 {
     Q_ASSERT(b > a);
     return a + random(1 + b - a);
@@ -37,14 +37,15 @@ inline double random1(qreal a, qreal b)
     return a + random1() * (b - a);
 }
 
-inline unsigned int dInt(unsigned int v, unsigned int deltaMax)
+inline int dInt(int v, int deltaMax)
 {
-    return v + random(-(int)deltaMax, (int)deltaMax);
+    const int r = random(-(int)deltaMax, (int)deltaMax);
+    return v + r;
 }
 
-inline unsigned int dInt(unsigned int v, unsigned int deltaMax, unsigned int L /* lower boundary */, unsigned int U /* upper boundary */)
+inline int dInt(int v, int deltaMax, int L /* lower boundary */, int U /* upper boundary */)
 {
-    const unsigned int r = dInt(v, deltaMax);
+    const int r = dInt(v, deltaMax);
     return (r < L)? L : ((r > U)? U : r);
 }
 
