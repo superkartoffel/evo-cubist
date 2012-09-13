@@ -47,13 +47,13 @@ public:
     inline int pointMutationProbability(void) const { return ui->pointMutationProbabilitySpinBox->value(); }
     inline int pointEmergenceProbability(void) const { return ui->pointEmergenceProbabilitySpinBox->value(); }
     inline int pointKillProbability(void) const { return ui->pointKillProbabilitySpinBox->value(); }
-    inline int genomeEmergenceProbability(void) const { return ui->genomeEmergenceProbabilitySpinBox->value(); }
-    inline int genomeMoveProbability(void) const { return ui->genomeMoveProbabilitySpinBox->value(); }
-    inline int genomeKillProbability(void) const { return ui->genomeKillProbabilitySpinBox->value(); }
-    inline int minPointsPerGenome(void) const { return ui->minPointsSpinBox->value(); }
-    inline int maxPointsPerGenome(void) const { return ui->maxPointsSpinBox->value(); }
-    inline int minGenomes(void) const { return ui->minGenomesSpinBox->value(); }
-    inline int maxGenomes(void) const { return ui->maxGenomesSpinBox->value(); }
+    inline int geneEmergenceProbability(void) const { return ui->geneEmergenceProbabilitySpinBox->value(); }
+    inline int geneMoveProbability(void) const { return ui->geneMoveProbabilitySpinBox->value(); }
+    inline int geneKillProbability(void) const { return ui->geneKillProbabilitySpinBox->value(); }
+    inline int minPointsPerGene(void) const { return ui->minPointsSpinBox->value(); }
+    inline int maxPointsPerGene(void) const { return ui->maxPointsSpinBox->value(); }
+    inline int minGenes(void) const { return ui->minGenesSpinBox->value(); }
+    inline int maxGenes(void) const { return ui->maxGenesSpinBox->value(); }
     inline int minAlpha(void) const { return ui->minAlphaSpinBox->value(); }
     inline int maxAlpha(void) const { return ui->maxAlphaSpinBox->value(); }
     inline int startDistribution(void) const { return ui->startDistributionComboBox->currentIndex(); }
@@ -64,13 +64,13 @@ public:
     void setPointMutationProbability(int);
     void setPointEmergenceProbability(int);
     void setPointKillProbability(int);
-    void setGenomeEmergenceProbability(int);
-    void setGenomeMoveProbability(int);
-    void setGenomeKillProbability(int);
-    void setMinPointsPerGenome(int);
-    void setMaxPointsPerGenome(int);
-    void setMinGenomes(int);
-    void setMaxGenomes(int);
+    void setGeneEmergenceProbability(int);
+    void setGeneMoveProbability(int);
+    void setGeneKillProbability(int);
+    void setMinPointsPerGene(int);
+    void setMaxPointsPerGene(int);
+    void setMinGenes(int);
+    void setMaxGenes(int);
     void setMinAlpha(int);
     void setMaxAlpha(int);
     void setStartDistribution(int);

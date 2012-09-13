@@ -430,7 +430,7 @@
     <message>
         <location filename="optionsform.ui" line="65"/>
         <source>Point mutation probability</source>
-        <translation>Punktsmutationswahrscheinlichkeit</translation>
+        <translation>Punktmutationswahrscheinlichkeit</translation>
     </message>
     <message>
         <location filename="optionsform.ui" line="91"/>

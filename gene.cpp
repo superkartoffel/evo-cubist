@@ -4,15 +4,15 @@
 #include <QtGlobal>
 #include <QtCore/QDebug>
 #include <limits>
-#include "genome.h"
+#include "gene.h"
 #include "breedersettings.h"
 #include "random/rnd.h"
 
 
-Genome::Genome(bool randomize)
+Gene::Gene(bool randomize)
 {
     if (randomize) {
-        const int N = random(gBreederSettings.minPointsPerGenome(), gBreederSettings.maxPointsPerGenome());
+        const int N = random(gBreederSettings.minPointsPerGene(), gBreederSettings.maxPointsPerGene());
         for (int x = 0; x < N; ++x)
             mPolygon.append(QPointF(random1(), random1()));
         mColor.setRgb(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
@@ -20,7 +20,7 @@ Genome::Genome(bool randomize)
 }
 
 
-void Genome::deepCopy(const QPolygonF& polygon)
+void Gene::deepCopy(const QPolygonF& polygon)
 {
     mPolygon.reserve(polygon.size());
     for (QPolygonF::const_iterator p = polygon.constBegin(); p != polygon.constEnd(); ++p)
@@ -29,10 +29,10 @@ void Genome::deepCopy(const QPolygonF& polygon)
 
 
 /// cut triangle in halves
-QVector<Genome> Genome::bisect(void) const
+QVector<Gene> Gene::bisect(void) const
 {
     Q_ASSERT(mPolygon.size() == 3);
-    QVector<Genome> result;
+    QVector<Gene> result;
     QPolygonF triangle = mPolygon;
     triangle.append(mPolygon.first());
     triangle.prepend(mPolygon.last());
@@ -51,16 +51,16 @@ QVector<Genome> Genome::bisect(void) const
     triangle1 << mid << *(p0-1) << *p0;
     QPolygonF triangle2;
     triangle2 << mid << *(p0-1) << *(p0+1);
-    result << Genome(triangle1, mColor) << Genome(triangle2, mColor);
+    result << Gene(triangle1, mColor) << Gene(triangle2, mColor);
     return result;
 }
 
 
 /// convert point cloud to triangles
 /// see http://de.wikipedia.org/wiki/Delaunay-Triangulation
-QVector<Genome> Genome::triangulize(void) const
+QVector<Gene> Gene::triangulize(void) const
 {
-    QVector<Genome> result;
+    QVector<Gene> result;
     QPolygonF Q = mPolygon;
     // TODO ...
     return result;
@@ -79,7 +79,7 @@ inline bool pointLessThan(const QPointF& a, const QPointF& b)
 }
 
 
-QPolygonF Genome::convexHull(void) const
+QPolygonF Gene::convexHull(void) const
 {
     QPolygonF P = mPolygon;
     int n = P.size();
@@ -107,16 +107,21 @@ QPolygonF Genome::convexHull(void) const
 }
 
 
-inline bool Genome::willMutate(int rate) const {
-    return (random(rate)) == 0;
+inline bool Gene::willMutate(int probability) const {
+    return random(probability) == 0;
 }
 
 
-void Genome::mutate(void)
+void Gene::mutate(void)
 {
-    if (willMutate(gBreederSettings.pointEmergenceProbability()) && mPolygon.size() < gBreederSettings.maxPointsPerGenome())
-        mPolygon.append(QPointF(random1(), random1()));
-    if (willMutate(gBreederSettings.pointKillProbability()) && mPolygon.size() > gBreederSettings.minPointsPerGenome())
+    if (willMutate(gBreederSettings.pointEmergenceProbability()) && mPolygon.size() < gBreederSettings.maxPointsPerGene()) {
+        const int i = random(mPolygon.size());
+        const int j = (i+1) % mPolygon.size();
+        const QPointF& p0 = mPolygon.at(i);
+        const QPointF& p1 = mPolygon.at(j);
+        mPolygon.insert(j, (p0 + p1) / 2);
+    }
+    if (willMutate(gBreederSettings.pointKillProbability()) && mPolygon.size() > gBreederSettings.minPointsPerGene())
         mPolygon.remove(random(mPolygon.size()));
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate(gBreederSettings.pointMutationProbability())) {
@@ -134,15 +139,15 @@ void Genome::mutate(void)
 }
 
 
-QTextStream& operator<< (QTextStream& s, const Genome& genome)
+QTextStream& operator<< (QTextStream& s, const Gene& gene)
 {
-    const QColor& color = genome.color();
+    const QColor& color = gene.color();
     s << "{\n"
       << "  \"color\": { " << QString("\"r\": %1, \"g\": %2, \"b\": %3, \"a\": %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alphaF()) << " },\n";
     s << "  \"vertices\": [\n";
-    for (QPolygonF::const_iterator p = genome.polygon().constBegin(); p != genome.polygon().constEnd(); ++p) {
+    for (QPolygonF::const_iterator p = gene.polygon().constBegin(); p != gene.polygon().constEnd(); ++p) {
         s << "    { " << QString("\"x\": %1, \"y\": %2").arg(p->x()).arg(p->y()) << " }";
-        if ((p+1) != genome.polygon().constEnd())
+        if ((p+1) != gene.polygon().constEnd())
             s << ",";
         s << "\n";
     }

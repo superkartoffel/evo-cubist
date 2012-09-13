@@ -86,15 +86,15 @@ void Breeder::populate(void)
     switch (gBreederSettings.startDistribution()) {
     case 0: // random
     {
-        for (int i = 0; i < gBreederSettings.minGenomes(); ++i)
-            mDNA.append(Genome(true));
+        for (int i = 0; i < gBreederSettings.minGenes(); ++i)
+            mDNA.append(Gene(true));
         break;
     }
     case 1: // tiled
         // fall-through
     case 2: // tiled with color hint
     {
-        const int N = qFloor(qSqrt(gBreederSettings.maxGenomes()));
+        const int N = qFloor(qSqrt(gBreederSettings.maxGenes()));
         const qreal stepX = 1.0 / N;
         const qreal stepY = 1.0 / N;
         for (qreal y = 0; y < 1.0; y += stepY) {
@@ -111,7 +111,7 @@ void Breeder::populate(void)
                     color = QColor(mOriginal.pixel(px, py));
                     color.setAlpha(random(gBreederSettings.minA(), gBreederSettings.maxA()));
                 }
-                mDNA.append(Genome(polygon, color));
+                mDNA.append(Gene(polygon, color));
             }
         }
         break;
@@ -120,12 +120,12 @@ void Breeder::populate(void)
         // fall-through
     case 4: // scattered with color hint
     {
-        for (int i = 0; i < gBreederSettings.minGenomes(); ++i) {
+        for (int i = 0; i < gBreederSettings.minGenes(); ++i) {
             QPolygonF polygon;
             const QPointF mid(random1(), random1());
-            for (int j = 0; j < gBreederSettings.minPointsPerGenome(); ++j) {
-                const qreal xoff = random1(-0.5, 0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
-                const qreal yoff = random1(-0.5, 0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGenome());
+            for (int j = 0; j < gBreederSettings.minPointsPerGene(); ++j) {
+                const qreal xoff = random1(-0.5, 0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGene());
+                const qreal yoff = random1(-0.5, 0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGene());
                 polygon << (mid + QPointF(xoff, yoff));
             }
             QColor color;
@@ -138,7 +138,7 @@ void Breeder::populate(void)
                 color = QColor(mOriginal.pixel(px, py));
                 color.setAlpha(random(gBreederSettings.minA(), gBreederSettings.maxA()));
             }
-            mDNA.append(Genome(polygon, color));
+            mDNA.append(Gene(polygon, color));
         }
         break;
     }
@@ -158,9 +158,9 @@ inline void Breeder::draw(void)
     p.drawRect(0, 0, mGenerated.width(), mGenerated.height());
     p.setRenderHint(QPainter::Antialiasing);
     p.scale(mGenerated.width(), mGenerated.height());
-    for (DNAType::const_iterator genome = mMutation.constBegin(); genome != mMutation.constEnd(); ++genome) {
-        p.setBrush(genome->color());
-        p.drawPolygon(genome->polygon());
+    for (DNAType::const_iterator gene = mMutation.constBegin(); gene != mMutation.constEnd(); ++gene) {
+        p.setBrush(gene->color());
+        p.drawPolygon(gene->polygon());
     }
 }
 

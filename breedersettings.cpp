@@ -92,60 +92,60 @@ void BreederSettings::setPointEmergenceProbability(int v)
 }
 
 
-void BreederSettings::setGenomeKillProbability(int v)
+void BreederSettings::setGeneKillProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mGenomeKillProbability = v;
+    mGeneKillProbability = v;
 }
 
 
-void BreederSettings::setGenomeMoveProbability(int v)
+void BreederSettings::setGeneMoveProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mGenomeMoveProbability = v;
+    mGeneMoveProbability = v;
 }
 
 
-void BreederSettings::setGenomeSliceProbability(int v)
+void BreederSettings::setGeneSliceProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mGenomeSliceProbability = v;
+    mGeneSliceProbability = v;
 }
 
 
-void BreederSettings::setGenomeEmergenceProbability(int v)
+void BreederSettings::setGeneEmergenceProbability(int v)
 {
     Q_ASSERT(v > 0);
-    mGenomeEmergenceProbability = v;
+    mGeneEmergenceProbability = v;
 }
 
 
-void BreederSettings::setMinPointsPerGenome(int v)
+void BreederSettings::setMinPointsPerGene(int v)
 {
     Q_ASSERT(v > 2);
-    Q_ASSERT(v <= mMaxPointsPerGenome);
-    mMinPointsPerGenome = v;
+    Q_ASSERT(v <= mMaxPointsPerGene);
+    mMinPointsPerGene = v;
 }
 
 
-void BreederSettings::setMaxPointsPerGenome(int v)
+void BreederSettings::setMaxPointsPerGene(int v)
 {
-    Q_ASSERT(v >= mMinPointsPerGenome);
-    mMaxPointsPerGenome = v;
+    Q_ASSERT(v >= mMinPointsPerGene);
+    mMaxPointsPerGene = v;
 }
 
 
-void BreederSettings::setMinGenomes(int v)
-{
-    Q_ASSERT(v > 0);
-    mMinGenomes = v;
-}
-
-
-void BreederSettings::setMaxGenomes(int v)
+void BreederSettings::setMinGenes(int v)
 {
     Q_ASSERT(v > 0);
-    mMaxGenomes = v;
+    mMinGenes = v;
+}
+
+
+void BreederSettings::setMaxGenes(int v)
+{
+    Q_ASSERT(v > 0);
+    mMaxGenes = v;
 }
 
 

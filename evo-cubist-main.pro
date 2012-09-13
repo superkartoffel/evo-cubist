@@ -15,7 +15,6 @@ TEMPLATE = app
 
 win32 {
 RC_FILE = evo-cubist.rc
-# QMAKE_CXXFLAGS = /MP4
 }
 
 SOURCES += \
@@ -27,11 +26,12 @@ SOURCES += \
     imagewidget.cpp \
     generationwidget.cpp \
     breeder.cpp \
-    genome.cpp \
+    gene.cpp \
     dna.cpp \
     optionsform.cpp \
     svgreader.cpp \
-    breedersettings.cpp
+    breedersettings.cpp \
+    helper.cpp
 
 HEADERS += \
     qt-json/json.h \
@@ -43,12 +43,13 @@ HEADERS += \
     imagewidget.h \
     generationwidget.h \
     breeder.h \
-    genome.h \
+    gene.h \
     dna.h \
     optionsform.h \
     svgreader.h \
     breedersettings.h \
-    individual.h
+    individual.h \
+    helper.h
 
 FORMS += mainwindow.ui \
     optionsform.ui

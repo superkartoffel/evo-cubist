@@ -13,7 +13,7 @@
 #include <limits>
 
 #include "dna.h"
-#include "genome.h"
+#include "gene.h"
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
 

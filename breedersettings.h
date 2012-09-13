@@ -24,14 +24,14 @@ public:
         , mPointMutationProbability(700)
         , mPointKillProbability(700)
         , mPointEmergenceProbability(700)
-        , mGenomeKillProbability(700)
-        , mGenomeMoveProbability(700)
-        , mGenomeSliceProbability(7000)
-        , mGenomeEmergenceProbability(700)
-        , mMinPointsPerGenome(3)
-        , mMaxPointsPerGenome(9)
-        , mMinGenomes(200)
-        , mMaxGenomes(400)
+        , mGeneKillProbability(700)
+        , mGeneMoveProbability(700)
+        , mGeneSliceProbability(7000)
+        , mGeneEmergenceProbability(700)
+        , mMinPointsPerGene(3)
+        , mMaxPointsPerGene(9)
+        , mMinGenes(200)
+        , mMaxGenes(400)
         , mStartDistribution(0)
         , mScatterFactor(0.5)
         , mAutoSaveInterval(10)
@@ -51,14 +51,14 @@ public:
     inline int pointMutationProbability(void) const { return mPointMutationProbability; }
     inline int pointKillProbability(void) const { return mPointKillProbability; }
     inline int pointEmergenceProbability(void) const { return mPointEmergenceProbability; }
-    inline int genomeKillProbability(void) const { return mGenomeKillProbability; }
-    inline int genomeMoveProbability(void) const { return mGenomeMoveProbability; }
-    inline int genomeSliceProbability(void) const { return mGenomeSliceProbability; }
-    inline int genomeEmergenceProbability(void) const { return mGenomeEmergenceProbability; }
-    inline int minPointsPerGenome(void) const { return mMinPointsPerGenome; }
-    inline int maxPointsPerGenome(void) const { return mMaxPointsPerGenome; }
-    inline int minGenomes(void) const { return mMinGenomes; }
-    inline int maxGenomes(void) const { return mMaxGenomes; }
+    inline int geneKillProbability(void) const { return mGeneKillProbability; }
+    inline int geneMoveProbability(void) const { return mGeneMoveProbability; }
+    inline int geneSliceProbability(void) const { return mGeneSliceProbability; }
+    inline int geneEmergenceProbability(void) const { return mGeneEmergenceProbability; }
+    inline int minPointsPerGene(void) const { return mMinPointsPerGene; }
+    inline int maxPointsPerGene(void) const { return mMaxPointsPerGene; }
+    inline int minGenes(void) const { return mMinGenes; }
+    inline int maxGenes(void) const { return mMaxGenes; }
     inline int startDistribution(void) const {  return mStartDistribution; }
     inline qreal scatterFactor(void) const { return mScatterFactor; }
     inline int cores(void) const { return mCores; }
@@ -75,14 +75,14 @@ public slots:
     void setPointMutationProbability(int);
     void setPointKillProbability(int);
     void setPointEmergenceProbability(int);
-    void setGenomeKillProbability(int);
-    void setGenomeMoveProbability(int);
-    void setGenomeSliceProbability(int);
-    void setGenomeEmergenceProbability(int);
-    void setMinPointsPerGenome(int);
-    void setMaxPointsPerGenome(int);
-    void setMinGenomes(int);
-    void setMaxGenomes(int);
+    void setGeneKillProbability(int);
+    void setGeneMoveProbability(int);
+    void setGeneSliceProbability(int);
+    void setGeneEmergenceProbability(int);
+    void setMinPointsPerGene(int);
+    void setMaxPointsPerGene(int);
+    void setMinGenes(int);
+    void setMaxGenes(int);
     void setCores(int);
     void setGPUComputing(bool);
     void setStartDistribution(int);
@@ -100,14 +100,14 @@ private:
     int mPointMutationProbability;
     int mPointKillProbability;
     int mPointEmergenceProbability;
-    int mGenomeKillProbability;
-    int mGenomeMoveProbability;
-    int mGenomeSliceProbability;
-    int mGenomeEmergenceProbability;
-    int mMinPointsPerGenome; // [3..n]
-    int mMaxPointsPerGenome; // [n..n+x]
-    int mMinGenomes;
-    int mMaxGenomes;
+    int mGeneKillProbability;
+    int mGeneMoveProbability;
+    int mGeneSliceProbability;
+    int mGeneEmergenceProbability;
+    int mMinPointsPerGene; // [3..n]
+    int mMaxPointsPerGene; // [n..n+x]
+    int mMinGenes;
+    int mMaxGenes;
     int mStartDistribution;
     qreal mScatterFactor;
     int mAutoSaveInterval; // secs

@@ -17,6 +17,7 @@
 #include "random/rnd.h"
 #include "breedersettings.h"
 #include "main.h"
+#include "helper.h"
 #include <limits>
 
 MainWindow::MainWindow(QWidget* parent)
@@ -143,17 +144,7 @@ void MainWindow::proceeded(unsigned long generation)
     quint64 totalseconds = totalSeconds();
     ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / totalseconds));
     ui->generationLineEdit->setText(QString("%1").arg(generation));
-    const unsigned int days = totalseconds / 60 / 60 / 24;
-    totalseconds -= days * 24 * 60 * 60;
-    const unsigned int hours = totalseconds / 60 / 60;
-    totalseconds -= hours * 60 * 60;
-    const unsigned int minutes = totalseconds / 60;
-    totalseconds -= minutes * 60;
-    const unsigned int seconds = totalseconds;
-    QString t = QString("%1:%2:%3").arg(hours, 2, 10, QChar('0')).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
-    if (days > 0)
-        t.prepend(tr("%1 %2 ").arg(days).arg(days > 1? tr("days") : tr("day")));
-    ui->totalTimeLineEdit->setText(t);
+    ui->totalTimeLineEdit->setText(secondsToTime(totalseconds));
 }
 
 
@@ -171,7 +162,7 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, u
     ui->pointsLineEdit->setText(QString("%1").arg(numPoints));
     if (mLog.isOpen()) {
         QTextStream log(&mLog);
-        // (Zeitstempel, Generation, Selected, Points, Genomes, Fitness)
+        // (Zeitstempel, Generation, Selected, Points, Genes, Fitness)
         log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " <<
                generation << " " <<
                selected << " " <<
@@ -336,13 +327,13 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/pointMutationProbability", mOptionsForm->pointMutationProbability());
     settings.setValue("Options/pointKillProbability", mOptionsForm->pointKillProbability());
     settings.setValue("Options/pointEmergenceProbability", mOptionsForm->pointEmergenceProbability());
-    settings.setValue("Options/genomeKillProbability", mOptionsForm->genomeKillProbability());
-    settings.setValue("Options/genomeMoveProbability", mOptionsForm->genomeMoveProbability());
-    settings.setValue("Options/genomeEmergenceProbability", mOptionsForm->genomeEmergenceProbability());
-    settings.setValue("Options/minPointsPerGenome", mOptionsForm->minPointsPerGenome());
-    settings.setValue("Options/maxPointsPerGenome", mOptionsForm->maxPointsPerGenome());
-    settings.setValue("Options/minGenomes", mOptionsForm->minGenomes());
-    settings.setValue("Options/maxGenomes", mOptionsForm->maxGenomes());
+    settings.setValue("Options/geneKillProbability", mOptionsForm->geneKillProbability());
+    settings.setValue("Options/geneMoveProbability", mOptionsForm->geneMoveProbability());
+    settings.setValue("Options/geneEmergenceProbability", mOptionsForm->geneEmergenceProbability());
+    settings.setValue("Options/minPointsPerGene", mOptionsForm->minPointsPerGene());
+    settings.setValue("Options/maxPointsPerGene", mOptionsForm->maxPointsPerGene());
+    settings.setValue("Options/minGenes", mOptionsForm->minGenes());
+    settings.setValue("Options/maxGenes", mOptionsForm->maxGenes());
     settings.setValue("Options/minAlpha", mOptionsForm->minAlpha());
     settings.setValue("Options/maxAlpha", mOptionsForm->maxAlpha());
     settings.setValue("Options/imageSaveDirectory", mOptionsForm->imageSaveDirectory());
@@ -386,13 +377,13 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm->setPointMutationProbability(settings.value("Options/pointMutationProbability", 1000).toInt());
     mOptionsForm->setPointKillProbability(settings.value("Options/pointKillProbability", 1000).toInt());
     mOptionsForm->setPointEmergenceProbability(settings.value("Options/pointEmergenceProbability", 1000).toInt());
-    mOptionsForm->setGenomeKillProbability(settings.value("Options/genomeKillProbability", 1000).toInt());
-    mOptionsForm->setGenomeMoveProbability(settings.value("Options/genomeMoveProbability", 5000).toInt());
-    mOptionsForm->setGenomeEmergenceProbability(settings.value("Options/genomeEmergenceProbability", 1000).toInt());
-    mOptionsForm->setMinPointsPerGenome(settings.value("Options/minPointsPerGenome", 3).toInt());
-    mOptionsForm->setMaxPointsPerGenome(settings.value("Options/maxPointsPerGenome", 5).toInt());
-    mOptionsForm->setMinGenomes(settings.value("Options/minGenomes", 150).toInt());
-    mOptionsForm->setMaxGenomes(settings.value("Options/maxGenomes", 500).toInt());
+    mOptionsForm->setGeneKillProbability(settings.value("Options/geneKillProbability", 1000).toInt());
+    mOptionsForm->setGeneMoveProbability(settings.value("Options/geneMoveProbability", 5000).toInt());
+    mOptionsForm->setGeneEmergenceProbability(settings.value("Options/geneEmergenceProbability", 1000).toInt());
+    mOptionsForm->setMinPointsPerGene(settings.value("Options/minPointsPerGene", 3).toInt());
+    mOptionsForm->setMaxPointsPerGene(settings.value("Options/maxPointsPerGene", 5).toInt());
+    mOptionsForm->setMinGenes(settings.value("Options/minGenes", 150).toInt());
+    mOptionsForm->setMaxGenes(settings.value("Options/maxGenes", 500).toInt());
     mOptionsForm->setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
     mOptionsForm->setMaxAlpha(settings.value("Options/maxAlpha", 45).toInt());
     mBreeder.reset();

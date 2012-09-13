@@ -140,7 +140,7 @@
          <item row="4" column="0">
           <widget class="QLabel" name="label_7">
            <property name="text">
-            <string>min/max points per genome</string>
+            <string>min/max points per gene</string>
            </property>
           </widget>
          </item>
@@ -181,14 +181,14 @@
           </layout>
          </item>
          <item row="5" column="0">
-          <widget class="QLabel" name="genomeKillProbabilityLabel">
+          <widget class="QLabel" name="geneKillProbabilityLabel">
            <property name="text">
-            <string>Genome kill probability</string>
+            <string>Gene kill probability</string>
            </property>
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QSpinBox" name="genomeKillProbabilitySpinBox">
+          <widget class="QSpinBox" name="geneKillProbabilitySpinBox">
            <property name="prefix">
             <string>1/</string>
            </property>
@@ -207,14 +207,14 @@
           </widget>
          </item>
          <item row="7" column="0">
-          <widget class="QLabel" name="genomeEmergenceProbabilityLabel">
+          <widget class="QLabel" name="geneEmergenceProbabilityLabel">
            <property name="text">
-            <string>Genome emergence probability</string>
+            <string>Gene emergence probability</string>
            </property>
           </widget>
          </item>
          <item row="7" column="1">
-          <widget class="QSpinBox" name="genomeEmergenceProbabilitySpinBox">
+          <widget class="QSpinBox" name="geneEmergenceProbabilitySpinBox">
            <property name="prefix">
             <string>1/</string>
            </property>
@@ -235,14 +235,14 @@
          <item row="8" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>min/max genomes</string>
+            <string>min/max genes</string>
            </property>
           </widget>
          </item>
          <item row="8" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
-            <widget class="QSpinBox" name="minGenomesSpinBox">
+            <widget class="QSpinBox" name="minGenesSpinBox">
              <property name="minimum">
               <number>1</number>
              </property>
@@ -258,7 +258,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="maxGenomesSpinBox">
+            <widget class="QSpinBox" name="maxGenesSpinBox">
              <property name="minimum">
               <number>1</number>
              </property>
@@ -319,14 +319,14 @@
           </widget>
          </item>
          <item row="6" column="0">
-          <widget class="QLabel" name="genomeEmergenceProbabilityLabel_2">
+          <widget class="QLabel" name="geneEmergenceProbabilityLabel_2">
            <property name="text">
-            <string>Genome move probability</string>
+            <string>Gene move probability</string>
            </property>
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QSpinBox" name="genomeMoveProbabilitySpinBox">
+          <widget class="QSpinBox" name="geneMoveProbabilitySpinBox">
            <property name="prefix">
             <string>1/</string>
            </property>

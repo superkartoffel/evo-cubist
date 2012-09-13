@@ -47,13 +47,13 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->pointMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointMutationProbability(int)));
     QObject::connect(ui->pointKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointKillProbability(int)));
     QObject::connect(ui->pointEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointEmergenceProbability(int)));
-    QObject::connect(ui->genomeKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeKillProbability(int)));
-    QObject::connect(ui->genomeMoveProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeMoveProbability(int)));
-    QObject::connect(ui->genomeEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGenomeEmergenceProbability(int)));
-    QObject::connect(ui->minGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinGenomes(int)));
-    QObject::connect(ui->maxGenomesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxGenomes(int)));
-    QObject::connect(ui->minPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinPointsPerGenome(int)));
-    QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxPointsPerGenome(int)));
+    QObject::connect(ui->geneKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGeneKillProbability(int)));
+    QObject::connect(ui->geneMoveProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGeneMoveProbability(int)));
+    QObject::connect(ui->geneEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGeneEmergenceProbability(int)));
+    QObject::connect(ui->minGenesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinGenes(int)));
+    QObject::connect(ui->maxGenesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxGenes(int)));
+    QObject::connect(ui->minPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinPointsPerGene(int)));
+    QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxPointsPerGene(int)));
     QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinA(int)));
     QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxA(int)));
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gBreederSettings, SLOT(setStartDistribution(int)));
@@ -107,11 +107,11 @@ void OptionsForm::resetToDefaults(void)
     ui->pointMutationProbabilitySpinBox->setValue(1000);
     ui->pointKillProbabilitySpinBox->setValue(1000);
     ui->pointEmergenceProbabilitySpinBox->setValue(1000);
-    ui->genomeKillProbabilitySpinBox->setValue(1000);
-    ui->genomeMoveProbabilitySpinBox->setValue(1000);
-    ui->genomeEmergenceProbabilitySpinBox->setValue(10000);
-    ui->minGenomesSpinBox->setValue(150);
-    ui->maxGenomesSpinBox->setValue(500);
+    ui->geneKillProbabilitySpinBox->setValue(1000);
+    ui->geneMoveProbabilitySpinBox->setValue(1000);
+    ui->geneEmergenceProbabilitySpinBox->setValue(10000);
+    ui->minGenesSpinBox->setValue(150);
+    ui->maxGenesSpinBox->setValue(500);
     ui->minPointsSpinBox->setValue(3);
     ui->maxPointsSpinBox->setValue(6);
     ui->minAlphaSpinBox->setValue(5);
@@ -184,45 +184,45 @@ void OptionsForm::setPointKillProbability(int v)
 }
 
 
-void OptionsForm::setGenomeEmergenceProbability(int v)
+void OptionsForm::setGeneEmergenceProbability(int v)
 {
-    ui->genomeEmergenceProbabilitySpinBox->setValue(v);
+    ui->geneEmergenceProbabilitySpinBox->setValue(v);
 }
 
 
-void OptionsForm::setGenomeMoveProbability(int v)
+void OptionsForm::setGeneMoveProbability(int v)
 {
-    ui->genomeMoveProbabilitySpinBox->setValue(v);
+    ui->geneMoveProbabilitySpinBox->setValue(v);
 }
 
 
-void OptionsForm::setGenomeKillProbability(int v)
+void OptionsForm::setGeneKillProbability(int v)
 {
-    ui->genomeKillProbabilitySpinBox->setValue(v);
+    ui->geneKillProbabilitySpinBox->setValue(v);
 }
 
 
-void OptionsForm::setMinPointsPerGenome(int v)
+void OptionsForm::setMinPointsPerGene(int v)
 {
     ui->minPointsSpinBox->setValue(v);
 }
 
 
-void OptionsForm::setMaxPointsPerGenome(int v)
+void OptionsForm::setMaxPointsPerGene(int v)
 {
     ui->maxPointsSpinBox->setValue(v);
 }
 
 
-void OptionsForm::setMinGenomes(int v)
+void OptionsForm::setMinGenes(int v)
 {
-    ui->minGenomesSpinBox->setValue(v);
+    ui->minGenesSpinBox->setValue(v);
 }
 
 
-void OptionsForm::setMaxGenomes(int v)
+void OptionsForm::setMaxGenes(int v)
 {
-    ui->maxGenomesSpinBox->setValue(v);
+    ui->maxGenesSpinBox->setValue(v);
 }
 
 

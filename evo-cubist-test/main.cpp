@@ -7,7 +7,7 @@
 #include <QTest>
 
 #include "../random/rnd.h"
-#include "../genome.h"
+#include "../gene.h"
 
 class RNGTest: public QObject
 {

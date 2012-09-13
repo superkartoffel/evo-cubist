@@ -1,8 +1,8 @@
 // Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 // All rights reserved.
 
-#ifndef __GENOME_H_
-#define __GENOME_H_
+#ifndef __GENE_H_
+#define __GENE_H_
 
 #include <QVector>
 #include <QColor>
@@ -11,20 +11,19 @@
 #include <QTextStream>
 #include "random/mersenne_twister.h"
 
-class Breeder;
 
-class Genome
+class Gene
 {
 public:
-    explicit Genome(bool randomize = false);
+    explicit Gene(bool randomize = false);
 
-    Genome(const QPolygonF& polygon, const QColor& color)
+    Gene(const QPolygonF& polygon, const QColor& color)
         : mColor(color)
     {
         deepCopy(polygon);
     }
 
-    Genome(const Genome& other)
+    Gene(const Gene& other)
         : mColor(other.mColor)
     {
         deepCopy(other.polygon());
@@ -36,8 +35,8 @@ public:
     void mutate(void);
 
     QPolygonF convexHull(void) const;
-    QVector<Genome> bisect(void) const;
-    QVector<Genome> triangulize(void) const;
+    QVector<Gene> bisect(void) const;
+    QVector<Gene> triangulize(void) const;
 
 private:
     QPolygonF mPolygon;
@@ -50,7 +49,7 @@ private:
 };
 
 
-QTextStream& operator<<(QTextStream&, const Genome&);
+QTextStream& operator<<(QTextStream&, const Gene&);
 
 
-#endif // __GENOME_H_
+#endif // __GENE_H_

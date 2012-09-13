@@ -9,7 +9,7 @@
 
 #include "svgreader.h"
 #include "breedersettings.h"
-#include "genome.h"
+#include "gene.h"
 
 
 QColor getRGB(const QRegExp& re, const QString& text, QXmlStreamReader& xml, bool* ok)
@@ -80,7 +80,7 @@ void SVGReader::readPath(void)
         polygon << QPointF(x, y);
         d = d.right(d.size() - pos - xy.at(0).size() + 1);
     }
-    mDNA.append(Genome(polygon, color));
+    mDNA.append(Gene(polygon, color));
 
     while (mXml.readNextStartElement()) {
         if (mXml.name() == "path")

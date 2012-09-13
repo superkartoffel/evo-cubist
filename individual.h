@@ -45,9 +45,9 @@ public:
         p.drawRect(0, 0, mGenerated.width(), mGenerated.height());
         p.setRenderHint(QPainter::Antialiasing);
         p.scale(mGenerated.width(), mGenerated.height());
-        for (DNAType::const_iterator genome = mDNA.constBegin(); genome != mDNA.constEnd(); ++genome) {
-            p.setBrush(genome->color());
-            p.drawPolygon(genome->polygon());
+        for (DNAType::const_iterator gene = mDNA.constBegin(); gene != mDNA.constEnd(); ++gene) {
+            p.setBrush(gene->color());
+            p.drawPolygon(gene->polygon());
         }
         mFitness = 0;
         const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
