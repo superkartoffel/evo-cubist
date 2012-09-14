@@ -37,6 +37,22 @@ void Breeder::setDirty(bool dirty)
 }
 
 
+void Breeder::spliceAt(const QPointF& p)
+{
+    // TODO: pause run()
+    for (DNAType::const_iterator gene = mDNA.constEnd()-1; gene >= mDNA.constBegin(); --gene) {
+        if (gene->polygon().containsPoint(p, Qt::OddEvenFill)) {
+            qDebug() << "matching gene found at" << gene->polygon();
+            QVector<Gene> offsprings = gene->splice();
+            qDebug() << "offsprings.size() =" << offsprings.size();
+            for (int i = 0; i < offsprings.size(); ++i)
+                qDebug() << offsprings.at(i).polygon();
+        }
+    }
+    // TODO: resume run()
+}
+
+
 void Breeder::setDNA(const DNA& dna)
 {
     bool wasRunning = isRunning();

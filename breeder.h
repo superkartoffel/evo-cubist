@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QImage>
+#include <QPointF>
 #include <QRgb>
 #include <QThread>
 #include <QtCore/QDebug>
@@ -68,6 +69,7 @@ signals:
     
 public slots:
     void setOriginalImage(const QImage&);
+    void spliceAt(const QPointF&);
 };
 
 #endif // __BREEDER_H_

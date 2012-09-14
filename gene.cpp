@@ -28,6 +28,14 @@ void Gene::deepCopy(const QPolygonF& polygon)
 }
 
 
+QVector<Gene> Gene::splice(void) const
+{
+    return (mPolygon.size() == 3)
+            ? bisect()
+            : triangulize();
+}
+
+
 /// cut triangle in halves
 QVector<Gene> Gene::bisect(void) const
 {

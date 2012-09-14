@@ -37,6 +37,7 @@ public:
     QPolygonF convexHull(void) const;
     QVector<Gene> bisect(void) const;
     QVector<Gene> triangulize(void) const;
+    QVector<Gene> splice(void) const;
 
 private:
     QPolygonF mPolygon;

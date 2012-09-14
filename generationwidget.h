@@ -9,6 +9,7 @@
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDropEvent>
+#include <QMouseEvent>
 
 class GenerationWidget : public QFrame
 {
@@ -24,16 +25,18 @@ protected:
     void dragEnterEvent(QDragEnterEvent*);
     void dragLeaveEvent(QDragLeaveEvent*);
     void dropEvent(QDropEvent*);
+    void mousePressEvent(QMouseEvent*);
 
 signals:
     void fileDropped(const QString&);
+    void clickAt(const QPointF&);
     
 public slots:
     void setImage(const QImage&);
 
 private:
     QImage mImage;
-
+    QRect mDestRect;
 };
 
 #endif // __GENERATIONWIDGET_H_
