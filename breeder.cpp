@@ -140,14 +140,14 @@ void Breeder::populate(void)
                     color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
                 }
                 QPolygonF polygon;
-                if (gSettings.startDistribution() == 2) {
-                    polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
-                }
-                else {
+                if (gSettings.startDistribution() == 5) {
                     polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY);
                     QPolygonF polygon2;
                     polygon2 << QPointF(x, y) << QPointF(x, y + stepY) << QPointF(x + stepX, y + stepY);
                     mDNA.append(Gene(polygon2, color));
+                }
+                else {
+                    polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
                 }
                 mDNA.append(Gene(polygon, color));
             }

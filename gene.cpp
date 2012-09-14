@@ -87,7 +87,7 @@ QPolygonF Gene::evaluateTriangle(int i, int j, int k) const
 }
 
 
-/// convert point cloud to triangles (dumb O(n^2) implementation)
+/// convert point cloud to triangles (dumb O(n^4) implementation)
 /// see http://de.wikipedia.org/wiki/Delaunay-Triangulation
 QVector<Gene> Gene::triangulize(void) const
 {
