@@ -6,10 +6,14 @@
 
 #include <QFrame>
 #include <QImage>
+#include <QVector>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDropEvent>
 #include <QMouseEvent>
+
+#include "gene.h"
+
 
 class GenerationWidget : public QFrame
 {
@@ -33,10 +37,14 @@ signals:
     
 public slots:
     void setImage(const QImage&);
+    void spliced(const Gene& gene, const QVector<Gene>& offsprings);
 
 private:
     QImage mImage;
     QRect mDestRect;
+
+    Gene mSplicedGene;
+    QVector<Gene> mSplices;
 };
 
 #endif // __GENERATIONWIDGET_H_

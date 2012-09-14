@@ -68,6 +68,7 @@ private:
 signals:
     void evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long);
     void proceeded(unsigned long);
+    void spliced(const Gene& gene, const QVector<Gene>& offsprings);
     
 public slots:
     void setOriginalImage(const QImage&);

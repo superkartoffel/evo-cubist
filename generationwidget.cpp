@@ -6,6 +6,7 @@
 #include <QUrl>
 #include <QMimeData>
 #include <QtCore/QDebug>
+#include <qmath.h>
 
 GenerationWidget::GenerationWidget(QFrame* parent)
     : QFrame(parent)
@@ -22,6 +23,14 @@ void GenerationWidget::setImage(const QImage& image)
 {
     mImage = image;
     setMinimumSize(mImage.size());
+    update();
+}
+
+
+void GenerationWidget::spliced(const Gene& gene, const QVector<Gene>& offsprings)
+{
+    mSplicedGene = gene;
+    mSplices = offsprings;
     update();
 }
 
@@ -43,6 +52,20 @@ void GenerationWidget::paintEvent(QPaintEvent*)
         mDestRect = QRect((width()-w)/2, 0, w, height());
     }
     p.drawImage(mDestRect, mImage);
+    if (mSplicedGene.color().isValid() && !mSplices.empty()) {
+        p.setRenderHint(QPainter::Antialiasing);
+        p.translate(mDestRect.x(), mDestRect.y());
+        p.scale(mDestRect.width(), mDestRect.height());
+        p.setBrush(Qt::transparent);
+        qreal invScale = 1.2 / qSqrt(mDestRect.width() * mDestRect.height());
+        p.setPen(QPen(Qt::green, invScale));
+        for (QVector<Gene>::const_iterator g = mSplices.constBegin(); g != mSplices.constEnd(); ++g)
+            p.drawPolygon(g->polygon());
+        p.setPen(QPen(Qt::red, invScale));
+        p.drawPolygon(mSplicedGene.polygon());
+        mSplicedGene = Gene();
+        mSplices.clear();
+    }
 }
 
 

@@ -42,19 +42,22 @@ void Breeder::spliceAt(const QPointF& p)
     mMutex.lock();
     int i = mDNA.size();
     while (i--) {
-        if (mDNA.at(i).polygon().containsPoint(p, Qt::OddEvenFill)) {
-            QVector<Gene> offsprings =  mDNA.at(i).splice();
+        const Gene& gene = mDNA.at(i);
+        if (gene.polygon().containsPoint(p, Qt::OddEvenFill)) {
+            QVector<Gene> offsprings =  gene.splice();
             if (offsprings.size() > 0) {
                 mDNA[i] = offsprings.first();
                 for (int j = 1; j < offsprings.size(); ++j)
                     mDNA.insert(i, offsprings.at(j));
+                qDebug() << "spliced " << gene.polygon();
+                emit spliced(gene, offsprings);
+                mMutation = mDNA;
+                draw();
+                // would like to emit evolved(...) but cannot because that
+                // would cause a deadlock situation because of the
+                // BlockingQueuedConnection between this thread and the
+                // main thread.
             }
-            mMutation = mDNA;
-            draw();
-            // would like to emit evolved(...) but cannot because that
-            // would cause a deadlock situation because of the
-            // BlockingQueuedConnection between this thread and the
-            // main thread.
             break;
         }
     }

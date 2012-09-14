@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
     QObject::connect(mGenerationWidget, SIGNAL(clickAt(const QPointF&)), &mBreeder, SLOT(spliceAt(const QPointF&)), Qt::DirectConnection);
+    QObject::connect(&mBreeder, SIGNAL(spliced(Gene,QVector<Gene>)), mGenerationWidget, SLOT(spliced(Gene,QVector<Gene>)));
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
