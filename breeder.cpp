@@ -39,7 +39,7 @@ void Breeder::setDirty(bool dirty)
 
 void Breeder::spliceAt(const QPointF& p)
 {
-    // TODO: pause run()
+    mMutex.lock();
     int i = mDNA.size();
     while (i--) {
         if (mDNA.at(i).polygon().containsPoint(p, Qt::OddEvenFill)) {
@@ -51,11 +51,14 @@ void Breeder::spliceAt(const QPointF& p)
             }
             mMutation = mDNA;
             draw();
-            emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration);
+            // would like to emit evolved(...) but cannot because that
+            // would cause a deadlock situation because of the
+            // BlockingQueuedConnection between this thread and the
+            // main thread.
             break;
         }
     }
-    // TODO: resume run()
+    mMutex.unlock();
 }
 
 
@@ -106,10 +109,10 @@ void Breeder::reset(void)
 void Breeder::populate(void)
 {
     mDNA.clear();
-    switch (gBreederSettings.startDistribution()) {
+    switch (gSettings.startDistribution()) {
     case 0: // random
     {
-        for (int i = 0; i < gBreederSettings.minGenes(); ++i)
+        for (int i = 0; i < gSettings.minGenes(); ++i)
             mDNA.append(Gene(true));
         break;
     }
@@ -119,23 +122,23 @@ void Breeder::populate(void)
         // fall-through
     case 5: // tiled trianges with color hint
     {
-        const int N = qFloor(qSqrt(gBreederSettings.maxGenes()));
+        const int N = qFloor(qSqrt(((gSettings.startDistribution() == 5)? 0.5 : 1) * gSettings.minGenes()));
         const qreal stepX = 1.0 / N;
         const qreal stepY = 1.0 / N;
         for (qreal y = 0; y < 1.0; y += stepY) {
             for (qreal x = 0; x < 1.0; x += stepX) {
                 QColor color;
-                if (gBreederSettings.startDistribution() == 1) {
-                    color = QColor(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
+                if (gSettings.startDistribution() == 1) {
+                    color = QColor(random(256), random(256), random(256), random(gSettings.minA(), gSettings.maxA()));
                 }
                 else {
                     const int px = (int)((x + stepX/2) * mOriginal.width());
                     const int py = (int)((y + stepY/2) * mOriginal.height());
                     color = QColor(mOriginal.pixel(px, py));
-                    color.setAlpha(random(gBreederSettings.minA(), gBreederSettings.maxA()));
+                    color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
                 }
                 QPolygonF polygon;
-                if (gBreederSettings.startDistribution() == 2) {
+                if (gSettings.startDistribution() == 2) {
                     polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
                 }
                 else {
@@ -153,30 +156,30 @@ void Breeder::populate(void)
         // fall-through
     case 4: // scattered with color hint
     {
-        for (int i = 0; i < gBreederSettings.minGenes(); ++i) {
+        for (int i = 0; i < gSettings.minGenes(); ++i) {
             QPolygonF polygon;
             const QPointF mid(random1(), random1());
-            for (int j = 0; j < gBreederSettings.minPointsPerGene(); ++j) {
-                const qreal xoff = random1(-0.5, 0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGene());
-                const qreal yoff = random1(-0.5, 0.5) / (gBreederSettings.scatterFactor() * gBreederSettings.minPointsPerGene());
+            for (int j = 0; j < gSettings.minPointsPerGene(); ++j) {
+                const qreal xoff = random1(-0.5, 0.5) / (gSettings.scatterFactor() * gSettings.minPointsPerGene());
+                const qreal yoff = random1(-0.5, 0.5) / (gSettings.scatterFactor() * gSettings.minPointsPerGene());
                 polygon << (mid + QPointF(xoff, yoff));
             }
             QColor color;
-            if (gBreederSettings.startDistribution() == 3) {
-                color = QColor(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
+            if (gSettings.startDistribution() == 3) {
+                color = QColor(random(256), random(256), random(256), random(gSettings.minA(), gSettings.maxA()));
             }
             else {
                 const int px = (int)(mid.x() * mOriginal.width());
                 const int py = (int)(mid.y() * mOriginal.height());
                 color = QColor(mOriginal.pixel(px, py));
-                color.setAlpha(random(gBreederSettings.minA(), gBreederSettings.maxA()));
+                color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
             }
             mDNA.append(Gene(polygon, color));
         }
         break;
     }
     default:
-        qWarning() << "unknown start distribution:" << gBreederSettings.startDistribution();
+        qWarning() << "unknown start distribution:" << gSettings.startDistribution();
         break;
     }
     mMutation = mDNA;
@@ -216,14 +219,15 @@ void Breeder::run(void)
 {
     // generate N mutations
     while (!mStopped) {
-        const int N = gBreederSettings.cores();
+        mMutex.lock();
+        const int N = gSettings.cores();
         QVector<Individual> population(N);
         for (int i = 0; i < N; ++i)
             population[i] = Individual(mDNA, mOriginal);
         QtConcurrent::blockingMap(population, Individual());
         // find fittest mutation
-        QVector<Individual>::iterator best = NULL;
-        for (QVector<Individual>::iterator mutation = population.begin(); mutation != population.end(); ++mutation) {
+        QVector<Individual>::const_iterator best = NULL;
+        for (QVector<Individual>::const_iterator mutation = population.constBegin(); mutation != population.constEnd(); ++mutation) {
             if (mutation->fitness() < mFitness)
                 best = mutation;
         }
@@ -233,9 +237,11 @@ void Breeder::run(void)
             mDNA = best->dna();
             mGenerated = best->generated();
             mDirty = true;
-            emit evolved(mGenerated, mDNA, mFitness, ++mSelected, mGeneration+N);
         }
+        mMutex.unlock();
         mGeneration += N;
         emit proceeded(mGeneration);
+        if (best)
+            emit evolved(mGenerated, mDNA, mFitness, ++mSelected, mGeneration);
     }
 }

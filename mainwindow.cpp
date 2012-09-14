@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
-    QObject::connect(mGenerationWidget, SIGNAL(clickAt(const QPointF&)), &mBreeder, SLOT(spliceAt(const QPointF&)));
+    QObject::connect(mGenerationWidget, SIGNAL(clickAt(const QPointF&)), &mBreeder, SLOT(spliceAt(const QPointF&)), Qt::DirectConnection);
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
@@ -59,11 +59,11 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetBreeder()));
 
-    QObject::connect(ui->redSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaR(int)));
-    QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaG(int)));
-    QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaB(int)));
-    QObject::connect(ui->alphaSlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaA(int)));
-    QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setDeltaXY(int)));
+    QObject::connect(ui->redSlider, SIGNAL(valueChanged(int)), &gSettings, SLOT(setDeltaR(int)));
+    QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), &gSettings, SLOT(setDeltaG(int)));
+    QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), &gSettings, SLOT(setDeltaB(int)));
+    QObject::connect(ui->alphaSlider, SIGNAL(valueChanged(int)), &gSettings, SLOT(setDeltaA(int)));
+    QObject::connect(ui->xySlider, SIGNAL(valueChanged(int)), &gSettings, SLOT(setDeltaXY(int)));
     QObject::connect(ui->redSlider, SIGNAL(valueChanged(int)), SLOT(setDeltaR(int)));
     QObject::connect(ui->greenSlider, SIGNAL(valueChanged(int)), SLOT(setDeltaG(int)));
     QObject::connect(ui->blueSlider, SIGNAL(valueChanged(int)), SLOT(setDeltaB(int)));
@@ -99,30 +99,35 @@ MainWindow::~MainWindow()
 }
 
 
+bool MainWindow::event(QEvent* e)
+{
+    return QMainWindow::event(e);
+}
+
+
 void MainWindow::closeEvent(QCloseEvent* e)
 {
     stopBreeding();
+    if (mBreeder.isDirty()) {
+        QMessageBox msgBox;
+        msgBox.setText(tr("<b>DNA has been modified.</b>"));
+        msgBox.setInformativeText(tr("You have unsaved DNA. Do you want to save it?"));
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+        switch (ret) {
+        case QMessageBox::Save:
+            saveDNA();
+            break;
+        case QMessageBox::Cancel:
+            e->ignore();
+            return;
+        case QMessageBox::Discard:
+            break;
+        }
+    }
     saveAppSettings();
     mOptionsForm->close();
-    if (!mBreeder.isDirty())
-        return;
-
-    QMessageBox msgBox;
-    msgBox.setText(tr("<b>DNA has been modified.</b>"));
-    msgBox.setInformativeText(tr("You have unsaved DNA. Do you want to save it?"));
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Save);
-    int ret = msgBox.exec();
-    switch (ret) {
-    case QMessageBox::Save:
-        saveDNA();
-        break;
-    case QMessageBox::Cancel:
-        e->ignore();
-        return;
-    case QMessageBox::Discard:
-        break;
-    }
     e->accept();
 }
 

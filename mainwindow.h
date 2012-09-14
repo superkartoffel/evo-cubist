@@ -9,6 +9,7 @@
 #include <QString>
 #include <QTimer>
 #include <QFile>
+#include <QEvent>
 #include <QtCore/QDebug>
 
 #include "imagewidget.h"
@@ -31,6 +32,7 @@ public:
 
 
 protected:
+    bool event(QEvent*);
     void closeEvent(QCloseEvent*);
 
 private:

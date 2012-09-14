@@ -9,6 +9,7 @@
 #include <QPointF>
 #include <QRgb>
 #include <QThread>
+#include <QMutex>
 #include <QtCore/QDebug>
 
 #include <limits>
@@ -62,6 +63,7 @@ private:
     QImage mGenerated;
     DNA mDNA;
     DNA mMutation;
+    QMutex mMutex;
 
 signals:
     void evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long);

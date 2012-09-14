@@ -43,25 +43,25 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->autoSaveCheckBox, SIGNAL(toggled(bool)), SIGNAL(autoSaveToggled(bool)));
 
     // save form values into global settings object
-    QObject::connect(ui->colorMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setColorMutationProbability(int)));
-    QObject::connect(ui->pointMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointMutationProbability(int)));
-    QObject::connect(ui->pointKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointKillProbability(int)));
-    QObject::connect(ui->pointEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setPointEmergenceProbability(int)));
-    QObject::connect(ui->geneKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGeneKillProbability(int)));
-    QObject::connect(ui->geneMoveProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGeneMoveProbability(int)));
-    QObject::connect(ui->geneEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setGeneEmergenceProbability(int)));
-    QObject::connect(ui->minGenesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinGenes(int)));
-    QObject::connect(ui->maxGenesSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxGenes(int)));
-    QObject::connect(ui->minPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinPointsPerGene(int)));
-    QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxPointsPerGene(int)));
-    QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMinA(int)));
-    QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setMaxA(int)));
-    QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gBreederSettings, SLOT(setStartDistribution(int)));
+    QObject::connect(ui->colorMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setColorMutationProbability(int)));
+    QObject::connect(ui->pointMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setPointMutationProbability(int)));
+    QObject::connect(ui->pointKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setPointKillProbability(int)));
+    QObject::connect(ui->pointEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setPointEmergenceProbability(int)));
+    QObject::connect(ui->geneKillProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setGeneKillProbability(int)));
+    QObject::connect(ui->geneMoveProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setGeneMoveProbability(int)));
+    QObject::connect(ui->geneEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setGeneEmergenceProbability(int)));
+    QObject::connect(ui->minGenesSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMinGenes(int)));
+    QObject::connect(ui->maxGenesSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMaxGenes(int)));
+    QObject::connect(ui->minPointsSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMinPointsPerGene(int)));
+    QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMaxPointsPerGene(int)));
+    QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMinA(int)));
+    QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMaxA(int)));
+    QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gSettings, SLOT(setStartDistribution(int)));
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), SLOT(startDistributionChanged(int)));
-    QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gBreederSettings, SLOT(setScatterFactor(double)));
+    QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gSettings, SLOT(setScatterFactor(double)));
 
-    QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gBreederSettings, SLOT(setGPUComputing(bool)));
-    QObject::connect(ui->coresSpinBox, SIGNAL(valueChanged(int)), &gBreederSettings, SLOT(setCores(int)));
+    QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setGPUComputing(bool)));
+    QObject::connect(ui->coresSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setCores(int)));
 
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetToDefaults()));
 

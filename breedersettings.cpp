@@ -5,7 +5,7 @@
 #include "breedersettings.h"
 
 /// global settings object
-BreederSettings gBreederSettings;
+BreederSettings gSettings;
 
 
 void BreederSettings::setDeltaR(int v)

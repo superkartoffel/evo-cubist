@@ -12,10 +12,10 @@
 Gene::Gene(bool randomize)
 {
     if (randomize) {
-        const int N = random(gBreederSettings.minPointsPerGene(), gBreederSettings.maxPointsPerGene());
+        const int N = random(gSettings.minPointsPerGene(), gSettings.maxPointsPerGene());
         for (int x = 0; x < N; ++x)
             mPolygon.append(QPointF(random1(), random1()));
-        mColor.setRgb(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
+        mColor.setRgb(random(256), random(256), random(256), random(gSettings.minA(), gSettings.maxA()));
     }
 }
 
@@ -128,26 +128,26 @@ inline bool Gene::willMutate(int probability) const {
 
 void Gene::mutate(void)
 {
-    if (willMutate(gBreederSettings.pointEmergenceProbability()) && mPolygon.size() < gBreederSettings.maxPointsPerGene()) {
+    if (willMutate(gSettings.pointEmergenceProbability()) && mPolygon.size() < gSettings.maxPointsPerGene()) {
         const int i = random(mPolygon.size());
         const int j = (i+1) % mPolygon.size();
         const QPointF& p0 = mPolygon.at(i);
         const QPointF& p1 = mPolygon.at(j);
         mPolygon.insert(j, (p0 + p1) / 2);
     }
-    if (willMutate(gBreederSettings.pointKillProbability()) && mPolygon.size() > gBreederSettings.minPointsPerGene())
+    if (willMutate(gSettings.pointKillProbability()) && mPolygon.size() > gSettings.minPointsPerGene())
         mPolygon.remove(random(mPolygon.size()));
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
-        if (willMutate(gBreederSettings.pointMutationProbability())) {
-            p->setX(dReal(p->x(), gBreederSettings.dXY(), 0.0, 1.0));
-            p->setY(dReal(p->y(), gBreederSettings.dXY(), 0.0, 1.0));
+        if (willMutate(gSettings.pointMutationProbability())) {
+            p->setX(dReal(p->x(), gSettings.dXY(), 0.0, 1.0));
+            p->setY(dReal(p->y(), gSettings.dXY(), 0.0, 1.0));
         }
     }
-    if (willMutate(gBreederSettings.colorMutationProbability())) {
-        const int r = dInt(mColor.red(), gBreederSettings.dR(), 0, 255);
-        const int g = dInt(mColor.green(), gBreederSettings.dR(), 0, 255);
-        const int b = dInt(mColor.blue(), gBreederSettings.dR(), 0, 255);
-        const int a = dInt(mColor.alpha(), gBreederSettings.dA(), gBreederSettings.minA(), gBreederSettings.maxA());
+    if (willMutate(gSettings.colorMutationProbability())) {
+        const int r = dInt(mColor.red(), gSettings.dR(), 0, 255);
+        const int g = dInt(mColor.green(), gSettings.dR(), 0, 255);
+        const int b = dInt(mColor.blue(), gSettings.dR(), 0, 255);
+        const int a = dInt(mColor.alpha(), gSettings.dA(), gSettings.minA(), gSettings.maxA());
         mColor.setRgb(r, g, b, a);
     }
 }

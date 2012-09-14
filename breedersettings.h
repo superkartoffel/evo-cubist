@@ -116,6 +116,6 @@ private:
 };
 
 
-extern BreederSettings gBreederSettings;
+extern BreederSettings gSettings;
 
 #endif // __BREEDERSETTINGS_H_
