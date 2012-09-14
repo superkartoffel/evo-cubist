@@ -126,23 +126,34 @@ inline bool Gene::willMutate(int probability) const {
 }
 
 
+void Gene::translatePoint(QPointF* const p)
+{
+    p->setX(dReal(p->x(), gSettings.dXY(), 0.0, 1.0));
+    p->setY(dReal(p->y(), gSettings.dXY(), 0.0, 1.0));
+}
+
+
 void Gene::mutate(void)
 {
+    // emerge
     if (willMutate(gSettings.pointEmergenceProbability()) && mPolygon.size() < gSettings.maxPointsPerGene()) {
         const int i = random(mPolygon.size());
         const int j = (i+1) % mPolygon.size();
         const QPointF& p0 = mPolygon.at(i);
         const QPointF& p1 = mPolygon.at(j);
-        mPolygon.insert(j, (p0 + p1) / 2);
+        QPointF newP = (p0 + p1) / 2;
+        translatePoint(&newP);
+        mPolygon.insert(j, newP);
     }
+    // kill
     if (willMutate(gSettings.pointKillProbability()) && mPolygon.size() > gSettings.minPointsPerGene())
         mPolygon.remove(random(mPolygon.size()));
+    // translate
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
-        if (willMutate(gSettings.pointMutationProbability())) {
-            p->setX(dReal(p->x(), gSettings.dXY(), 0.0, 1.0));
-            p->setY(dReal(p->y(), gSettings.dXY(), 0.0, 1.0));
-        }
+        if (willMutate(gSettings.pointMutationProbability()))
+            translatePoint(p);
     }
+    // change color
     if (willMutate(gSettings.colorMutationProbability())) {
         const int r = dInt(mColor.red(), gSettings.dR(), 0, 255);
         const int g = dInt(mColor.green(), gSettings.dR(), 0, 255);

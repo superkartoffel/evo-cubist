@@ -39,6 +39,8 @@ public:
     QVector<Gene> triangulize(void) const;
     QVector<Gene> splice(void) const;
 
+    static inline void translatePoint(QPointF* const);
+
 private:
     QPolygonF mPolygon;
     QColor mColor;
