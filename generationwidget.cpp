@@ -16,6 +16,8 @@ GenerationWidget::GenerationWidget(QFrame* parent)
     setSizePolicy(sizePolicy);
     setAcceptDrops(true);
     setStyleSheet("background-color: #333333;");
+    setFrameShape(QFrame::StyledPanel);
+    setFrameStyle(QFrame::Plain);
 }
 
 

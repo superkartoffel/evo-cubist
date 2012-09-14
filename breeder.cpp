@@ -49,7 +49,6 @@ void Breeder::spliceAt(const QPointF& p)
                 mDNA[i] = offsprings.first();
                 for (int j = 1; j < offsprings.size(); ++j)
                     mDNA.insert(i, offsprings.at(j));
-                qDebug() << "spliced " << gene.polygon();
                 emit spliced(gene, offsprings);
                 mMutation = mDNA;
                 draw();

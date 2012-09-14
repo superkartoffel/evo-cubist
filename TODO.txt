@@ -1,6 +1,8 @@
 BUGS
 
-[ ] Keine Datei darf beim Speichern überschrieben werden
+[ ] Keine Datei darf beim Speichern überschrieben werden.
+[ ] OptionsForm: minPointsPerGene kann größer sein als maxPointsPerGene
+[ ] OptionsForm: minGenes kann größer sein als maxGenes
 [ ] Warnung "QImage::pixel: coordinate (x,y) out of range" in Breeder::populate() wegen Polygonen, die außerhalb des Bildes liegen.
 [ ] Umschalten der Prozesspriorität lässt Programm einfrieren
 [ ] Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.

@@ -49,6 +49,7 @@ private:
 
     void deepCopy(const QPolygonF& polygon);
 
+    QPolygonF evaluateTriangle(int i, int j, int k) const;
 };
 
 

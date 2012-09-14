@@ -7,6 +7,7 @@
 #include "gene.h"
 #include "breedersettings.h"
 #include "random/rnd.h"
+#include "circle.h"
 
 
 Gene::Gene(bool randomize)
@@ -30,6 +31,7 @@ void Gene::deepCopy(const QPolygonF& polygon)
 
 QVector<Gene> Gene::splice(void) const
 {
+    Q_ASSERT(mPolygon.size() >= 3);
     return (mPolygon.size() == 3)
             ? bisect()
             : triangulize();
@@ -64,17 +66,40 @@ QVector<Gene> Gene::bisect(void) const
 }
 
 
+inline bool pointLessThan(const QPointF& a, const QPointF& b)
+{
+    return a.x() < b.x() || (a.x() == b.x() && a.y() < b.y());
+}
+
+
+QPolygonF Gene::evaluateTriangle(int i, int j, int k) const
+{
+    Circle circle = Circle(mPolygon.at(i), mPolygon.at(j), mPolygon.at(k));
+    for (int w = 0; w < mPolygon.size(); ++w) {
+        if (w == i || w == j || w == k)
+            continue;
+        if (circle.contains(mPolygon.at(w)))
+            return QPolygonF();
+    }
+    QPolygonF result;
+    result << mPolygon.at(i) << mPolygon.at(j) << mPolygon.at(k);
+    return result;
+}
+
+
 /// convert point cloud to triangles (dumb O(n^2) implementation)
 /// see http://de.wikipedia.org/wiki/Delaunay-Triangulation
 QVector<Gene> Gene::triangulize(void) const
 {
+    Q_ASSERT(mPolygon.size() > 3);
     QVector<Gene> result;
-    QPolygonF Q = mPolygon;
-    for (int i = 0; i < Q.size(); ++i) {
-        for (int j = 0; j < Q.size(); ++j) {
-            if (j == i)
-                continue;
-            // TODO: ...
+    for (int i = 0; i < mPolygon.size()-2; ++i) {
+        for (int j = i + 1; j < mPolygon.size()-1; ++j) {
+            for (int k = j + 1; k < mPolygon.size(); ++k) {
+                const QPolygonF& triangle = evaluateTriangle(i, j, k);
+                if (!triangle.isEmpty())
+                    result << Gene(triangle, mColor);
+            }
         }
     }
     return result;
@@ -84,12 +109,6 @@ QVector<Gene> Gene::triangulize(void) const
 inline int cross(const QPointF& O, const QPointF& A, const QPointF& B)
 {
     return (A.x() - O.x()) * (B.y() - O.y()) - (A.y() - O.y()) * (B.x() - O.x());
-}
-
-
-inline bool pointLessThan(const QPointF& a, const QPointF& b)
-{
-    return a.x() < b.x() || (a.x() == b.x() && a.y() < b.y());
 }
 
 

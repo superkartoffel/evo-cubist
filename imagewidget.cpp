@@ -16,6 +16,8 @@ ImageWidget::ImageWidget(QFrame* parent)
     setSizePolicy(sizePolicy);
     setAcceptDrops(true);
     setStyleSheet("background-color: #222222;");
+    setFrameShape(QFrame::StyledPanel);
+    setFrameStyle(QFrame::Plain);
 }
 
 
