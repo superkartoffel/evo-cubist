@@ -383,6 +383,11 @@
                <string>scattered w/ color hint</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>tiled triangles</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>

@@ -40,13 +40,19 @@ void Breeder::setDirty(bool dirty)
 void Breeder::spliceAt(const QPointF& p)
 {
     // TODO: pause run()
-    for (DNAType::const_iterator gene = mDNA.constEnd()-1; gene >= mDNA.constBegin(); --gene) {
-        if (gene->polygon().containsPoint(p, Qt::OddEvenFill)) {
-            qDebug() << "matching gene found at" << gene->polygon();
-            QVector<Gene> offsprings = gene->splice();
-            qDebug() << "offsprings.size() =" << offsprings.size();
-            for (int i = 0; i < offsprings.size(); ++i)
-                qDebug() << offsprings.at(i).polygon();
+    int i = mDNA.size();
+    while (i--) {
+        if (mDNA.at(i).polygon().containsPoint(p, Qt::OddEvenFill)) {
+            QVector<Gene> offsprings =  mDNA.at(i).splice();
+            if (offsprings.size() > 0) {
+                mDNA[i] = offsprings.first();
+                for (int j = 1; j < offsprings.size(); ++j)
+                    mDNA.insert(i, offsprings.at(j));
+            }
+            mMutation = mDNA;
+            draw();
+            emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration);
+            break;
         }
     }
     // TODO: resume run()
@@ -110,14 +116,14 @@ void Breeder::populate(void)
     case 1: // tiled
         // fall-through
     case 2: // tiled with color hint
+        // fall-through
+    case 5: // tiled trianges with color hint
     {
         const int N = qFloor(qSqrt(gBreederSettings.maxGenes()));
         const qreal stepX = 1.0 / N;
         const qreal stepY = 1.0 / N;
         for (qreal y = 0; y < 1.0; y += stepY) {
             for (qreal x = 0; x < 1.0; x += stepX) {
-                QPolygonF polygon;
-                polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
                 QColor color;
                 if (gBreederSettings.startDistribution() == 1) {
                     color = QColor(random(256), random(256), random(256), random(gBreederSettings.minA(), gBreederSettings.maxA()));
@@ -127,6 +133,16 @@ void Breeder::populate(void)
                     const int py = (int)((y + stepY/2) * mOriginal.height());
                     color = QColor(mOriginal.pixel(px, py));
                     color.setAlpha(random(gBreederSettings.minA(), gBreederSettings.maxA()));
+                }
+                QPolygonF polygon;
+                if (gBreederSettings.startDistribution() == 2) {
+                    polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY) << QPointF(x, y + stepY);
+                }
+                else {
+                    polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY);
+                    QPolygonF polygon2;
+                    polygon2 << QPointF(x, y) << QPointF(x, y + stepY) << QPointF(x + stepX, y + stepY);
+                    mDNA.append(Gene(polygon2, color));
                 }
                 mDNA.append(Gene(polygon, color));
             }

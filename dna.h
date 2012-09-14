@@ -42,6 +42,7 @@ public:
 
     void setScale(const QSize& size) { mSize = size; }
 
+    inline Gene& operator[](int index) { return mDNA[index]; }
     inline void append(const Gene& gene) { mDNA.append(gene); }
     inline void clear(void) { mDNA.clear(); }
     inline int size(void) const { return mDNA.size(); }

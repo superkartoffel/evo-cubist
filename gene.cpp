@@ -36,41 +36,47 @@ QVector<Gene> Gene::splice(void) const
 }
 
 
-/// cut triangle in halves
+/// cut triangle in halves by slicing it from the middle of the longest leg to the opposite edge
 QVector<Gene> Gene::bisect(void) const
 {
     Q_ASSERT(mPolygon.size() == 3);
-    QVector<Gene> result;
     QPolygonF triangle = mPolygon;
-    triangle.append(mPolygon.first());
-    triangle.prepend(mPolygon.last());
+    triangle.append(mPolygon.at(0));
+    triangle.append(mPolygon.at(1));
     // find longest leg
-    QPolygonF::const_iterator p0 = NULL;
-    qreal longestLength = std::numeric_limits<qreal>::max();
-    for (QPolygonF::const_iterator p = mPolygon.constBegin()+1; p != mPolygon.constEnd()-1; ++p) {
-        qreal l = QLineF(*p, *(p+1)).length();
-        if (l < longestLength) {
-            longestLength = l;
+    QPolygonF::const_iterator p0 = triangle.constBegin();
+    qreal possibleLongestLength = QLineF(*p0, *(p0+1)).length();
+    for (QPolygonF::const_iterator p = triangle.constBegin()+1; p != triangle.constEnd()-1; ++p) {
+        const qreal l = QLineF(*p, *(p+1)).length();
+        if (l > possibleLongestLength) {
+            possibleLongestLength = l;
             p0 = p;
         }
     }
     QPointF mid = (*p0 + *(p0+1)) / 2;
     QPolygonF triangle1;
-    triangle1 << mid << *(p0-1) << *p0;
+    triangle1 << *p0 << mid << *(p0+2);
     QPolygonF triangle2;
-    triangle2 << mid << *(p0-1) << *(p0+1);
+    triangle2 << *(p0+1) << *(p0+2) << mid;
+    QVector<Gene> result;
     result << Gene(triangle1, mColor) << Gene(triangle2, mColor);
     return result;
 }
 
 
-/// convert point cloud to triangles
+/// convert point cloud to triangles (dumb O(n^2) implementation)
 /// see http://de.wikipedia.org/wiki/Delaunay-Triangulation
 QVector<Gene> Gene::triangulize(void) const
 {
     QVector<Gene> result;
     QPolygonF Q = mPolygon;
-
+    for (int i = 0; i < Q.size(); ++i) {
+        for (int j = 0; j < Q.size(); ++j) {
+            if (j == i)
+                continue;
+            // TODO: ...
+        }
+    }
     return result;
 }
 

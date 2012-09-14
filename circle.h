@@ -5,6 +5,7 @@
 #define __CIRCLE_H_
 
 #include <QPointF>
+#include <QLineF>
 
 class Circle {
 public:
@@ -26,6 +27,7 @@ public:
     bool isValid(void) const { return mRadius >= 0; }
     void setCenter(const QPointF& center) { mCenter = center; }
     void setRadius(qreal radius) { mRadius = radius; }
+    bool contains(const QPointF& p) const { return QLineF(mCenter, p).length() <= mRadius; }
 
 private: // methods
     void from3Points(const QPointF& p1, const QPointF& p2, const QPointF& p3);
