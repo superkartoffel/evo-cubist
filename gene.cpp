@@ -96,7 +96,7 @@ inline bool pointLessThan(const QPointF& a, const QPointF& b)
 QPolygonF Gene::convexHull(void) const
 {
     QPolygonF P = mPolygon;
-    int n = P.size();
+    const int n = P.size();
     int k = 0;
     QPolygonF H(2*n);
 
@@ -104,16 +104,16 @@ QPolygonF Gene::convexHull(void) const
     qSort(P.begin(), P.end(), pointLessThan);
 
     // build lower hull
-    for (int i = 0; i < n; i++) {
-        while (k >= 2 && cross(H[k-2], H[k-1], P[i]) <= 0)
-            k--;
-        H[k++] = P[i];
+    for (int i = 0; i < n; ++i) {
+        while (k >= 2 && cross(H[k-2], H[k-1], P.at(i)) <= 0)
+            --k;
+        H[k++] = P.at(i);
     }
     // build upper hull
-    for (int i = n-2, t = k+1; i >= 0; i--) {
-        while (k >= t && cross(H[k-2], H[k-1], P[i]) <= 0)
-            k--;
-        H[k++] = P[i];
+    for (int i = n-2, t = k+1; i >= 0; --i) {
+        while (k >= t && cross(H[k-2], H[k-1], P.at(i)) <= 0)
+            --k;
+        H[k++] = P.at(i);
     }
 
     H.resize(k-1);
