@@ -48,8 +48,8 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
-    QObject::connect(mGenerationWidget, SIGNAL(clickAt(const QPointF&)), &mBreeder, SLOT(spliceAt(const QPointF&)), Qt::DirectConnection);
-    QObject::connect(&mBreeder, SIGNAL(spliced(Gene,QVector<Gene>)), mGenerationWidget, SLOT(spliced(Gene,QVector<Gene>)));
+    QObject::connect(mGenerationWidget, SIGNAL(clickAt(const QPointF&)), &mBreeder, SLOT(spliceAt(const QPointF&)));
+    QObject::connect(&mBreeder, SIGNAL(spliced(Gene, QVector<Gene>)), mGenerationWidget, SLOT(spliced(Gene, QVector<Gene>)));
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
@@ -202,6 +202,7 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, u
     ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
     ui->pointsLineEdit->setText(QString("%1").arg(numPoints));
+    mGenerationWidget->setDNA(dna);
     if (mLog.isOpen()) {
         QTextStream log(&mLog);
         // (Zeitstempel, Generation, Selected, Points, Genes, Fitness)

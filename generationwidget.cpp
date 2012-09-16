@@ -10,9 +10,12 @@
 
 GenerationWidget::GenerationWidget(QFrame* parent)
     : QFrame(parent)
+    , mWindowAspectRatio(0)
+    , mImageAspectRatio(0)
 {
     QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHeightForWidth(true);
+    setMouseTracking(true);
     setSizePolicy(sizePolicy);
     setAcceptDrops(true);
     setStyleSheet("background-color: #333333;");
@@ -24,7 +27,14 @@ GenerationWidget::GenerationWidget(QFrame* parent)
 void GenerationWidget::setImage(const QImage& image)
 {
     mImage = image;
-    setMinimumSize(mImage.size());
+    mImageAspectRatio = (qreal) mImage.width() / mImage.height();
+    update();
+}
+
+
+void GenerationWidget::setDNA(const DNA& dna)
+{
+    mDNA = dna;
     update();
 }
 
@@ -37,36 +47,59 @@ void GenerationWidget::spliced(const Gene& gene, const QVector<Gene>& offsprings
 }
 
 
+bool GenerationWidget::event(QEvent* e)
+{
+    switch (e->type()) {
+    case QEvent::Leave:
+        mHighlighted = QPolygonF();
+        update();
+        break;
+    default:
+        break;
+    }
+    return QFrame::event(e);
+}
+
+
+void GenerationWidget::resizeEvent(QResizeEvent* e)
+{
+    mWindowAspectRatio = (qreal) e->size().width() / e->size().height();
+}
+
+
 void GenerationWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.fillRect(rect(), Qt::black);
-    if (mImage.isNull())
+    if (mImage.isNull() || qFuzzyIsNull(mImageAspectRatio) || qFuzzyIsNull(mImageAspectRatio))
         return;
-    qreal windowAspectRatio = (qreal) width() / height();
-    qreal imageAspectRatio = (qreal) mImage.width() / mImage.height();
-    if (windowAspectRatio < imageAspectRatio) {
-        const int h = int(width() / imageAspectRatio);
+    if (mWindowAspectRatio < mImageAspectRatio) {
+        const int h = int(width() / mImageAspectRatio);
         mDestRect = QRect(0, (height()-h)/2, width(), h);
     }
     else {
-        const int w = int(height() * imageAspectRatio);
+        const int w = int(height() * mImageAspectRatio);
         mDestRect = QRect((width()-w)/2, 0, w, height());
     }
     p.drawImage(mDestRect, mImage);
+    qreal invScale = 1 / qSqrt(mDestRect.width() * mDestRect.height());
+    p.translate(mDestRect.x(), mDestRect.y());
+    p.scale(mDestRect.width(), mDestRect.height());
+    p.setBrush(Qt::transparent);
+    p.setRenderHint(QPainter::Antialiasing);
     if (mSplicedGene.color().isValid() && !mSplices.empty()) {
-        p.setRenderHint(QPainter::Antialiasing);
-        p.translate(mDestRect.x(), mDestRect.y());
-        p.scale(mDestRect.width(), mDestRect.height());
-        p.setBrush(Qt::transparent);
-        qreal invScale = 1.2 / qSqrt(mDestRect.width() * mDestRect.height());
-        p.setPen(QPen(Qt::green, invScale));
+        p.setPen(QPen(Qt::green, 1.2 * invScale));
         for (QVector<Gene>::const_iterator g = mSplices.constBegin(); g != mSplices.constEnd(); ++g)
             p.drawPolygon(g->polygon());
-        p.setPen(QPen(Qt::red, invScale));
+        p.setPen(QPen(Qt::red, 1.3 * invScale));
         p.drawPolygon(mSplicedGene.polygon());
         mSplicedGene = Gene();
         mSplices.clear();
+    }
+    if (!mHighlighted.isEmpty()) {
+        p.setPen(QPen(QColor(255, 0, 200), 1.3 * invScale));
+        p.setBrush(Qt::transparent);
+        p.drawPolygon(mHighlighted);
     }
 }
 
@@ -74,8 +107,17 @@ void GenerationWidget::paintEvent(QPaintEvent*)
 void GenerationWidget::mousePressEvent(QMouseEvent* e)
 {
     const QPoint clickPos = e->pos() - mDestRect.topLeft();
-    const QPointF p((qreal)clickPos.x() / mImage.width(), (qreal)clickPos.y() / mImage.height());
+    const QPointF p((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height());
     emit clickAt(p);
+}
+
+
+void GenerationWidget::mouseMoveEvent(QMouseEvent* e)
+{
+    const QPoint clickPos = e->pos() - mDestRect.topLeft();
+    const QPointF p((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height());
+    mHighlighted = mDNA.findPolygonForPoint(p);
+    update();
 }
 
 

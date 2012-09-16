@@ -26,6 +26,7 @@ signals:
     void imageDropped(const QImage&);
 
 protected:
+    void resizeEvent(QResizeEvent*);
     void paintEvent(QPaintEvent*);
     void dragEnterEvent(QDragEnterEvent*);
     void dragLeaveEvent(QDragLeaveEvent*);
@@ -37,6 +38,9 @@ public slots:
 private:
     QImage mImage;
     QString mImageFileName;
+    QRect mDestRect;
+    qreal mWindowAspectRatio;
+    qreal mImageAspectRatio;
 };
 
 #endif // __IMAGEWIDGET_H_

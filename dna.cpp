@@ -38,6 +38,18 @@ inline bool DNA::willMutate(unsigned int probability) {
 }
 
 
+QPolygonF DNA::findPolygonForPoint(const QPointF& p) const
+{
+    int i = mDNA.size();
+    while (i--) {
+        const Gene& gene = mDNA.at(i);
+        if (gene.polygon().containsPoint(p, Qt::OddEvenFill))
+            return gene.polygon();
+    }
+    return QPolygonF();
+}
+
+
 void DNA::mutate(void)
 {
     // maybe spawn a new gene

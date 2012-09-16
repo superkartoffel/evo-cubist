@@ -12,6 +12,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 
+#include "dna.h"
 #include "gene.h"
 
 
@@ -25,11 +26,14 @@ public:
     const QImage& image(void) const { return mImage; }
 
 protected:
+    bool event(QEvent*);
+    void resizeEvent(QResizeEvent*);
     void paintEvent(QPaintEvent*);
     void dragEnterEvent(QDragEnterEvent*);
     void dragLeaveEvent(QDragLeaveEvent*);
     void dropEvent(QDropEvent*);
     void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
 signals:
     void fileDropped(const QString&);
@@ -37,11 +41,17 @@ signals:
     
 public slots:
     void setImage(const QImage&);
+    void setDNA(const DNA&);
     void spliced(const Gene& gene, const QVector<Gene>& offsprings);
+
 
 private:
     QImage mImage;
+    DNA mDNA;
+    QPolygonF mHighlighted;
     QRect mDestRect;
+    qreal mWindowAspectRatio;
+    qreal mImageAspectRatio;
 
     Gene mSplicedGene;
     QVector<Gene> mSplices;

@@ -10,6 +10,8 @@
 
 ImageWidget::ImageWidget(QFrame* parent)
     : QFrame(parent)
+    , mWindowAspectRatio(0)
+    , mImageAspectRatio(0)
 {
     QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHeightForWidth(true);
@@ -24,29 +26,32 @@ ImageWidget::ImageWidget(QFrame* parent)
 void ImageWidget::setImage(const QImage& image)
 {
     mImage = image.convertToFormat(QImage::Format_ARGB32);
-    setMinimumSize(mImage.size());
+    mImageAspectRatio = (qreal) mImage.width() / mImage.height();
     update();
+}
+
+
+void ImageWidget::resizeEvent(QResizeEvent* e)
+{
+    mWindowAspectRatio = (qreal) e->size().width() / e->size().height();
 }
 
 
 void ImageWidget::paintEvent(QPaintEvent*)
 {
-    if (mImage.isNull())
-        return;
     QPainter p(this);
     p.fillRect(rect(), Qt::black);
-    qreal windowAspectRatio = (qreal) width() / height();
-    qreal imageAspectRatio = (qreal) mImage.width() / mImage.height();
-    QRect destRect;
-    if (windowAspectRatio < imageAspectRatio) {
-        const int h = int(width() / imageAspectRatio);
-        destRect = QRect(0, (height()-h)/2, width(), h);
+    if (mImage.isNull() || qFuzzyIsNull(mImageAspectRatio) || qFuzzyIsNull(mImageAspectRatio))
+        return;
+    if (mWindowAspectRatio < mImageAspectRatio) {
+        const int h = int(width() / mImageAspectRatio);
+        mDestRect = QRect(0, (height()-h)/2, width(), h);
     }
     else {
-        const int w = int(height() * imageAspectRatio);
-        destRect = QRect((width()-w)/2, 0, w, height());
+        const int w = int(height() * mImageAspectRatio);
+        mDestRect = QRect((width()-w)/2, 0, w, height());
     }
-    p.drawImage(destRect, mImage);
+    p.drawImage(mDestRect, mImage);
 }
 
 

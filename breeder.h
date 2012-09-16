@@ -37,6 +37,8 @@ public:
     inline quint64 currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }
 
+    QPolygonF findPolygon(const QPointF&, const DNA&) const;
+
     void breed(QThread::Priority = QThread::LowPriority);
     void stop(void);
     bool isDirty(void) const { return mDirty; }

@@ -49,7 +49,7 @@ public:
     inline void remove(int index) { mDNA.remove(index); }
     inline void insert(int index, const Gene& gene) { mDNA.insert(index, gene); }
     inline void reserve(int size) { mDNA.reserve(size); }
-    inline const Gene& at(int index) { return mDNA.at(index); }
+    inline const Gene& at(int index) const { return mDNA.at(index); }
     inline DNAType::const_iterator constBegin(void) const  { return mDNA.constBegin(); }
     inline DNAType::const_iterator constEnd(void) const { return mDNA.constEnd(); }
     inline DNAType::iterator begin(void) { return mDNA.begin(); }
@@ -68,6 +68,8 @@ public:
     inline void setSelected(unsigned long v) { mSelected = v; }
     inline void setFitness(quint64 v) { mFitness = v; }
     inline void setTotalSeconds(quint64 v) { mTotalSeconds = v; }
+
+    QPolygonF findPolygonForPoint(const QPointF& p) const;
 
 private:
     QSize mSize;

@@ -136,8 +136,10 @@ void Breeder::populate(void)
                 else {
                     const int px = (int)((x + stepX/2) * mOriginal.width());
                     const int py = (int)((y + stepY/2) * mOriginal.height());
-                    color = QColor(mOriginal.pixel(px, py));
-                    color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
+                    if (px < mOriginal.width() && py < mOriginal.height()) {
+                        color = QColor(mOriginal.pixel(px, py));
+                        color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
+                    }
                 }
                 QPolygonF polygon;
                 if (gSettings.startDistribution() == 5) {
@@ -173,8 +175,10 @@ void Breeder::populate(void)
             else {
                 const int px = (int)(mid.x() * mOriginal.width());
                 const int py = (int)(mid.y() * mOriginal.height());
-                color = QColor(mOriginal.pixel(px, py));
-                color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
+                if (px < mOriginal.width() && py < mOriginal.height()) {
+                    color = QColor(mOriginal.pixel(px, py));
+                    color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
+                }
             }
             mDNA.append(Gene(polygon, color));
         }

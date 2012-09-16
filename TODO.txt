@@ -1,16 +1,14 @@
 BUGS
 
-[ ] Keine Datei darf beim Speichern überschrieben werden.
+[ ] Nach ein paar Malen Splitten von Poylgonen im GenerationWidget generiert der Breeder zwar munter weiter neue Generationen, aber offenbar keine erfolgreichen Mutationen mehr.
 [ ] OptionsForm: minPointsPerGene kann größer sein als maxPointsPerGene
 [ ] OptionsForm: minGenes kann größer sein als maxGenes
-[ ] Warnung "QImage::pixel: coordinate (x,y) out of range" in Breeder::populate() wegen Polygonen, die außerhalb des Bildes liegen.
-[ ] Umschalten der Prozesspriorität lässt Programm einfrieren
 [ ] Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.
+[-] Umschalten der Prozesspriorität lässt Programm einfrieren
 
 FEATURES
 
-[ ] Klick ins GenerationWidget zerteilt das Genom an der angeklickten Position.
-[ ] Neue Startverteilung: "tiled triangles w/ color hint"
+[ ] Keine Datei darf beim Speichern überschrieben werden.
 [ ] Lokalisierungen aus Ressourcendatei einbinden.
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [ ] Werte der RGBA/xy-Schieber aus DNA-Datei auslesen und Schieber darauf einstellen.

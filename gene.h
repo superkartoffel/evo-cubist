@@ -39,6 +39,8 @@ public:
     QVector<Gene> triangulize(void) const;
     QVector<Gene> splice(void) const;
 
+    bool isAlive(void) const { return mPolygon.size() > 0 && mColor.isValid(); }
+
     static inline void translatePoint(QPointF* const);
 
 private:
