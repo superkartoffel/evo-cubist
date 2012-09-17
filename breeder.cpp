@@ -8,6 +8,7 @@
 #include <QtCore>
 #include <QtCore/QDebug>
 #include <QVector>
+#include <QMutexLocker>
 #include <limits>
 #include <qmath.h>
 #include "breeder.h"
@@ -39,7 +40,7 @@ void Breeder::setDirty(bool dirty)
 
 void Breeder::spliceAt(const QPointF& p)
 {
-    mMutex.lock();
+    QMutexLocker locker(&mMutex);
     int i = mDNA.size();
     while (i--) {
         const Gene& gene = mDNA.at(i);
@@ -51,6 +52,8 @@ void Breeder::spliceAt(const QPointF& p)
                     mDNA.insert(i, offsprings.at(j));
                 emit spliced(gene, offsprings);
                 mMutation = mDNA;
+                Individual individual(mDNA, mOriginal);
+                mFitness = individual.calcFitness();
                 draw();
                 // would like to emit evolved(...) but cannot because that
                 // would cause a deadlock situation because of the
@@ -60,15 +63,12 @@ void Breeder::spliceAt(const QPointF& p)
             break;
         }
     }
-    mMutex.unlock();
 }
 
 
 void Breeder::setDNA(const DNA& dna)
 {
-    bool wasRunning = isRunning();
-    if (wasRunning)
-        stop();
+    QMutexLocker locker(&mMutex);
     mDNA = dna;
     mMutation = dna;
     mFitness = dna.fitness();
@@ -76,8 +76,6 @@ void Breeder::setDNA(const DNA& dna)
     mSelected = dna.selected();
     mTotalSeconds = dna.totalSeconds();
     draw();
-    if (wasRunning)
-        breed(priority());
 }
 
 
@@ -110,6 +108,7 @@ void Breeder::reset(void)
 
 void Breeder::populate(void)
 {
+    QMutexLocker locker(&mMutex);
     mDNA.clear();
     switch (gSettings.startDistribution()) {
     case 0: // random
@@ -233,9 +232,9 @@ void Breeder::run(void)
         QtConcurrent::blockingMap(population, Individual());
         // find fittest mutation
         QVector<Individual>::const_iterator best = NULL;
-        for (QVector<Individual>::const_iterator mutation = population.constBegin(); mutation != population.constEnd(); ++mutation) {
-            if (mutation->fitness() < mFitness)
-                best = mutation;
+        for (QVector<Individual>::const_iterator i = population.constBegin(); i != population.constEnd(); ++i) {
+            if (i->fitness() < mFitness)
+                best = i;
         }
         // select fittest mutation if any
         if (best) {

@@ -145,10 +145,10 @@ inline bool Gene::willMutate(int probability) const {
 }
 
 
-void Gene::translatePoint(QPointF* const p)
+void Gene::translatePoint(QPointF& p)
 {
-    p->setX(dReal(p->x(), gSettings.dXY(), 0.0, 1.0));
-    p->setY(dReal(p->y(), gSettings.dXY(), 0.0, 1.0));
+    p.setX(dReal(p.x(), gSettings.dXY(), 0.0, 1.0));
+    p.setY(dReal(p.y(), gSettings.dXY(), 0.0, 1.0));
 }
 
 
@@ -161,7 +161,7 @@ void Gene::mutate(void)
         const QPointF& p0 = mPolygon.at(i);
         const QPointF& p1 = mPolygon.at(j);
         QPointF newP = (p0 + p1) / 2;
-        translatePoint(&newP);
+        translatePoint(newP);
         mPolygon.insert(j, newP);
     }
     // kill
@@ -170,7 +170,7 @@ void Gene::mutate(void)
     // translate
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate(gSettings.pointMutationProbability()))
-            translatePoint(p);
+            translatePoint(*p);
     }
     // change color
     if (willMutate(gSettings.colorMutationProbability())) {

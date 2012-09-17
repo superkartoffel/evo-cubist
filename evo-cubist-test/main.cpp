@@ -70,8 +70,6 @@ private slots:
     {
         for (int i = 0; i < N; ++i) {
             qreal v = random1();
-            if (v<0)
-                qDebug() << v;
             QVERIFY2(v < 1.0, "v above upper boundary");
             QVERIFY2(v >= 0.0, "v below lower boundary");
         }

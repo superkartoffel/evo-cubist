@@ -26,7 +26,7 @@ namespace MT {
         int index;
 
     private: // methods
-        void warmup();
+        void warmup(void);
     };
 
 

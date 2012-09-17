@@ -29,6 +29,16 @@ public:
     inline quint64 fitness(void) const { return mFitness; }
     inline void operator()(Individual& individual) { individual.evolve(); }
 
+    inline quint64 calcFitness(void) {
+        mFitness = 0;
+        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
+        const QRgb* const oEnd  = o + mOriginal->byteCount() / sizeof(QRgb);
+        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
+        while (o < oEnd)
+            mFitness += rgbDelta(*o++, *g++);
+        return mFitness;
+    }
+
     inline unsigned int rgbDelta(QRgb c1, QRgb c2)
     {
         const int r = qRed(c1) - qRed(c2);
@@ -38,7 +48,9 @@ public:
     }
 
     inline void evolve(void) {
+        // DNA mutieren
         mDNA.mutate();
+        // Polygone zeichnen
         QPainter p(&mGenerated);
         p.setPen(Qt::transparent);
         p.setBrush(Qt::white);
@@ -49,12 +61,7 @@ public:
             p.setBrush(gene->color());
             p.drawPolygon(gene->polygon());
         }
-        mFitness = 0;
-        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
-        const QRgb* const oEnd  = o + mOriginal->byteCount() / sizeof(QRgb);
-        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
-        while (o < oEnd)
-            mFitness += rgbDelta(*o++, *g++);
+        calcFitness();
     }
 
 private:
