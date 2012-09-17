@@ -29,28 +29,24 @@ public:
     inline quint64 fitness(void) const { return mFitness; }
     inline void operator()(Individual& individual) { individual.evolve(); }
 
-    inline quint64 calcFitness(void) {
-        mFitness = 0;
-        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
-        const QRgb* const oEnd  = o + mOriginal->byteCount() / sizeof(QRgb);
-        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
-        while (o < oEnd)
-            mFitness += rgbDelta(*o++, *g++);
-        return mFitness;
-    }
-
-    inline unsigned int rgbDelta(QRgb c1, QRgb c2)
-    {
+    inline unsigned int rgbDelta(QRgb c1, QRgb c2) {
         const int r = qRed(c1) - qRed(c2);
         const int g = qGreen(c1) - qGreen(c2);
         const int b = qBlue(c1) - qBlue(c2);
         return r*r + g*g + b*b;
     }
 
-    inline void evolve(void) {
-        // DNA mutieren
-        mDNA.mutate();
-        // Polygone zeichnen
+    inline quint64 calcFitness(void) {
+        mFitness = 0;
+        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
+        const QRgb* const oEnd = o + mOriginal->width() * mOriginal->height();
+        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
+        while (o < oEnd)
+            mFitness += rgbDelta(*o++, *g++);
+        return mFitness;
+    }
+
+    inline void draw(void) {
         QPainter p(&mGenerated);
         p.setPen(Qt::transparent);
         p.setBrush(Qt::white);
@@ -61,6 +57,11 @@ public:
             p.setBrush(gene->color());
             p.drawPolygon(gene->polygon());
         }
+    }
+
+    inline void evolve(void) {
+        mDNA.mutate();
+        draw();
         calcFitness();
     }
 

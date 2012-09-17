@@ -17,4 +17,3 @@ QString secondsToTime(int seconds)
         t.prepend(QObject::tr("%1 %2 ").arg(days).arg(days > 1? QObject::tr("days") : QObject::tr("day")));
     return t;
 }
-

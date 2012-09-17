@@ -54,8 +54,6 @@ public:
     inline DNAType::const_iterator constEnd(void) const { return mDNA.constEnd(); }
     inline DNAType::iterator begin(void) { return mDNA.begin(); }
     inline DNAType::iterator end(void) { return mDNA.end(); }
-    inline DNAType& data(void) { return mDNA; }
-    inline const DNAType& data(void) const { return mDNA; }
     inline const QSize& scale(void) const { return mSize; }
 
     inline unsigned long generation(void) const { return mGeneration; }

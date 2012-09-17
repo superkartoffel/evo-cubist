@@ -31,8 +31,9 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="143"/>
-        <source>Genomes</source>
-        <translation>Genome</translation>
+        <source>Genes</source>
+        <oldsource>Genomes</oldsource>
+        <translation>Gene</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="166"/>
@@ -60,188 +61,190 @@
         <translation>Gesamtzeit</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="266"/>
-        <location filename="mainwindow.cpp" line="280"/>
-        <location filename="mainwindow.cpp" line="313"/>
-        <location filename="mainwindow.cpp" line="497"/>
+        <location filename="mainwindow.ui" line="272"/>
+        <location filename="mainwindow.cpp" line="314"/>
+        <location filename="mainwindow.cpp" line="347"/>
+        <location filename="mainwindow.cpp" line="531"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="273"/>
+        <location filename="mainwindow.ui" line="285"/>
         <source>Reset</source>
         <translation>Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="299"/>
+        <location filename="mainwindow.ui" line="534"/>
         <source>alpha delta (for min/max see options)</source>
         <translation>Alpha-Abweichung (für min/max, siehe Optionen)</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="330"/>
+        <location filename="mainwindow.ui" line="396"/>
         <source>green delta [0..255]</source>
         <translation>Grün-Abweichung [0..255]</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="349"/>
+        <location filename="mainwindow.ui" line="437"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="371"/>
+        <location filename="mainwindow.ui" line="333"/>
         <source>red delta [0..255]</source>
         <translation>Rot-Abweichung [0..255]</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="403"/>
+        <location filename="mainwindow.ui" line="553"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="425"/>
+        <location filename="mainwindow.ui" line="459"/>
         <source>blue delta [0..255]</source>
         <translation>Blau-Abweichung [0..255]</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="444"/>
+        <location filename="mainwindow.ui" line="311"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="454"/>
+        <location filename="mainwindow.ui" line="374"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="476"/>
+        <location filename="mainwindow.ui" line="585"/>
         <source>delta for point translation ]0..1[</source>
         <translation>Delta für Punkttranslation ]0..1[</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="501"/>
+        <location filename="mainwindow.ui" line="563"/>
         <source>xy</source>
         <translation>xy</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="542"/>
+        <location filename="mainwindow.ui" line="300"/>
+        <source>Deltas</source>
+        <translation>Deltas</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="685"/>
         <source>&amp;File</source>
         <translation>&amp;Datei</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="546"/>
+        <location filename="mainwindow.ui" line="689"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="553"/>
+        <location filename="mainwindow.ui" line="696"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="564"/>
+        <location filename="mainwindow.ui" line="707"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="572"/>
+        <location filename="mainwindow.ui" line="715"/>
         <source>Extras</source>
         <translation>Extras</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="591"/>
+        <location filename="mainwindow.ui" line="734"/>
         <source>Original image ...</source>
         <translation>Originalbild ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="594"/>
+        <location filename="mainwindow.ui" line="737"/>
         <source>Ctrl+O</source>
         <translation>Strg+O</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="599"/>
-        <location filename="mainwindow.ui" line="607"/>
+        <location filename="mainwindow.ui" line="742"/>
+        <location filename="mainwindow.ui" line="750"/>
         <source>DNA ...</source>
         <translation>DNS ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="602"/>
-        <location filename="mainwindow.ui" line="620"/>
+        <location filename="mainwindow.ui" line="745"/>
+        <location filename="mainwindow.ui" line="763"/>
         <source>Ctrl+S</source>
         <translation>Strg+S</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="612"/>
+        <location filename="mainwindow.ui" line="755"/>
         <source>Exit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="617"/>
-        <location filename="mainwindow.ui" line="625"/>
+        <location filename="mainwindow.ui" line="760"/>
+        <location filename="mainwindow.ui" line="768"/>
         <source>SVG ...</source>
         <translation>SVG ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="630"/>
+        <location filename="mainwindow.ui" line="773"/>
         <source>About Evo Cubist</source>
         <translation>Über Eco Cubist</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="635"/>
+        <location filename="mainwindow.ui" line="778"/>
         <source>About Qt</source>
         <translation>Über Qt</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="640"/>
+        <location filename="mainwindow.ui" line="783"/>
         <source>Options</source>
         <translation>Optionen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="648"/>
+        <location filename="mainwindow.ui" line="791"/>
         <source>Settings ...</source>
         <translation>Einstellungen ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="33"/>
+        <location filename="mainwindow.cpp" line="34"/>
         <source>%1 %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="104"/>
+        <location filename="mainwindow.cpp" line="114"/>
         <source>&lt;b&gt;DNA has been modified.&lt;/b&gt;</source>
         <translation>&lt;b&gt;DNA wurde geändert.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="105"/>
+        <location filename="mainwindow.cpp" line="115"/>
         <source>You have unsaved DNA. Do you want to save it?</source>
         <translation>Sie haben ungespeicherte DNA. Möchten Sie sie jetzt speichern?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="155"/>
         <source>%1 %2 </source>
-        <translation>%1 %2</translation>
+        <translation type="obsolete">%1 %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="155"/>
         <source>days</source>
-        <translation>Tage</translation>
+        <translation type="obsolete">Tage</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="155"/>
         <source>day</source>
-        <translation>Tag</translation>
+        <translation type="obsolete">Tag</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="165"/>
+        <location filename="mainwindow.cpp" line="198"/>
         <source>n/a</source>
         <translation>n/a</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="195"/>
+        <location filename="mainwindow.cpp" line="229"/>
         <source>Automatically saved mutation %1 out of %2 generations.</source>
         <translation>Mutation %1 von %2 Generationen automatisch gespeichert.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="197"/>
+        <location filename="mainwindow.cpp" line="231"/>
         <source>Automatic saving failed.</source>
         <translation>Automatisches Speichern fehlgeschlagen.</translation>
     </message>
@@ -250,7 +253,7 @@
         <translation type="obsolete">Automatisches Speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="234"/>
+        <location filename="mainwindow.cpp" line="268"/>
         <source>DNA save directory missing</source>
         <translation>Verzeichnis zum Speichern der DNA nicht vorhanden</translation>
     </message>
@@ -259,7 +262,7 @@
         <translation type="obsolete">Das gewählte Verzeichnis zum Speichern der DNS ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="241"/>
+        <location filename="mainwindow.cpp" line="275"/>
         <source>Image save directory missing</source>
         <translation>Verzeichnis zum Speichern der Bilder ist nicht vorhanden</translation>
     </message>
@@ -268,109 +271,109 @@
         <translation type="obsolete">Das gewählte Verzeichnis zum Speichern der Bilder ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="234"/>
+        <location filename="mainwindow.cpp" line="268"/>
         <source>The selected DNA save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again.</source>
         <translation>Das gewählte Verzeichnis zum Speichern der DNS ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="241"/>
+        <location filename="mainwindow.cpp" line="275"/>
         <source>The selected image save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again.</source>
         <translation>Das gewählte Verzeichnis zum Speichern der Bilder ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="250"/>
+        <location filename="mainwindow.cpp" line="284"/>
         <source>Log file is not writable</source>
         <translation>Log-Datei ist nicht beschreibbar</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="250"/>
+        <location filename="mainwindow.cpp" line="284"/>
         <source>The selected log file is not writable. Please go to the options dialog and choose a new one. Then try starting again.</source>
         <translation>Die gewählte Log-Datei ist nicht beschreibbar. Bitte wählen Sie eine neue im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="256"/>
+        <location filename="mainwindow.cpp" line="290"/>
         <source>Starting ...</source>
         <translation>Starten ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="283"/>
+        <location filename="mainwindow.cpp" line="317"/>
         <source>Pause</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="291"/>
-        <location filename="mainwindow.cpp" line="313"/>
+        <location filename="mainwindow.cpp" line="325"/>
+        <location filename="mainwindow.cpp" line="347"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="404"/>
+        <location filename="mainwindow.cpp" line="438"/>
         <source>Save DNA</source>
         <translation>DNA speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="404"/>
-        <location filename="mainwindow.cpp" line="481"/>
+        <location filename="mainwindow.cpp" line="438"/>
+        <location filename="mainwindow.cpp" line="515"/>
         <source>DNA files (*.svg; *.json; *.dna)</source>
         <translation>DNA-Dateien (*.svg; *.json; *.dna)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="410"/>
+        <location filename="mainwindow.cpp" line="444"/>
         <source>DNA saved as &apos;%1&apos;.</source>
         <translation>DNA gespeichert unter &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="414"/>
+        <location filename="mainwindow.cpp" line="448"/>
         <source>Error saving DNA</source>
         <translation>Fehler beim Speichern der DNA</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="414"/>
+        <location filename="mainwindow.cpp" line="448"/>
         <source>DNA could not be saved as &apos;%1&apos;.</source>
         <translation>DNA konnte nicht unter &apos;%1&apos; gespeichert werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="428"/>
+        <location filename="mainwindow.cpp" line="462"/>
         <source>Load original picture</source>
         <translation>Laden des Originalbildes</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="438"/>
+        <location filename="mainwindow.cpp" line="472"/>
         <source>Original picture &apos;%1&apos; loaded.</source>
         <translation>Originalbild &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="441"/>
+        <location filename="mainwindow.cpp" line="475"/>
         <source>Error loading the original picture.</source>
         <translation>Fehler beim Laden des Originalbildes.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="441"/>
+        <location filename="mainwindow.cpp" line="475"/>
         <source>Original picture could not be loaded.</source>
         <translation>Originalbild konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="470"/>
+        <location filename="mainwindow.cpp" line="504"/>
         <source>DNA &apos;%1&apos; loaded.</source>
         <translation>DNA &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="473"/>
+        <location filename="mainwindow.cpp" line="507"/>
         <source>Error loading DNA</source>
         <translation>Fehler beim Laden der DNA</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="473"/>
+        <location filename="mainwindow.cpp" line="507"/>
         <source>DNA could not be loaded. Reason: %1</source>
         <translation>DNA konnte nicht geladen werden. Grund: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="504"/>
+        <location filename="mainwindow.cpp" line="538"/>
         <source>About %1 %2</source>
         <translation>Über %1 %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="505"/>
+        <location filename="mainwindow.cpp" line="539"/>
         <source>&lt;p&gt;&lt;b&gt;%1&lt;/b&gt; calculates vector images from bitmaps by using genetic algorithms. See &lt;a href=&quot;%2&quot; title=&quot;%1 project homepage&quot;&gt;%2&lt;/a&gt; for more info.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 %3 &amp;lt;%4&amp;gt;&lt;/p&gt;&lt;p&gt;This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.&lt;/p&gt;&lt;p&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.&lt;/p&gt;You should have received a copy of the GNU General Public License along with this program. If not, see &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0&quot;&gt;http://www.gnu.org/licenses&lt;/a&gt;&lt;/p&gt;.</source>
         <translation>&lt;p&gt;&lt;b&gt;Evo Cubist&lt;/b&gt; berechnet Vektorgrafiken auf Pixelgrafiken mit Hilfe genetischer Algorithmen. Siehe &lt;a href=&quot;http://evo-cubist.googlecode.com/&quot;&gt;http://evo-cubist.googlecode.com/&lt;/a&gt; für weitere Informationen.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 Oliver Lau &amp;lt;oliver@von-und-fuer.lau.de&amp;gt;&lt;/p&gt;&lt;p&gt;Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Wahll) jeder späteren Version.&lt;/p&gt;
 &lt;p&gt;Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm erhalten haben. Falls nicht, siehe &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0&quot;&gt;http://www.gnu.org/licenses&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Die Software &lt;b&gt;Evo Cubist&lt;/b&gt; wurde zu Lehr- und Demonstrationszwecken geschaffen und ist nicht für den produktiven Einsatz vorgesehen. Der Autor und der Heise Zeitschriften Verlag haften  nicht für Schäden, die aus der Nutzung der Software entstehen, und übernehmen keine Gewähr für ihre Vollständigkeit, Fehlerfreiheit und Eignung für einen bestimmten Zweck.&lt;/p&gt;</translation>
@@ -380,17 +383,17 @@
         <translation type="obsolete">DNA konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="481"/>
+        <location filename="mainwindow.cpp" line="515"/>
         <source>Load DNA</source>
         <translation>DNA laden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="490"/>
+        <location filename="mainwindow.cpp" line="524"/>
         <source>Really reset breeder?</source>
         <translation>Den Brutkasten wirklich zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="490"/>
+        <location filename="mainwindow.cpp" line="524"/>
         <source>Do you really want to reset the breeder?</source>
         <translation>Wollen Sie den Brutkasten wirklich zurücksetzen?</translation>
     </message>
@@ -421,9 +424,9 @@
         <location filename="optionsform.ui" line="72"/>
         <location filename="optionsform.ui" line="98"/>
         <location filename="optionsform.ui" line="124"/>
-        <location filename="optionsform.ui" line="193"/>
-        <location filename="optionsform.ui" line="219"/>
-        <location filename="optionsform.ui" line="331"/>
+        <location filename="optionsform.ui" line="236"/>
+        <location filename="optionsform.ui" line="262"/>
+        <location filename="optionsform.ui" line="398"/>
         <source>1/</source>
         <translation>1/</translation>
     </message>
@@ -444,47 +447,54 @@
     </message>
     <message>
         <location filename="optionsform.ui" line="143"/>
-        <source>min/max points per genome</source>
+        <source>min/max points per gene</source>
+        <oldsource>min/max points per genome</oldsource>
         <translation>min/max Punkte pro Genom</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="186"/>
         <source>Genome kill probability</source>
-        <translation>Genomentfernungswahrscheinlichkeit</translation>
+        <translation type="obsolete">Genomentfernungswahrscheinlichkeit</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="212"/>
         <source>Genome emergence probability</source>
-        <translation>Genomerscheinungswahrscheinlichkeit</translation>
+        <translation type="obsolete">Genomerscheinungswahrscheinlichkeit</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="238"/>
         <source>min/max genomes</source>
-        <translation>min/max Genome</translation>
+        <translation type="obsolete">min/max Genome</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="317"/>
+        <location filename="optionsform.ui" line="281"/>
         <source>min/max alpha</source>
         <translation>min/max Alpha</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="324"/>
         <source>Genome move probability</source>
-        <translation>Genomverschiebungswahrscheinlichkeit</translation>
+        <translation type="obsolete">Genomverschiebungswahrscheinlichkeit</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="383"/>
+        <location filename="optionsform.ui" line="357"/>
         <source>scattered w/ color hint</source>
         <translation>gestreut mit Farbe aus Originalbild</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="391"/>
+        <location filename="optionsform.ui" line="362"/>
+        <source>tiled triangles</source>
+        <translation>gekachelte Dreiecke</translation>
+    </message>
+    <message>
+        <location filename="optionsform.ui" line="370"/>
         <source>scatter factor (the higher the less coverage)</source>
         <translation>Streufaktor (je größer, umso geringere Abdeckung)</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="432"/>
-        <location filename="optionsform.ui" line="435"/>
+        <location filename="optionsform.ui" line="391"/>
+        <source>Gene emergence probability</source>
+        <translation>Generscheinungswahrscheinlichkeit</translation>
+    </message>
+    <message>
+        <location filename="optionsform.ui" line="437"/>
+        <location filename="optionsform.ui" line="440"/>
         <source>Reset to defaults</source>
         <translation>Auf Voreinstellungen zurücksetzen</translation>
     </message>
@@ -493,111 +503,126 @@
         <translation type="obsolete">Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="458"/>
+        <location filename="optionsform.ui" line="463"/>
         <source>Autosave</source>
         <translation>Automatisches Speichern</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="470"/>
+        <location filename="optionsform.ui" line="475"/>
         <source>Generated images/DNA</source>
         <translation>Generierte Bilder/DNA</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="481"/>
+        <location filename="optionsform.ui" line="486"/>
         <source>Save images to directory</source>
         <translation>Bilder speichern in Verzeichnis</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="506"/>
-        <location filename="optionsform.ui" line="598"/>
-        <location filename="optionsform.ui" line="678"/>
+        <location filename="optionsform.ui" line="511"/>
+        <location filename="optionsform.ui" line="603"/>
+        <location filename="optionsform.ui" line="683"/>
         <source>Choose ...</source>
         <translation>Wählen ...</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="515"/>
+        <location filename="optionsform.ui" line="520"/>
         <source>Image filename template</source>
         <translation>Muster für Dateiname</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="528"/>
-        <location filename="optionsform.ui" line="620"/>
+        <location filename="optionsform.ui" line="533"/>
+        <location filename="optionsform.ui" line="625"/>
         <source>%1 = original image filename, %2 = generations, %3 = selected generations</source>
         <translation>%1 = Dateiname des Originalbildes (ohne Endung), %2 = Generation, %3 = Nummer der ausgewählten Generation</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="535"/>
+        <location filename="optionsform.ui" line="540"/>
         <source>Save interval</source>
         <translation>Speicherintervall</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="548"/>
+        <location filename="optionsform.ui" line="553"/>
         <source> s</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="573"/>
+        <location filename="optionsform.ui" line="578"/>
         <source>Autosave on</source>
         <translation>Autospeichern ein</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="607"/>
+        <location filename="optionsform.ui" line="612"/>
         <source>Save DNA to directory</source>
         <translation>DNS speichern in Verzeichnis</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="627"/>
+        <location filename="optionsform.ui" line="632"/>
         <source>DNA filename template</source>
         <translation>Muster für DNS-Dateinamen</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="652"/>
+        <location filename="optionsform.ui" line="657"/>
         <source>Logging</source>
         <translation>Protokollierung</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="660"/>
+        <location filename="optionsform.ui" line="665"/>
         <source>Log to file</source>
         <translation>Protokollieren in Datei</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="693"/>
+        <location filename="optionsform.ui" line="698"/>
         <source>Miscellaneous</source>
         <translation>Verschiedenes</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="707"/>
+        <location filename="optionsform.ui" line="712"/>
         <source>Process priority</source>
         <translation>Prozesspriorität</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="727"/>
+        <location filename="optionsform.ui" line="732"/>
         <source>Use # cores</source>
         <oldsource>Cores used</oldsource>
         <translation>Anzahl Kerne verwenden</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="350"/>
+        <location filename="optionsform.ui" line="324"/>
         <source>Start distribution</source>
         <translation>Startverteilung</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="363"/>
+        <location filename="optionsform.ui" line="186"/>
+        <source>min/max genes</source>
+        <translation>min/max Gene</translation>
+    </message>
+    <message>
+        <location filename="optionsform.ui" line="229"/>
+        <source>Gene kill probability</source>
+        <translation>Genentfernungswahrscheinlichkeit</translation>
+    </message>
+    <message>
+        <location filename="optionsform.ui" line="255"/>
+        <source>Gene move probability</source>
+        <translation>Genverschiebungswahrscheinlichkeit</translation>
+    </message>
+    <message>
+        <location filename="optionsform.ui" line="337"/>
         <source>random</source>
         <translation>zufällig</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="368"/>
+        <location filename="optionsform.ui" line="342"/>
         <source>tiled</source>
         <translation>gekachelt</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="373"/>
+        <location filename="optionsform.ui" line="347"/>
         <source>tiled w/ color hint</source>
         <translation>gekachelt mit Farbe aus Originalbild</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="378"/>
+        <location filename="optionsform.ui" line="352"/>
         <source>scattered</source>
         <translation>gestreut</translation>
     </message>
@@ -606,7 +631,7 @@
         <translation type="obsolete">Multiprocessing einschalten</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="772"/>
+        <location filename="optionsform.ui" line="777"/>
         <source>Enable GPU computing</source>
         <translation>GPU-Berechnungen einschalten</translation>
     </message>
@@ -789,6 +814,21 @@
 Line %2, column %3</source>
         <translation type="obsolete">%1
 Zeile %2, Spalte %3</translation>
+    </message>
+    <message>
+        <location filename="helper.cpp" line="17"/>
+        <source>%1 %2 </source>
+        <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="helper.cpp" line="17"/>
+        <source>days</source>
+        <translation>Tage</translation>
+    </message>
+    <message>
+        <location filename="helper.cpp" line="17"/>
+        <source>day</source>
+        <translation>Tag</translation>
     </message>
 </context>
 </TS>
