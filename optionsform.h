@@ -81,13 +81,11 @@ signals:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
     void logFileChanged(const QString&);
-    void priorityChanged(QThread::Priority);
 
 private slots:
     void selectImageSaveDirectory(void);
     void selectDNASaveDirectory(void);
     void selectLogFile(void);
-    void priorityChanged(int);
     void resetToDefaults(void);
     void startDistributionChanged(int);
 

@@ -25,14 +25,6 @@ OptionsForm::OptionsForm(QWidget* parent)
 {
     ui->setupUi(this);
 
-    ui->priorityComboBox->addItem(tr("highest"), QThread::HighestPriority);
-    ui->priorityComboBox->addItem(tr("high"), QThread::HighPriority);
-    ui->priorityComboBox->addItem(tr("normal"), QThread::NormalPriority);
-    ui->priorityComboBox->addItem(tr("low"), QThread::LowPriority);
-    ui->priorityComboBox->addItem(tr("lowest"), QThread::LowestPriority);
-    ui->priorityComboBox->setCurrentIndex(2);
-
-    QObject::connect(ui->priorityComboBox, SIGNAL(currentIndexChanged(int)), SLOT(priorityChanged(int)));
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
 
@@ -119,20 +111,6 @@ void OptionsForm::resetToDefaults(void)
     ui->startDistributionComboBox->setCurrentIndex(4);
     ui->scatterFactorSpinBox->setValue(0.5);
     ui->coresSpinBox->setValue(QThread::idealThreadCount());
-}
-
-
-void OptionsForm::priorityChanged(int index)
-{
-    Q_ASSERT(index >= 0 && index < 5);
-    static const QThread::Priority mapping[5] = {
-        QThread::HighestPriority,
-        QThread::HighPriority,
-        QThread::NormalPriority,
-        QThread::LowPriority,
-        QThread::LowestPriority
-    };
-    emit priorityChanged(mapping[index]);
 }
 
 
