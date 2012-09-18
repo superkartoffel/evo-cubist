@@ -34,7 +34,7 @@ public:
     DNA(const DNA& dna);
 
     void mutate(void);
-    bool save(const QString& filename, unsigned long generation, unsigned long selected, quint64 fitness, quint64 duration);
+    bool save(QString& filename, unsigned long generation, unsigned long selected, quint64 fitness, quint64 duration);
     bool load(const QString& filename);
     const QString& errorString(void) const { return mErrorString; }
 

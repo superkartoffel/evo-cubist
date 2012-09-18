@@ -12,13 +12,13 @@
 #include <QThread>
 #include <QRegExp>
 #include <QStringList>
+#include <limits>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "random/rnd.h"
 #include "breedersettings.h"
 #include "main.h"
 #include "helper.h"
-#include <limits>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -220,9 +220,10 @@ void MainWindow::autoSaveGeneratedImage(void)
 {
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
-    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    QString imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    serializeFilename(imageFilename);
     mGenerationWidget->image().save(imageFilename);
-    const QString& dnaFilename = mOptionsForm->dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    QString dnaFilename = mOptionsForm->dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
     bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
     if (success)
@@ -435,7 +436,7 @@ void MainWindow::restoreAppSettings(void)
 
 void MainWindow::saveDNA(void)
 {
-    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
+    QString dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
     if (dnaFilename.isNull())
         return;
     DNA dna = mBreeder.dna();

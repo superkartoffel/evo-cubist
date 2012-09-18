@@ -7,7 +7,6 @@ BUGS
 
 FEATURES
 
-[ ] Keine Datei darf beim Speichern überschrieben werden.
 [ ] Lokalisierungen aus Ressourcendatei einbinden.
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [ ] Werte der RGBA/xy-Schieber aus DNA-Datei auslesen und Schieber darauf einstellen.
