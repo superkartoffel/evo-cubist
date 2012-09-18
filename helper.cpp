@@ -2,6 +2,8 @@
 // All rights reserved.
 
 #include <QObject>
+#include <QFileInfo>
+#include <QFile>
 #include "helper.h"
 
 QString secondsToTime(int seconds)
@@ -16,4 +18,15 @@ QString secondsToTime(int seconds)
     if (days > 0)
         t.prepend(QObject::tr("%1 %2 ").arg(days).arg(days > 1? QObject::tr("days") : QObject::tr("day")));
     return t;
+}
+
+
+void serializeFilename(QString& filename)
+{
+    QFileInfo info(filename);
+    const QString& path = info.absolutePath();
+    const QString& name = info.baseName();
+    const QString& suffix = info.suffix();
+    for (int a = 1; QFile::exists(filename); ++a)
+        filename = QString("%1/%2_%3.%4").arg(path).arg(name).arg(a, 3, 10, QChar('0')).arg(suffix);
 }

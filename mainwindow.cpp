@@ -12,18 +12,17 @@
 #include <QThread>
 #include <QRegExp>
 #include <QStringList>
+#include <limits>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "random/rnd.h"
 #include "breedersettings.h"
 #include "main.h"
 #include "helper.h"
-#include <limits>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , mPriority(QThread::InheritPriority)
 {
     QCoreApplication::setOrganizationName(Company);
     QCoreApplication::setOrganizationDomain(Company);
@@ -53,7 +52,6 @@ MainWindow::MainWindow(QWidget* parent)
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
 
-    QObject::connect(mOptionsForm, SIGNAL(priorityChanged(QThread::Priority)), SLOT(priorityChanged(QThread::Priority)));
     QObject::connect(mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
     QObject::connect(mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
 
@@ -163,16 +161,6 @@ void MainWindow::setDeltaXY(int v)
 }
 
 
-void MainWindow::priorityChanged(QThread::Priority priority)
-{
-    mPriority = priority;
-    bool wasRunning = mBreeder.isRunning();
-    mBreeder.stop();
-    if (wasRunning)
-        mBreeder.breed(mPriority);
-}
-
-
 quint64 MainWindow::totalSeconds(void) const {
     quint64 totalseconds = mBreeder.totalSeconds() + QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t();
     if (totalseconds == 0)
@@ -220,9 +208,10 @@ void MainWindow::autoSaveGeneratedImage(void)
 {
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
-    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    QString imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    serializeFilename(imageFilename);
     mGenerationWidget->image().save(imageFilename);
-    const QString& dnaFilename = mOptionsForm->dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    QString dnaFilename = mOptionsForm->dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
     bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
     if (success)
@@ -307,7 +296,7 @@ void MainWindow::startBreeding(void)
                      this,
                      SLOT(proceeded(unsigned long)),
                      Qt::BlockingQueuedConnection);
-    mBreeder.breed(mPriority);
+    mBreeder.breed();
     if (mOptionsForm->autoSave()) {
         mAutoSaveTimer.setInterval(1000 * mOptionsForm->saveInterval());
         mAutoSaveTimer.start();
@@ -435,7 +424,7 @@ void MainWindow::restoreAppSettings(void)
 
 void MainWindow::saveDNA(void)
 {
-    const QString& dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
+    QString dnaFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
     if (dnaFilename.isNull())
         return;
     DNA dna = mBreeder.dna();

@@ -4,6 +4,7 @@
 #include <QDateTime>
 #include <QIODevice>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QtCore/QDebug>
 
@@ -43,7 +44,7 @@ QPolygonF DNA::findPolygonForPoint(const QPointF& p) const
     int i = mDNA.size();
     while (i--) {
         const Gene& gene = mDNA.at(i);
-        if (gene.polygon().containsPoint(p, Qt::OddEvenFill))
+        if (gene.polygon().containsPoint(p, Qt::WindingFill))
             return gene.polygon();
     }
     return QPolygonF();
@@ -74,9 +75,10 @@ void DNA::mutate(void)
 
 
 // XXX: move method to Breeder
-bool DNA::save(const QString& filename, unsigned long generation, unsigned long selected, quint64 fitness, quint64 totalSeconds)
+bool DNA::save(QString& filename, unsigned long generation, unsigned long selected, quint64 fitness, quint64 totalSeconds)
 {
     bool rc;
+    serializeFilename(filename);
     QFile file(filename);
     rc = file.open(QIODevice::WriteOnly);
     if (!rc)

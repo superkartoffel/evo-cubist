@@ -5,8 +5,8 @@
 #define __HELPER_H_
 
 #include <QString>
-#include <QDateTime>
 
 extern QString secondsToTime(int);
+extern void serializeFilename(QString& filename);
 
 #endif // __HELPER_H_

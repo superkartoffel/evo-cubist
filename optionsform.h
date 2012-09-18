@@ -81,15 +81,19 @@ signals:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
     void logFileChanged(const QString&);
-    void priorityChanged(QThread::Priority);
 
 private slots:
     void selectImageSaveDirectory(void);
     void selectDNASaveDirectory(void);
     void selectLogFile(void);
-    void priorityChanged(int);
     void resetToDefaults(void);
     void startDistributionChanged(int);
+    void minGenesChanged(int);
+    void maxGenesChanged(int);
+    void minPointsPerGeneChanged(int);
+    void maxPointsPerGeneChanged(int);
+    void minAlphaChanged(int);
+    void maxAlphaChanged(int);
 
 private:
     static const QString SaveFilenameTemplate;

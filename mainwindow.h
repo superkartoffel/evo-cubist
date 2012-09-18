@@ -44,7 +44,6 @@ private:
     QDateTime mStartTime;
     QString mLastSavedDNA;
     QString mSaveDirectory;
-    QThread::Priority mPriority;
     QFile mLog;
 
     void saveAppSettings(void);
@@ -71,7 +70,6 @@ private slots:
     void autoSaveGeneratedImage(void);
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
-    void priorityChanged(QThread::Priority);
 
     void setDeltaR(int);
     void setDeltaG(int);

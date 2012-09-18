@@ -25,14 +25,6 @@ OptionsForm::OptionsForm(QWidget* parent)
 {
     ui->setupUi(this);
 
-    ui->priorityComboBox->addItem(tr("highest"), QThread::HighestPriority);
-    ui->priorityComboBox->addItem(tr("high"), QThread::HighPriority);
-    ui->priorityComboBox->addItem(tr("normal"), QThread::NormalPriority);
-    ui->priorityComboBox->addItem(tr("low"), QThread::LowPriority);
-    ui->priorityComboBox->addItem(tr("lowest"), QThread::LowestPriority);
-    ui->priorityComboBox->setCurrentIndex(2);
-
-    QObject::connect(ui->priorityComboBox, SIGNAL(currentIndexChanged(int)), SLOT(priorityChanged(int)));
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));
 
@@ -51,11 +43,17 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->geneMoveProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setGeneMoveProbability(int)));
     QObject::connect(ui->geneEmergenceProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setGeneEmergenceProbability(int)));
     QObject::connect(ui->minGenesSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMinGenes(int)));
+    QObject::connect(ui->minGenesSpinBox, SIGNAL(valueChanged(int)), SLOT(minGenesChanged(int)));
     QObject::connect(ui->maxGenesSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMaxGenes(int)));
+    QObject::connect(ui->maxGenesSpinBox, SIGNAL(valueChanged(int)), SLOT(maxGenesChanged(int)));
     QObject::connect(ui->minPointsSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMinPointsPerGene(int)));
+    QObject::connect(ui->minPointsSpinBox, SIGNAL(valueChanged(int)), SLOT(minPointsPerGeneChanged(int)));
     QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMaxPointsPerGene(int)));
+    QObject::connect(ui->maxPointsSpinBox, SIGNAL(valueChanged(int)), SLOT(maxPointsPerGeneChanged(int)));
     QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMinA(int)));
+    QObject::connect(ui->minAlphaSpinBox, SIGNAL(valueChanged(int)), SLOT(minAlphaChanged(int)));
     QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setMaxA(int)));
+    QObject::connect(ui->maxAlphaSpinBox, SIGNAL(valueChanged(int)), SLOT(maxAlphaChanged(int)));
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gSettings, SLOT(setStartDistribution(int)));
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), SLOT(startDistributionChanged(int)));
     QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gSettings, SLOT(setScatterFactor(double)));
@@ -64,8 +62,6 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->coresSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setCores(int)));
 
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetToDefaults()));
-
-
 }
 
 
@@ -93,6 +89,43 @@ void OptionsForm::go(const QString& where, const QString& what)
     }
 }
 
+
+void OptionsForm::minGenesChanged(int v)
+{
+    ui->maxGenesSpinBox->setMinimum(v);
+}
+
+
+void OptionsForm::maxGenesChanged(int v)
+{
+    ui->minGenesSpinBox->setMaximum(v);
+}
+
+
+void OptionsForm::minPointsPerGeneChanged(int v)
+{
+    ui->maxPointsSpinBox->setMinimum(v);
+}
+
+
+void OptionsForm::maxPointsPerGeneChanged(int v)
+{
+    ui->minPointsSpinBox->setMaximum(v);
+}
+
+
+void OptionsForm::minAlphaChanged(int v)
+{
+    ui->maxAlphaSpinBox->setMinimum(v);
+}
+
+
+void OptionsForm::maxAlphaChanged(int v)
+{
+    ui->minAlphaSpinBox->setMaximum(v);
+}
+
+
 void OptionsForm::startDistributionChanged(int index)
 {
     ui->scatterFactorSpinBox->setEnabled(index == 3 || index == 4);
@@ -119,20 +152,6 @@ void OptionsForm::resetToDefaults(void)
     ui->startDistributionComboBox->setCurrentIndex(4);
     ui->scatterFactorSpinBox->setValue(0.5);
     ui->coresSpinBox->setValue(QThread::idealThreadCount());
-}
-
-
-void OptionsForm::priorityChanged(int index)
-{
-    Q_ASSERT(index >= 0 && index < 5);
-    static const QThread::Priority mapping[5] = {
-        QThread::HighestPriority,
-        QThread::HighPriority,
-        QThread::NormalPriority,
-        QThread::LowPriority,
-        QThread::LowestPriority
-    };
-    emit priorityChanged(mapping[index]);
 }
 
 
