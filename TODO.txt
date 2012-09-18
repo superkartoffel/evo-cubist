@@ -3,7 +3,6 @@ BUGS
 [ ] OptionsForm: minPointsPerGene kann größer sein als maxPointsPerGene
 [ ] OptionsForm: minGenes kann größer sein als maxGenes
 [ ] Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.
-[-] Umschalten der Prozesspriorität lässt Programm einfrieren
 
 FEATURES
 
@@ -14,5 +13,4 @@ FEATURES
 
 POSSIBLE SPEED-UPS
 
-[ ] Jedes Individuum (Klasse Individual) bekommt einen eigenen Zufallszahlengenerator, um Thread-übergreifende Speicherzugriffe auf das globale MersenneTwister-Objekt zu verhindern.
 [ ] Polygone per OpenGL in Framebuffer zeichnen. RGB-Differenz zwischen Framebuffer und Originalbild mit Hilfe von Shadern berechnen.
