@@ -209,7 +209,7 @@
     <message>
         <location filename="mainwindow.cpp" line="34"/>
         <source>%1 %2</source>
-        <translation></translation>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="114"/>
@@ -223,7 +223,7 @@
     </message>
     <message>
         <source>%1 %2 </source>
-        <translation type="obsolete">%1 %2</translation>
+        <translation type="obsolete">%1 %2 </translation>
     </message>
     <message>
         <source>days</source>
