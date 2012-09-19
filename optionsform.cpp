@@ -57,9 +57,8 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), &gSettings, SLOT(setStartDistribution(int)));
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), SLOT(startDistributionChanged(int)));
     QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gSettings, SLOT(setScatterFactor(double)));
-
-    QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setGPUComputing(bool)));
     QObject::connect(ui->coresSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setCores(int)));
+//  QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setGPUComputing(bool)));
 
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetToDefaults()));
 }

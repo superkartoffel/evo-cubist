@@ -40,6 +40,7 @@ public:
     QPolygonF findPolygon(const QPointF&, const DNA&) const;
 
     void breed(QThread::Priority = QThread::LowPriority);
+    void generate(void);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
     void setDNA(const DNA&);

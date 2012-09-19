@@ -311,6 +311,7 @@ void MainWindow::stopBreeding(void)
 {
     if (!mBreeder.isRunning())
         return;
+    statusBar()->showMessage(tr("Stopping ..."), 550);
     ui->startStopPushButton->setText(tr("Resume"));
     mAutoSaveTimer.stop();
     mBreeder.stop();

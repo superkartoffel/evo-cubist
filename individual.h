@@ -36,16 +36,6 @@ public:
         return r*r + g*g + b*b;
     }
 
-    inline quint64 calcFitness(void) {
-        mFitness = 0;
-        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
-        const QRgb* const oEnd = o + mOriginal->width() * mOriginal->height();
-        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
-        while (o < oEnd)
-            mFitness += rgbDelta(*o++, *g++);
-        return mFitness;
-    }
-
     inline void draw(void) {
         QPainter p(&mGenerated);
         p.setPen(Qt::transparent);
@@ -59,9 +49,19 @@ public:
         }
     }
 
+    inline quint64 calcFitness(void) {
+        draw();
+        mFitness = 0;
+        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
+        const QRgb* const oEnd = o + mOriginal->width() * mOriginal->height();
+        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
+        while (o < oEnd)
+            mFitness += rgbDelta(*o++, *g++);
+        return mFitness;
+    }
+
     inline void evolve(void) {
         mDNA.mutate();
-        draw();
         calcFitness();
     }
 

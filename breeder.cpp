@@ -38,31 +38,11 @@ void Breeder::setDirty(bool dirty)
 }
 
 
-void Breeder::spliceAt(const QPointF& p)
+void Breeder::generate(void)
 {
-    QMutexLocker locker(&mMutex);
-    int i = mDNA.size();
-    while (i--) {
-        const Gene& gene = mDNA.at(i);
-        if (gene.polygon().containsPoint(p, Qt::OddEvenFill)) {
-            QVector<Gene> offsprings =  gene.splice();
-            if (offsprings.size() > 0) {
-                mDNA[i] = offsprings.first();
-                for (int j = 1; j < offsprings.size(); ++j)
-                    mDNA.insert(i, offsprings.at(j));
-                emit spliced(gene, offsprings);
-                mMutation = mDNA;
-                Individual individual(mDNA, mOriginal);
-                mFitness = individual.calcFitness();
-                draw();
-                // would like to emit evolved(...) but cannot because that
-                // would cause a deadlock situation because of the
-                // BlockingQueuedConnection between this thread and the
-                // main thread.
-            }
-            break;
-        }
-    }
+    Individual individual(mDNA, mOriginal);
+    mFitness = individual.calcFitness();
+    mGenerated = individual.generated();
 }
 
 
@@ -71,11 +51,10 @@ void Breeder::setDNA(const DNA& dna)
     QMutexLocker locker(&mMutex);
     mDNA = dna;
     mMutation = dna;
-    mFitness = dna.fitness();
     mGeneration = dna.generation();
     mSelected = dna.selected();
     mTotalSeconds = dna.totalSeconds();
-    draw();
+    generate();
 }
 
 
@@ -91,16 +70,41 @@ void Breeder::setSelected(unsigned long selected)
 }
 
 
+void Breeder::spliceAt(const QPointF& p)
+{
+    QMutexLocker locker(&mMutex);
+    int i = mDNA.size();
+    while (i--) {
+        const Gene& gene = mDNA.at(i);
+        if (gene.polygon().containsPoint(p, Qt::OddEvenFill)) {
+            QVector<Gene> offsprings =  gene.splice();
+            if (offsprings.size() > 0) {
+                mDNA[i] = offsprings.first();
+                for (int j = 1; j < offsprings.size(); ++j)
+                    mDNA.insert(i, offsprings.at(j));
+                emit spliced(gene, offsprings);
+                mMutation = mDNA;
+                generate();
+                // would like to emit evolved(...) but cannot because that
+                // would cause a deadlock situation because of the
+                // BlockingQueuedConnection between this thread and the
+                // main thread.
+            }
+            break;
+        }
+    }
+}
+
+
 void Breeder::reset(void)
 {
     mGeneration = 1;
-    mFitness = std::numeric_limits<quint64>::max();
     mSelected = 1;
     mDirty = false;
     mStopped = false;
     mTotalSeconds = 0;
     populate();
-    draw();
+    generate();
     emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration);
     emit proceeded(mGeneration);
 }
@@ -188,21 +192,6 @@ void Breeder::populate(void)
         break;
     }
     mMutation = mDNA;
-}
-
-
-inline void Breeder::draw(void)
-{
-    QPainter p(&mGenerated);
-    p.setPen(Qt::transparent);
-    p.setBrush(Qt::white);
-    p.drawRect(0, 0, mGenerated.width(), mGenerated.height());
-    p.setRenderHint(QPainter::Antialiasing);
-    p.scale(mGenerated.width(), mGenerated.height());
-    for (DNAType::const_iterator gene = mMutation.constBegin(); gene != mMutation.constEnd(); ++gene) {
-        p.setBrush(gene->color());
-        p.drawPolygon(gene->polygon());
-    }
 }
 
 
