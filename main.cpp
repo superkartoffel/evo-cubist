@@ -14,7 +14,7 @@ const QString AppName = QObject::tr("Evo Cubist");
 const QString AppUrl = "http://evo-cubist.googlecode.com/";
 const QString AppAuthor = "Oliver Lau";
 const QString AppAuthorMail = "oliver@von-und-fuer-lau.de";
-const QString AppVersionNoDebug = "0.8";
+const QString AppVersionNoDebug = "1.0";
 #ifdef QT_NO_DEBUG
 const QString AppVersion = AppVersionNoDebug;
 #else
