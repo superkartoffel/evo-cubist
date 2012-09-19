@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     QApplication a(argc, argv);
     a.addLibraryPath("plugins");
     QTranslator translator;
-    bool ok = translator.load("evo-cubist_" + QLocale::system().name());
+    bool ok = translator.load(":/translations/evo-cubist_" + QLocale::system().name());
 #ifndef QT_NO_DEBUG
     if (!ok)
         qDebug() << "Could not load translations for" << QLocale::system().name() << "locale";
