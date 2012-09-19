@@ -189,7 +189,7 @@
     <message>
         <location filename="mainwindow.ui" line="773"/>
         <source>About Evo Cubist</source>
-        <translation>Über Eco Cubist</translation>
+        <translation>Über Evo Cubist</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="778"/>
