@@ -14,7 +14,7 @@ const QString AppName = QObject::tr("Evo Cubist");
 const QString AppUrl = "http://evo-cubist.googlecode.com/";
 const QString AppAuthor = "Oliver Lau";
 const QString AppAuthorMail = "oliver@von-und-fuer-lau.de";
-const QString AppVersionNoDebug = "0.75";
+const QString AppVersionNoDebug = "0.8";
 #ifdef QT_NO_DEBUG
 const QString AppVersion = AppVersionNoDebug;
 #else
@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     bool ok = translator.load(":/translations/evo-cubist_" + QLocale::system().name());
 #ifndef QT_NO_DEBUG
     if (!ok)
-        qDebug() << "Could not load translations for" << QLocale::system().name() << "locale";
+        qWarning() << "Could not load translations for" << QLocale::system().name() << "locale";
 #endif
     if (ok)
         a.installTranslator(&translator);

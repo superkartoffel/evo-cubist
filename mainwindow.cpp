@@ -386,7 +386,7 @@ void MainWindow::restoreAppSettings(void)
     QSettings settings(Company, AppName);
     restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
     restoreState(settings.value("MainWindow/windowState").toByteArray());
-    QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/KWA10.png").toString();
+    QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/KWA10.jpg").toString();
     mImageWidget->loadImage(imageFileName);
     mLastSavedDNA = settings.value("MainWindow/lastSavedDNA").toString();
     ui->redSlider->setValue(settings.value("Options/deltaR", 50).toInt());
