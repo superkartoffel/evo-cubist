@@ -9,7 +9,7 @@
 #include <QPointF>
 #include <QPolygonF>
 #include <QTextStream>
-#include "random/mersenne_twister.h"
+#include "helper.h"
 
 
 class Gene
@@ -40,6 +40,7 @@ public:
     QVector<Gene> splice(void) const;
 
     bool isAlive(void) const { return mPolygon.size() > 0 && mColor.isValid(); }
+    bool isConvex(void) const { return isConvexPolygon(mPolygon); }
 
     static inline void translatePoint(QPointF&);
 
