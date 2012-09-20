@@ -4,7 +4,6 @@ BUGS
 
 FEATURES
 
-[ ] Liste zuletzt geöffneter Dateien (PNG, DNA) pflegen und über Datei-Menü zum Öffnen zur Verfügung stellen
 [ ] Optionen in XML-Datei speichern, nicht nur in Registry
 [ ] Werte der RGBA/xy-Schieber aus DNA-Datei auslesen und Schieber darauf einstellen.
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert

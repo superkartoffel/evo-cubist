@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QFile>
 #include <QEvent>
+#include <QAction>
 #include <QtCore/QDebug>
 
 #include "imagewidget.h"
@@ -46,6 +47,10 @@ private:
     QString mSaveDirectory;
     QFile mLog;
 
+    static const int MaxRecentFiles = 10;
+    QAction* mRecentImageFileActs[MaxRecentFiles];
+    QAction* mRecentDNAFileActs[MaxRecentFiles];
+
     void saveAppSettings(void);
     void restoreAppSettings(void);
     void startBreeding(void);
@@ -70,6 +75,10 @@ private slots:
     void autoSaveGeneratedImage(void);
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
+    void loadRecentImageFile(void);
+    void loadRecentDNAFile(void);
+    void updateRecentImageFileActions(void);
+    void updateRecentDNAFileActions(void);
 
     void setDeltaR(int);
     void setDeltaG(int);

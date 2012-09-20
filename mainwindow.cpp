@@ -79,11 +79,24 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(show()));
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(raise()));
 
-    rng.seed(QDateTime::currentDateTime().toTime_t());
+    for (int i = 0; i < MaxRecentFiles; ++i) {
+        mRecentImageFileActs[i] = new QAction(this);
+        mRecentImageFileActs[i]->setVisible(false);
+        QObject::connect(mRecentImageFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentImageFile()));
+        mRecentDNAFileActs[i] = new QAction(this);
+        mRecentDNAFileActs[i]->setVisible(false);
+        QObject::connect(mRecentDNAFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentDNAFile()));
+    }
 
     restoreAppSettings();
 
+    for (int i = 0; i < MaxRecentFiles; ++i) {
+        ui->menuOpenRecentImage->addAction(mRecentImageFileActs[i]);
+        ui->menuOpenRecentDNA->addAction(mRecentDNAFileActs[i]);
+    }
+
     mStartTime = QDateTime::currentDateTime();
+    rng.seed(mStartTime.toTime_t());
     proceeded(1);
     evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
 }
@@ -419,6 +432,9 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm->setMaxGenes(settings.value("Options/maxGenes", 500).toInt());
     mOptionsForm->setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
     mOptionsForm->setMaxAlpha(settings.value("Options/maxAlpha", 45).toInt());
+
+    updateRecentImageFileActions();
+    updateRecentDNAFileActions();
     mBreeder.reset();
 }
 
@@ -460,6 +476,14 @@ void MainWindow::loadOriginalImage(const QString& filename)
         bool success = mImageWidget->loadImage(filename);
         if (success) {
             statusBar()->showMessage(tr("Original picture '%1' loaded.").arg(filename), 3000);
+            QSettings settings(Company, AppName);
+            QStringList files = settings.value("recentImageFileList").toStringList();
+            files.removeAll(filename);
+            files.prepend(filename);
+            while (files.size() > MaxRecentFiles)
+                files.removeLast();
+            settings.setValue("recentImageFileList", files);
+            updateRecentImageFileActions();
         }
         else {
             QMessageBox::warning(this, tr("Error loading the original picture."), tr("Original picture could not be loaded."));
@@ -492,6 +516,14 @@ void MainWindow::loadDNA(const QString& filename)
             proceeded(mBreeder.generation());
             evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
+            QSettings settings(Company, AppName);
+            QStringList files = settings.value("recentDNAFileList").toStringList();
+            files.removeAll(filename);
+            files.prepend(filename);
+            while (files.size() > MaxRecentFiles)
+                files.removeLast();
+            settings.setValue("recentDNAFileList", files);
+            updateRecentDNAFileActions();
         }
         else {
             QMessageBox::warning(this, tr("Error loading DNA"), tr("DNA could not be loaded. Reason: %1").arg(dna.errorString()));
@@ -504,6 +536,58 @@ void MainWindow::openDNA(void)
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
     loadDNA(filename);
+}
+
+
+void MainWindow::loadRecentDNAFile(void)
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    if (action)
+        loadDNA(action->data().toString());
+}
+
+
+void MainWindow::loadRecentImageFile(void)
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    if (action)
+        loadOriginalImage(action->data().toString());
+}
+
+
+void MainWindow::updateRecentImageFileActions(void)
+{
+    QSettings settings(Company, AppName);
+    QStringList files = settings.value("recentImageFileList").toStringList();
+    int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
+    for (int i = 0; i < numRecentFiles; ++i) {
+        QString text = tr("&%1 %2").arg(i+1).arg(QFileInfo(files[i]).fileName());
+        mRecentImageFileActs[i]->setText(text);
+        mRecentImageFileActs[i]->setData(files[i]);
+        mRecentImageFileActs[i]->setVisible(true);
+    }
+    for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
+        mRecentImageFileActs[j]->setVisible(false);
+    if (numRecentFiles > 0)
+        ui->menuOpenRecentImage->setEnabled(true);
+}
+
+
+void MainWindow::updateRecentDNAFileActions(void)
+{
+    QSettings settings(Company, AppName);
+    QStringList files = settings.value("recentDNAFileList").toStringList();
+    int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
+    for (int i = 0; i < numRecentFiles; ++i) {
+        QString text = tr("&%1 %2").arg(i+1).arg(QFileInfo(files[i]).fileName());
+        mRecentDNAFileActs[i]->setText(text);
+        mRecentDNAFileActs[i]->setData(files[i]);
+        mRecentDNAFileActs[i]->setVisible(true);
+    }
+    for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
+        mRecentDNAFileActs[j]->setVisible(false);
+    if (numRecentFiles > 0)
+        ui->menuOpenRecentDNA->setEnabled(true);
 }
 
 
