@@ -1,6 +1,6 @@
 BUGS
 
-[ ] Windows/Mac OS X: Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.
+[ ] Mac OS X: Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der PRO-Datei angegebenen.
 
 FEATURES
 
