@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>427</width>
-    <height>396</height>
+    <width>531</width>
+    <height>529</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="autoSaveTabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="breeding">
       <attribute name="title">
@@ -751,6 +751,36 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>colorMutationProbabilitySpinBox</tabstop>
+  <tabstop>pointMutationProbabilitySpinBox</tabstop>
+  <tabstop>pointKillProbabilitySpinBox</tabstop>
+  <tabstop>pointEmergenceProbabilitySpinBox</tabstop>
+  <tabstop>minPointsSpinBox</tabstop>
+  <tabstop>maxPointsSpinBox</tabstop>
+  <tabstop>minGenesSpinBox</tabstop>
+  <tabstop>maxGenesSpinBox</tabstop>
+  <tabstop>geneKillProbabilitySpinBox</tabstop>
+  <tabstop>geneEmergenceProbabilitySpinBox</tabstop>
+  <tabstop>geneMoveProbabilitySpinBox</tabstop>
+  <tabstop>minAlphaSpinBox</tabstop>
+  <tabstop>maxAlphaSpinBox</tabstop>
+  <tabstop>startDistributionComboBox</tabstop>
+  <tabstop>scatterFactorSpinBox</tabstop>
+  <tabstop>resetPushButton</tabstop>
+  <tabstop>autoSaveTabWidget</tabstop>
+  <tabstop>imageSaveDirectoryLineEdit</tabstop>
+  <tabstop>selectImageDirectoryPushButton</tabstop>
+  <tabstop>imageFilenameTemplateLineEdit</tabstop>
+  <tabstop>saveIntervalSpinBox</tabstop>
+  <tabstop>autoSaveCheckBox</tabstop>
+  <tabstop>dnaSaveDirectoryLineEdit</tabstop>
+  <tabstop>selectDNADirectoryPushButton</tabstop>
+  <tabstop>dnaFilenameTemplateLineEdit</tabstop>
+  <tabstop>logFileLineEdit</tabstop>
+  <tabstop>selectLogFilePushButton</tabstop>
+  <tabstop>coresSpinBox</tabstop>
+ </tabstops>
  <resources>
   <include location="evo-cubist.qrc"/>
  </resources>

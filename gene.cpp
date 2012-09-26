@@ -13,10 +13,10 @@
 Gene::Gene(bool randomize)
 {
     if (randomize) {
-        const int N = random(gSettings.minPointsPerGene(), gSettings.maxPointsPerGene());
+        const int N = randomu(gSettings.minPointsPerGene(), gSettings.maxPointsPerGene());
         for (int x = 0; x < N; ++x)
             mPolygon.append(QPointF(random1(), random1()));
-        mColor.setRgb(random(256), random(256), random(256), random(gSettings.minA(), gSettings.maxA()));
+        mColor.setRgb(randomu(256), randomu(256), randomu(256), randomu(gSettings.minA(), gSettings.maxA()));
     }
 }
 
@@ -47,11 +47,11 @@ QVector<Gene> Gene::bisect(void) const
     triangle.append(mPolygon.at(1));
     // find longest leg
     QPolygonF::const_iterator p0 = triangle.constBegin();
-    qreal possibleLongestLength = QLineF(*p0, *(p0+1)).length();
+    qreal possibleLongestLeg = QLineF(*p0, *(p0+1)).length();
     for (QPolygonF::const_iterator p = triangle.constBegin()+1; p != triangle.constEnd()-1; ++p) {
         const qreal l = QLineF(*p, *(p+1)).length();
-        if (l > possibleLongestLength) {
-            possibleLongestLength = l;
+        if (l > possibleLongestLeg) {
+            possibleLongestLeg = l;
             p0 = p;
         }
     }
@@ -141,11 +141,11 @@ QPolygonF Gene::convexHull(void) const
 
 
 inline bool Gene::willMutate(int probability) const {
-    return random(probability) == 0;
+    return randomu(probability) == 0;
 }
 
 
-void Gene::translatePoint(QPointF& p)
+void Gene::randomlyTranslatePoint(QPointF& p)
 {
     p.setX(dReal(p.x(), gSettings.dXY(), 0.0, 1.0));
     p.setY(dReal(p.y(), gSettings.dXY(), 0.0, 1.0));
@@ -156,27 +156,27 @@ void Gene::mutate(void)
 {
     // emerge
     if (willMutate(gSettings.pointEmergenceProbability()) && mPolygon.size() < gSettings.maxPointsPerGene()) {
-        const int i = random(mPolygon.size());
+        const int i = randomu(mPolygon.size());
         const int j = (i+1) % mPolygon.size();
         const QPointF& p0 = mPolygon.at(i);
         const QPointF& p1 = mPolygon.at(j);
         QPointF newP = (p0 + p1) / 2;
-        translatePoint(newP);
+        randomlyTranslatePoint(newP);
         mPolygon.insert(j, newP);
     }
     // kill
     if (willMutate(gSettings.pointKillProbability()) && mPolygon.size() > gSettings.minPointsPerGene())
-        mPolygon.remove(random(mPolygon.size()));
+        mPolygon.remove(randomu(mPolygon.size()));
     // translate
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate(gSettings.pointMutationProbability()))
-            translatePoint(*p);
+            randomlyTranslatePoint(*p);
     }
     // change color
     if (willMutate(gSettings.colorMutationProbability())) {
         const int r = dInt(mColor.red(), gSettings.dR(), 0, 255);
-        const int g = dInt(mColor.green(), gSettings.dR(), 0, 255);
-        const int b = dInt(mColor.blue(), gSettings.dR(), 0, 255);
+        const int g = dInt(mColor.green(), gSettings.dG(), 0, 255);
+        const int b = dInt(mColor.blue(), gSettings.dB(), 0, 255);
         const int a = dInt(mColor.alpha(), gSettings.dA(), gSettings.minA(), gSettings.maxA());
         mColor.setRgb(r, g, b, a);
     }

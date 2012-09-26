@@ -134,14 +134,14 @@ void Breeder::populate(void)
             for (qreal x = 0; x < 1.0; x += stepX) {
                 QColor color;
                 if (gSettings.startDistribution() == 1) {
-                    color = QColor(random(256), random(256), random(256), random(gSettings.minA(), gSettings.maxA()));
+                    color = QColor(randomu(256), randomu(256), randomu(256), randomu(gSettings.minA(), gSettings.maxA()));
                 }
                 else {
                     const int px = (int)((x + stepX/2) * mOriginal.width());
                     const int py = (int)((y + stepY/2) * mOriginal.height());
                     if (px < mOriginal.width() && py < mOriginal.height()) {
                         color = QColor(mOriginal.pixel(px, py));
-                        color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
+                        color.setAlpha(randomu(gSettings.minA(), gSettings.maxA()));
                     }
                 }
                 QPolygonF polygon;
@@ -173,14 +173,14 @@ void Breeder::populate(void)
             }
             QColor color;
             if (gSettings.startDistribution() == 3) {
-                color = QColor(random(256), random(256), random(256), random(gSettings.minA(), gSettings.maxA()));
+                color = QColor(randomu(256), randomu(256), randomu(256), randomu(gSettings.minA(), gSettings.maxA()));
             }
             else {
                 const int px = (int)(mid.x() * mOriginal.width());
                 const int py = (int)(mid.y() * mOriginal.height());
                 if (px < mOriginal.width() && py < mOriginal.height()) {
                     color = QColor(mOriginal.pixel(px, py));
-                    color.setAlpha(random(gSettings.minA(), gSettings.maxA()));
+                    color.setAlpha(randomu(gSettings.minA(), gSettings.maxA()));
                 }
             }
             mDNA.append(Gene(polygon, color));
@@ -222,8 +222,10 @@ void Breeder::run(void)
         // find fittest mutation
         QVector<Individual>::const_iterator best = NULL;
         for (QVector<Individual>::const_iterator i = population.constBegin(); i != population.constEnd(); ++i) {
-            if (i->fitness() < mFitness)
+            if (i->fitness() < mFitness) {
                 best = i;
+                mFitness = best->fitness();
+            }
         }
         // select fittest mutation if any
         if (best) {

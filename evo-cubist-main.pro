@@ -13,6 +13,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = evo-cubist
 TEMPLATE = app
 
+macx {
+ICON = evo-cubist.icns
+CONFIG += app_bundle
+}
+
 win32 {
 RC_FILE = evo-cubist.rc
 }

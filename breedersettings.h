@@ -11,7 +11,7 @@ class BreederSettings : public QObject
     Q_OBJECT
 
 public:
-    BreederSettings::BreederSettings(void)
+    BreederSettings(void)
         : QObject(NULL)
         , mdXY(0.5)
         , mdR(128)

@@ -25,7 +25,15 @@ const QString AppVersion = AppVersionNoDebug + " [DEBUG]";
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
+    a.setOrganizationName(Company);
+    a.setOrganizationDomain(Company);
+    a.setApplicationName(AppName);
+    a.setApplicationVersion(AppVersionNoDebug);
     a.addLibraryPath("plugins");
+#if defined(Q_OS_MAC)
+    QCoreApplication::addLibraryPath("../plugins");
+    qDebug() << QCoreApplication::libraryPaths();
+#endif
     QTranslator translator;
     bool ok = translator.load(":/translations/evo-cubist_" + QLocale::system().name());
 #ifndef QT_NO_DEBUG

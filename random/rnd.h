@@ -9,26 +9,26 @@
 
 extern MT::MersenneTwister rng;
 
-inline unsigned int random(void)
+inline unsigned int randomu(void)
 {
     return rng.next();
 }
 
-inline unsigned int random(int a)
+inline unsigned int randomu(int a)
 {
     Q_ASSERT(a != 0);
     return rng.next() % a;
 }
 
-inline int random(int a, int b)
+inline int randomu(int a, int b)
 {
     Q_ASSERT(b >= a);
-    return a + random(1 + b - a);
+    return a + randomu(1 + b - a);
 }
 
 inline double random1(void)
 {
-    return (double)random() / rng.max();
+    return (double)randomu() / rng.max();
 }
 
 inline double random1(qreal a, qreal b)
@@ -39,7 +39,7 @@ inline double random1(qreal a, qreal b)
 
 inline int dInt(int v, int deltaMax)
 {
-    const int r = random(-(int)deltaMax, (int)deltaMax);
+    const int r = randomu(-(int)deltaMax, (int)deltaMax);
     return v + r;
 }
 

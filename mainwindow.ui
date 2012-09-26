@@ -257,9 +257,6 @@
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QPushButton" name="startStopPushButton">
               <property name="sizePolicy">
@@ -302,9 +299,6 @@
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0">
-               <property name="margin">
-                <number>0</number>
-               </property>
                <item row="0" column="0">
                 <widget class="QLabel" name="label_6">
                  <property name="text">
@@ -677,8 +671,11 @@
      <x>0</x>
      <y>0</y>
      <width>655</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
+   </property>
+   <property name="accessibleName">
+    <string>Evo Cubist</string>
    </property>
    <widget class="QMenu" name="menu_File">
     <property name="title">

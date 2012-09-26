@@ -42,7 +42,7 @@ public:
     bool isAlive(void) const { return mPolygon.size() > 0 && mColor.isValid(); }
     bool isConvex(void) const { return isConvexPolygon(mPolygon); }
 
-    static inline void translatePoint(QPointF&);
+    static inline void randomlyTranslatePoint(QPointF&);
 
 private:
     QPolygonF mPolygon;
