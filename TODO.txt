@@ -1,6 +1,6 @@
 BUGS
 
-[ ] Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.
+[ ] Windows/Mac OS X: Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der RC-Datei angegebenen.
 
 FEATURES
 

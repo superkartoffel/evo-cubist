@@ -24,9 +24,6 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    QCoreApplication::setOrganizationName(Company);
-    QCoreApplication::setOrganizationDomain(Company);
-    QCoreApplication::setApplicationName(AppName);
     QSettings::setDefaultFormat(QSettings::NativeFormat);
 
     ui->setupUi(this);
