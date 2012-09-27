@@ -13,14 +13,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = evo-cubist
 TEMPLATE = app
 
-macx {
-ICON = evo-cubist.icns
-CONFIG += app_bundle
-}
+ICON = icons/evo-cubist.icns
 
-win32 {
 RC_FILE = evo-cubist.rc
-}
 
 SOURCES += \
     qt-json/json.cpp \
