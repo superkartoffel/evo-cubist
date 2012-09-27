@@ -22,7 +22,7 @@ QString secondsToTime(int seconds)
 }
 
 
-void serializeFilename(QString& filename)
+void avoidDuplicateFilename(QString& filename)
 {
     QFileInfo info(filename);
     const QString& path = info.absolutePath();

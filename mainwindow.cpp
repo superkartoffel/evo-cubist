@@ -83,6 +83,9 @@ MainWindow::MainWindow(QWidget* parent)
         mRecentDNAFileActs[i] = new QAction(this);
         mRecentDNAFileActs[i]->setVisible(false);
         QObject::connect(mRecentDNAFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentDNAFile()));
+        mRecentProjectFileActs[i] = new QAction(this);
+        mRecentProjectFileActs[i]->setVisible(false);
+        QObject::connect(mRecentProjectFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentProjectFile()));
     }
 
     restoreAppSettings();
@@ -219,7 +222,7 @@ void MainWindow::autoSaveGeneratedImage(void)
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
     QString imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
-    serializeFilename(imageFilename);
+    avoidDuplicateFilename(imageFilename);
     mGenerationWidget->image().save(imageFilename);
     QString dnaFilename = mOptionsForm->dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
@@ -432,7 +435,41 @@ void MainWindow::restoreAppSettings(void)
 
     updateRecentImageFileActions();
     updateRecentDNAFileActions();
+    updateRecentProjectFileActions();
     mBreeder.reset();
+}
+
+
+void MainWindow::saveProject(void)
+{
+    QString projFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
+    if (projFilename.isNull())
+        return;
+    QFile file(projFilename);
+    bool success = file.open(QIODevice::WriteOnly);
+    if (!success) {
+        QMessageBox::warning(this, tr("Error saving project file"), tr("Project file could not be saved as '%1'.\n%2").arg(projFilename).arg(file.errorString()));
+        return;
+    }
+    QTextStream out(&file);
+    out << "<evocubist-project>\n"
+        << " <files>\n"
+        << "  <dna>" << mostRecentFileInList("recentDNAFileList") << "</dna>\n"
+        << "  <image>" << mostRecentFileInList("recentImageFileList") << "</image>\n"
+        << " </files>\n"
+        << " <imageSaveDirectory>" << mOptionsForm->imageSaveDirectory() << "</imageSaveDirectory>\n"
+        << " <imageSaveFilenameTemplate>" << mOptionsForm->imageSaveFilenameTemplate() << "</imageSaveFilenameTemplate>\n"
+        << " <dnaSaveDirectory>" << mOptionsForm->dnaSaveDirectory() << "</dnaSaveDirectory>\n"
+        << " <dnaSaveFilenameTemplate>" << mOptionsForm->dnaSaveFilenameTemplate() << "</dnaSaveFilenameTemplate>\n"
+        << gSettings.toXml()
+        << "/<evocubist-project>\n";
+    file.close();
+    if (success) {
+        statusBar()->showMessage(tr("Project file saved as '%1'.").arg(projFilename), 5000);
+    }
+    else {
+        QMessageBox::warning(this, tr("Error saving project file"), tr("Project file could not be saved as '%1'.").arg(projFilename));
+    }
 }
 
 
@@ -473,13 +510,7 @@ void MainWindow::loadOriginalImage(const QString& filename)
         bool success = mImageWidget->loadImage(filename);
         if (success) {
             statusBar()->showMessage(tr("Original picture '%1' loaded.").arg(filename), 3000);
-            QSettings settings(Company, AppName);
-            QStringList files = settings.value("recentImageFileList").toStringList();
-            files.removeAll(filename);
-            files.prepend(filename);
-            while (files.size() > MaxRecentFiles)
-                files.removeLast();
-            settings.setValue("recentImageFileList", files);
+            appendToRecentFileList(filename, "recentImageFileList");
             updateRecentImageFileActions();
         }
         else {
@@ -513,13 +544,7 @@ void MainWindow::loadDNA(const QString& filename)
             proceeded(mBreeder.generation());
             evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
-            QSettings settings(Company, AppName);
-            QStringList files = settings.value("recentDNAFileList").toStringList();
-            files.removeAll(filename);
-            files.prepend(filename);
-            while (files.size() > MaxRecentFiles)
-                files.removeLast();
-            settings.setValue("recentDNAFileList", files);
+            appendToRecentFileList(filename, "recentDNAFileList");
             updateRecentDNAFileActions();
         }
         else {
@@ -549,6 +574,18 @@ void MainWindow::loadRecentImageFile(void)
     QAction* action = qobject_cast<QAction*>(sender());
     if (action)
         loadOriginalImage(action->data().toString());
+}
+
+
+void MainWindow::appendToRecentFileList(const QString& fileName, const QString& listName)
+{
+    QSettings settings(Company, AppName);
+    QStringList files = settings.value(listName).toStringList();
+    files.removeAll(fileName);
+    files.prepend(fileName);
+    while (files.size() > MaxRecentFiles)
+        files.removeLast();
+    settings.setValue(listName, files);
 }
 
 
@@ -585,6 +622,32 @@ void MainWindow::updateRecentDNAFileActions(void)
         mRecentDNAFileActs[j]->setVisible(false);
     if (numRecentFiles > 0)
         ui->menuOpenRecentDNA->setEnabled(true);
+}
+
+
+QString MainWindow::mostRecentFileInList(const QString& listName)
+{
+    QSettings settings(Company, AppName);
+    QStringList files = settings.value(listName).toStringList();
+    return files.first();
+}
+
+
+void MainWindow::updateRecentProjectFileActions(void)
+{
+    QSettings settings(Company, AppName);
+    QStringList files = settings.value("recentProjectFileList").toStringList();
+    int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
+    for (int i = 0; i < numRecentFiles; ++i) {
+        QString text = tr("&%1 %2").arg(i+1).arg(QFileInfo(files[i]).fileName());
+        mRecentProjectFileActs[i]->setText(text);
+        mRecentProjectFileActs[i]->setData(files[i]);
+        mRecentProjectFileActs[i]->setVisible(true);
+    }
+    for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
+        mRecentProjectFileActs[j]->setVisible(false);
+    if (numRecentFiles > 0)
+        ui->menuOpenRecentProject->setEnabled(true);
 }
 
 

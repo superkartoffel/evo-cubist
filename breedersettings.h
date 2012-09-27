@@ -63,6 +63,8 @@ public:
     inline qreal scatterFactor(void) const { return mScatterFactor; }
     inline int cores(void) const { return mCores; }
 
+    QString toXml(void) const;
+
 public slots:
     void setDeltaXY(int);
     void setDeltaR(int);

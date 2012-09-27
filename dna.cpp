@@ -78,7 +78,7 @@ void DNA::mutate(void)
 bool DNA::save(QString& filename, unsigned long generation, unsigned long selected, quint64 fitness, quint64 totalSeconds)
 {
     bool rc;
-    serializeFilename(filename);
+    avoidDuplicateFilename(filename);
     QFile file(filename);
     rc = file.open(QIODevice::WriteOnly);
     if (!rc)

@@ -2,6 +2,8 @@
 // All rights reserved.
 
 #include <QtCore/QDebug>
+#include <QString>
+#include <QTextStream>
 #include "breedersettings.h"
 
 /// global settings object
@@ -169,9 +171,45 @@ void BreederSettings::setCores(int v)
 }
 
 
-
-
 void BreederSettings::setStartDistribution(int index)
 {
     mStartDistribution = index;
+}
+
+
+QString BreederSettings::toXml(void) const
+{
+    QString xml;
+    QTextStream out(&xml);
+    out << "<settings>\n"
+        << "  <deltas>\n"
+        << "    <xy>" << mdXY << "</xy>\n"
+        << "    <red>" << mdR << "</red>\n"
+        << "    <green>" << mdG << "</green>\n"
+        << "    <blue>" << mdB << "</blue>\n"
+        << "    <alpha>" << mdA << "</alpha>\n"
+        << "  </deltas>\n"
+        << "  <breeder>\n"
+        << "    <minA>" << mMinA << "</minA>\n"
+        << "    <maxA>" << mMaxA << "</maxA>\n"
+        << "    <colorMutationProbability>" << mColorMutationProbability << "</colorMutationProbability>\n"
+        << "    <pointMutationProbability>" << mPointMutationProbability << "</pointMutationProbability>\n"
+        << "    <pointKillProbability>" << mPointKillProbability << "</pointKillProbability>\n"
+        << "    <pointEmergenceProbability>" << mPointEmergenceProbability << "</pointEmergenceProbability>\n"
+        << "    <geneKillProbability>" << mGeneKillProbability << "</geneKillProbability>\n"
+        << "    <geneMoveProbability>" << mGeneMoveProbability << "</geneMoveProbability>\n"
+        << "    <geneSliceProbability>" << mGeneSliceProbability << "</geneSliceProbability>\n"
+        << "    <geneEmergenceProbability>" << mGeneEmergenceProbability << "</geneEmergenceProbability>\n"
+        << "    <minPointsPerGene>" << mMinPointsPerGene << "</minPointsPerGene>\n"
+        << "    <maxPointsPerGene>" << mMaxPointsPerGene << "</maxPointsPerGene>\n"
+        << "    <minGenes>" << mMinGenes << "</minGenes>\n"
+        << "    <maxGenes>" << mMaxGenes << "</maxGenes>\n"
+        << "    <startDistribution>" << mStartDistribution << "</startDistribution>\n"
+        << "    <scatterFactor>" << mScatterFactor << "</scatterFactor>\n"
+        << "    <autoSaveInterval>" << mAutoSaveInterval << "</autoSaveInterval>\n"
+        << "    <cores>" << mCores << "</cores>\n"
+        << "    <gpuComputing>" << mGPUComputing << "</gpuComputing>\n"
+        << "  </breeder>\n"
+        << "</settings>\n";
+    return xml;
 }

@@ -671,7 +671,7 @@
      <x>0</x>
      <y>0</y>
      <width>655</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="accessibleName">
@@ -693,7 +693,7 @@
       <string>Save</string>
      </property>
      <addaction name="actionSaveDNA"/>
-     <addaction name="actionSaveSettings"/>
+     <addaction name="actionSaveProject"/>
     </widget>
     <widget class="QMenu" name="menuOpenRecentImage">
      <property name="title">
@@ -707,11 +707,18 @@
      </property>
      <addaction name="separator"/>
     </widget>
+    <widget class="QMenu" name="menuOpenRecentProject">
+     <property name="title">
+      <string>Open recent project</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
     <addaction name="menuOpen"/>
     <addaction name="menuSave"/>
     <addaction name="separator"/>
     <addaction name="menuOpenRecentImage"/>
     <addaction name="menuOpenRecentDNA"/>
+    <addaction name="menuOpenRecentProject"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -796,12 +803,12 @@
     <string>Options</string>
    </property>
   </action>
-  <action name="actionSaveSettings">
+  <action name="actionSaveProject">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>Settings ...</string>
+    <string>Project ...</string>
    </property>
   </action>
   <action name="actionOpen_recent_image">

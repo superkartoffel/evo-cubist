@@ -8,7 +8,7 @@
 #include <QPolygonF>
 
 extern QString secondsToTime(int);
-extern void serializeFilename(QString& filename);
+extern void avoidDuplicateFilename(QString& filename);
 extern bool isConvexPolygon(const QPolygonF&);
 
 #endif // __HELPER_H_
