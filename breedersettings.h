@@ -5,13 +5,17 @@
 #define __BREEDERSETTINGS_H_
 
 #include <QObject>
+#include <QString>
+#include <QIODevice>
+#include <QXmlStreamReader>
+
 
 class BreederSettings : public QObject
 {
     Q_OBJECT
 
 public:
-    BreederSettings(void)
+    BreederSettings()
         : QObject(NULL)
         , mdXY(0.5)
         , mdR(128)
@@ -40,6 +44,7 @@ public:
         // ...
     }
 
+
     double dXY(void) const { return mdXY; }
     inline int dR(void) const { return mdR; }
     inline int dG(void) const { return mdG; }
@@ -63,7 +68,9 @@ public:
     inline qreal scatterFactor(void) const { return mScatterFactor; }
     inline int cores(void) const { return mCores; }
 
-    QString toXml(void) const;
+    bool save(const QString& fileName);
+    bool load(const QString& fileName);
+    QString errorString(void) const;
 
 public slots:
     void setDeltaXY(int);
@@ -89,6 +96,8 @@ public slots:
     void setGPUComputing(bool);
     void setStartDistribution(int);
     void setScatterFactor(double);
+    void setCurrentDNAFile(const QString&);
+    void setCurrentImageFile(const QString&);
 
 private:
     double mdXY; // [0..1)
@@ -115,6 +124,45 @@ private:
     int mAutoSaveInterval; // secs
     int mCores;
     bool mGPUComputing;
+    QString mCurrentDNAFile;
+    QString mCurrentImageFile;
+    QString mImageSaveDirectory;
+    QString mImageSaveFilenameTemplate;
+    QString mDNASaveDirectory;
+    QString mDNASaveFilenameTemplate;
+
+    QXmlStreamReader mXml;
+
+    void readMinA(void);
+    void readMaxA(void);
+    void readColorMutationProbability(void);
+    void readPointMutationProbability(void);
+    void readPointKillProbability(void);
+    void readPointEmergenceProbability(void);
+    void readGeneKillProbability(void);
+    void readGeneMoveProbability(void);
+    void readGeneSliceProbability(void);
+    void readGeneEmergenceProbability(void);
+    void readMinPointsPerGene(void);
+    void readMaxPointsPerGene(void);
+    void readMinGenes(void);
+    void readMaxGenes(void);
+    void readStartDistribution(void);
+    void readScatterFactor(void);
+    void readAutoSaveInterval(void);
+    void readCores(void);
+    void readGPUComputing(void);
+    void readXY(void);
+    void readRed(void);
+    void readGreen(void);
+    void readBlue(void);
+    void readAlpha(void);
+    void readDeltas(void);
+    void readBreeder(void);
+    void readFiles(void);
+    void readAutosave(void);
+    void read(void);
+    bool read(QIODevice*);
 };
 
 

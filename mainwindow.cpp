@@ -83,9 +83,9 @@ MainWindow::MainWindow(QWidget* parent)
         mRecentDNAFileActs[i] = new QAction(this);
         mRecentDNAFileActs[i]->setVisible(false);
         QObject::connect(mRecentDNAFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentDNAFile()));
-        mRecentProjectFileActs[i] = new QAction(this);
-        mRecentProjectFileActs[i]->setVisible(false);
-        QObject::connect(mRecentProjectFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentProjectFile()));
+        mRecentSettingsFileActs[i] = new QAction(this);
+        mRecentSettingsFileActs[i]->setVisible(false);
+        QObject::connect(mRecentSettingsFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentSettingsFile()));
     }
 
     restoreAppSettings();
@@ -93,6 +93,7 @@ MainWindow::MainWindow(QWidget* parent)
     for (int i = 0; i < MaxRecentFiles; ++i) {
         ui->menuOpenRecentImage->addAction(mRecentImageFileActs[i]);
         ui->menuOpenRecentDNA->addAction(mRecentDNAFileActs[i]);
+        ui->menuOpenRecentSettings->addAction(mRecentSettingsFileActs[i]);
     }
 
     mStartTime = QDateTime::currentDateTime();
@@ -435,41 +436,17 @@ void MainWindow::restoreAppSettings(void)
 
     updateRecentImageFileActions();
     updateRecentDNAFileActions();
-    updateRecentProjectFileActions();
+    updateRecentSettingsFileActions();
     mBreeder.reset();
 }
 
 
-void MainWindow::saveProject(void)
+void MainWindow::saveSettings(void)
 {
-    QString projFilename = QFileDialog::getSaveFileName(this, tr("Save DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
-    if (projFilename.isNull())
+    QString settingsFilename = QFileDialog::getSaveFileName(this, tr("Save settings"), QString(), tr("Settings file (*.evo; *.xml)"));
+    if (settingsFilename.isNull())
         return;
-    QFile file(projFilename);
-    bool success = file.open(QIODevice::WriteOnly);
-    if (!success) {
-        QMessageBox::warning(this, tr("Error saving project file"), tr("Project file could not be saved as '%1'.\n%2").arg(projFilename).arg(file.errorString()));
-        return;
-    }
-    QTextStream out(&file);
-    out << "<evocubist-project>\n"
-        << " <files>\n"
-        << "  <dna>" << mostRecentFileInList("recentDNAFileList") << "</dna>\n"
-        << "  <image>" << mostRecentFileInList("recentImageFileList") << "</image>\n"
-        << " </files>\n"
-        << " <imageSaveDirectory>" << mOptionsForm->imageSaveDirectory() << "</imageSaveDirectory>\n"
-        << " <imageSaveFilenameTemplate>" << mOptionsForm->imageSaveFilenameTemplate() << "</imageSaveFilenameTemplate>\n"
-        << " <dnaSaveDirectory>" << mOptionsForm->dnaSaveDirectory() << "</dnaSaveDirectory>\n"
-        << " <dnaSaveFilenameTemplate>" << mOptionsForm->dnaSaveFilenameTemplate() << "</dnaSaveFilenameTemplate>\n"
-        << gSettings.toXml()
-        << "/<evocubist-project>\n";
-    file.close();
-    if (success) {
-        statusBar()->showMessage(tr("Project file saved as '%1'.").arg(projFilename), 5000);
-    }
-    else {
-        QMessageBox::warning(this, tr("Error saving project file"), tr("Project file could not be saved as '%1'.").arg(projFilename));
-    }
+    gSettings.save(settingsFilename);
 }
 
 
@@ -577,6 +554,30 @@ void MainWindow::loadRecentImageFile(void)
 }
 
 
+void MainWindow::loadSettings(const QString& filename)
+{
+    if (filename != "") {
+        bool success = gSettings.load(filename);
+        if (success) {
+            statusBar()->showMessage(tr("Settings file '%1' loaded.").arg(filename), 3000);
+            appendToRecentFileList(filename, "recentProjectFileList");
+            updateRecentSettingsFileActions();
+        }
+        else {
+            QMessageBox::warning(this, tr("Error loading settings file."), tr("The settings file could not be loaded."));
+        }
+    }
+}
+
+
+void MainWindow::loadRecentSettingsFile(void)
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    if (action)
+        loadSettings(action->data().toString());
+}
+
+
 void MainWindow::appendToRecentFileList(const QString& fileName, const QString& listName)
 {
     QSettings settings(Company, AppName);
@@ -633,21 +634,21 @@ QString MainWindow::mostRecentFileInList(const QString& listName)
 }
 
 
-void MainWindow::updateRecentProjectFileActions(void)
+void MainWindow::updateRecentSettingsFileActions(void)
 {
     QSettings settings(Company, AppName);
     QStringList files = settings.value("recentProjectFileList").toStringList();
     int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
     for (int i = 0; i < numRecentFiles; ++i) {
         QString text = tr("&%1 %2").arg(i+1).arg(QFileInfo(files[i]).fileName());
-        mRecentProjectFileActs[i]->setText(text);
-        mRecentProjectFileActs[i]->setData(files[i]);
-        mRecentProjectFileActs[i]->setVisible(true);
+        mRecentSettingsFileActs[i]->setText(text);
+        mRecentSettingsFileActs[i]->setData(files[i]);
+        mRecentSettingsFileActs[i]->setVisible(true);
     }
     for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
-        mRecentProjectFileActs[j]->setVisible(false);
+        mRecentSettingsFileActs[j]->setVisible(false);
     if (numRecentFiles > 0)
-        ui->menuOpenRecentProject->setEnabled(true);
+        ui->menuOpenRecentSettings->setEnabled(true);
 }
 
 

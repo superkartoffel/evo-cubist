@@ -707,9 +707,9 @@
      </property>
      <addaction name="separator"/>
     </widget>
-    <widget class="QMenu" name="menuOpenRecentProject">
+    <widget class="QMenu" name="menuOpenRecentSettings">
      <property name="title">
-      <string>Open recent project</string>
+      <string>Open recent settings</string>
      </property>
      <addaction name="separator"/>
     </widget>
@@ -718,7 +718,7 @@
     <addaction name="separator"/>
     <addaction name="menuOpenRecentImage"/>
     <addaction name="menuOpenRecentDNA"/>
-    <addaction name="menuOpenRecentProject"/>
+    <addaction name="menuOpenRecentSettings"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>

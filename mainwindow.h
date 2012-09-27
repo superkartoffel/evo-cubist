@@ -50,7 +50,7 @@ private:
     static const int MaxRecentFiles = 10;
     QAction* mRecentImageFileActs[MaxRecentFiles];
     QAction* mRecentDNAFileActs[MaxRecentFiles];
-    QAction* mRecentProjectFileActs[MaxRecentFiles];
+    QAction* mRecentSettingsFileActs[MaxRecentFiles];
 
     void saveAppSettings(void);
     void restoreAppSettings(void);
@@ -64,12 +64,13 @@ private:
     QTimer mAutoSaveTimer;
 
 private slots:
+    void loadSettings(const QString& filename);
     void loadDNA(const QString& filename);
     void evolved(const QImage&, const DNA&, quint64 fitness, unsigned long selected, unsigned long generation);
     void imageDropped(const QImage&);
     void proceeded(unsigned long generation);
     void startStop(void);
-    void saveProject(void);
+    void saveSettings(void);
     void saveDNA(void);
     void openDNA(void);
     void openOriginalImage(void);
@@ -81,9 +82,10 @@ private slots:
     void autoSaveToggled(bool);
     void loadRecentImageFile(void);
     void loadRecentDNAFile(void);
+    void loadRecentSettingsFile(void);
     void updateRecentImageFileActions(void);
     void updateRecentDNAFileActions(void);
-    void updateRecentProjectFileActions(void);
+    void updateRecentSettingsFileActions(void);
 
     void setDeltaR(int);
     void setDeltaG(int);
