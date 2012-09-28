@@ -82,9 +82,7 @@ private slots:
     void loadRecentImageFile(void);
     void loadRecentDNAFile(void);
     void loadRecentSettingsFile(void);
-    void updateRecentImageFileActions(void);
-    void updateRecentDNAFileActions(void);
-    void updateRecentSettingsFileActions(void);
+    void updateRecentFileActions(const QString& listName, QMenu* menu, QAction* actions[]);
 
     void setDeltaR(int);
     void setDeltaG(int);

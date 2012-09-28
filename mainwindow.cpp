@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QSettings>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QDir>
 #include <QMessageBox>
 #include <QThread>
@@ -437,9 +438,9 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm->setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
     mOptionsForm->setMaxAlpha(settings.value("Options/maxAlpha", 45).toInt());
 
-    updateRecentImageFileActions();
-    updateRecentDNAFileActions();
-    updateRecentSettingsFileActions();
+    updateRecentFileActions("Options/recentImageFileList", ui->menuOpenRecentImage, mRecentImageFileActs);
+    updateRecentFileActions("Options/recentDNAFileList", ui->menuOpenRecentDNA, mRecentDNAFileActs);
+    updateRecentFileActions("Options/recentSettingsFileList", ui->menuOpenRecentSettings, mRecentSettingsFileActs);
     mBreeder.reset();
 }
 
@@ -485,12 +486,12 @@ void MainWindow::openOriginalImage(void)
 
 void MainWindow::loadOriginalImage(const QString& filename)
 {
-    if (filename != "") {
+    if (!filename.isEmpty()) {
         bool success = mImageWidget->loadImage(filename);
         if (success) {
             statusBar()->showMessage(tr("Original picture '%1' loaded.").arg(filename), 3000);
-            appendToRecentFileList(filename, "recentImageFileList");
-            updateRecentImageFileActions();
+            appendToRecentFileList(filename, "Options/recentImageFileList");
+            updateRecentFileActions("Options/recentImageFileList", ui->menuOpenRecentImage, mRecentImageFileActs);
             gSettings.setCurrentImageFile(filename);
         }
         else {
@@ -502,14 +503,42 @@ void MainWindow::loadOriginalImage(const QString& filename)
 
 void MainWindow::loadSettings(const QString& filename)
 {
-    if (filename != "") {
+    if (!filename.isEmpty()) {
         bool success = gSettings.load(filename);
         if (success) {
             stopBreeding();
             loadOriginalImage(gSettings.currentImageFile());
             loadDNA(gSettings.currentDNAFile());
-            appendToRecentFileList(filename, "recentProjectFileList");
-            updateRecentSettingsFileActions();
+            appendToRecentFileList(filename, "Options/recentSettingsFileList");
+            updateRecentFileActions("Options/recentSettingsFileList", ui->menuOpenRecentSettings, mRecentSettingsFileActs);
+            ui->redSlider->setValue(gSettings.dR());
+            ui->greenSlider->setValue(gSettings.dG());
+            ui->blueSlider->setValue(gSettings.dB());
+            ui->alphaSlider->setValue(gSettings.dA());
+            ui->xySlider->setValue(gSettings.dXY());
+            mOptionsForm->setImageSaveDirectory(gSettings.imageSaveDirectory());
+            mOptionsForm->setImageSaveFilenameTemplate(gSettings.imageSaveFilenameTemplate());
+            mOptionsForm->setDNASaveDirectory(gSettings.dnaSaveDirectory());
+            mOptionsForm->setDNASaveFilenameTemplate(gSettings.dnaSaveFilenameTemplate());
+            mOptionsForm->setSaveInterval(gSettings.autoSaveInterval());
+            mOptionsForm->setAutoSave(gSettings.autoSave());
+            mOptionsForm->setLogFile(gSettings.logFile());
+            mOptionsForm->setCores(gSettings.cores());
+            mOptionsForm->setStartDistribution(gSettings.startDistribution());
+            mOptionsForm->setScatterFactor(gSettings.scatterFactor());
+            mOptionsForm->setColorMutationProbability(gSettings.colorMutationProbability());
+            mOptionsForm->setPointMutationProbability(gSettings.pointMutationProbability());
+            mOptionsForm->setPointKillProbability(gSettings.pointKillProbability());
+            mOptionsForm->setPointEmergenceProbability(gSettings.pointEmergenceProbability());
+            mOptionsForm->setGeneKillProbability(gSettings.geneKillProbability());
+            mOptionsForm->setGeneMoveProbability(gSettings.geneMoveProbability());
+            mOptionsForm->setGeneEmergenceProbability(gSettings.geneEmergenceProbability());
+            mOptionsForm->setMinPointsPerGene(gSettings.minPointsPerGene());
+            mOptionsForm->setMaxPointsPerGene(gSettings.maxPointsPerGene());
+            mOptionsForm->setMinGenes(gSettings.minGenes());
+            mOptionsForm->setMaxGenes(gSettings.maxGenes());
+            mOptionsForm->setMinAlpha(gSettings.minA());
+            mOptionsForm->setMaxAlpha(gSettings.maxA());
             statusBar()->showMessage(tr("Settings file '%1' loaded.").arg(filename), 3000);
         }
         else {
@@ -528,7 +557,7 @@ void MainWindow::openSettings(void)
 
 void MainWindow::loadDNA(const QString& filename)
 {
-    if (filename != "") {
+    if (!filename.isEmpty()) {
         DNA dna;
         bool success = dna.load(filename);
         if (success) {
@@ -550,8 +579,8 @@ void MainWindow::loadDNA(const QString& filename)
             proceeded(mBreeder.generation());
             evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
-            appendToRecentFileList(filename, "recentDNAFileList");
-            updateRecentDNAFileActions();
+            appendToRecentFileList(filename, "Options/recentDNAFileList");
+            updateRecentFileActions("Options/recentDNAFileList", ui->menuOpenRecentDNA, mRecentDNAFileActs);
             gSettings.setCurrentDNAFile(filename);
         }
         else {
@@ -613,57 +642,29 @@ QString MainWindow::mostRecentFileInList(const QString& listName)
 }
 
 
-void MainWindow::updateRecentImageFileActions(void)
+void MainWindow::updateRecentFileActions(const QString& listName, QMenu* menu, QAction* actions[])
 {
     QSettings settings(Company, AppName);
-    QStringList files = settings.value("recentImageFileList").toStringList();
-    int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
-    for (int i = 0; i < numRecentFiles; ++i) {
-        QString text = tr("&%1 %2").arg(i+1).arg(QFileInfo(files[i]).fileName());
-        mRecentImageFileActs[i]->setText(text);
-        mRecentImageFileActs[i]->setData(files[i]);
-        mRecentImageFileActs[i]->setVisible(true);
+    const QStringList& files = settings.value(listName).toStringList();
+    QStringList updatedFiles;
+    QStringList::const_iterator file = files.constBegin();
+    while (file != files.constEnd() && updatedFiles.size() < MaxRecentFiles) {
+        QFileInfo fInfo(*file);
+        // only keep readable files, remove duplicates
+        if (!updatedFiles.contains(*file) && fInfo.isFile() && fInfo.isReadable()) {
+            const int i = updatedFiles.size();
+            const QString& text = tr("&%1 %2").arg(i).arg(fInfo.fileName());
+            actions[i]->setText(text);
+            actions[i]->setData(*file);
+            actions[i]->setVisible(true);
+            updatedFiles.append(*file);
+        }
+        ++file;
     }
-    for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
-        mRecentImageFileActs[j]->setVisible(false);
-    if (numRecentFiles > 0)
-        ui->menuOpenRecentImage->setEnabled(true);
-}
-
-
-void MainWindow::updateRecentDNAFileActions(void)
-{
-    QSettings settings(Company, AppName);
-    QStringList files = settings.value("recentDNAFileList").toStringList();
-    int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
-    for (int i = 0; i < numRecentFiles; ++i) {
-        QString text = tr("&%1 %2").arg(i+1).arg(QFileInfo(files[i]).fileName());
-        mRecentDNAFileActs[i]->setText(text);
-        mRecentDNAFileActs[i]->setData(files[i]);
-        mRecentDNAFileActs[i]->setVisible(true);
-    }
-    for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
-        mRecentDNAFileActs[j]->setVisible(false);
-    if (numRecentFiles > 0)
-        ui->menuOpenRecentDNA->setEnabled(true);
-}
-
-
-void MainWindow::updateRecentSettingsFileActions(void)
-{
-    QSettings settings(Company, AppName);
-    QStringList files = settings.value("recentProjectFileList").toStringList();
-    int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
-    for (int i = 0; i < numRecentFiles; ++i) {
-        QString text = tr("&%1 %2").arg(i+1).arg(QFileInfo(files[i]).fileName());
-        mRecentSettingsFileActs[i]->setText(text);
-        mRecentSettingsFileActs[i]->setData(files[i]);
-        mRecentSettingsFileActs[i]->setVisible(true);
-    }
-    for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
-        mRecentSettingsFileActs[j]->setVisible(false);
-    if (numRecentFiles > 0)
-        ui->menuOpenRecentSettings->setEnabled(true);
+    for (int i = updatedFiles.size(); i < MaxRecentFiles; ++i)
+        actions[i]->setVisible(false);
+    menu->setEnabled(updatedFiles.size() > 0);
+    settings.setValue(listName, updatedFiles);
 }
 
 

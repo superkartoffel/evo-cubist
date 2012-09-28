@@ -193,6 +193,12 @@ void BreederSettings::setStartDistribution(int index)
 }
 
 
+void BreederSettings::setLogFile(const QString& logFile)
+{
+    mLogFile = logFile;
+}
+
+
 void BreederSettings::setCurrentDNAFile(const QString& dnaFile)
 {
     mCurrentDNAFile = dnaFile;
@@ -229,17 +235,16 @@ void BreederSettings::setDNASaveFilenameTemplate(const QString& v)
 }
 
 
-bool BreederSettings::save(const QString &fileName)
+bool BreederSettings::save(const QString& fileName)
 {
-    bool rc;
+    Q_ASSERT(!fileName.isEmpty());
     QFile file(fileName);
-    rc = file.open(QIODevice::WriteOnly | QIODevice::Text);
-    if (!rc)
+    bool ok = file.open(QIODevice::WriteOnly | QIODevice::Text);
+    if (!ok)
         return false;
     QTextStream out(&file);
-    QTextCodec* utf8Codec = QTextCodec::codecForMib(106);
-    out.setCodec(utf8Codec);
     out.setAutoDetectUnicode(false);
+    out.setCodec(QTextCodec::codecForMib(106/* UTF-8 */));
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
         << "<evocubist-settings version=\"" << AppVersionNoDebug << "\">\n"
         << "  <deltas>\n"
@@ -267,7 +272,7 @@ bool BreederSettings::save(const QString &fileName)
         << "    <startDistribution>" << mStartDistribution << "</startDistribution>\n"
         << "    <scatterFactor>" << mScatterFactor << "</scatterFactor>\n"
         << "    <cores>" << mCores << "</cores>\n"
-        << "    <gpuComputing>" << mGPUComputing << "</gpuComputing>\n"
+//      << "    <gpuComputing>" << mGPUComputing << "</gpuComputing>\n"
         << "  </breeder>\n"
         << "  <files>\n"
         << "    <dna>" << mCurrentDNAFile << "</dna>\n"
@@ -283,12 +288,13 @@ bool BreederSettings::save(const QString &fileName)
         << "  </autosave>\n"
         << "</evocubist-settings>\n";
     file.close();
-    return rc;
+    return ok;
 }
 
 
-bool BreederSettings::load(const QString &fileName)
+bool BreederSettings::load(const QString& fileName)
 {
+    Q_ASSERT(!fileName.isEmpty());
     QFile file(fileName);
     bool success = file.open(QIODevice::ReadOnly | QIODevice::Text);
     if (!success)
@@ -317,9 +323,7 @@ void BreederSettings::readRed(void)
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "red");
     bool ok = false;
     const QString& redString = mXml.readElementText();
-    qDebug() << redString;
     const int r = redString.toInt(&ok);
-    qDebug() << r;
     if (ok)
         mdR = r;
     else
@@ -845,6 +849,7 @@ void BreederSettings::read(void)
 
 bool BreederSettings::read(QIODevice* device)
 {
+    Q_ASSERT(device != NULL);
     mXml.setDevice(device);
     if (mXml.readNextStartElement()) {
         if (mXml.name() == "evocubist-settings" && mXml.attributes().value("version").startsWith("1.")) {
@@ -858,7 +863,7 @@ bool BreederSettings::read(QIODevice* device)
 }
 
 
-QString BreederSettings::errorString() const
+QString BreederSettings::errorString(void) const
 {
     return QObject::tr("%1 (line %2, column %3)").arg(mXml.errorString()).arg(mXml.lineNumber()).arg(mXml.columnNumber());
 }

@@ -75,7 +75,6 @@ void DNA::mutate(void)
 }
 
 
-// XXX: move method to Breeder
 bool DNA::save(QString& filename, unsigned long generation, unsigned long selected, quint64 fitness, quint64 totalSeconds)
 {
     bool rc;
@@ -85,9 +84,8 @@ bool DNA::save(QString& filename, unsigned long generation, unsigned long select
     if (!rc)
         return false;
     QTextStream out(&file);
-    QTextCodec* utf8Codec = QTextCodec::codecForMib(106);
-    out.setCodec(utf8Codec);
     out.setAutoDetectUnicode(false);
+    out.setCodec(QTextCodec::codecForMib(106/* UTF-8 */));
     if (filename.endsWith(".json") || filename.endsWith(".dna")) {
         out << "{\n"
             << " \"datetime\": \"" << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << "\",\n"

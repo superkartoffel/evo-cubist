@@ -69,10 +69,14 @@ public:
     inline qreal scatterFactor(void) const { return mScatterFactor; }
     inline int cores(void) const { return mCores; }
     inline bool autoSave(void) const { return mAutoSave; }
+    inline const QString& logFile(void) const { return mLogFile; }
     inline int autoSaveInterval(void) const { return mAutoSaveInterval; }
     inline const QString& currentImageFile(void) const { return mCurrentImageFile; }
     inline const QString& currentDNAFile(void) const { return mCurrentDNAFile; }
-
+    inline const QString& imageSaveDirectory(void) const { return mImageSaveDirectory; }
+    inline const QString& imageSaveFilenameTemplate(void) const { return mImageSaveFilenameTemplate; }
+    inline const QString& dnaSaveDirectory(void) const { return mDNASaveDirectory; }
+    inline const QString& dnaSaveFilenameTemplate(void) const { return mDNASaveFilenameTemplate; }
     bool save(const QString& fileName);
     bool load(const QString& fileName);
     QString errorString(void) const;
@@ -103,6 +107,7 @@ public slots:
     void setAutoSave(bool);
     void setStartDistribution(int);
     void setScatterFactor(double);
+    void setLogFile(const QString&);
     void setCurrentDNAFile(const QString&);
     void setCurrentImageFile(const QString&);
     void setImageSaveDirectory(const QString&);
@@ -136,6 +141,7 @@ private:
     int mAutoSaveInterval; // secs
     int mCores;
     bool mGPUComputing;
+    QString mLogFile;
     QString mCurrentDNAFile;
     QString mCurrentImageFile;
     QString mImageSaveDirectory;

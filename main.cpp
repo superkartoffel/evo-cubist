@@ -14,7 +14,7 @@ const QString AppName = QObject::tr("Evo Cubist");
 const QString AppUrl = "http://evo-cubist.googlecode.com/";
 const QString AppAuthor = "Oliver Lau";
 const QString AppAuthorMail = "oliver@von-und-fuer-lau.de";
-const QString AppVersionNoDebug = "1.1";
+const QString AppVersionNoDebug = "1.2";
 #ifdef QT_NO_DEBUG
 const QString AppVersion = AppVersionNoDebug;
 #else
@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     a.setApplicationName(AppName);
     a.setApplicationVersion(AppVersionNoDebug);
     a.addLibraryPath("plugins");
-#if defined(Q_OS_MAC)
+#ifdef Q_OS_MAC
     QCoreApplication::addLibraryPath("../plugins");
     qDebug() << QCoreApplication::libraryPaths();
 #endif
