@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QTextCodec>
 #include "breedersettings.h"
+#include "main.h"
 
 /// global settings object
 BreederSettings gSettings;
@@ -194,14 +195,12 @@ void BreederSettings::setStartDistribution(int index)
 
 void BreederSettings::setCurrentDNAFile(const QString& dnaFile)
 {
-    qDebug() << "BreederSettings::setCurrentDNAFile(" << dnaFile << ")";
     mCurrentDNAFile = dnaFile;
 }
 
 
 void BreederSettings::setCurrentImageFile(const QString& imageFile)
 {
-    qDebug() << "BreederSettings::setCurrentImageFile(" << imageFile << ")";
     mCurrentImageFile = imageFile;
 }
 
@@ -242,7 +241,7 @@ bool BreederSettings::save(const QString &fileName)
     out.setCodec(utf8Codec);
     out.setAutoDetectUnicode(false);
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
-        << "<evocubist-settings>\n"
+        << "<evocubist-settings version=\"" << AppVersionNoDebug << "\">\n"
         << "  <deltas>\n"
         << "    <red>" << mdR << "</red>\n"
         << "    <green>" << mdG << "</green>\n"
@@ -290,8 +289,13 @@ bool BreederSettings::save(const QString &fileName)
 
 bool BreederSettings::load(const QString &fileName)
 {
-    Q_UNUSED(fileName);
-    return true;
+    QFile file(fileName);
+    bool success = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    if (!success)
+        return false;
+    success = read(&file);
+    file.close();
+    return success;
 }
 
 
@@ -307,16 +311,19 @@ void BreederSettings::readXY(void)
         mXml.raiseError(QObject::tr("invalid delta green: %1").arg(xyString));
 }
 
+
 void BreederSettings::readRed(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "red");
     bool ok = false;
     const QString& redString = mXml.readElementText();
+    qDebug() << redString;
     const int r = redString.toInt(&ok);
+    qDebug() << r;
     if (ok)
         mdR = r;
     else
-        mXml.raiseError(QObject::tr("invalid delta green: %1").arg(redString));
+        mXml.raiseError(QObject::tr("invalid delta red: %1").arg(redString));
 }
 
 
@@ -366,16 +373,16 @@ void BreederSettings::readDeltas(void)
         if (mXml.name() == "xy") {
             readXY();
         }
-        if (mXml.name() == "red") {
+        else if (mXml.name() == "red") {
             readRed();
         }
-        if (mXml.name() == "green") {
+        else if (mXml.name() == "green") {
             readGreen();
         }
-        if (mXml.name() == "blue") {
+        else if (mXml.name() == "blue") {
             readBlue();
         }
-        if (mXml.name() == "alpha") {
+        else if (mXml.name() == "alpha") {
             readAlpha();
         }
         else {
@@ -625,55 +632,55 @@ void BreederSettings::readBreeder(void)
         if (mXml.name() == "minA") {
             readMinA();
         }
-        if (mXml.name() == "maxA") {
+        else if (mXml.name() == "maxA") {
             readMaxA();
         }
-        if (mXml.name() == "colorMutationProbability") {
+        else if (mXml.name() == "colorMutationProbability") {
             readColorMutationProbability();
         }
-        if (mXml.name() == "pointMutationProbability") {
+        else if (mXml.name() == "pointMutationProbability") {
             readPointMutationProbability();
         }
-        if (mXml.name() == "pointKillProbability") {
+        else if (mXml.name() == "pointKillProbability") {
             readPointKillProbability();
         }
-        if (mXml.name() == "pointEmergenceProbability") {
+        else if (mXml.name() == "pointEmergenceProbability") {
             readPointEmergenceProbability();
         }
-        if (mXml.name() == "geneKillProbability") {
+        else if (mXml.name() == "geneKillProbability") {
             readGeneKillProbability();
         }
-        if (mXml.name() == "geneMoveProbability") {
+        else if (mXml.name() == "geneMoveProbability") {
             readGeneMoveProbability();
         }
-        if (mXml.name() == "geneSliceProbability") {
+        else if (mXml.name() == "geneSliceProbability") {
             readGeneSliceProbability();
         }
-        if (mXml.name() == "geneEmergenceProbability") {
+        else if (mXml.name() == "geneEmergenceProbability") {
             readGeneEmergenceProbability();
         }
-        if (mXml.name() == "minPointsPerGene") {
+        else if (mXml.name() == "minPointsPerGene") {
             readMinPointsPerGene();
         }
-        if (mXml.name() == "maxPointsPerGene") {
+        else if (mXml.name() == "maxPointsPerGene") {
             readMaxPointsPerGene();
         }
-        if (mXml.name() == "minGenes") {
+        else if (mXml.name() == "minGenes") {
             readMinGenes();
         }
-        if (mXml.name() == "maxGenes") {
+        else if (mXml.name() == "maxGenes") {
             readMaxGenes();
         }
-        if (mXml.name() == "startDistribution") {
+        else if (mXml.name() == "startDistribution") {
             readStartDistribution();
         }
-        if (mXml.name() == "scatterFactor") {
+        else if (mXml.name() == "scatterFactor") {
             readScatterFactor();
         }
-        if (mXml.name() == "cores") {
+        else if (mXml.name() == "cores") {
             readCores();
         }
-        if (mXml.name() == "gpuComputing") {
+        else if (mXml.name() == "gpuComputing") {
             readGPUComputing();
         }
         else {
@@ -686,22 +693,14 @@ void BreederSettings::readBreeder(void)
 void BreederSettings::readRecentDNAFile(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "dna");
-    const QString& str = mXml.readElementText();
-    if (!str.isEmpty())
-        mCurrentDNAFile = str;
-    else
-        mXml.raiseError(QObject::tr("invalid dna: %1").arg(str));
+    mCurrentDNAFile = mXml.readElementText();
 }
 
 
 void BreederSettings::readRecentImageFile(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "image");
-    const QString& str = mXml.readElementText();
-    if (!str.isEmpty())
-        mCurrentImageFile = str;
-    else
-        mXml.raiseError(QObject::tr("invalid image: %1").arg(str));
+    mCurrentImageFile = mXml.readElementText();
 }
 
 
@@ -722,6 +721,19 @@ void BreederSettings::readFiles(void)
 }
 
 
+void BreederSettings::readAutoSaveEnabled(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "enabled");
+    bool ok = false;
+    const QString& str = mXml.readElementText();
+    const int v = str.toInt(&ok);
+    if (ok)
+        mAutoSave = (v != 0);
+    else
+        mXml.raiseError(QObject::tr("invalid autosave enabled value: %1").arg(str));
+}
+
+
 void BreederSettings::readAutoSaveInterval(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "interval");
@@ -731,20 +743,80 @@ void BreederSettings::readAutoSaveInterval(void)
     if (ok)
         mAutoSaveInterval = v;
     else
-        mXml.raiseError(QObject::tr("invalid interval: %1").arg(str));
+        mXml.raiseError(QObject::tr("invalid autosave interval: %1").arg(str));
+}
+
+
+void BreederSettings::readAutoSaveImageDirectory(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "imageDirectory");
+    const QString& str = mXml.readElementText();
+    if (!str.isEmpty())
+        mImageSaveDirectory = str;
+    else
+        mXml.raiseError(QObject::tr("invalid imageDirectory: %1").arg(str));
+}
+
+
+void BreederSettings::readAutoSaveImageFilenameTemplate(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "imageFilenameTemplate");
+    const QString& str = mXml.readElementText();
+    if (!str.isEmpty())
+        mImageSaveFilenameTemplate = str;
+    else
+        mXml.raiseError(QObject::tr("invalid imageDirectory: %1").arg(str));
+}
+
+
+void BreederSettings::readAutoSaveDNADirectory(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "dnaDirectory");
+    const QString& str = mXml.readElementText();
+    if (!str.isEmpty())
+        mDNASaveDirectory = str;
+    else
+        mXml.raiseError(QObject::tr("invalid dnaDirectory: %1").arg(str));
+}
+
+
+void BreederSettings::readAutoSaveDNAFilenameTemplate(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "dnaFilenameTemplate");
+    const QString& str = mXml.readElementText();
+    if (!str.isEmpty())
+        mDNASaveFilenameTemplate = str;
+    else
+        mXml.raiseError(QObject::tr("invalid dnaFilenameTemplate: %1").arg(str));
 }
 
 
 void BreederSettings::readAutosave(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "autosave");
-    bool ok = false;
-    const QString& str = mXml.readElementText();
-    const int v = str.toInt(&ok);
-    if (ok)
-        mAutoSave = (v != 0);
-    else
-        mXml.raiseError(QObject::tr("invalid autosave value: %1").arg(str));
+    while (mXml.readNextStartElement()) {
+        if (mXml.name() == "enabled") {
+            readAutoSaveEnabled();
+        }
+        else if (mXml.name() == "interval") {
+            readAutoSaveInterval();
+        }
+        else if (mXml.name() == "imageDirectory") {
+            readAutoSaveImageDirectory();
+        }
+        else if (mXml.name() == "imageFilenameTemplate") {
+            readAutoSaveImageFilenameTemplate();
+        }
+        else if (mXml.name() == "dnaDirectory") {
+            readAutoSaveDNADirectory();
+        }
+        else if (mXml.name() == "dnaFilenameTemplate") {
+            readAutoSaveDNAFilenameTemplate();
+        }
+        else {
+            mXml.skipCurrentElement();
+        }
+    }
 }
 
 
@@ -790,4 +862,3 @@ QString BreederSettings::errorString() const
 {
     return QObject::tr("%1 (line %2, column %3)").arg(mXml.errorString()).arg(mXml.lineNumber()).arg(mXml.columnNumber());
 }
-

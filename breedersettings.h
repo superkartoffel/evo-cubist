@@ -70,6 +70,8 @@ public:
     inline int cores(void) const { return mCores; }
     inline bool autoSave(void) const { return mAutoSave; }
     inline int autoSaveInterval(void) const { return mAutoSaveInterval; }
+    inline const QString& currentImageFile(void) const { return mCurrentImageFile; }
+    inline const QString& currentDNAFile(void) const { return mCurrentDNAFile; }
 
     bool save(const QString& fileName);
     bool load(const QString& fileName);
@@ -161,7 +163,12 @@ private:
     void readMaxGenes(void);
     void readStartDistribution(void);
     void readScatterFactor(void);
+    void readAutoSaveEnabled(void);
     void readAutoSaveInterval(void);
+    void readAutoSaveImageDirectory(void);
+    void readAutoSaveImageFilenameTemplate(void);
+    void readAutoSaveDNADirectory(void);
+    void readAutoSaveDNAFilenameTemplate(void);
     void readCores(void);
     void readGPUComputing(void);
     void readXY(void);

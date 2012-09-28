@@ -687,6 +687,7 @@
      </property>
      <addaction name="actionOpenOriginalImage"/>
      <addaction name="actionOpenDNA"/>
+     <addaction name="actionOpenSettings"/>
     </widget>
     <widget class="QMenu" name="menuSave">
      <property name="title">
@@ -814,6 +815,11 @@
   <action name="actionOpen_recent_image">
    <property name="text">
     <string>Open recent image</string>
+   </property>
+  </action>
+  <action name="actionOpenSettings">
+   <property name="text">
+    <string>Settings ...</string>
    </property>
   </action>
  </widget>

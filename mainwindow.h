@@ -68,6 +68,7 @@ private slots:
     void imageDropped(const QImage&);
     void proceeded(unsigned long generation);
     void startStop(void);
+    void openSettings(void);
     void saveSettings(void);
     void saveDNA(void);
     void openDNA(void);

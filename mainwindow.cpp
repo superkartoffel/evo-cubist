@@ -70,6 +70,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionOpenDNA, SIGNAL(triggered()), SLOT(openDNA()));
     QObject::connect(ui->actionOpenOriginalImage, SIGNAL(triggered()), SLOT(openOriginalImage()));
     QObject::connect(ui->actionSaveSettings, SIGNAL(triggered()), SLOT(saveSettings()));
+    QObject::connect(ui->actionOpenSettings, SIGNAL(triggered()), SLOT(openSettings()));
 
     QObject::connect(ui->actionExit, SIGNAL(triggered()), SLOT(close()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
@@ -499,6 +500,32 @@ void MainWindow::loadOriginalImage(const QString& filename)
 }
 
 
+void MainWindow::loadSettings(const QString& filename)
+{
+    if (filename != "") {
+        bool success = gSettings.load(filename);
+        if (success) {
+            stopBreeding();
+            loadOriginalImage(gSettings.currentImageFile());
+            loadDNA(gSettings.currentDNAFile());
+            appendToRecentFileList(filename, "recentProjectFileList");
+            updateRecentSettingsFileActions();
+            statusBar()->showMessage(tr("Settings file '%1' loaded.").arg(filename), 3000);
+        }
+        else {
+            QMessageBox::warning(this, tr("Error loading settings"), tr("Settings could not be loaded. (%1)").arg(gSettings.errorString()));
+        }
+    }
+}
+
+
+void MainWindow::openSettings(void)
+{
+    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load Settings"), QString(), tr("Settings files (*.evo; *.xml)"));
+    loadSettings(filename);
+}
+
+
 void MainWindow::loadDNA(const QString& filename)
 {
     if (filename != "") {
@@ -528,7 +555,7 @@ void MainWindow::loadDNA(const QString& filename)
             gSettings.setCurrentDNAFile(filename);
         }
         else {
-            QMessageBox::warning(this, tr("Error loading DNA"), tr("DNA could not be loaded. Reason: %1").arg(dna.errorString()));
+            QMessageBox::warning(this, tr("Error loading DNA"), tr("DNA could not be loaded. (%1)").arg(dna.errorString()));
         }
     }
 }
@@ -536,7 +563,7 @@ void MainWindow::loadDNA(const QString& filename)
 
 void MainWindow::openDNA(void)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
+    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
     loadDNA(filename);
 }
 
@@ -557,21 +584,6 @@ void MainWindow::loadRecentImageFile(void)
 }
 
 
-void MainWindow::loadSettings(const QString& filename)
-{
-    if (filename != "") {
-        bool success = gSettings.load(filename);
-        if (success) {
-            statusBar()->showMessage(tr("Settings file '%1' loaded.").arg(filename), 3000);
-            appendToRecentFileList(filename, "recentProjectFileList");
-            updateRecentSettingsFileActions();
-        }
-        else {
-            QMessageBox::warning(this, tr("Error loading settings file."), tr("The settings file could not be loaded."));
-        }
-    }
-}
-
 
 void MainWindow::loadRecentSettingsFile(void)
 {
@@ -590,6 +602,14 @@ void MainWindow::appendToRecentFileList(const QString& fileName, const QString& 
     while (files.size() > MaxRecentFiles)
         files.removeLast();
     settings.setValue(listName, files);
+}
+
+
+QString MainWindow::mostRecentFileInList(const QString& listName)
+{
+    QSettings settings(Company, AppName);
+    QStringList files = settings.value(listName).toStringList();
+    return files.first();
 }
 
 
@@ -626,14 +646,6 @@ void MainWindow::updateRecentDNAFileActions(void)
         mRecentDNAFileActs[j]->setVisible(false);
     if (numRecentFiles > 0)
         ui->menuOpenRecentDNA->setEnabled(true);
-}
-
-
-QString MainWindow::mostRecentFileInList(const QString& listName)
-{
-    QSettings settings(Company, AppName);
-    QStringList files = settings.value(listName).toStringList();
-    return files.first();
 }
 
 
