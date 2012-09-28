@@ -9,8 +9,8 @@
 #include "imagewidget.h"
 #include "breedersettings.h"
 
-ImageWidget::ImageWidget(QFrame* parent)
-    : QFrame(parent)
+ImageWidget::ImageWidget(QWidget* parent)
+    : QWidget(parent)
     , mWindowAspectRatio(0)
     , mImageAspectRatio(0)
 {
@@ -19,8 +19,6 @@ ImageWidget::ImageWidget(QFrame* parent)
     setSizePolicy(sizePolicy);
     setAcceptDrops(true);
     setStyleSheet("background-color: #222222;");
-    setFrameShape(QFrame::StyledPanel);
-    setFrameStyle(QFrame::Plain);
 }
 
 

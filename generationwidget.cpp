@@ -9,8 +9,8 @@
 #include "generationwidget.h"
 #include "breedersettings.h"
 
-GenerationWidget::GenerationWidget(QFrame* parent)
-    : QFrame(parent)
+GenerationWidget::GenerationWidget(QWidget* parent)
+    : QWidget(parent)
     , mWindowAspectRatio(0)
     , mImageAspectRatio(0)
 {
@@ -20,8 +20,6 @@ GenerationWidget::GenerationWidget(QFrame* parent)
     setSizePolicy(sizePolicy);
     setAcceptDrops(true);
     setStyleSheet("background-color: #333333;");
-    setFrameShape(QFrame::StyledPanel);
-    setFrameStyle(QFrame::Plain);
 }
 
 
@@ -58,7 +56,7 @@ bool GenerationWidget::event(QEvent* e)
     default:
         break;
     }
-    return QFrame::event(e);
+    return QWidget::event(e);
 }
 
 

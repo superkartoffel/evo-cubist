@@ -564,8 +564,7 @@ void MainWindow::loadDNA(const QString& filename)
             mBreeder.setDNA(dna);
             if (dna.generation() == 0 || dna.selected() == 0) { // evaluation of metadata section failed
                 QRegExp re("(\\d{10}).+(\\d{9})");
-                const int pos = re.indexIn(filename);
-                if (-1 != pos) {
+                if (re.indexIn(filename) != -1) {
                     const QStringList& n = re.capturedTexts();
                     mBreeder.setGeneration(n.at(1).toULong());
                     mBreeder.setSelected(n.at(2).toULong());

@@ -14,7 +14,7 @@
 
 QColor getRGB(const QRegExp& re, const QString& text, QXmlStreamReader& xml, bool* ok)
 {
-    if (-1 == re.indexIn(text)) {
+    if (re.indexIn(text) == -1) {
         ok = false;
         return QColor();
     }
@@ -295,7 +295,7 @@ bool SVGReader::readSVG(QIODevice* device)
 }
 
 
-QString SVGReader::errorString() const
+QString SVGReader::errorString(void) const
 {
     return QObject::tr("%1 (line %2, column %3)").arg(mXml.errorString()).arg(mXml.lineNumber()).arg(mXml.columnNumber());
 }

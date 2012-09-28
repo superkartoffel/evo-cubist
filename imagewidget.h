@@ -11,11 +11,12 @@
 #include <QDragLeaveEvent>
 #include <QDropEvent>
 
-class ImageWidget : public QFrame
+class ImageWidget : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit ImageWidget(QFrame* parent = NULL);
+    explicit ImageWidget(QWidget* parent = NULL);
     void setImage(const QImage&);
     const QString& imageFileName(void) const { return mImageFileName; }
     bool loadImage(const QString& fileName);

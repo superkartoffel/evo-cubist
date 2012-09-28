@@ -1,10 +1,10 @@
 BUGS
 
-[ ] Mac OS X: Die Anwendung wird mit einem Default-Icon auf dem Desktop abgezeigt, nicht mit dem in der PRO-Datei angegebenen.
+[ ] GenerationWidget: Gesplittete Polygone sind erst beim nächsten update() sichtbar.
 
 FEATURES
 
-[ ] Werte der RGBA/xy-Schieber aus DNA-Datei auslesen und Schieber darauf einstellen.
+[ ] Namen der DNA-Datei beim automatischen Speichern in Registry ablegen und beim nächsten Programmstart automatisch diese DNA einlesen.
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
 [?] GenerationWidget: markiertes Polygon löschen
 

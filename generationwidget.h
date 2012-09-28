@@ -16,11 +16,11 @@
 #include "gene.h"
 
 
-class GenerationWidget : public QFrame
+class GenerationWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GenerationWidget(QFrame* parent = NULL);
+    explicit GenerationWidget(QWidget* parent = NULL);
     virtual QSize minimumSizeHint(void) const { return QSize(256, 256); }
 
     const QImage& image(void) const { return mImage; }
