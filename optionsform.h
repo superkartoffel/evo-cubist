@@ -77,6 +77,9 @@ public:
     void setScatterFactor(qreal);
     void setCores(int);
 
+protected:
+    void showEvent(QShowEvent*);
+
 signals:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);

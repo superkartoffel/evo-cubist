@@ -77,7 +77,6 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
     QObject::connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(aboutQt()));
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(show()));
-    QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(raise()));
 
     for (int i = 0; i < MaxRecentFiles; ++i) {
         mRecentImageFileActs[i] = new QAction(this);

@@ -623,7 +623,7 @@ void BreederSettings::readGPUComputing(void)
     const QString& str = mXml.readElementText();
     const int v = str.toInt(&ok);
     if (ok)
-        mGPUComputing = v;
+        mGPUComputing = (v != 0);
     else
         mXml.raiseError(QObject::tr("invalid gpuComputing: %1").arg(str));
 }

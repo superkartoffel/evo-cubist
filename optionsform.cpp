@@ -76,10 +76,14 @@ OptionsForm::~OptionsForm()
 }
 
 
+void OptionsForm::showEvent(QShowEvent*)
+{
+    raise();
+}
+
+
 void OptionsForm::go(const QString& where, const QString& what)
 {
-    show();
-    raise();
     if (where == "Autosave") {
         ui->autoSaveTabWidget->setCurrentIndex(1);
         if (what == "imageSaveDirectory") {
@@ -92,6 +96,7 @@ void OptionsForm::go(const QString& where, const QString& what)
             // TODO: show tooltip for field or otherwise highlight it
         }
     }
+    show();
 }
 
 
@@ -163,7 +168,7 @@ void OptionsForm::resetToDefaults(void)
 void OptionsForm::selectImageSaveDirectory(void)
 {
     const QString& dirName = QFileDialog::getExistingDirectory(this, tr("Choose image save directory"), ui->imageSaveDirectoryLineEdit->text());
-    if (dirName != "")
+    if (!dirName.isNull())
         setImageSaveDirectory(dirName);
 }
 
@@ -171,7 +176,7 @@ void OptionsForm::selectImageSaveDirectory(void)
 void OptionsForm::selectDNASaveDirectory(void)
 {
     const QString& dirName = QFileDialog::getExistingDirectory(this, tr("Choose DNA save directory"), ui->dnaSaveDirectoryLineEdit->text());
-    if (dirName != "")
+    if (!dirName.isNull())
         setDNASaveDirectory(dirName);
 }
 
@@ -179,7 +184,7 @@ void OptionsForm::selectDNASaveDirectory(void)
 void OptionsForm::selectLogFile(void)
 {
     const QString& fileName = QFileDialog::getSaveFileName(this, tr("Choose log file"), ui->logFileLineEdit->text());
-    if (fileName != "")
+    if (!fileName.isNull())
         setLogFile(fileName);
 }
 

@@ -31,7 +31,6 @@ public:
     explicit MainWindow(QWidget* parent = NULL);
     ~MainWindow();
 
-
 protected:
     bool event(QEvent*);
     void closeEvent(QCloseEvent*);
