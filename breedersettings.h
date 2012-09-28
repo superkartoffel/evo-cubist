@@ -38,6 +38,7 @@ public:
         , mMaxGenes(400)
         , mStartDistribution(0)
         , mScatterFactor(0.5)
+        , mAutoSave(false)
         , mAutoSaveInterval(10)
         , mCores(2)
     {
@@ -67,6 +68,8 @@ public:
     inline int startDistribution(void) const {  return mStartDistribution; }
     inline qreal scatterFactor(void) const { return mScatterFactor; }
     inline int cores(void) const { return mCores; }
+    inline bool autoSave(void) const { return mAutoSave; }
+    inline int autoSaveInterval(void) const { return mAutoSaveInterval; }
 
     bool save(const QString& fileName);
     bool load(const QString& fileName);
@@ -94,10 +97,16 @@ public slots:
     void setMaxGenes(int);
     void setCores(int);
     void setGPUComputing(bool);
+    void setAutoSaveInterval(int);
+    void setAutoSave(bool);
     void setStartDistribution(int);
     void setScatterFactor(double);
     void setCurrentDNAFile(const QString&);
     void setCurrentImageFile(const QString&);
+    void setImageSaveDirectory(const QString&);
+    void setImageSaveFilenameTemplate(const QString&);
+    void setDNASaveDirectory(const QString&);
+    void setDNASaveFilenameTemplate(const QString&);
 
 private:
     double mdXY; // [0..1)
@@ -121,6 +130,7 @@ private:
     int mMaxGenes;
     int mStartDistribution;
     qreal mScatterFactor;
+    bool mAutoSave;
     int mAutoSaveInterval; // secs
     int mCores;
     bool mGPUComputing;
@@ -133,6 +143,8 @@ private:
 
     QXmlStreamReader mXml;
 
+    void readRecentDNAFile(void);
+    void readRecentImageFile(void);
     void readMinA(void);
     void readMaxA(void);
     void readColorMutationProbability(void);

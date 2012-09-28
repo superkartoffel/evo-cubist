@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionSaveDNA, SIGNAL(triggered()), SLOT(saveDNA()));
     QObject::connect(ui->actionOpenDNA, SIGNAL(triggered()), SLOT(openDNA()));
     QObject::connect(ui->actionOpenOriginalImage, SIGNAL(triggered()), SLOT(openOriginalImage()));
+    QObject::connect(ui->actionSaveSettings, SIGNAL(triggered()), SLOT(saveSettings()));
 
     QObject::connect(ui->actionExit, SIGNAL(triggered()), SLOT(close()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
@@ -228,10 +229,13 @@ void MainWindow::autoSaveGeneratedImage(void)
     QString dnaFilename = mOptionsForm->dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
     bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
-    if (success)
+    if (success) {
         statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.generation()), 3000);
-    else
+        gSettings.setCurrentDNAFile(dnaFilename);
+    }
+    else {
         statusBar()->showMessage(tr("Automatic saving failed."), 3000);
+    }
     setCursor(oldCursor);
 }
 
@@ -363,7 +367,6 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/geometry", saveGeometry());
     settings.setValue("MainWindow/windowState", saveState());
     settings.setValue("MainWindow/imageFilename", mImageWidget->imageFileName());
-    settings.setValue("MainWindow/lastSavedDNA", mLastSavedDNA);
     settings.setValue("Options/geometry", mOptionsForm->saveGeometry());
     settings.setValue("Options/deltaR", ui->redSlider->value());
     settings.setValue("Options/deltaG", ui->greenSlider->value());
@@ -403,7 +406,6 @@ void MainWindow::restoreAppSettings(void)
     restoreState(settings.value("MainWindow/windowState").toByteArray());
     QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/KWA10.jpg").toString();
     mImageWidget->loadImage(imageFileName);
-    mLastSavedDNA = settings.value("MainWindow/lastSavedDNA").toString();
     ui->redSlider->setValue(settings.value("Options/deltaR", 50).toInt());
     ui->greenSlider->setValue(settings.value("Options/deltaG", 50).toInt());
     ui->blueSlider->setValue(settings.value("Options/deltaB", 50).toInt());
@@ -459,7 +461,6 @@ void MainWindow::saveDNA(void)
     bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
     if (success) {
         statusBar()->showMessage(tr("DNA saved as '%1'.").arg(dnaFilename), 5000);
-        mLastSavedDNA = dnaFilename;
     }
     else {
         QMessageBox::warning(this, tr("Error saving DNA"), tr("DNA could not be saved as '%1'.").arg(dnaFilename));
@@ -489,6 +490,7 @@ void MainWindow::loadOriginalImage(const QString& filename)
             statusBar()->showMessage(tr("Original picture '%1' loaded.").arg(filename), 3000);
             appendToRecentFileList(filename, "recentImageFileList");
             updateRecentImageFileActions();
+            gSettings.setCurrentImageFile(filename);
         }
         else {
             QMessageBox::warning(this, tr("Error loading the original picture."), tr("Original picture could not be loaded."));
@@ -523,6 +525,7 @@ void MainWindow::loadDNA(const QString& filename)
             statusBar()->showMessage(tr("DNA '%1' loaded.").arg(filename), 3000);
             appendToRecentFileList(filename, "recentDNAFileList");
             updateRecentDNAFileActions();
+            gSettings.setCurrentDNAFile(filename);
         }
         else {
             QMessageBox::warning(this, tr("Error loading DNA"), tr("DNA could not be loaded. Reason: %1").arg(dna.errorString()));

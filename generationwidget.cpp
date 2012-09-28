@@ -1,12 +1,13 @@
 // Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 // All rights reserved.
 
-#include "generationwidget.h"
 #include <QPainter>
 #include <QUrl>
 #include <QMimeData>
 #include <QtCore/QDebug>
 #include <qmath.h>
+#include "generationwidget.h"
+#include "breedersettings.h"
 
 GenerationWidget::GenerationWidget(QFrame* parent)
     : QFrame(parent)
@@ -152,7 +153,9 @@ void GenerationWidget::dropEvent(QDropEvent* e)
     if (d->hasUrls()) {
         QString fileUrl = d->urls().first().toString();
         if (fileUrl.contains(QRegExp("file://.*\\.(svg|json)$"))) {
-            emit fileDropped(fileUrl.remove("file:///"));
+            const QString fileName = fileUrl.remove("file:///");
+            emit fileDropped(fileName);
+            gSettings.setCurrentDNAFile(fileName);
         }
     }
     setStyleSheet("background-color: #222222;");

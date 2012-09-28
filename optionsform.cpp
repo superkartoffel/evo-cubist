@@ -58,6 +58,12 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->startDistributionComboBox, SIGNAL(currentIndexChanged(int)), SLOT(startDistributionChanged(int)));
     QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gSettings, SLOT(setScatterFactor(double)));
     QObject::connect(ui->coresSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setCores(int)));
+    QObject::connect(ui->saveIntervalSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setAutoSaveInterval(int)));
+    QObject::connect(ui->autoSaveCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setAutoSave(bool)));
+    QObject::connect(ui->imageSaveDirectoryLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setImageSaveDirectory(QString)));
+    QObject::connect(ui->dnaSaveDirectoryLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setDNASaveDirectory(QString)));
+    QObject::connect(ui->imageFilenameTemplateLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setImageSaveFilenameTemplate(QString)));
+    QObject::connect(ui->dnaFilenameTemplateLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setDNASaveFilenameTemplate(QString)));
 //  QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setGPUComputing(bool)));
 
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetToDefaults()));

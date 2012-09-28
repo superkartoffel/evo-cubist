@@ -693,7 +693,7 @@
       <string>Save</string>
      </property>
      <addaction name="actionSaveDNA"/>
-     <addaction name="actionSaveProject"/>
+     <addaction name="actionSaveSettings"/>
     </widget>
     <widget class="QMenu" name="menuOpenRecentImage">
      <property name="title">
@@ -803,12 +803,12 @@
     <string>Options</string>
    </property>
   </action>
-  <action name="actionSaveProject">
+  <action name="actionSaveSettings">
    <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Project ...</string>
+    <string>Settings ...</string>
    </property>
   </action>
   <action name="actionOpen_recent_image">

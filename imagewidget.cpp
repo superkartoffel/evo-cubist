@@ -7,6 +7,7 @@
 #include <QtCore/QDebug>
 
 #include "imagewidget.h"
+#include "breedersettings.h"
 
 ImageWidget::ImageWidget(QFrame* parent)
     : QFrame(parent)
@@ -103,6 +104,7 @@ bool ImageWidget::loadImage(const QString& fileName)
         return false;
     setImage(image);
     mImageFileName = fileName;
+    gSettings.setCurrentImageFile(fileName);
     emit imageDropped(mImage);
     return true;
 }

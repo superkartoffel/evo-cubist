@@ -43,8 +43,6 @@ private:
     GenerationWidget* mGenerationWidget;
     Breeder mBreeder;
     QDateTime mStartTime;
-    QString mLastSavedDNA;
-    QString mSaveDirectory;
     QFile mLog;
 
     static const int MaxRecentFiles = 10;
