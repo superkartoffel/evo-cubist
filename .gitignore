@@ -3,6 +3,14 @@ bin/*
 opt/*
 tmp/*
 deploy/*
+*.o
+moc_*
+Makefile*
+ui_*.h
+*.dmg
+qrc_*.cpp
+evo-cubist.app
+evo-cubist-test/*.moc
 evo-cubist-test/Makefile*
 evo-cubist-test/debug/*
 evo-cubist-test/release/*

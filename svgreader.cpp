@@ -53,13 +53,7 @@ void SVGReader::readPath(void)
 
     QRegExp fo_re("fill-opacity\\s*:\\s*([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
     pos = fo_re.indexIn(style);
-    qreal alpha;
-    if (-1 != pos) {
-        alpha = fo_re.capturedTexts().at(1).toDouble(&ok);
-        if (!ok) {
-
-        }
-    }
+    qreal alpha = (-1 != pos)? fo_re.capturedTexts().at(1).toDouble(&ok) : color.alphaF();
     if (!ok)
         mXml.raiseError(QObject::tr("fill-opacity (%1): not found or invalid").arg(fo_re.capturedTexts().at(1)));
     color.setAlphaF(alpha);
