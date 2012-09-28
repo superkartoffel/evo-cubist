@@ -65,7 +65,7 @@
         <location filename="mainwindow.ui" line="269"/>
         <location filename="mainwindow.cpp" line="322"/>
         <location filename="mainwindow.cpp" line="356"/>
-        <location filename="mainwindow.cpp" line="681"/>
+        <location filename="mainwindow.cpp" line="680"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
@@ -145,87 +145,87 @@
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="701"/>
-        <location filename="mainwindow.ui" line="817"/>
+        <location filename="mainwindow.ui" line="704"/>
+        <location filename="mainwindow.ui" line="826"/>
         <source>Open recent image</source>
         <translation>Zuletzt geöffnete Bilder</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="707"/>
+        <location filename="mainwindow.ui" line="713"/>
         <source>Open recent DNA</source>
         <translation>Zuletzt geöffnete DNS</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="713"/>
+        <location filename="mainwindow.ui" line="722"/>
         <source>Open recent settings</source>
         <translation>Zuletzt geöffnete Einstellungen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="728"/>
+        <location filename="mainwindow.ui" line="737"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="736"/>
+        <location filename="mainwindow.ui" line="745"/>
         <source>Extras</source>
         <translation>Extras</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="755"/>
+        <location filename="mainwindow.ui" line="764"/>
         <source>Original image ...</source>
         <translation>Originalbild ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="758"/>
+        <location filename="mainwindow.ui" line="767"/>
         <source>Ctrl+O</source>
         <translation>Strg+O</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="763"/>
-        <location filename="mainwindow.ui" line="771"/>
+        <location filename="mainwindow.ui" line="772"/>
+        <location filename="mainwindow.ui" line="780"/>
         <source>DNA ...</source>
         <translation>DNS ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="766"/>
-        <location filename="mainwindow.ui" line="784"/>
+        <location filename="mainwindow.ui" line="775"/>
+        <location filename="mainwindow.ui" line="793"/>
         <source>Ctrl+S</source>
         <translation>Strg+S</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="776"/>
+        <location filename="mainwindow.ui" line="785"/>
         <source>Exit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="781"/>
-        <location filename="mainwindow.ui" line="789"/>
+        <location filename="mainwindow.ui" line="790"/>
+        <location filename="mainwindow.ui" line="798"/>
         <source>SVG ...</source>
         <translation>SVG ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="794"/>
+        <location filename="mainwindow.ui" line="803"/>
         <source>About Evo Cubist</source>
         <translation>Über Evo Cubist</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="799"/>
+        <location filename="mainwindow.ui" line="808"/>
         <source>About Qt</source>
         <translation>Über Qt</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="804"/>
+        <location filename="mainwindow.ui" line="813"/>
         <source>Options</source>
         <translation>Optionen</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="812"/>
-        <location filename="mainwindow.ui" line="822"/>
+        <location filename="mainwindow.ui" line="821"/>
+        <location filename="mainwindow.ui" line="831"/>
         <source>Settings ...</source>
         <translation>Einstellungen ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="30"/>
+        <location filename="mainwindow.cpp" line="31"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
@@ -346,7 +346,7 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="458"/>
-        <location filename="mainwindow.cpp" line="566"/>
+        <location filename="mainwindow.cpp" line="593"/>
         <source>DNA files (*.svg; *.json; *.dna)</source>
         <translation>DNA-Dateien (*.svg; *.json; *.dna)</translation>
     </message>
@@ -386,65 +386,68 @@
         <translation>Originalbild konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="513"/>
+        <location filename="mainwindow.cpp" line="541"/>
         <source>Settings file &apos;%1&apos; loaded.</source>
         <translation>Einstellungen &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="516"/>
+        <location filename="mainwindow.cpp" line="544"/>
         <source>Error loading settings</source>
         <translation>Fehler beim Laden der Einstellungen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="516"/>
+        <location filename="mainwindow.cpp" line="544"/>
         <source>Settings could not be loaded. (%1)</source>
         <translation>Einstellungen konnten nicht geladen werden. (%1)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="524"/>
+        <location filename="mainwindow.cpp" line="552"/>
         <source>Load Settings</source>
         <translation>Einstellungen laden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="524"/>
+        <location filename="mainwindow.cpp" line="552"/>
         <source>Settings files (*.evo; *.xml)</source>
         <translation>Einstellungen (*.evo; *.xml)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="552"/>
+        <location filename="mainwindow.cpp" line="579"/>
         <source>DNA &apos;%1&apos; loaded.</source>
         <translation>DNA &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="558"/>
+        <location filename="mainwindow.cpp" line="585"/>
         <source>Error loading DNA</source>
         <translation>Fehler beim Laden der DNA</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="558"/>
+        <location filename="mainwindow.cpp" line="585"/>
         <source>DNA could not be loaded. (%1)</source>
         <translation>DNS kann nicht geladen werden. (%1)</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="688"/>
+        <source>&lt;p&gt;&lt;b&gt;%1&lt;/b&gt; calculates vector images from bitmaps by using genetic algorithms. See &lt;a href=&quot;%2&quot; title=&quot;%1 project homepage&quot;&gt;%2&lt;/a&gt; for more info.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 %3 &amp;lt;%4&amp;gt;&lt;/p&gt;&lt;p&gt;This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.&lt;/p&gt;&lt;p&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.&lt;/p&gt;You should have received a copy of the GNU General Public License along with this program. If not, see &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0&quot;&gt;http://www.gnu.org/licenses&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;&lt;b&gt;%1&lt;/b&gt; berechnet Vektorgrafiken aus Pixelgrafiken mit Hilfe genetischer Algorithmen. Siehe &lt;a href=&quot;%2&quot; title=&quot;%1-Projektseite&quot;&gt;%2&lt;/a&gt; für weitere Informationen.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 %3 &amp;lt;%4&amp;gt;&lt;/p&gt;&lt;p&gt;Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Wahll) jeder späteren Version.&lt;/p&gt;
+&lt;p&gt;Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm erhalten haben. Falls nicht, siehe &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0&quot;&gt;http://www.gnu.org/licenses&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Die Software &lt;b&gt;Evo Cubist&lt;/b&gt; wurde zu Lehr- und Demonstrationszwecken geschaffen und ist nicht für den produktiven Einsatz vorgesehen. Der Autor und der Heise Zeitschriften Verlag haften  nicht für Schäden, die aus der Nutzung der Software entstehen, und übernehmen keine Gewähr für ihre Vollständigkeit, Fehlerfreiheit und Eignung für einen bestimmten Zweck.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>DNA could not be loaded. Reason: %1</source>
         <translation type="obsolete">DNA konnte nicht geladen werden. Grund: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="622"/>
-        <location filename="mainwindow.cpp" line="640"/>
-        <location filename="mainwindow.cpp" line="658"/>
+        <location filename="mainwindow.cpp" line="654"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="688"/>
+        <location filename="mainwindow.cpp" line="687"/>
         <source>About %1 %2</source>
         <translation>Über %1 %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="689"/>
         <source>&lt;p&gt;&lt;b&gt;%1&lt;/b&gt; calculates vector images from bitmaps by using genetic algorithms. See &lt;a href=&quot;%2&quot; title=&quot;%1 project homepage&quot;&gt;%2&lt;/a&gt; for more info.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 %3 &amp;lt;%4&amp;gt;&lt;/p&gt;&lt;p&gt;This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.&lt;/p&gt;&lt;p&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.&lt;/p&gt;You should have received a copy of the GNU General Public License along with this program. If not, see &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0&quot;&gt;http://www.gnu.org/licenses&lt;/a&gt;&lt;/p&gt;.</source>
-        <translation>&lt;p&gt;&lt;b&gt;Evo Cubist&lt;/b&gt; berechnet Vektorgrafiken aus Pixelgrafiken mit Hilfe genetischer Algorithmen. Siehe &lt;a href=&quot;http://evo-cubist.googlecode.com/&quot;&gt;http://evo-cubist.googlecode.com/&lt;/a&gt; für weitere Informationen.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 Oliver Lau &amp;lt;oliver@von-und-fuer.lau.de&amp;gt;&lt;/p&gt;&lt;p&gt;Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Wahll) jeder späteren Version.&lt;/p&gt;
+        <translation type="obsolete">&lt;p&gt;&lt;b&gt;%1&lt;/b&gt; berechnet Vektorgrafiken aus Pixelgrafiken mit Hilfe genetischer Algorithmen. Siehe &lt;a href=&quot;%2&quot; title=&quot;%1-Projektseite&quot;&gt;%2&lt;/a&gt; für weitere Informationen.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 %3 &amp;lt;%4&amp;gt;&lt;/p&gt;&lt;p&gt;Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Wahll) jeder späteren Version.&lt;/p&gt;
 &lt;p&gt;Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm erhalten haben. Falls nicht, siehe &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0&quot;&gt;http://www.gnu.org/licenses&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Die Software &lt;b&gt;Evo Cubist&lt;/b&gt; wurde zu Lehr- und Demonstrationszwecken geschaffen und ist nicht für den produktiven Einsatz vorgesehen. Der Autor und der Heise Zeitschriften Verlag haften  nicht für Schäden, die aus der Nutzung der Software entstehen, und übernehmen keine Gewähr für ihre Vollständigkeit, Fehlerfreiheit und Eignung für einen bestimmten Zweck.&lt;/p&gt;</translation>
     </message>
     <message>
@@ -452,17 +455,17 @@
         <translation type="obsolete">DNA konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="566"/>
+        <location filename="mainwindow.cpp" line="593"/>
         <source>Load DNA</source>
         <translation>DNA laden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="674"/>
+        <location filename="mainwindow.cpp" line="673"/>
         <source>Really reset breeder?</source>
         <translation>Den Brutkasten wirklich zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="674"/>
+        <location filename="mainwindow.cpp" line="673"/>
         <source>Do you really want to reset the breeder?</source>
         <translation>Wollen Sie den Brutkasten wirklich zurücksetzen?</translation>
     </message>
@@ -723,27 +726,27 @@
         <translation type="obsolete">niedrigste</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="142"/>
+        <location filename="optionsform.cpp" line="147"/>
         <source>Reset parameters to defaults?</source>
         <translation>Parameter auf Vorgabe zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="142"/>
+        <location filename="optionsform.cpp" line="147"/>
         <source>Do you really want to reset all parameters to their defaults?</source>
         <translation>Wollen Sie die Parameter wirklich auf die Voreinstellungen zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="165"/>
+        <location filename="optionsform.cpp" line="170"/>
         <source>Choose image save directory</source>
         <translation>Verzeichnis zum Speichern der generierten Bilder auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="173"/>
+        <location filename="optionsform.cpp" line="178"/>
         <source>Choose DNA save directory</source>
         <translation>Verzeichnis zum Speichern der DNS auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="181"/>
+        <location filename="optionsform.cpp" line="186"/>
         <source>Choose log file</source>
         <translation>Protokolldatei wählen</translation>
     </message>
@@ -792,209 +795,209 @@
         <translation>fill nicht gefunden oder ungültig</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="64"/>
+        <location filename="svgreader.cpp" line="58"/>
         <source>fill-opacity (%1): not found or invalid</source>
         <translation>fill-opacity (%1) nicht gefunden oder ungültig</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="76"/>
+        <location filename="svgreader.cpp" line="70"/>
         <source>invalid x coordinate in &quot;%1&quot;</source>
         <translation>ungültige x-Koordinate in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="79"/>
+        <location filename="svgreader.cpp" line="73"/>
         <source>invalid y coordinate in &quot;%1&quot;</source>
         <translation>ungültige y-Koordinate in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="103"/>
+        <location filename="svgreader.cpp" line="97"/>
         <source>invalid total seconds: %1</source>
         <translation>ungültige total seconds: %1</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="114"/>
+        <location filename="svgreader.cpp" line="108"/>
         <source>invalid generation: %1</source>
         <translation>ungültige generation: %1</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="125"/>
+        <location filename="svgreader.cpp" line="119"/>
         <source>invalid selected: %1</source>
         <translation>ungültiger Wert für selected: %1</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="136"/>
+        <location filename="svgreader.cpp" line="130"/>
         <source>invalid fitness: %1</source>
         <translation>ungültiger Wert für fitness: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="326"/>
-        <location filename="svgreader.cpp" line="149"/>
+        <location filename="breedersettings.cpp" line="330"/>
+        <location filename="svgreader.cpp" line="143"/>
         <source>invalid delta red: %1</source>
         <translation>ungültiger Wert für red: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="311"/>
-        <location filename="breedersettings.cpp" line="339"/>
-        <location filename="svgreader.cpp" line="162"/>
+        <location filename="breedersettings.cpp" line="317"/>
+        <location filename="breedersettings.cpp" line="343"/>
+        <location filename="svgreader.cpp" line="156"/>
         <source>invalid delta green: %1</source>
         <translation>ungültiger Wert für green: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="352"/>
-        <location filename="svgreader.cpp" line="175"/>
+        <location filename="breedersettings.cpp" line="356"/>
+        <location filename="svgreader.cpp" line="169"/>
         <source>invalid delta blue: %1</source>
         <translation>ungültiger Wert für blue: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="365"/>
-        <location filename="svgreader.cpp" line="188"/>
+        <location filename="breedersettings.cpp" line="369"/>
+        <location filename="svgreader.cpp" line="182"/>
         <source>invalid delta alpha: %1</source>
         <translation>ungültiger Wert für alpha: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="403"/>
+        <location filename="breedersettings.cpp" line="407"/>
         <source>invalid minA: %1</source>
         <translation>ungültiges minA: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="416"/>
+        <location filename="breedersettings.cpp" line="420"/>
         <source>invalid maxA: %1</source>
         <translation>ungültiges maxA: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="429"/>
+        <location filename="breedersettings.cpp" line="433"/>
         <source>invalid colorMutationProbability: %1</source>
         <translation>ungültige colorMutationProbability: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="442"/>
+        <location filename="breedersettings.cpp" line="446"/>
         <source>invalid pointMutationProbability: %1</source>
         <translation>ungültige pointMutationProbability: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="455"/>
+        <location filename="breedersettings.cpp" line="459"/>
         <source>invalid pointKillProbability: %1</source>
         <translation>ungültige pointKillProbability: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="468"/>
+        <location filename="breedersettings.cpp" line="472"/>
         <source>invalid pointEmergenceProbability: %1</source>
         <translation>ungültige pointEmergenceProbability: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="481"/>
+        <location filename="breedersettings.cpp" line="485"/>
         <source>invalid geneKillProbability: %1</source>
         <translation>ungültige geneKillProbability: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="494"/>
+        <location filename="breedersettings.cpp" line="498"/>
         <source>invalid geneMoveProbability: %1</source>
         <translation>ungültige geneMoveProbability: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="507"/>
+        <location filename="breedersettings.cpp" line="511"/>
         <source>invalid geneSliceProbability: %1</source>
         <translation>ungültige geneSliceProbability: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="520"/>
+        <location filename="breedersettings.cpp" line="524"/>
         <source>invalid geneEmergenceProbability: %1</source>
         <translation>ungültige geneEmergenceProbability: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="533"/>
+        <location filename="breedersettings.cpp" line="537"/>
         <source>invalid minPointsPerGene: %1</source>
         <translation>ungültige minPointsPerGene: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="546"/>
+        <location filename="breedersettings.cpp" line="550"/>
         <source>invalid maxPointsPerGene: %1</source>
         <translation>ungültige maxPointsPerGene: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="559"/>
+        <location filename="breedersettings.cpp" line="563"/>
         <source>invalid minGenes: %1</source>
         <translation>ungültige minGenes: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="572"/>
+        <location filename="breedersettings.cpp" line="576"/>
         <source>invalid maxGenes: %1</source>
         <translation>ungültige maxGenes: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="585"/>
+        <location filename="breedersettings.cpp" line="589"/>
         <source>invalid startDistribution: %1</source>
         <translation>ungültige startDistribution: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="598"/>
+        <location filename="breedersettings.cpp" line="602"/>
         <source>invalid scatterFactor: %1</source>
         <translation>ungültiger scatterFactor: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="611"/>
+        <location filename="breedersettings.cpp" line="615"/>
         <source>invalid cores: %1</source>
         <translation>ungültige cores: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="624"/>
+        <location filename="breedersettings.cpp" line="628"/>
         <source>invalid gpuComputing: %1</source>
         <translation>gpuComputing ungültig: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="733"/>
+        <location filename="breedersettings.cpp" line="737"/>
         <source>invalid autosave enabled value: %1</source>
         <translation>ungültiger autosave enabled value: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="746"/>
+        <location filename="breedersettings.cpp" line="750"/>
         <source>invalid autosave interval: %1</source>
         <translation>ungültiges autosave interval: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="757"/>
-        <location filename="breedersettings.cpp" line="768"/>
+        <location filename="breedersettings.cpp" line="761"/>
+        <location filename="breedersettings.cpp" line="772"/>
         <source>invalid imageDirectory: %1</source>
         <translation>ungültiges imageDirectory: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="779"/>
+        <location filename="breedersettings.cpp" line="783"/>
         <source>invalid dnaDirectory: %1</source>
         <translation>ungültiges dnaDirectory: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="790"/>
+        <location filename="breedersettings.cpp" line="794"/>
         <source>invalid dnaFilenameTemplate: %1</source>
         <translation>ungültiges dnaFilenameTemplate: %1</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="854"/>
+        <location filename="breedersettings.cpp" line="859"/>
         <source>The file is not an Evo Cubist v1.x settings file.</source>
         <translation>Die Datei enthält keine Einstellungen für Evo Cubist v1.x.</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="201"/>
+        <location filename="svgreader.cpp" line="195"/>
         <source>invalid delta XY: %1</source>
         <translation>ungültiger Wert für XY: %1</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="255"/>
+        <location filename="svgreader.cpp" line="249"/>
         <source>invalid x scale factor in &quot;%1&quot;</source>
         <translation>ungültige x-Skalierung in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="258"/>
+        <location filename="svgreader.cpp" line="252"/>
         <source>invalid y scale factor in &quot;%1&quot;</source>
         <translation>ungültige y-Skalierung in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="297"/>
+        <location filename="svgreader.cpp" line="291"/>
         <source>The file is not an SVG version 1.1 file.</source>
         <translation>Diese Datei liegt nicht im SVG-Format (v1.1) vor.</translation>
     </message>
     <message>
-        <location filename="breedersettings.cpp" line="863"/>
-        <location filename="svgreader.cpp" line="306"/>
+        <location filename="breedersettings.cpp" line="868"/>
+        <location filename="svgreader.cpp" line="300"/>
         <source>%1 (line %2, column %3)</source>
         <translation>%1 (Zeile %2, Spalte %3)</translation>
     </message>
