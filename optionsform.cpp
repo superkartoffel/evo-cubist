@@ -102,36 +102,50 @@ void OptionsForm::go(const QString& where, const QString& what)
 
 void OptionsForm::minGenesChanged(int v)
 {
+    Q_ASSERT(v >= 0);
+    Q_ASSERT(v <= ui->maxGenesSpinBox->value());
     ui->maxGenesSpinBox->setMinimum(v);
 }
 
 
 void OptionsForm::maxGenesChanged(int v)
 {
+    Q_ASSERT(v >= 0);
+    Q_ASSERT(v >= ui->minGenesSpinBox->value());
     ui->minGenesSpinBox->setMaximum(v);
 }
 
 
 void OptionsForm::minPointsPerGeneChanged(int v)
 {
+    Q_ASSERT(v >= 3);
+    Q_ASSERT(v <= ui->maxPointsSpinBox->value());
     ui->maxPointsSpinBox->setMinimum(v);
 }
 
 
 void OptionsForm::maxPointsPerGeneChanged(int v)
 {
+    Q_ASSERT(v >= 3);
+    Q_ASSERT(v >= ui->minPointsSpinBox->value());
     ui->minPointsSpinBox->setMaximum(v);
 }
 
 
 void OptionsForm::minAlphaChanged(int v)
 {
+    Q_ASSERT(v >= 0);
+    Q_ASSERT(v < 256);
+    Q_ASSERT(v <= ui->maxAlphaSpinBox->value());
     ui->maxAlphaSpinBox->setMinimum(v);
 }
 
 
 void OptionsForm::maxAlphaChanged(int v)
 {
+    Q_ASSERT(v >= 0);
+    Q_ASSERT(v < 256);
+    Q_ASSERT(v >= ui->minAlphaSpinBox->value());
     ui->minAlphaSpinBox->setMaximum(v);
 }
 
@@ -191,78 +205,97 @@ void OptionsForm::selectLogFile(void)
 
 void OptionsForm::setColorMutationProbability(int v)
 {
+    Q_ASSERT(v > 0);
     ui->colorMutationProbabilitySpinBox->setValue(v);
 }
 
 
 void OptionsForm::setPointMutationProbability(int v)
 {
+    Q_ASSERT(v > 0);
     ui->pointMutationProbabilitySpinBox->setValue(v);
 }
 
 
 void OptionsForm::setPointEmergenceProbability(int v)
 {
+    Q_ASSERT(v > 0);
     ui->pointEmergenceProbabilitySpinBox->setValue(v);
 }
 
 
 void OptionsForm::setPointKillProbability(int v)
 {
+    Q_ASSERT(v > 0);
     ui->pointKillProbabilitySpinBox->setValue(v);
 }
 
 
 void OptionsForm::setGeneEmergenceProbability(int v)
 {
+    Q_ASSERT(v > 0);
     ui->geneEmergenceProbabilitySpinBox->setValue(v);
 }
 
 
 void OptionsForm::setGeneMoveProbability(int v)
 {
+    Q_ASSERT(v > 0);
     ui->geneMoveProbabilitySpinBox->setValue(v);
 }
 
 
 void OptionsForm::setGeneKillProbability(int v)
 {
+    Q_ASSERT(v > 0);
     ui->geneKillProbabilitySpinBox->setValue(v);
 }
 
 
 void OptionsForm::setMinPointsPerGene(int v)
 {
+    Q_ASSERT(v >= 3);
+    Q_ASSERT(v <= ui->maxPointsSpinBox->value());
     ui->minPointsSpinBox->setValue(v);
 }
 
 
 void OptionsForm::setMaxPointsPerGene(int v)
 {
+    Q_ASSERT(v >= 3);
+    Q_ASSERT(v >= ui->minPointsSpinBox->value());
     ui->maxPointsSpinBox->setValue(v);
 }
 
 
 void OptionsForm::setMinGenes(int v)
 {
+    Q_ASSERT(v > 0);
     ui->minGenesSpinBox->setValue(v);
 }
 
 
 void OptionsForm::setMaxGenes(int v)
 {
+    Q_ASSERT(v >= 0);
     ui->maxGenesSpinBox->setValue(v);
 }
 
 
 void OptionsForm::setMinAlpha(int v)
 {
+    Q_ASSERT(v >= 0);
+    Q_ASSERT(v < 256);
+    Q_ASSERT(v <= ui->maxAlphaSpinBox->value());
     ui->minAlphaSpinBox->setValue(v);
 }
 
 
 void OptionsForm::setMaxAlpha(int v)
 {
+    Q_ASSERT(v >= 0);
+    Q_ASSERT(v < 256);
+    Q_ASSERT(v >= ui->minAlphaSpinBox->value());
     ui->maxAlphaSpinBox->setValue(v);
 }
 
@@ -290,6 +323,7 @@ void OptionsForm::setStartDistribution(int index)
 
 void OptionsForm::setSaveInterval(int interval)
 {
+    Q_ASSERT(v > 0);
     ui->saveIntervalSpinBox->setValue(interval);
 }
 

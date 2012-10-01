@@ -780,77 +780,77 @@
         <translation>ungültige Rotkomponente (%2)  in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="27"/>
+        <location filename="svgreader.cpp" line="29"/>
         <source>fill: invalid green component (%2) in &quot;%1&quot;</source>
         <translation>ungültige Grünkomponente (%2)  in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="30"/>
+        <location filename="svgreader.cpp" line="34"/>
         <source>fill: invalid blue component (%2) in &quot;%1&quot;</source>
         <translation>ungültige Blaukomponente (%2)  in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="52"/>
+        <location filename="svgreader.cpp" line="55"/>
         <source>fill not found or invalid</source>
         <translation>fill nicht gefunden oder ungültig</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="58"/>
+        <location filename="svgreader.cpp" line="62"/>
         <source>fill-opacity (%1): not found or invalid</source>
         <translation>fill-opacity (%1) nicht gefunden oder ungültig</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="70"/>
+        <location filename="svgreader.cpp" line="74"/>
         <source>invalid x coordinate in &quot;%1&quot;</source>
         <translation>ungültige x-Koordinate in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="73"/>
+        <location filename="svgreader.cpp" line="79"/>
         <source>invalid y coordinate in &quot;%1&quot;</source>
         <translation>ungültige y-Koordinate in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="97"/>
+        <location filename="svgreader.cpp" line="104"/>
         <source>invalid total seconds: %1</source>
         <translation>ungültige total seconds: %1</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="108"/>
+        <location filename="svgreader.cpp" line="115"/>
         <source>invalid generation: %1</source>
         <translation>ungültige generation: %1</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="119"/>
+        <location filename="svgreader.cpp" line="126"/>
         <source>invalid selected: %1</source>
         <translation>ungültiger Wert für selected: %1</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="130"/>
+        <location filename="svgreader.cpp" line="137"/>
         <source>invalid fitness: %1</source>
         <translation>ungültiger Wert für fitness: %1</translation>
     </message>
     <message>
         <location filename="breedersettings.cpp" line="330"/>
-        <location filename="svgreader.cpp" line="143"/>
+        <location filename="svgreader.cpp" line="150"/>
         <source>invalid delta red: %1</source>
         <translation>ungültiger Wert für red: %1</translation>
     </message>
     <message>
         <location filename="breedersettings.cpp" line="317"/>
         <location filename="breedersettings.cpp" line="343"/>
-        <location filename="svgreader.cpp" line="156"/>
+        <location filename="svgreader.cpp" line="163"/>
         <source>invalid delta green: %1</source>
         <translation>ungültiger Wert für green: %1</translation>
     </message>
     <message>
         <location filename="breedersettings.cpp" line="356"/>
-        <location filename="svgreader.cpp" line="169"/>
+        <location filename="svgreader.cpp" line="176"/>
         <source>invalid delta blue: %1</source>
         <translation>ungültiger Wert für blue: %1</translation>
     </message>
     <message>
         <location filename="breedersettings.cpp" line="369"/>
-        <location filename="svgreader.cpp" line="182"/>
+        <location filename="svgreader.cpp" line="189"/>
         <source>invalid delta alpha: %1</source>
         <translation>ungültiger Wert für alpha: %1</translation>
     </message>
@@ -976,28 +976,28 @@
         <translation>Die Datei enthält keine Einstellungen für Evo Cubist v1.x.</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="195"/>
+        <location filename="svgreader.cpp" line="202"/>
         <source>invalid delta XY: %1</source>
         <translation>ungültiger Wert für XY: %1</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="249"/>
+        <location filename="svgreader.cpp" line="255"/>
         <source>invalid x scale factor in &quot;%1&quot;</source>
         <translation>ungültige x-Skalierung in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="252"/>
+        <location filename="svgreader.cpp" line="260"/>
         <source>invalid y scale factor in &quot;%1&quot;</source>
         <translation>ungültige y-Skalierung in &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="svgreader.cpp" line="291"/>
+        <location filename="svgreader.cpp" line="301"/>
         <source>The file is not an SVG version 1.1 file.</source>
         <translation>Diese Datei liegt nicht im SVG-Format (v1.1) vor.</translation>
     </message>
     <message>
         <location filename="breedersettings.cpp" line="868"/>
-        <location filename="svgreader.cpp" line="300"/>
+        <location filename="svgreader.cpp" line="310"/>
         <source>%1 (line %2, column %3)</source>
         <translation>%1 (Zeile %2, Spalte %3)</translation>
     </message>
@@ -1010,7 +1010,7 @@ Zeile %2, Spalte %3</translation>
     <message>
         <location filename="helper.cpp" line="20"/>
         <source>%1 %2 </source>
-        <translation>%1 %2</translation>
+        <translation>%1 %2 </translation>
     </message>
     <message>
         <location filename="helper.cpp" line="20"/>
