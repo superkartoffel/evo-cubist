@@ -47,12 +47,12 @@
      </column>
      <column>
       <property name="text">
-       <string>Generation</string>
+       <string>Selected</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Selected</string>
+       <string>Generation</string>
       </property>
      </column>
      <column>
@@ -94,6 +94,13 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="autofitPushButton">
+       <property name="text">
+        <string>Autofit rows/columns</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -108,6 +115,38 @@
    <hints>
     <hint type="sourcelabel">
      <x>47</x>
+     <y>357</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>258</x>
+     <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>autofitPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>tableWidget</receiver>
+   <slot>resizeColumnsToContents()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>452</x>
+     <y>357</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>258</x>
+     <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>autofitPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>tableWidget</receiver>
+   <slot>resizeRowsToContents()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>452</x>
      <y>357</y>
     </hint>
     <hint type="destinationlabel">

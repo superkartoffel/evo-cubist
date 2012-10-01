@@ -13,10 +13,10 @@
 Gene::Gene(bool randomize)
 {
     if (randomize) {
-        const int N = randomu(gSettings.minPointsPerGene(), gSettings.maxPointsPerGene());
+        const int N = RAND::rnd(gSettings.minPointsPerGene(), gSettings.maxPointsPerGene());
         for (int x = 0; x < N; ++x)
-            mPolygon.append(QPointF(random1(), random1()));
-        mColor.setRgb(randomu(256), randomu(256), randomu(256), randomu(gSettings.minA(), gSettings.maxA()));
+            mPolygon.append(QPointF(RAND::rnd1(), RAND::rnd1()));
+        mColor.setRgb(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
     }
 }
 
@@ -141,14 +141,14 @@ QPolygonF Gene::convexHull(void) const
 
 
 inline bool Gene::willMutate(int probability) const {
-    return randomu(probability) == 0;
+    return RAND::rnd(probability) == 0;
 }
 
 
 void Gene::randomlyTranslatePoint(QPointF& p)
 {
-    p.setX(dReal(p.x(), gSettings.dXY(), 0.0, 1.0));
-    p.setY(dReal(p.y(), gSettings.dXY(), 0.0, 1.0));
+    p.setX(RAND::dReal(p.x(), gSettings.dXY(), 0.0, 1.0));
+    p.setY(RAND::dReal(p.y(), gSettings.dXY(), 0.0, 1.0));
 }
 
 
@@ -156,7 +156,7 @@ void Gene::mutate(void)
 {
     // emerge
     if (willMutate(gSettings.pointEmergenceProbability()) && mPolygon.size() < gSettings.maxPointsPerGene()) {
-        const int i = randomu(mPolygon.size());
+        const int i = RAND::rnd(mPolygon.size());
         const int j = (i+1) % mPolygon.size();
         const QPointF& p0 = mPolygon.at(i);
         const QPointF& p1 = mPolygon.at(j);
@@ -166,7 +166,7 @@ void Gene::mutate(void)
     }
     // kill
     if (willMutate(gSettings.pointKillProbability()) && mPolygon.size() > gSettings.minPointsPerGene())
-        mPolygon.remove(randomu(mPolygon.size()));
+        mPolygon.remove(RAND::rnd(mPolygon.size()));
     // translate
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate(gSettings.pointMutationProbability()))
@@ -174,10 +174,10 @@ void Gene::mutate(void)
     }
     // change color
     if (willMutate(gSettings.colorMutationProbability())) {
-        const int r = dInt(mColor.red(), gSettings.dR(), 0, 255);
-        const int g = dInt(mColor.green(), gSettings.dG(), 0, 255);
-        const int b = dInt(mColor.blue(), gSettings.dB(), 0, 255);
-        const int a = dInt(mColor.alpha(), gSettings.dA(), gSettings.minA(), gSettings.maxA());
+        const int r = RAND::dInt(mColor.red(), gSettings.dR(), 0, 255);
+        const int g = RAND::dInt(mColor.green(), gSettings.dG(), 0, 255);
+        const int b = RAND::dInt(mColor.blue(), gSettings.dB(), 0, 255);
+        const int a = RAND::dInt(mColor.alpha(), gSettings.dA(), gSettings.minA(), gSettings.maxA());
         mColor.setRgb(r, g, b, a);
     }
 }

@@ -28,8 +28,6 @@ namespace MT {
     private: // methods
         void warmup(void);
     };
-
-
 }
 
 #endif //  __MERSENNETWISTER_H_

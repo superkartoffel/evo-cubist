@@ -31,7 +31,7 @@ private slots:
     void tRandom()
     {
         for (int i = 0; i < N; ++i) {
-            unsigned int v = random(256);
+            unsigned int v = RAND::rnd(256);
             QVERIFY2(v < 256, "v above upper boundary");
             QVERIFY2(v >= 0, "v below lower boundary");
         }
@@ -40,7 +40,7 @@ private slots:
     void tRandomWithBounds()
     {
         for (int i = 0; i < N; ++i) {
-            unsigned int v = random(10, 20);
+            unsigned int v = RAND::rnd(10, 20);
             QVERIFY2(v <= 20, "v above upper boundary");
             QVERIFY2(v >= 10, "v below lower boundary");
         }
@@ -49,7 +49,7 @@ private slots:
     void tDInt()
     {
         for (int i = 0; i < N; ++i) {
-            qreal v = dInt(20, 50);
+            qreal v = RAND::dInt(20, 50);
             QVERIFY2(v <= 70, "v above upper boundary");
             QVERIFY2(v >= -30, "v below lower boundary");
         }
@@ -59,7 +59,7 @@ private slots:
     void tDIntWithBoundy()
     {
         for (int i = 0; i < N; ++i) {
-            qreal v = dInt(20, 50, 0, 30);
+            qreal v = RAND::dInt(20, 50, 0, 30);
             QVERIFY2(v <= 30, "v above upper boundary");
             QVERIFY2(v >= 0, "v below lower boundary");
         }
@@ -69,7 +69,7 @@ private slots:
     void tRandom1()
     {
         for (int i = 0; i < N; ++i) {
-            qreal v = random1();
+            qreal v = RAND::rnd1();
             QVERIFY2(v < 1.0, "v above upper boundary");
             QVERIFY2(v >= 0.0, "v below lower boundary");
         }
@@ -78,7 +78,7 @@ private slots:
     void tRandom1WithBounds()
     {
         for (int i = 0; i < N; ++i) {
-            qreal v = random1(-0.5, 0.5);
+            qreal v = RAND::rnd1(-0.5, 0.5);
             QVERIFY2(v <= +0.5, "v above upper boundary");
             QVERIFY2(v >= -0.5, "v below lower boundary");
         }
@@ -87,7 +87,7 @@ private slots:
     void tdReal()
     {
         for (int i = 0; i < N; ++i) {
-            qreal v = dReal(0.5, 1.0);
+            qreal v = RAND::dReal(0.5, 1.0);
             QVERIFY2(v <= +1.5, "v above upper boundary");
             QVERIFY2(v >= -0.5, "v below lower boundary");
         }
@@ -96,7 +96,7 @@ private slots:
     void tdRealWithBounds()
     {
         for (int i = 0; i < N; ++i) {
-            qreal v = dReal(0.5, 1.0, 0.2, 0.3);
+            qreal v = RAND::dReal(0.5, 1.0, 0.2, 0.3);
             QVERIFY2(v <= 0.7, "v above upper boundary");
             QVERIFY2(v >= 0.2, "v below lower boundary");
         }

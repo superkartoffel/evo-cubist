@@ -134,14 +134,14 @@ void Breeder::populate(void)
             for (qreal x = 0; x < 1.0; x += stepX) {
                 QColor color;
                 if (gSettings.startDistribution() == 1) {
-                    color = QColor(randomu(256), randomu(256), randomu(256), randomu(gSettings.minA(), gSettings.maxA()));
+                    color = QColor(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
                 }
                 else {
                     const int px = (int)((x + stepX/2) * mOriginal.width());
                     const int py = (int)((y + stepY/2) * mOriginal.height());
                     if (px < mOriginal.width() && py < mOriginal.height()) {
                         color = QColor(mOriginal.pixel(px, py));
-                        color.setAlpha(randomu(gSettings.minA(), gSettings.maxA()));
+                        color.setAlpha(RAND::rnd(gSettings.minA(), gSettings.maxA()));
                     }
                 }
                 QPolygonF polygon;
@@ -165,22 +165,22 @@ void Breeder::populate(void)
     {
         for (int i = 0; i < gSettings.minGenes(); ++i) {
             QPolygonF polygon;
-            const QPointF mid(random1(), random1());
+            const QPointF mid(RAND::rnd1(), RAND::rnd1());
             for (int j = 0; j < gSettings.minPointsPerGene(); ++j) {
-                const qreal xoff = random1(-0.5, 0.5) / (gSettings.scatterFactor() * gSettings.minPointsPerGene());
-                const qreal yoff = random1(-0.5, 0.5) / (gSettings.scatterFactor() * gSettings.minPointsPerGene());
+                const qreal xoff = RAND::rnd1(-0.5, 0.5) / (gSettings.scatterFactor() * gSettings.minPointsPerGene());
+                const qreal yoff = RAND::rnd1(-0.5, 0.5) / (gSettings.scatterFactor() * gSettings.minPointsPerGene());
                 polygon << (mid + QPointF(xoff, yoff));
             }
             QColor color;
             if (gSettings.startDistribution() == 3) {
-                color = QColor(randomu(256), randomu(256), randomu(256), randomu(gSettings.minA(), gSettings.maxA()));
+                color = QColor(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
             }
             else {
                 const int px = (int)(mid.x() * mOriginal.width());
                 const int py = (int)(mid.y() * mOriginal.height());
                 if (px < mOriginal.width() && py < mOriginal.height()) {
                     color = QColor(mOriginal.pixel(px, py));
-                    color.setAlpha(randomu(gSettings.minA(), gSettings.maxA()));
+                    color.setAlpha(RAND::rnd(gSettings.minA(), gSettings.maxA()));
                 }
             }
             mDNA.append(Gene(polygon, color));

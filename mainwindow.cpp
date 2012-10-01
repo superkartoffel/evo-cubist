@@ -101,8 +101,7 @@ MainWindow::MainWindow(QWidget* parent)
         ui->menuOpenRecentSettings->addAction(mRecentSettingsFileActs[i]);
     }
 
-    mStartTime = QDateTime::currentDateTime();
-    rng.seed(mStartTime.toTime_t());
+    RAND::initialize();
     proceeded(1);
     evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
 }

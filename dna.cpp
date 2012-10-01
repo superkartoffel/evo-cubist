@@ -36,7 +36,7 @@ DNA::DNA(const DNA& other)
 
 
 inline bool DNA::willMutate(unsigned int probability) {
-    return randomu(probability) == 0;
+    return RAND::rnd(probability) == 0;
 }
 
 
@@ -59,10 +59,10 @@ void DNA::mutate(void)
         mDNA.append(Gene(true));
     // maybe kill a gene
     if (willMutate(gSettings.geneKillProbability()) && mDNA.size() > gSettings.minGenes())
-        mDNA.remove(randomu(mDNA.size()));
+        mDNA.remove(RAND::rnd(mDNA.size()));
     if (willMutate(gSettings.geneMoveProbability())) {
-        const int oldIndex = randomu(mDNA.size());
-        const int newIndex = randomu(mDNA.size());
+        const int oldIndex = RAND::rnd(mDNA.size());
+        const int newIndex = RAND::rnd(mDNA.size());
         if (oldIndex != newIndex) {
             const Gene gene = mDNA.at(oldIndex);
             mDNA.remove(oldIndex);

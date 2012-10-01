@@ -32,8 +32,8 @@ void LogViewerForm::log(unsigned long generation, unsigned long selected, int nu
     const int rows = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(rows);
     ui->tableWidget->setItem(rows, 0, new QTableWidgetItem(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")));
-    ui->tableWidget->setItem(rows, 1, new QTableWidgetItem(QString("%1").arg(generation)));
-    ui->tableWidget->setItem(rows, 2, new QTableWidgetItem(QString("%1").arg(selected)));
+    ui->tableWidget->setItem(rows, 1, new QTableWidgetItem(QString("%1").arg(selected)));
+    ui->tableWidget->setItem(rows, 2, new QTableWidgetItem(QString("%1").arg(generation)));
     ui->tableWidget->setItem(rows, 3, new QTableWidgetItem(QString("%1").arg(numPoints)));
     ui->tableWidget->setItem(rows, 4, new QTableWidgetItem(QString("%1").arg(numGenes)));
     ui->tableWidget->setItem(rows, 5, new QTableWidgetItem(QString("%1").arg(fitness)));
@@ -43,7 +43,6 @@ void LogViewerForm::log(unsigned long generation, unsigned long selected, int nu
     ui->tableWidget->item(rows, 3)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ui->tableWidget->item(rows, 4)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ui->tableWidget->item(rows, 5)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    ui->tableWidget->resizeColumnsToContents();
-    ui->tableWidget->resizeRowsToContents();
+    ui->tableWidget->scrollToBottom();
 }
 
