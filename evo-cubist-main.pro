@@ -32,7 +32,8 @@ SOURCES += \
     svgreader.cpp \
     breedersettings.cpp \
     helper.cpp \
-    circle.cpp
+    circle.cpp \
+    logviewerform.cpp
 
 HEADERS += \
     qt-json/json.h \
@@ -51,10 +52,12 @@ HEADERS += \
     breedersettings.h \
     individual.h \
     helper.h \
-    circle.h
+    circle.h \
+    logviewerform.h
 
 FORMS += mainwindow.ui \
-    optionsform.ui
+    optionsform.ui \
+    logviewerform.ui
 
 OTHER_FILES += \
     HINTS.txt \

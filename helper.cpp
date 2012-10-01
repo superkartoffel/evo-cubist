@@ -17,7 +17,7 @@ QString secondsToTime(int seconds)
     seconds -= minutes * 60;
     QString t = QString("%1:%2:%3").arg(hours, 2, 10, QChar('0')).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
     if (days > 0)
-        t.prepend(QObject::tr("%1 %2 ").arg(days).arg(days > 1? QObject::tr("days") : QObject::tr("day")));
+        t.prepend(QObject::tr("%1 %2%3").arg(days).arg(days > 1? QObject::tr("days") : QObject::tr("day")).arg(" "));
     return t;
 }
 
@@ -39,7 +39,8 @@ bool isConvexPolygon(const QPolygonF& polygon) {
     QPolygonF points = polygon;
     points.append(points.at(0));
     points.append(points.at(1));
-    int oldSign = 0;
+    static const int NO_SIGN = 0;
+    int oldSign = NO_SIGN;
     for (int i = 0; i < points.size() - 2; ++i) {
         const QPointF& p0 = points.at(i);
         const QPointF& p1 = points.at(i+1);
@@ -49,7 +50,7 @@ bool isConvexPolygon(const QPolygonF& polygon) {
         const qreal dx2 = p2.x() - p1.x();
         const qreal dy2 = p2.y() - p1.y();
         const qreal cross = dx1 * dy2 - dy1 * dx2;
-        if (oldSign == 0) {
+        if (oldSign == NO_SIGN) {
             oldSign = (cross < 0)? -1 : 1;
         }
         else {

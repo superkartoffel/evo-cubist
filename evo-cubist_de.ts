@@ -726,27 +726,27 @@
         <translation type="obsolete">niedrigste</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="147"/>
+        <location filename="optionsform.cpp" line="161"/>
         <source>Reset parameters to defaults?</source>
         <translation>Parameter auf Vorgabe zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="147"/>
+        <location filename="optionsform.cpp" line="161"/>
         <source>Do you really want to reset all parameters to their defaults?</source>
         <translation>Wollen Sie die Parameter wirklich auf die Voreinstellungen zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="170"/>
+        <location filename="optionsform.cpp" line="184"/>
         <source>Choose image save directory</source>
         <translation>Verzeichnis zum Speichern der generierten Bilder auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="178"/>
+        <location filename="optionsform.cpp" line="192"/>
         <source>Choose DNA save directory</source>
         <translation>Verzeichnis zum Speichern der DNS auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="186"/>
+        <location filename="optionsform.cpp" line="200"/>
         <source>Choose log file</source>
         <translation>Protokolldatei wählen</translation>
     </message>
@@ -1009,8 +1009,9 @@ Zeile %2, Spalte %3</translation>
     </message>
     <message>
         <location filename="helper.cpp" line="20"/>
-        <source>%1 %2 </source>
-        <translation>%1 %2 </translation>
+        <source>%1 %2%3</source>
+        <oldsource>%1 %2 </oldsource>
+        <translation>%1 %2%3</translation>
     </message>
     <message>
         <location filename="helper.cpp" line="20"/>

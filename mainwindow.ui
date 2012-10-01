@@ -671,7 +671,7 @@
      <x>0</x>
      <y>0</y>
      <width>655</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="accessibleName">
@@ -745,6 +745,7 @@
      <string>Extras</string>
     </property>
     <addaction name="actionOptions"/>
+    <addaction name="actionLogViewer"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuExtras"/>
@@ -829,6 +830,11 @@
   <action name="actionOpenSettings">
    <property name="text">
     <string>Settings ...</string>
+   </property>
+  </action>
+  <action name="actionLogViewer">
+   <property name="text">
+    <string>Log Viewer</string>
    </property>
   </action>
  </widget>

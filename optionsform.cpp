@@ -323,7 +323,7 @@ void OptionsForm::setStartDistribution(int index)
 
 void OptionsForm::setSaveInterval(int interval)
 {
-    Q_ASSERT(v > 0);
+    Q_ASSERT(interval > 0);
     ui->saveIntervalSpinBox->setValue(interval);
 }
 

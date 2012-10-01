@@ -42,6 +42,8 @@ MainWindow::MainWindow(QWidget* parent)
     hbox2->addWidget(mGenerationWidget);
     ui->generatedGroupBox->setLayout(hbox2);
 
+    mLogViewerForm = new LogViewerForm;
+
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
@@ -77,6 +79,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), SLOT(about()));
     QObject::connect(ui->actionAboutQt, SIGNAL(triggered()), SLOT(aboutQt()));
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(show()));
+    QObject::connect(ui->actionLogViewer, SIGNAL(triggered()), mLogViewerForm, SLOT(show()));
 
     for (int i = 0; i < MaxRecentFiles; ++i) {
         mRecentImageFileActs[i] = new QAction(this);
@@ -107,6 +110,7 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow()
 {
+    delete mLogViewerForm;
     delete mOptionsForm;
     delete mImageWidget;
     delete mGenerationWidget;
@@ -143,6 +147,7 @@ void MainWindow::closeEvent(QCloseEvent* e)
     }
     saveAppSettings();
     mOptionsForm->close();
+    mLogViewerForm->close();
     e->accept();
 }
 
@@ -173,7 +178,7 @@ void MainWindow::setDeltaA(int v)
 
 void MainWindow::setDeltaXY(int v)
 {
-    ui->xyLineEdit->setText(QString("%1").arg(1e-4*(qreal)v));
+    ui->xyLineEdit->setText(QString("%1").arg(1e-4 * v));
 }
 
 
@@ -194,29 +199,43 @@ void MainWindow::proceeded(unsigned long generation)
 }
 
 
+void MainWindow::doLog(const QString& message)
+{
+    if (mLog.isOpen()) {
+        QTextStream f(&mLog);
+        f << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << message << "\n";
+    }
+}
+
+
+void MainWindow::doLog(unsigned long generation, unsigned long selected, int numPoints, int numGenes, quint64 fitness)
+{
+    mLogViewerForm->log(generation, selected, numPoints, numGenes, fitness);
+    const QString& message = QString("%1 %2 %3 %4 %5 %6")
+            .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz"))
+            .arg(generation)
+            .arg(selected)
+            .arg(numPoints)
+            .arg(numGenes)
+            .arg(fitness);
+    if (mLog.isOpen()) {
+        QTextStream f(&mLog);
+        f << message << "\n";
+    }
+}
+
+
 void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, unsigned long selected, unsigned long generation)
 {
     const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
-    if (fitness == std::numeric_limits<quint64>::max())
-        ui->fitnessLineEdit->setText(tr("n/a"));
-    else
-        ui->fitnessLineEdit->setText(QString("%1").arg(fitness));
+    ui->fitnessLineEdit->setText((fitness == std::numeric_limits<quint64>::max())? tr("n/a") : QString("%1").arg(fitness));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
     ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
     ui->pointsLineEdit->setText(QString("%1").arg(numPoints));
     mGenerationWidget->setDNA(dna);
-    if (mLog.isOpen()) {
-        QTextStream log(&mLog);
-        // (Zeitstempel, Generation, Selected, Points, Genes, Fitness)
-        log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " <<
-               generation << " " <<
-               selected << " " <<
-               numPoints << " " <<
-               dna.size() << " " <<
-               fitness << "\n";
-    }
+    doLog(generation, selected, numPoints, dna.size(), fitness);
 }
 
 
@@ -299,10 +318,7 @@ void MainWindow::startBreeding(void)
     if (!mOptionsForm->logFile().isEmpty()) {
         mLog.setFileName(mOptionsForm->logFile());
         mLog.open(QIODevice::Append | QIODevice::Text);
-        if (mLog.isOpen()) {
-            QTextStream log(&mLog);
-            log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "START.\n";
-        }
+        doLog("START.");
     }
     mStartTime = QDateTime::currentDateTime();
     QObject::connect(&mBreeder,
@@ -343,11 +359,9 @@ void MainWindow::stopBreeding(void)
                         SIGNAL(proceeded(unsigned long)),
                         this,
                         SLOT(proceeded(unsigned long)));
-    if (mLog.isOpen()) {
-        QTextStream log(&mLog);
-        log << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << "STOP.\n";
+    doLog("STOP.");
+    if (mLog.isOpen())
         mLog.close();
-    }
 }
 
 
