@@ -59,7 +59,7 @@ private:
     quint64 totalSeconds(void) const;
     void appendToRecentFileList(const QString& fileName, const QString& listName);
     QString mostRecentFileInList(const QString&);
-    void doLog(unsigned long generation, unsigned long selected, int numPoints, int numgenes, quint64 fitness);
+    void doLog(unsigned long generation, unsigned long selected, int numPoints, int numgenes, quint64 fitness, const QImage& image);
     void doLog(const QString& message);
 
     QTimer mAutoSaveTimer;

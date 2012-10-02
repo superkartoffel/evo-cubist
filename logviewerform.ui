@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
+    <width>449</width>
     <height>379</height>
    </rect>
   </property>
@@ -29,7 +29,7 @@
       <number>0</number>
      </property>
      <property name="columnCount">
-      <number>6</number>
+      <number>7</number>
      </property>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>true</bool>
@@ -68,6 +68,11 @@
      <column>
       <property name="text">
        <string>Fitness</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Image</string>
       </property>
      </column>
     </widget>

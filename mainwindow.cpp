@@ -207,9 +207,9 @@ void MainWindow::doLog(const QString& message)
 }
 
 
-void MainWindow::doLog(unsigned long generation, unsigned long selected, int numPoints, int numGenes, quint64 fitness)
+void MainWindow::doLog(unsigned long generation, unsigned long selected, int numPoints, int numGenes, quint64 fitness, const QImage& image)
 {
-    mLogViewerForm->log(generation, selected, numPoints, numGenes, fitness);
+    mLogViewerForm->log(generation, selected, numPoints, numGenes, fitness, image);
     const QString& message = QString("%1 %2 %3 %4 %5 %6")
             .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz"))
             .arg(generation)
@@ -234,7 +234,7 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, u
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
     ui->pointsLineEdit->setText(QString("%1").arg(numPoints));
     mGenerationWidget->setDNA(dna);
-    doLog(generation, selected, numPoints, dna.size(), fitness);
+    doLog(generation, selected, numPoints, dna.size(), fitness, image);
 }
 
 
