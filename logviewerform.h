@@ -7,17 +7,21 @@
 #include <QWidget>
 #include <QShowEvent>
 #include <QString>
+#include <QMenu>
+#include <QPoint>
+
 
 namespace Ui {
 class LogViewerForm;
 }
+
 
 class LogViewerForm : public QWidget
 {
     Q_OBJECT
     
 public:
-    explicit LogViewerForm(QWidget* parent = NULL);
+    LogViewerForm(QWidget* parent = NULL);
     ~LogViewerForm();
     void log(unsigned long generation, unsigned long selected, int numPoints, int numGenes, quint64 fitness, const QImage& image);
 
@@ -26,9 +30,17 @@ protected:
 
 private:
     Ui::LogViewerForm *ui;
+    QMenu* mMenu;
+
+signals:
+    void showPicture(int generation, int selected);
+    void copyPicture(int generation, int selected);
+    void gotoPicture(int generation, int selected);
 
 private slots:
     void cellDoubleClicked(int, int);
+    void clear(void);
+    void provideContextMenu(const QPoint&);
 };
 
 #endif // __LOGVIEWERFORM_H_

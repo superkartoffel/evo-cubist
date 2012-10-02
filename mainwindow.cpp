@@ -2,8 +2,12 @@
 // All rights reserved.
 
 #include <QtGlobal>
+#include <QDesktopServices>
+#include <QApplication>
+#include <QClipboard>
 #include <QHBoxLayout>
-#include <QDockWidget>
+#include <QDialog>
+#include <QPalette>
 #include <QTextStream>
 #include <QSettings>
 #include <QFileDialog>
@@ -20,6 +24,7 @@
 #include "breedersettings.h"
 #include "main.h"
 #include "helper.h"
+
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -43,6 +48,9 @@ MainWindow::MainWindow(QWidget* parent)
     ui->generatedGroupBox->setLayout(hbox2);
 
     mLogViewerForm = new LogViewerForm;
+    QObject::connect(mLogViewerForm, SIGNAL(copyPicture(int,int)), SLOT(copyPicture(int,int)));
+    QObject::connect(mLogViewerForm, SIGNAL(showPicture(int,int)), SLOT(showPicture(int,int)));
+    QObject::connect(mLogViewerForm, SIGNAL(gotoPicture(int,int)), SLOT(gotoPicture(int,int)));
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
@@ -151,6 +159,54 @@ void MainWindow::closeEvent(QCloseEvent* e)
 }
 
 
+void MainWindow::copyPicture(int generation, int selected)
+{
+    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), generation, selected);
+    const QImage& img = QImage(imageFilename);
+    if (img.isNull()) {
+        QMessageBox::information(this, tr("Image NOT copied"), tr("The selected image could not be copied to the clipboard. Probably you selected an image which hasn't been automatically saved. Relax."));
+        return;
+    }
+    QApplication::clipboard()->setImage(img);
+    statusBar()->showMessage(tr("Image copied to clipboard."), 3000);
+}
+
+
+void MainWindow::showPicture(int generation, int selected)
+{
+    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), generation, selected);
+    QImage img(imageFilename);
+    if (img.isNull()) {
+        QMessageBox::information(this, tr("Image missing"), tr("The selected image could not be found or is invalid. Probably you selected an image which hasn't been automatically saved. Relax."));
+        return;
+    }
+    QDialog imgDialog(this);
+    QPalette palette;
+    palette.setBrush(imgDialog.backgroundRole(), QBrush(img));
+    imgDialog.setPalette(palette);
+    imgDialog.setFixedSize(img.size());
+    imgDialog.setWindowTitle(tr("%1 - Image Viewer").arg(AppName));
+    imgDialog.exec();
+}
+
+
+void MainWindow::gotoPicture(int generation, int selected)
+{
+    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), generation, selected);
+    QFileInfo fInfo(imageFilename);
+    if (!fInfo.isReadable()) {
+        QMessageBox::information(this, tr("Image not found"), tr("The selected image could not be found. Probably you selected an image which hasn't been automatically saved. Relax."));
+        return;
+    }
+    const QString& path = QString("file:///%1").arg(fInfo.absolutePath());
+    bool ok = QDesktopServices::openUrl(path);
+    if (!ok) {
+        QMessageBox::warning(this, tr("Directory not found"), tr("The configured save directory '%1' could not be found. Please check the corresponding form field in the options dialog.").arg(fInfo.absolutePath()), QMessageBox::Ok, QMessageBox::NoButton);
+        mOptionsForm->go("Autosave", "imageSaveDirectory");
+    }
+}
+
+
 void MainWindow::setDeltaR(int v)
 {
     ui->rLineEdit->setText(QString("%1").arg(v));
@@ -191,7 +247,7 @@ quint64 MainWindow::totalSeconds(void) const {
 
 void MainWindow::proceeded(unsigned long generation)
 {
-    quint64 totalseconds = totalSeconds();
+    const quint64 totalseconds = totalSeconds();
     ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / totalseconds));
     ui->generationLineEdit->setText(QString("%1").arg(generation));
     ui->totalTimeLineEdit->setText(secondsToTime(totalseconds));

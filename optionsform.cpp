@@ -103,7 +103,7 @@ void OptionsForm::go(const QString& where, const QString& what)
 void OptionsForm::minGenesChanged(int v)
 {
     Q_ASSERT(v >= 0);
-    Q_ASSERT(v <= ui->maxGenesSpinBox->value());
+//    Q_ASSERT(v <= ui->maxGenesSpinBox->value());
     ui->maxGenesSpinBox->setMinimum(v);
 }
 
@@ -111,7 +111,7 @@ void OptionsForm::minGenesChanged(int v)
 void OptionsForm::maxGenesChanged(int v)
 {
     Q_ASSERT(v >= 0);
-    Q_ASSERT(v >= ui->minGenesSpinBox->value());
+//    Q_ASSERT(v >= ui->minGenesSpinBox->value());
     ui->minGenesSpinBox->setMaximum(v);
 }
 
@@ -119,7 +119,7 @@ void OptionsForm::maxGenesChanged(int v)
 void OptionsForm::minPointsPerGeneChanged(int v)
 {
     Q_ASSERT(v >= 3);
-    Q_ASSERT(v <= ui->maxPointsSpinBox->value());
+//    Q_ASSERT(v <= ui->maxPointsSpinBox->value());
     ui->maxPointsSpinBox->setMinimum(v);
 }
 
@@ -136,7 +136,7 @@ void OptionsForm::minAlphaChanged(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-    Q_ASSERT(v <= ui->maxAlphaSpinBox->value());
+//    Q_ASSERT(v <= ui->maxAlphaSpinBox->value());
     ui->maxAlphaSpinBox->setMinimum(v);
 }
 
@@ -145,7 +145,7 @@ void OptionsForm::maxAlphaChanged(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-    Q_ASSERT(v >= ui->minAlphaSpinBox->value());
+//    Q_ASSERT(v >= ui->minAlphaSpinBox->value());
     ui->minAlphaSpinBox->setMaximum(v);
 }
 
@@ -255,7 +255,7 @@ void OptionsForm::setGeneKillProbability(int v)
 void OptionsForm::setMinPointsPerGene(int v)
 {
     Q_ASSERT(v >= 3);
-    Q_ASSERT(v <= ui->maxPointsSpinBox->value());
+//    Q_ASSERT(v <= ui->maxPointsSpinBox->value());
     ui->minPointsSpinBox->setValue(v);
 }
 
@@ -263,7 +263,7 @@ void OptionsForm::setMinPointsPerGene(int v)
 void OptionsForm::setMaxPointsPerGene(int v)
 {
     Q_ASSERT(v >= 3);
-    Q_ASSERT(v >= ui->minPointsSpinBox->value());
+//    Q_ASSERT(v >= ui->minPointsSpinBox->value());
     ui->maxPointsSpinBox->setValue(v);
 }
 
@@ -286,7 +286,7 @@ void OptionsForm::setMinAlpha(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-    Q_ASSERT(v <= ui->maxAlphaSpinBox->value());
+//    Q_ASSERT(v <= ui->maxAlphaSpinBox->value());
     ui->minAlphaSpinBox->setValue(v);
 }
 
@@ -295,7 +295,7 @@ void OptionsForm::setMaxAlpha(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-    Q_ASSERT(v >= ui->minAlphaSpinBox->value());
+//    Q_ASSERT(v >= ui->minAlphaSpinBox->value());
     ui->maxAlphaSpinBox->setValue(v);
 }
 
@@ -376,6 +376,3 @@ QString OptionsForm::dnaFilename(const QString& originalImageFilename, unsigned 
     QFileInfo fileInfo(originalImageFilename);
     return ui->dnaSaveDirectoryLineEdit->text() + "/" + QString(ui->dnaFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
 }
-
-
-

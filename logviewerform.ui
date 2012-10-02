@@ -20,25 +20,55 @@
    <item>
     <widget class="QTableWidget" name="tableWidget">
      <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOn</enum>
+      <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="dragDropOverwriteMode">
+      <bool>false</bool>
+     </property>
+     <property name="showGrid">
+      <bool>true</bool>
+     </property>
+     <property name="gridStyle">
+      <enum>Qt::DotLine</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
      </property>
      <property name="rowCount">
       <number>0</number>
      </property>
      <property name="columnCount">
-      <number>7</number>
+      <number>6</number>
      </property>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>50</number>
+     </attribute>
      <attribute name="horizontalHeaderHighlightSections">
-      <bool>true</bool>
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>10</number>
      </attribute>
      <attribute name="verticalHeaderVisible">
       <bool>false</bool>
      </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>19</number>
+     </attribute>
      <attribute name="verticalHeaderHighlightSections">
-      <bool>true</bool>
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>10</number>
      </attribute>
      <column>
       <property name="text">
@@ -68,11 +98,6 @@
      <column>
       <property name="text">
        <string>Fitness</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Image</string>
       </property>
      </column>
     </widget>
@@ -112,22 +137,6 @@
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>clearPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>tableWidget</receiver>
-   <slot>clearContents()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>47</x>
-     <y>357</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>173</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>autofitPushButton</sender>
    <signal>clicked()</signal>

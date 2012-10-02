@@ -86,6 +86,9 @@ private slots:
     void loadRecentDNAFile(void);
     void loadRecentSettingsFile(void);
     void updateRecentFileActions(const QString& listName, QMenu* menu, QAction* actions[]);
+    void copyPicture(int generation, int selected);
+    void showPicture(int generation, int selected);
+    void gotoPicture(int generation, int selected);
 
     void setDeltaR(int);
     void setDeltaG(int);
