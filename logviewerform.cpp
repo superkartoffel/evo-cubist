@@ -16,11 +16,10 @@ LogViewerForm::LogViewerForm(QWidget* parent)
     ui->setupUi(this);
     mMenu = new QMenu(this);
     ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    mMenu->addAction(tr("Show picture"))->setData("show");
-    mMenu->addAction(tr("Copy picture to clipboard"))->setData("copy");
-    mMenu->addAction(tr("Go to folder containing picture"))->setData("goto");
+    mMenu->addAction(QIcon(":/icons/show-picture.png"), tr("Show picture"))->setData("show");
+    mMenu->addAction(QIcon(":/icons/copy-to-clipboard.png"), tr("Copy picture to clipboard"))->setData("copy");
+    mMenu->addAction(QIcon(":/icons/go-to-folder.png"), tr("Go to folder containing picture"))->setData("goto");
     QObject::connect(ui->tableWidget, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(provideContextMenu(const QPoint&)));
-    QObject::connect(ui->tableWidget, SIGNAL(cellDoubleClicked(int,int)), SLOT(cellDoubleClicked(int,int)));
     QObject::connect(ui->clearPushButton, SIGNAL(clicked()), SLOT(clear()));
 }
 
@@ -61,14 +60,6 @@ void LogViewerForm::log(unsigned long generation, unsigned long selected, int nu
 }
 
 
-void LogViewerForm::cellDoubleClicked(int row, int column)
-{
-    Q_UNUSED(row);
-    Q_UNUSED(column);
-    // TODO: show generated image
-}
-
-
 void LogViewerForm::clear(void)
 {
     int row = ui->tableWidget->rowCount();
@@ -81,12 +72,14 @@ void LogViewerForm::provideContextMenu(const QPoint& p)
 {
     QTableWidgetItem* item = ui->tableWidget->itemAt(p);
     if (item != NULL) {
-        qDebug() << item->row() << item->column();
         QAction* action = mMenu->exec(mapToGlobal(p));
         if (action != NULL) {
             const QString& cmd = action->data().toString();
-            const int selected   = ui->tableWidget->item(item->row(), 1)->text().toInt();
-            const int generation = ui->tableWidget->item(item->row(), 2)->text().toInt();
+            bool ok = false;
+            const int selected   = ui->tableWidget->item(item->row(), 1)->text().toInt(&ok);
+            Q_ASSERT(ok);
+            const int generation = ui->tableWidget->item(item->row(), 2)->text().toInt(&ok);
+            Q_ASSERT(ok);
             if (cmd == "show") {
                 emit showPicture(generation, selected);
             }

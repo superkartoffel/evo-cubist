@@ -1,7 +1,6 @@
 BUGS
 
 [ ] GenerationWidget: Gesplittete Polygone sind erst beim nächsten update() sichtbar.
-[ ] Nach dem Laden einer Einstellungsdatei wird ein "zufällig" generiertes Bild angezeigt und dann erst das in der Einstellungsdatei angegebene.
 
 FEATURES
 

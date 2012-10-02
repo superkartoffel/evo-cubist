@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
     setWindowTitle(tr("%1 %2").arg(AppName).arg(AppVersion));
 
-    mOptionsForm = new OptionsForm;
+    RAND::initialize();
 
     mImageWidget = new ImageWidget;
     QHBoxLayout* hbox1 = new QHBoxLayout;
@@ -47,10 +47,18 @@ MainWindow::MainWindow(QWidget* parent)
     hbox2->addWidget(mGenerationWidget);
     ui->generatedGroupBox->setLayout(hbox2);
 
+    mOptionsForm = new OptionsForm;
+#ifndef QT_NO_DEBUG
+    mOptionsForm->show();
+#endif
+
     mLogViewerForm = new LogViewerForm;
-    QObject::connect(mLogViewerForm, SIGNAL(copyPicture(int,int)), SLOT(copyPicture(int,int)));
-    QObject::connect(mLogViewerForm, SIGNAL(showPicture(int,int)), SLOT(showPicture(int,int)));
-    QObject::connect(mLogViewerForm, SIGNAL(gotoPicture(int,int)), SLOT(gotoPicture(int,int)));
+    QObject::connect(mLogViewerForm, SIGNAL(copyPicture(int, int)), SLOT(copyPicture(int, int)));
+    QObject::connect(mLogViewerForm, SIGNAL(showPicture(int, int)), SLOT(showPicture(int, int)));
+    QObject::connect(mLogViewerForm, SIGNAL(gotoPicture(int, int)), SLOT(gotoPicture(int, int)));
+#ifndef QT_NO_DEBUG
+    mLogViewerForm->show();
+#endif
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
@@ -89,6 +97,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(show()));
     QObject::connect(ui->actionLogViewer, SIGNAL(triggered()), mLogViewerForm, SLOT(show()));
 
+
     for (int i = 0; i < MaxRecentFiles; ++i) {
         mRecentImageFileActs[i] = new QAction(this);
         mRecentImageFileActs[i]->setVisible(false);
@@ -101,17 +110,14 @@ MainWindow::MainWindow(QWidget* parent)
         QObject::connect(mRecentSettingsFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentSettingsFile()));
     }
 
-    restoreAppSettings();
-
     for (int i = 0; i < MaxRecentFiles; ++i) {
         ui->menuOpenRecentImage->addAction(mRecentImageFileActs[i]);
         ui->menuOpenRecentDNA->addAction(mRecentDNAFileActs[i]);
         ui->menuOpenRecentSettings->addAction(mRecentSettingsFileActs[i]);
     }
 
-    RAND::initialize();
-    proceeded(1);
-    evolved(mBreeder.image(), mBreeder.dna(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
+    restoreAppSettings();
+    resetBreeder();
 }
 
 
@@ -282,6 +288,7 @@ void MainWindow::doLog(unsigned long generation, unsigned long selected, int num
 
 void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, unsigned long selected, unsigned long generation)
 {
+    qDebug() << "MainWindow::evolved() generation =" << generation;
     const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
     ui->fitnessLineEdit->setText((fitness == std::numeric_limits<quint64>::max())? tr("n/a") : QString("%1").arg(fitness));

@@ -38,7 +38,6 @@ signals:
     void gotoPicture(int generation, int selected);
 
 private slots:
-    void cellDoubleClicked(int, int);
     void clear(void);
     void provideContextMenu(const QPoint&);
 };
