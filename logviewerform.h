@@ -31,6 +31,7 @@ protected:
 private:
     Ui::LogViewerForm *ui;
     QMenu* mMenu;
+    enum Commands { ShowPicture, CopyToClipboard, GoToFolder };
 
 signals:
     void showPicture(int generation, int selected);

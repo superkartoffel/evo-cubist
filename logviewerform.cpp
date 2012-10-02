@@ -16,9 +16,9 @@ LogViewerForm::LogViewerForm(QWidget* parent)
     ui->setupUi(this);
     mMenu = new QMenu(this);
     ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    mMenu->addAction(QIcon(":/icons/show-picture.png"), tr("Show picture"))->setData("show");
-    mMenu->addAction(QIcon(":/icons/copy-to-clipboard.png"), tr("Copy picture to clipboard"))->setData("copy");
-    mMenu->addAction(QIcon(":/icons/go-to-folder.png"), tr("Go to folder containing picture"))->setData("goto");
+    mMenu->addAction(QIcon(":/icons/show-picture.png"), tr("Show picture"))->setData(ShowPicture);
+    mMenu->addAction(QIcon(":/icons/copy-to-clipboard.png"), tr("Copy picture to clipboard"))->setData(CopyToClipboard);
+    mMenu->addAction(QIcon(":/icons/go-to-folder.png"), tr("Go to folder containing picture"))->setData(GoToFolder);
     QObject::connect(ui->tableWidget, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(provideContextMenu(const QPoint&)));
     QObject::connect(ui->clearPushButton, SIGNAL(clicked()), SLOT(clear()));
 }
@@ -44,7 +44,7 @@ void LogViewerForm::log(unsigned long generation, unsigned long selected, int nu
     picItem->setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     const QImage& scaledImage = image.scaledToHeight(31, Qt::SmoothTransformation);
     picItem->setData(Qt::DecorationRole, scaledImage);
-    picItem->setData(Qt::DisplayRole, QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    picItem->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
     ui->tableWidget->setItem(N, 0, picItem);
     ui->tableWidget->setItem(N, 1, new QTableWidgetItem(QString("%1").arg(selected)));
     ui->tableWidget->item(N, 1)->setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
@@ -74,23 +74,28 @@ void LogViewerForm::provideContextMenu(const QPoint& p)
     if (item != NULL) {
         QAction* action = mMenu->exec(mapToGlobal(p));
         if (action != NULL) {
-            const QString& cmd = action->data().toString();
             bool ok = false;
             const int selected   = ui->tableWidget->item(item->row(), 1)->text().toInt(&ok);
             Q_ASSERT(ok);
             const int generation = ui->tableWidget->item(item->row(), 2)->text().toInt(&ok);
             Q_ASSERT(ok);
-            if (cmd == "show") {
+            switch (action->data().toInt())
+            {
+            case ShowPicture:
                 emit showPicture(generation, selected);
-            }
-            else if (cmd == "copy") {
+                break;
+            case CopyToClipboard:
                 emit copyPicture(generation, selected);
-            }
-            else if (cmd == "goto") {
+                break;
+            case GoToFolder:
                 emit gotoPicture(generation, selected);
+                break;
+            default:
+#ifndef QT_NO_DEBUG
+                qWarning() << "unknown command:" << action->data().toInt();
+#endif
+                break;
             }
-            else
-                qWarning() << "unknow command:" << cmd;
         }
     }
 }
