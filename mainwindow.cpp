@@ -607,7 +607,7 @@ void MainWindow::loadSettings(const QString& filename)
             ui->greenSlider->setValue(gSettings.dG());
             ui->blueSlider->setValue(gSettings.dB());
             ui->alphaSlider->setValue(gSettings.dA());
-            ui->xySlider->setValue(gSettings.dXY());
+            ui->xySlider->setValue(1e4 * gSettings.dXY());
             mOptionsForm->setImageSaveDirectory(gSettings.imageSaveDirectory());
             mOptionsForm->setImageSaveFilenameTemplate(gSettings.imageSaveFilenameTemplate());
             mOptionsForm->setDNASaveDirectory(gSettings.dnaSaveDirectory());

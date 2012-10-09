@@ -46,7 +46,7 @@ public:
     }
 
 
-    double dXY(void) const { return mdXY; }
+    qreal dXY(void) const { return mdXY; }
     inline int dR(void) const { return mdR; }
     inline int dG(void) const { return mdG; }
     inline int dB(void) const { return mdB; }
@@ -116,7 +116,7 @@ public slots:
     void setDNASaveFilenameTemplate(const QString&);
 
 private:
-    double mdXY; // [0..1)
+    qreal mdXY; // [0..1)
     int mdR; // [0..255]
     int mdG; // [0..255]
     int mdB; // [0..255]
