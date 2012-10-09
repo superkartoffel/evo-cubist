@@ -40,6 +40,8 @@ public:
     inline int saveInterval(void) const { return ui->saveIntervalSpinBox->value(); }
     inline bool autoSave(void) const { return ui->autoSaveCheckBox->isChecked(); }
     inline bool logInternally(void) const { return ui->internalLogCheckBox->isChecked(); }
+    inline bool stopOnNextAutosave(void) const { return ui->stopOnNextAutosaveCheckBox->isChecked(); }
+    inline void setStopOnNextAutosave(bool enabled) const { ui->stopOnNextAutosaveCheckBox->setChecked(enabled); }
 
     void setLogFile(const QString&);
     QString logFile(void) const { return ui->logFileLineEdit->text(); }

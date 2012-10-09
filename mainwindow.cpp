@@ -150,7 +150,7 @@ void MainWindow::closeEvent(QCloseEvent* e)
         int ret = msgBox.exec();
         switch (ret) {
         case QMessageBox::Save:
-            saveDNA();
+            saveSettings();
             break;
         case QMessageBox::Cancel:
             e->ignore();
@@ -323,6 +323,10 @@ void MainWindow::autoSaveGeneratedImage(void)
         statusBar()->showMessage(tr("Automatic saving failed."), 3000);
     }
     setCursor(oldCursor);
+    if (mOptionsForm->stopOnNextAutosave()) {
+        mOptionsForm->setStopOnNextAutosave(false);
+        stopBreeding();
+    }
 }
 
 
@@ -534,7 +538,7 @@ void MainWindow::restoreAppSettings(void)
 
 void MainWindow::saveSettings(void)
 {
-    QString settingsFilename = QFileDialog::getSaveFileName(this, tr("Save settings"), QString(), tr("Settings file (*.evo; *.xml)"));
+    const QString& settingsFilename = QFileDialog::getSaveFileName(this, tr("Save settings"), QString(), tr("Settings file (*.evo; *.xml)"));
     if (settingsFilename.isNull())
         return;
     appendToRecentFileList(settingsFilename, "Options/recentSettingsFileList");
