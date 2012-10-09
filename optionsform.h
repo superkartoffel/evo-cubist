@@ -30,8 +30,8 @@ public:
     void setImageSaveFilenameTemplate(const QString&);
     void setDNASaveDirectory(const QString&);
     void setDNASaveFilenameTemplate(const QString&);
-    QString imageFilename(const QString&, unsigned int generations, unsigned int selected);
-    QString dnaFilename(const QString&, unsigned int generations, unsigned int selected);
+    QString makeImageFilename(const QString&, unsigned int generations, unsigned int selected);
+    QString makeDNAFilename(const QString&, unsigned int generations, unsigned int selected);
 
     inline QString imageSaveDirectory(void) const { return ui->imageSaveDirectoryLineEdit->text(); }
     inline QString imageSaveFilenameTemplate(void) const { return ui->imageFilenameTemplateLineEdit->text(); }
@@ -84,6 +84,7 @@ signals:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
     void logFileChanged(const QString&);
+    void changeStartDistribution(void);
 
 private slots:
     void selectImageSaveDirectory(void);

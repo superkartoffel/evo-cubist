@@ -89,6 +89,7 @@ private slots:
     void copyPicture(int generation, int selected);
     void showPicture(int generation, int selected);
     void gotoPicture(int generation, int selected);
+    void startDistributionChanged(void);
 
     void setDeltaR(int);
     void setDeltaG(int);

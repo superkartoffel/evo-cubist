@@ -97,7 +97,7 @@ bool ImageWidget::loadImage(const QString& fileName)
         qWarning() << "ImageWidget::loadImage(): fileName is empty.";
         return false;
     }
-    QImage image = QImage(fileName);
+    const QImage image(fileName);
     if (image.isNull())
         return false;
     setImage(image);

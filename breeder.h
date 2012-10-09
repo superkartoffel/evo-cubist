@@ -34,12 +34,11 @@ public:
     inline const QImage& image(void) const { return mGenerated; }
     inline const QImage& originalImage(void) const { return mOriginal; }
     inline unsigned long generation(void) const { return mGeneration; }
+    inline unsigned long selectedGeneration(void) const { return mSelectedGenerations; }
     inline quint64 currentFitness(void) const { return mFitness; }
     inline unsigned long selected(void) const { return mSelected; }
 
-    QPolygonF findPolygon(const QPointF&, const DNA&) const;
-
-    void breed(QThread::Priority = QThread::LowPriority);
+    void breed(QThread::Priority priority = QThread::LowPriority);
     void generate(void);
     void stop(void);
     bool isDirty(void) const { return mDirty; }
@@ -59,6 +58,7 @@ private:
     bool mDirty;
     volatile bool mStopped;
     unsigned long mGeneration;
+    unsigned long mSelectedGenerations;
     quint64 mFitness;
     unsigned long mSelected;
     quint64 mTotalSeconds;

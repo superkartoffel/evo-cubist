@@ -70,6 +70,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     QObject::connect(mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
     QObject::connect(mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
+    QObject::connect(mOptionsForm, SIGNAL(changeStartDistribution()), SLOT(startDistributionChanged()));
 
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetBreeder()));
@@ -167,23 +168,23 @@ void MainWindow::closeEvent(QCloseEvent* e)
 
 void MainWindow::copyPicture(int generation, int selected)
 {
-    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), generation, selected);
+    const QString& imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), generation, selected);
     const QImage& img = QImage(imageFilename);
     if (img.isNull()) {
-        QMessageBox::information(this, tr("Image NOT copied"), tr("The selected image could not be copied to the clipboard. Probably you selected an image which hasn't been automatically saved. Relax."));
+        QMessageBox::warning(this, tr("Image NOT copied"), tr("The selected image could not be copied to the clipboard. Probably you selected an image which hasn't been automatically saved."));
         return;
     }
     QApplication::clipboard()->setImage(img);
-    statusBar()->showMessage(tr("Image copied to clipboard."), 3000);
+    QMessageBox::information(this, tr("Image copied to clipboard"), tr("The selected image has been copied to the clipboard."));
 }
 
 
 void MainWindow::showPicture(int generation, int selected)
 {
-    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), generation, selected);
+    const QString& imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), generation, selected);
     QImage img(imageFilename);
     if (img.isNull()) {
-        QMessageBox::information(this, tr("Image missing"), tr("The selected image could not be found or is invalid. Probably you selected an image which hasn't been automatically saved. Relax."));
+        QMessageBox::warning(this, tr("Image missing"), tr("The selected image could not be found or is invalid. Probably you selected an image which hasn't been automatically saved."));
         return;
     }
     QDialog imgDialog(this);
@@ -198,14 +199,14 @@ void MainWindow::showPicture(int generation, int selected)
 
 void MainWindow::gotoPicture(int generation, int selected)
 {
-    const QString& imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), generation, selected);
+    const QString& imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), generation, selected);
     QFileInfo fInfo(imageFilename);
     if (!fInfo.isReadable()) {
-        QMessageBox::information(this, tr("Image not found"), tr("The selected image could not be found. Probably you selected an image which hasn't been automatically saved. Relax."));
+        QMessageBox::warning(this, tr("Image not found"), tr("The selected image could not be found. Probably you selected an image which hasn't been automatically saved."));
         return;
     }
     const QString& path = QString("file:///%1").arg(fInfo.absolutePath());
-    bool ok = QDesktopServices::openUrl(path);
+    const bool ok = QDesktopServices::openUrl(path);
     if (!ok) {
         QMessageBox::warning(this, tr("Directory not found"), tr("The configured save directory '%1' could not be found. Please check the corresponding form field in the options dialog.").arg(fInfo.absolutePath()), QMessageBox::Ok, QMessageBox::NoButton);
         mOptionsForm->go("Autosave", "imageSaveDirectory");
@@ -288,7 +289,6 @@ void MainWindow::doLog(unsigned long generation, unsigned long selected, int num
 
 void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, unsigned long selected, unsigned long generation)
 {
-    qDebug() << "MainWindow::evolved() generation =" << generation;
     const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
     ui->fitnessLineEdit->setText((fitness == std::numeric_limits<quint64>::max())? tr("n/a") : QString("%1").arg(fitness));
@@ -305,15 +305,18 @@ void MainWindow::autoSaveGeneratedImage(void)
 {
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
-    QString imageFilename = mOptionsForm->imageFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    const unsigned long selectedGeneration = mBreeder.selectedGeneration();
+    const unsigned long selected = mBreeder.selected();
+    QString imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), selectedGeneration, mBreeder.selected());
     avoidDuplicateFilename(imageFilename);
     mGenerationWidget->image().save(imageFilename);
-    QString dnaFilename = mOptionsForm->dnaFilename(mImageWidget->imageFileName(), mBreeder.generation(), mBreeder.selected());
+    QString dnaFilename = mOptionsForm->makeDNAFilename(mImageWidget->imageFileName(), selectedGeneration, mBreeder.selected());
     DNA dna = mBreeder.dna(); // gives a clone
-    bool success = dna.save(dnaFilename, mBreeder.generation(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
+    bool success = dna.save(dnaFilename, selectedGeneration, selected, mBreeder.currentFitness(), totalSeconds());
     if (success) {
-        statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.generation()), 3000);
+        statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(selected).arg(selectedGeneration), 3000);
         gSettings.setCurrentDNAFile(dnaFilename);
+        mLogViewerForm->highlightLastRow();
     }
     else {
         statusBar()->showMessage(tr("Automatic saving failed."), 3000);
@@ -322,10 +325,17 @@ void MainWindow::autoSaveGeneratedImage(void)
 }
 
 
+void MainWindow::startDistributionChanged(void)
+{
+    if (!mBreeder.isRunning())
+        resetBreeder();
+}
+
+
 void MainWindow::autoSaveIntervalChanged(int interval)
 {
     if (mOptionsForm->autoSave()) {
-        bool wasActive = mAutoSaveTimer.isActive();
+        const bool wasActive = mAutoSaveTimer.isActive();
         mAutoSaveTimer.stop();
         mAutoSaveTimer.setInterval(1000 * interval);
         if (wasActive)
@@ -337,7 +347,7 @@ void MainWindow::autoSaveIntervalChanged(int interval)
 void MainWindow::autoSaveToggled(bool enabled)
 {
     if (enabled) {
-        bool wasActive = mAutoSaveTimer.isActive();
+        const bool wasActive = mAutoSaveTimer.isActive();
         mAutoSaveTimer.setInterval(1000 * mOptionsForm->saveInterval());
         if (wasActive)
             mAutoSaveTimer.start();
@@ -444,6 +454,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/geometry", saveGeometry());
     settings.setValue("MainWindow/windowState", saveState());
     settings.setValue("MainWindow/imageFilename", mImageWidget->imageFileName());
+    settings.setValue("LogViewer/geometry", mLogViewerForm->saveGeometry());
     settings.setValue("Options/geometry", mOptionsForm->saveGeometry());
     settings.setValue("Options/deltaR", ui->redSlider->value());
     settings.setValue("Options/deltaG", ui->greenSlider->value());
@@ -488,6 +499,7 @@ void MainWindow::restoreAppSettings(void)
     ui->blueSlider->setValue(settings.value("Options/deltaB", 50).toInt());
     ui->alphaSlider->setValue(settings.value("Options/deltaA", 50).toInt());
     ui->xySlider->setValue(settings.value("Options/deltaXY", 2300).toInt());
+    mLogViewerForm->restoreGeometry(settings.value("LogViewer/geometry").toByteArray());
     mOptionsForm->restoreGeometry(settings.value("Options/geometry").toByteArray());
     mOptionsForm->setImageSaveDirectory(settings.value("Options/imageSaveDirectory", QDir::homePath()).toString());
     mOptionsForm->setImageSaveFilenameTemplate(settings.value("Options/imageSaveFilenameTemplate", "%1-%2-%3.png").toString());
@@ -512,7 +524,6 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm->setMaxGenes(settings.value("Options/maxGenes", 500).toInt());
     mOptionsForm->setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
     mOptionsForm->setMaxAlpha(settings.value("Options/maxAlpha", 45).toInt());
-
     updateRecentFileActions("Options/recentImageFileList", ui->menuOpenRecentImage, mRecentImageFileActs);
     updateRecentFileActions("Options/recentDNAFileList", ui->menuOpenRecentDNA, mRecentDNAFileActs);
     updateRecentFileActions("Options/recentSettingsFileList", ui->menuOpenRecentSettings, mRecentSettingsFileActs);
@@ -554,7 +565,7 @@ void MainWindow::imageDropped(const QImage&)
 
 void MainWindow::openOriginalImage(void)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Load original picture"));
+    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load original picture"));
     loadOriginalImage(filename);
 }
 
@@ -562,7 +573,7 @@ void MainWindow::openOriginalImage(void)
 void MainWindow::loadOriginalImage(const QString& filename)
 {
     if (!filename.isEmpty()) {
-        bool success = mImageWidget->loadImage(filename);
+        const bool success = mImageWidget->loadImage(filename);
         if (success) {
             statusBar()->showMessage(tr("Original picture '%1' loaded.").arg(filename), 3000);
             appendToRecentFileList(filename, "Options/recentImageFileList");
@@ -579,7 +590,7 @@ void MainWindow::loadOriginalImage(const QString& filename)
 void MainWindow::loadSettings(const QString& filename)
 {
     if (!filename.isEmpty()) {
-        bool success = gSettings.load(filename);
+        const bool success = gSettings.load(filename);
         if (success) {
             stopBreeding();
             loadOriginalImage(gSettings.currentImageFile());
@@ -634,7 +645,7 @@ void MainWindow::loadDNA(const QString& filename)
 {
     if (!filename.isEmpty()) {
         DNA dna;
-        bool success = dna.load(filename);
+        const bool success = dna.load(filename);
         if (success) {
             stopBreeding();
             mBreeder.setDNA(dna);
@@ -673,7 +684,7 @@ void MainWindow::openDNA(void)
 
 void MainWindow::loadRecentDNAFile(void)
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    const QAction* const action = qobject_cast<QAction*>(sender());
     if (action)
         loadDNA(action->data().toString());
 }
@@ -681,7 +692,7 @@ void MainWindow::loadRecentDNAFile(void)
 
 void MainWindow::loadRecentImageFile(void)
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    const QAction* const action = qobject_cast<QAction*>(sender());
     if (action)
         loadOriginalImage(action->data().toString());
 }
@@ -690,7 +701,7 @@ void MainWindow::loadRecentImageFile(void)
 
 void MainWindow::loadRecentSettingsFile(void)
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    const QAction* const action = qobject_cast<QAction*>(sender());
     if (action)
         loadSettings(action->data().toString());
 }
@@ -752,7 +763,7 @@ void MainWindow::resetBreeder(void)
         mStartTime = QDateTime::currentDateTime();
         mBreeder.reset();
         proceeded(1);
-        evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.generation());
+        evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.selectedGeneration());
         ui->startStopPushButton->setText(tr("Start"));
     }
 }

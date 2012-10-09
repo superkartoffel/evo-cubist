@@ -153,6 +153,7 @@ void OptionsForm::maxAlphaChanged(int v)
 void OptionsForm::startDistributionChanged(int index)
 {
     ui->scatterFactorSpinBox->setEnabled(index == 3 || index == 4);
+    emit changeStartDistribution();
 }
 
 
@@ -364,15 +365,17 @@ void OptionsForm::setLogFile(const QString& filename)
 }
 
 
-QString OptionsForm::imageFilename(const QString& originalImageFilename, unsigned int generations, unsigned int selected)
+QString OptionsForm::makeImageFilename(const QString& originalImageFilename, unsigned int generations, unsigned int selected)
 {
     QFileInfo fileInfo(originalImageFilename);
-    return ui->imageSaveDirectoryLineEdit->text() + "/" + QString(ui->imageFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
+    const QString& filename = ui->imageSaveDirectoryLineEdit->text() + "/" + QString(ui->imageFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
+    return filename;
 }
 
 
-QString OptionsForm::dnaFilename(const QString& originalImageFilename, unsigned int generations, unsigned int selected)
+QString OptionsForm::makeDNAFilename(const QString& originalImageFilename, unsigned int generations, unsigned int selected)
 {
     QFileInfo fileInfo(originalImageFilename);
-    return ui->dnaSaveDirectoryLineEdit->text() + "/" + QString(ui->dnaFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
+    const QString& filename = ui->dnaSaveDirectoryLineEdit->text() + "/" + QString(ui->dnaFilenameTemplateLineEdit->text()).arg(fileInfo.completeBaseName()).arg(generations, 10, 10, QChar('0')).arg(selected, 9, 10, QChar('0'));
+    return filename;
 }

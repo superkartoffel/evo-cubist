@@ -136,38 +136,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>autofitPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>tableWidget</receiver>
-   <slot>resizeColumnsToContents()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>452</x>
-     <y>357</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>173</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>autofitPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>tableWidget</receiver>
-   <slot>resizeRowsToContents()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>452</x>
-     <y>357</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>173</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -9,6 +9,9 @@
 #include "ui_logviewerform.h"
 
 
+const QColor LogViewerForm::HighlightColor = QColor(135, 230, 76);
+
+
 LogViewerForm::LogViewerForm(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::LogViewerForm)
@@ -21,6 +24,7 @@ LogViewerForm::LogViewerForm(QWidget* parent)
     mMenu->addAction(QIcon(":/icons/go-to-folder.png"), tr("Go to folder containing picture"))->setData(GoToFolder);
     QObject::connect(ui->tableWidget, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(provideContextMenu(const QPoint&)));
     QObject::connect(ui->clearPushButton, SIGNAL(clicked()), SLOT(clear()));
+    QObject::connect(ui->autofitPushButton, SIGNAL(clicked()), SLOT(autofitTableContents()));
 }
 
 
@@ -71,7 +75,7 @@ void LogViewerForm::clear(void)
 void LogViewerForm::provideContextMenu(const QPoint& p)
 {
     QTableWidgetItem* item = ui->tableWidget->itemAt(p);
-    if (item != NULL) {
+    if (item != NULL && item->backgroundColor() == HighlightColor) {
         QAction* action = mMenu->exec(mapToGlobal(p));
         if (action != NULL) {
             bool ok = false;
@@ -96,6 +100,27 @@ void LogViewerForm::provideContextMenu(const QPoint& p)
 #endif
                 break;
             }
+        }
+    }
+}
+
+
+void LogViewerForm::autofitTableContents(void)
+{
+    ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->resizeRowsToContents();
+    ui->tableWidget->scrollToBottom();
+}
+
+
+void LogViewerForm::highlightLastRow(void)
+{
+
+    if (ui->tableWidget->rowCount() > 0) {
+        const int row = ui->tableWidget->rowCount() - 1;
+        for (int column = 0; column < ui->tableWidget->columnCount(); ++column) {
+            QTableWidgetItem* const item = ui->tableWidget->item(row, column);
+            item->setBackgroundColor(HighlightColor);
         }
     }
 }

@@ -52,6 +52,7 @@ void Breeder::setDNA(const DNA& dna)
     mDNA = dna;
     mMutation = dna;
     mGeneration = dna.generation();
+    mSelectedGenerations = mGeneration;
     mSelected = dna.selected();
     mTotalSeconds = dna.totalSeconds();
     generate();
@@ -61,6 +62,7 @@ void Breeder::setDNA(const DNA& dna)
 void Breeder::setGeneration(unsigned long generation)
 {
     mGeneration = generation;
+    mSelectedGenerations = generation;
 }
 
 
@@ -99,13 +101,14 @@ void Breeder::spliceAt(const QPointF& p)
 void Breeder::reset(void)
 {
     mGeneration = 1;
+    mSelectedGenerations = 1;
     mSelected = 1;
     mDirty = false;
     mStopped = false;
     mTotalSeconds = 0;
     populate();
     generate();
-    emit evolved(mGenerated, mDNA, mFitness, mSelected, mGeneration);
+    emit evolved(mGenerated, mDNA, mFitness, mSelected, mSelectedGenerations);
     emit proceeded(mGeneration);
 }
 
@@ -233,11 +236,12 @@ void Breeder::run(void)
             mDNA = best->dna();
             mGenerated = best->generated();
             mDirty = true;
+            mSelectedGenerations = mGeneration + N;
         }
         mMutex.unlock();
         mGeneration += N;
         emit proceeded(mGeneration);
         if (best)
-            emit evolved(mGenerated, mDNA, mFitness, ++mSelected, mGeneration);
+            emit evolved(mGenerated, mDNA, mFitness, ++mSelected, mSelectedGenerations);
     }
 }
