@@ -31,11 +31,13 @@ LogViewerForm::LogViewerForm(QWidget* parent)
 LogViewerForm::~LogViewerForm()
 {
     delete ui;
+    delete mMenu;
 }
 
 
 void LogViewerForm::showEvent(QShowEvent*)
 {
+    activateWindow();
     raise();
 }
 
@@ -44,7 +46,7 @@ void LogViewerForm::log(unsigned long generation, unsigned long selected, int nu
 {
     const int N = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(N);
-    QTableWidgetItem* picItem = new QTableWidgetItem;
+    QTableWidgetItem* const picItem = new QTableWidgetItem;
     picItem->setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     const QImage& scaledImage = image.scaledToHeight(31, Qt::SmoothTransformation);
     picItem->setData(Qt::DecorationRole, scaledImage);
@@ -60,7 +62,10 @@ void LogViewerForm::log(unsigned long generation, unsigned long selected, int nu
     ui->tableWidget->item(N, 4)->setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
     ui->tableWidget->setItem(N, 5, new QTableWidgetItem(QString("%1").arg(fitness)));
     ui->tableWidget->item(N, 5)->setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    ui->tableWidget->scrollToBottom();
+    if (ui->autoScrollCheckBox->isChecked())
+        ui->tableWidget->scrollToBottom();
+    if (ui->autoResizeCheckBox->isChecked())
+        autofitTableContents();
 }
 
 
@@ -76,7 +81,7 @@ void LogViewerForm::provideContextMenu(const QPoint& p)
 {
     QTableWidgetItem* item = ui->tableWidget->itemAt(p);
     if (item != NULL && item->backgroundColor() == HighlightColor) {
-        QAction* action = mMenu->exec(mapToGlobal(p));
+        QAction* const action = mMenu->exec(mapToGlobal(p));
         if (action != NULL) {
             bool ok = false;
             const int selected   = ui->tableWidget->item(item->row(), 1)->text().toInt(&ok);
@@ -109,7 +114,6 @@ void LogViewerForm::autofitTableContents(void)
 {
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->resizeRowsToContents();
-    ui->tableWidget->scrollToBottom();
 }
 
 

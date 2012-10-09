@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>531</width>
-    <height>529</height>
+    <width>427</width>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="autoSaveTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="breeding">
       <attribute name="title">
@@ -659,14 +659,14 @@
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
            <layout class="QFormLayout" name="formLayout_4">
-            <item row="0" column="0">
+            <item row="1" column="0">
              <widget class="QLabel" name="logToFileLabel">
               <property name="text">
                <string>Log to file</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item row="1" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_8">
               <item>
                <widget class="QLineEdit" name="logFileLineEdit"/>
@@ -685,6 +685,16 @@
                </widget>
               </item>
              </layout>
+            </item>
+            <item row="2" column="1">
+             <widget class="QCheckBox" name="internalLogCheckBox">
+              <property name="text">
+               <string>Log internally</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>

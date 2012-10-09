@@ -78,6 +78,7 @@ OptionsForm::~OptionsForm()
 
 void OptionsForm::showEvent(QShowEvent*)
 {
+    activateWindow();
     raise();
 }
 

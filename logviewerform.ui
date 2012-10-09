@@ -125,6 +125,20 @@
       </spacer>
      </item>
      <item>
+      <widget class="QCheckBox" name="autoScrollCheckBox">
+       <property name="text">
+        <string>Auto scroll</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="autoResizeCheckBox">
+       <property name="text">
+        <string>Auto resize</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="autofitPushButton">
        <property name="text">
         <string>Autofit rows/columns</string>

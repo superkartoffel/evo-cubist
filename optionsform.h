@@ -39,6 +39,7 @@ public:
     inline QString dnaSaveFilenameTemplate(void) const { return ui->dnaFilenameTemplateLineEdit->text(); }
     inline int saveInterval(void) const { return ui->saveIntervalSpinBox->value(); }
     inline bool autoSave(void) const { return ui->autoSaveCheckBox->isChecked(); }
+    inline bool logInternally(void) const { return ui->internalLogCheckBox->isChecked(); }
 
     void setLogFile(const QString&);
     QString logFile(void) const { return ui->logFileLineEdit->text(); }

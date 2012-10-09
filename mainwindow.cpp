@@ -272,17 +272,18 @@ void MainWindow::doLog(const QString& message)
 
 void MainWindow::doLog(unsigned long generation, unsigned long selected, int numPoints, int numGenes, quint64 fitness, const QImage& image)
 {
-    mLogViewerForm->log(generation, selected, numPoints, numGenes, fitness, image);
-    const QString& message = QString("%1 %2 %3 %4 %5 %6")
-            .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz"))
-            .arg(generation)
-            .arg(selected)
-            .arg(numPoints)
-            .arg(numGenes)
-            .arg(fitness);
+    if (mOptionsForm->logInternally())
+        mLogViewerForm->log(generation, selected, numPoints, numGenes, fitness, image);
     if (mLog.isOpen()) {
         QTextStream f(&mLog);
-        f << message << "\n";
+        f << QString("%1 %2 %3 %4 %5 %6")
+             .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz"))
+             .arg(generation)
+             .arg(selected)
+             .arg(numPoints)
+             .arg(numGenes)
+             .arg(fitness)
+          << "\n";
     }
 }
 
@@ -536,6 +537,7 @@ void MainWindow::saveSettings(void)
     QString settingsFilename = QFileDialog::getSaveFileName(this, tr("Save settings"), QString(), tr("Settings file (*.evo; *.xml)"));
     if (settingsFilename.isNull())
         return;
+    appendToRecentFileList(settingsFilename, "Options/recentSettingsFileList");
     gSettings.save(settingsFilename);
 }
 
