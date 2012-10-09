@@ -17,7 +17,7 @@ class BreederSettings : public QObject
 public:
     BreederSettings()
         : QObject(NULL)
-        , mdXY(0.5)
+        , mdXY(0.0042)
         , mdR(128)
         , mdG(128)
         , mdB(128)

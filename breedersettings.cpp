@@ -310,11 +310,11 @@ void BreederSettings::readXY(void)
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "xy");
     bool ok = false;
     const QString& xyString = mXml.readElementText();
-    const int xy = xyString.toDouble(&ok);
+    const qreal xy = xyString.toDouble(&ok);
     if (ok)
         mdXY = xy;
     else
-        mXml.raiseError(QObject::tr("invalid delta green: %1").arg(xyString));
+        mXml.raiseError(QObject::tr("invalid delta xy: %1").arg(xyString));
 }
 
 
