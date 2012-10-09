@@ -714,90 +714,88 @@
         <translation>Generscheinungswahrscheinlichkeit</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="437"/>
-        <location filename="optionsform.ui" line="440"/>
         <source>Reset to defaults</source>
-        <translation>Auf Voreinstellungen zurücksetzen</translation>
+        <translation type="obsolete">Auf Voreinstellungen zurücksetzen</translation>
     </message>
     <message>
         <source>Reset</source>
         <translation type="obsolete">Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="463"/>
+        <location filename="optionsform.ui" line="450"/>
         <source>Autosave</source>
         <translation>Automatisches Speichern</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="475"/>
+        <location filename="optionsform.ui" line="462"/>
         <source>Generated images/DNA</source>
         <translation>Generierte Bilder/DNA</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="486"/>
+        <location filename="optionsform.ui" line="473"/>
         <source>Save images to directory</source>
         <translation>Bilder speichern in Verzeichnis</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="511"/>
-        <location filename="optionsform.ui" line="603"/>
-        <location filename="optionsform.ui" line="683"/>
+        <location filename="optionsform.ui" line="498"/>
+        <location filename="optionsform.ui" line="590"/>
+        <location filename="optionsform.ui" line="670"/>
         <source>Choose ...</source>
         <translation>Wählen ...</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="520"/>
+        <location filename="optionsform.ui" line="507"/>
         <source>Image filename template</source>
         <translation>Muster für Dateiname</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="533"/>
-        <location filename="optionsform.ui" line="625"/>
+        <location filename="optionsform.ui" line="520"/>
+        <location filename="optionsform.ui" line="612"/>
         <source>%1 = original image filename, %2 = generations, %3 = selected generations</source>
         <translation>%1 = Dateiname des Originalbildes (ohne Endung), %2 = Generation, %3 = Nummer der ausgewählten Generation</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="540"/>
+        <location filename="optionsform.ui" line="527"/>
         <source>Save interval</source>
         <translation>Speicherintervall</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="553"/>
+        <location filename="optionsform.ui" line="540"/>
         <source> s</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="578"/>
+        <location filename="optionsform.ui" line="565"/>
         <source>Autosave on</source>
         <translation>Autospeichern ein</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="612"/>
+        <location filename="optionsform.ui" line="599"/>
         <source>Save DNA to directory</source>
         <translation>DNS speichern in Verzeichnis</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="632"/>
+        <location filename="optionsform.ui" line="619"/>
         <source>DNA filename template</source>
         <translation>Muster für DNS-Dateinamen</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="657"/>
+        <location filename="optionsform.ui" line="644"/>
         <source>Logging</source>
         <translation>Protokollierung</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="665"/>
+        <location filename="optionsform.ui" line="652"/>
         <source>Log to file</source>
         <translation>Protokollieren in Datei</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="692"/>
+        <location filename="optionsform.ui" line="679"/>
         <source>Log internally</source>
         <translation>internes Protokollieren</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="708"/>
+        <location filename="optionsform.ui" line="695"/>
         <source>Miscellaneous</source>
         <translation>Verschiedenes</translation>
     </message>
@@ -806,7 +804,7 @@
         <translation type="obsolete">Prozesspriorität</translation>
     </message>
     <message>
-        <location filename="optionsform.ui" line="745"/>
+        <location filename="optionsform.ui" line="732"/>
         <source>Use # cores</source>
         <oldsource>Cores used</oldsource>
         <translation>Anzahl Kerne verwenden</translation>
@@ -880,27 +878,25 @@
         <translation type="obsolete">niedrigste</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="163"/>
         <source>Reset parameters to defaults?</source>
-        <translation>Parameter auf Vorgabe zurücksetzen?</translation>
+        <translation type="obsolete">Parameter auf Vorgabe zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="163"/>
         <source>Do you really want to reset all parameters to their defaults?</source>
-        <translation>Wollen Sie die Parameter wirklich auf die Voreinstellungen zurücksetzen?</translation>
+        <translation type="obsolete">Wollen Sie die Parameter wirklich auf die Voreinstellungen zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="186"/>
+        <location filename="optionsform.cpp" line="161"/>
         <source>Choose image save directory</source>
         <translation>Verzeichnis zum Speichern der generierten Bilder auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="194"/>
+        <location filename="optionsform.cpp" line="169"/>
         <source>Choose DNA save directory</source>
         <translation>Verzeichnis zum Speichern der DNS auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="202"/>
+        <location filename="optionsform.cpp" line="177"/>
         <source>Choose log file</source>
         <translation>Protokolldatei wählen</translation>
     </message>

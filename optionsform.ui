@@ -21,7 +21,7 @@
    <item row="2" column="0">
     <widget class="QTabWidget" name="autoSaveTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="breeding">
       <attribute name="title">
@@ -429,19 +429,6 @@
        <item row="1" column="0">
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QPushButton" name="resetPushButton">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="toolTip">
-            <string>Reset to defaults</string>
-           </property>
-           <property name="text">
-            <string>Reset to defaults</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <spacer name="verticalSpacer_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -777,7 +764,6 @@
   <tabstop>maxAlphaSpinBox</tabstop>
   <tabstop>startDistributionComboBox</tabstop>
   <tabstop>scatterFactorSpinBox</tabstop>
-  <tabstop>resetPushButton</tabstop>
   <tabstop>autoSaveTabWidget</tabstop>
   <tabstop>imageSaveDirectoryLineEdit</tabstop>
   <tabstop>selectImageDirectoryPushButton</tabstop>

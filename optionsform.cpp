@@ -65,8 +65,6 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->imageFilenameTemplateLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setImageSaveFilenameTemplate(QString)));
     QObject::connect(ui->dnaFilenameTemplateLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setDNASaveFilenameTemplate(QString)));
 //  QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setGPUComputing(bool)));
-
-    QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetToDefaults()));
 }
 
 
@@ -155,29 +153,6 @@ void OptionsForm::startDistributionChanged(int index)
 {
     ui->scatterFactorSpinBox->setEnabled(index == 3 || index == 4);
     emit changeStartDistribution();
-}
-
-
-void OptionsForm::resetToDefaults(void)
-{
-    if (QMessageBox::question(this, tr("Reset parameters to defaults?"), tr("Do you really want to reset all parameters to their defaults?"), QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Cancel)
-        return;
-    ui->colorMutationProbabilitySpinBox->setValue(1000);
-    ui->pointMutationProbabilitySpinBox->setValue(1000);
-    ui->pointKillProbabilitySpinBox->setValue(1000);
-    ui->pointEmergenceProbabilitySpinBox->setValue(1000);
-    ui->geneKillProbabilitySpinBox->setValue(1000);
-    ui->geneMoveProbabilitySpinBox->setValue(1000);
-    ui->geneEmergenceProbabilitySpinBox->setValue(10000);
-    ui->minGenesSpinBox->setValue(150);
-    ui->maxGenesSpinBox->setValue(500);
-    ui->minPointsSpinBox->setValue(3);
-    ui->maxPointsSpinBox->setValue(6);
-    ui->minAlphaSpinBox->setValue(5);
-    ui->maxAlphaSpinBox->setValue(45);
-    ui->startDistributionComboBox->setCurrentIndex(4);
-    ui->scatterFactorSpinBox->setValue(0.5);
-    ui->coresSpinBox->setValue(QThread::idealThreadCount());
 }
 
 

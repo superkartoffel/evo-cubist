@@ -91,7 +91,6 @@ private slots:
     void selectImageSaveDirectory(void);
     void selectDNASaveDirectory(void);
     void selectLogFile(void);
-    void resetToDefaults(void);
     void startDistributionChanged(int);
     void minGenesChanged(int);
     void maxGenesChanged(int);
