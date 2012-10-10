@@ -17,6 +17,7 @@ ImageWidget::ImageWidget(QWidget* parent)
     QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHeightForWidth(true);
     setSizePolicy(sizePolicy);
+    setMouseTracking(true);
     setAcceptDrops(true);
     setStyleSheet("background-color: #222222;");
 }
@@ -88,6 +89,24 @@ void ImageWidget::dropEvent(QDropEvent* e)
             loadImage(fileUrl.remove("file:///"));
     }
     setStyleSheet("background-color: #222222;");
+}
+
+
+void ImageWidget::mouseMoveEvent(QMouseEvent* e)
+{
+    const QPoint& pos = ((qreal)mImage.width() / (qreal)mDestRect.width()) * (e->pos() - mDestRect.topLeft());
+    if (pos.x() >= 0 && pos.y() >= 0 && pos.x() < mImage.width() && pos.y() < mImage.height())
+        emit colorChanged(mImage.pixel(pos));
+}
+
+
+void ImageWidget::mousePressEvent(QMouseEvent* e)
+{
+    if (e->button() == Qt::LeftButton) {
+        const QPoint& pos = ((qreal)mImage.width() / (qreal)mDestRect.width()) * (e->pos() - mDestRect.topLeft());
+        if (pos.x() >= 0 && pos.y() >= 0 && pos.x() < mImage.width() && pos.y() < mImage.height())
+            emit colorSelected(mImage.pixel(pos));
+    }
 }
 
 

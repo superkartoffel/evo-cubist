@@ -5,11 +5,13 @@
 #define __IMAGEWIDGET_H_
 
 #include <QString>
+#include <QRgb>
 #include <QFrame>
 #include <QImage>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDropEvent>
+#include <QMouseEvent>
 
 class ImageWidget : public QWidget
 {
@@ -25,6 +27,8 @@ public:
 
 signals:
     void imageDropped(const QImage&);
+    void colorChanged(QRgb);
+    void colorSelected(QRgb);
 
 protected:
     void resizeEvent(QResizeEvent*);
@@ -32,6 +36,8 @@ protected:
     void dragEnterEvent(QDragEnterEvent*);
     void dragLeaveEvent(QDragLeaveEvent*);
     void dropEvent(QDropEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 
 public slots:
 
