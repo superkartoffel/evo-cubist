@@ -16,9 +16,9 @@ GenerationWidget::GenerationWidget(QWidget* parent)
 {
     QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHeightForWidth(true);
-    setMouseTracking(true);
     setSizePolicy(sizePolicy);
     setAcceptDrops(true);
+    setMouseTracking(true);
 }
 
 
@@ -80,7 +80,7 @@ void GenerationWidget::paintEvent(QPaintEvent*)
         mDestRect = QRect((width()-w)/2, 0, w, height());
     }
     p.drawImage(mDestRect, mImage);
-    qreal invScale = 1 / qSqrt(mDestRect.width() * mDestRect.height());
+    const qreal invScale = 1 / qSqrt(mDestRect.width() * mDestRect.height());
     p.translate(mDestRect.x(), mDestRect.y());
     p.scale(mDestRect.width(), mDestRect.height());
     p.setBrush(Qt::transparent);

@@ -347,9 +347,14 @@ void OptionsForm::setLogFile(const QString& filename)
 void OptionsForm::backgroundColorChanged(const QString& colorString)
 {
     const QColor newColor(colorString);
-    ui->backgroundColorFrame->setStyleSheet(newColor.isValid()
-                                            ? QString("background-color: %1").arg(colorString)
-                                            : "background-image: url(:/images/checkered-pattern.png)");
+    if (newColor.isValid()) {
+        ui->backgroundColorFrame->setStyleSheet(QString("background-color: %1").arg(colorString));
+        ui->setBackgroundColorPushButton->setEnabled(true);
+    }
+    else {
+        ui->backgroundColorFrame->setStyleSheet("background-image: url(:/images/checkered-pattern.png)");
+        ui->setBackgroundColorPushButton->setEnabled(false);
+    }
 }
 
 
@@ -367,9 +372,11 @@ void OptionsForm::backgroundColorChanged(QRgb rgb)
 void OptionsForm::backgroundColorSelected(void)
 {
     const QColor newColor(ui->backgroundColorLineEdit->text());
-    const QRgb rgb = newColor.rgba();
-    gSettings.setBackgroundColor(rgb);
-    emit backgroundColorSelected(rgb);
+    if (newColor.isValid()) {
+        const QRgb rgb = newColor.rgba();
+        gSettings.setBackgroundColor(rgb);
+        emit backgroundColorSelected(rgb);
+    }
 }
 
 

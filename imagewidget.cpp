@@ -20,8 +20,8 @@ ImageWidget::ImageWidget(QWidget* parent)
     QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHeightForWidth(true);
     setSizePolicy(sizePolicy);
-    setMouseTracking(true);
     setAcceptDrops(true);
+    setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -29,7 +29,7 @@ ImageWidget::ImageWidget(QWidget* parent)
 void ImageWidget::setImage(const QImage& image)
 {
     mImage = image.convertToFormat(QImage::Format_ARGB32);
-    mImageAspectRatio = (qreal) mImage.width() / mImage.height();
+    mImageAspectRatio = (qreal)mImage.width() / mImage.height();
     update();
 }
 
