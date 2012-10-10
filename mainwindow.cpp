@@ -184,19 +184,17 @@ void MainWindow::copyPicture(int generation, int selected)
 
 void MainWindow::showPicture(int generation, int selected)
 {
-    const QString& imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), generation, selected);
-    QImage img(imageFilename);
-    if (img.isNull()) {
-        QMessageBox::warning(this, tr("Image missing"), tr("The selected image could not be found or is invalid. Probably you selected an image which hasn't been automatically saved."));
+    const QString& svgFilename = mOptionsForm->makeDNAFilename(mImageWidget->imageFileName(), generation, selected);
+    QFileInfo fInfo(svgFilename);
+    if (!fInfo.isFile() || !fInfo.isReadable()) {
+        QMessageBox::warning(this, tr("DNA missing"), tr("The selected DNA could not be found or is invalid. Probably you selected a generation which hasn't been automatically saved."));
         return;
     }
-    QDialog imgDialog(this);
-    QPalette palette;
-    palette.setBrush(imgDialog.backgroundRole(), QBrush(img));
-    imgDialog.setPalette(palette);
-    imgDialog.setFixedSize(img.size());
-    imgDialog.setWindowTitle(tr("%1 - Image Viewer").arg(AppName));
-    imgDialog.exec();
+    mSVGWidget.load(svgFilename);
+    mSVGWidget.setBaseSize(mBreeder.image().size());
+    mSVGWidget.setMinimumSize(mBreeder.image().size()/2);
+    mSVGWidget.setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    mSVGWidget.show();
 }
 
 

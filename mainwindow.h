@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QEvent>
 #include <QAction>
+#include <QtSvg/QSvgWidget>
 #include <QtCore/QDebug>
 
 #include "imagewidget.h"
@@ -42,6 +43,7 @@ private:
     LogViewerForm* mLogViewerForm;
     ImageWidget* mImageWidget;
     GenerationWidget* mGenerationWidget;
+    QSvgWidget mSVGWidget;
     Breeder mBreeder;
     QDateTime mStartTime;
     QFile mLog;

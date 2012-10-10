@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 
-QT += core gui xml
+QT += core gui xml svg
 
 CONFIG += warn_on thread qt
 
