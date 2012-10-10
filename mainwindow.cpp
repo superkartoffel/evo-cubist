@@ -153,7 +153,7 @@ void MainWindow::closeEvent(QCloseEvent* e)
         int ret = msgBox.exec();
         switch (ret) {
         case QMessageBox::Save:
-            saveSettings();
+            saveDNA();
             break;
         case QMessageBox::Cancel:
             e->ignore();
@@ -200,10 +200,10 @@ void MainWindow::showPicture(int generation, int selected)
 
 void MainWindow::gotoPicture(int generation, int selected)
 {
-    const QString& imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), generation, selected);
-    QFileInfo fInfo(imageFilename);
+    const QString& svgFilename = mOptionsForm->makeDNAFilename(mImageWidget->imageFileName(), generation, selected);
+    QFileInfo fInfo(svgFilename);
     if (!fInfo.isReadable()) {
-        QMessageBox::warning(this, tr("Image not found"), tr("The selected image could not be found. Probably you selected an image which hasn't been automatically saved."));
+        QMessageBox::warning(this, tr("DNA not found"), tr("The selected DNA could not be found. Probably you selected a generation which hasn't been automatically saved."));
         return;
     }
     const QString& path = QString("file:///%1").arg(fInfo.absolutePath());
