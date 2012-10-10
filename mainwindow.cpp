@@ -339,7 +339,7 @@ void MainWindow::startDistributionChanged(void)
 
 void MainWindow::autoSaveIntervalChanged(int interval)
 {
-    if (mOptionsForm->autoSave()) {
+    if (mOptionsForm->autoSave() && interval > 0) {
         const bool wasActive = mAutoSaveTimer.isActive();
         mAutoSaveTimer.stop();
         mAutoSaveTimer.setInterval(1000 * interval);
