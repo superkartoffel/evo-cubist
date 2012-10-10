@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QMimeData>
 #include <QUrl>
+#include <QPixmap>
 #include <QtCore/QDebug>
 
 #include "imagewidget.h"
@@ -13,13 +14,15 @@ ImageWidget::ImageWidget(QWidget* parent)
     : QWidget(parent)
     , mWindowAspectRatio(0)
     , mImageAspectRatio(0)
+    , mColorPickMode(false)
+    , mPipetteCursor(QPixmap(":/cursors/pipette.png"), 0, 15)
 {
     QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHeightForWidth(true);
     setSizePolicy(sizePolicy);
     setMouseTracking(true);
     setAcceptDrops(true);
-    setStyleSheet("background-color: #222222;");
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 
@@ -57,55 +60,76 @@ void ImageWidget::paintEvent(QPaintEvent*)
 
 void ImageWidget::dragEnterEvent(QDragEnterEvent* e)
 {
-    const QMimeData* d = e->mimeData();
-    if (d->hasUrls()) {
-        if (d->urls().first().toString().contains(QRegExp("\\.(png|jpg|gif|ico|mng|tga|tiff?)$"))) {
-            e->acceptProposedAction();
-            setStyleSheet("background-color: #22dd22;");
-        }
-        else {
-            e->ignore();
-        }
-    }
-    else {
+    const QMimeData* const d = e->mimeData();
+    if (d->hasUrls() && d->urls().first().toString().contains(QRegExp("\\.(png|jpg|gif|ico|mng|tga|tiff?)$")))
+        e->acceptProposedAction();
+    else
         e->ignore();
-    }
 }
 
 
 void ImageWidget::dragLeaveEvent(QDragLeaveEvent* e)
 {
-    setStyleSheet("background-color: #222222;");
     e->accept();
 }
 
 
 void ImageWidget::dropEvent(QDropEvent* e)
 {
-    const QMimeData* d = e->mimeData();
+    const QMimeData* const d = e->mimeData();
     if (d->hasUrls()) {
         QString fileUrl = d->urls().first().toString();
         if (fileUrl.contains(QRegExp("file://.*\\.(png|jpg|gif|ico|mng|tga|tiff?)$")))
             loadImage(fileUrl.remove("file:///"));
     }
-    setStyleSheet("background-color: #222222;");
+}
+
+
+void ImageWidget::keyPressEvent(QKeyEvent* e)
+{
+    if (e->key() == Qt::Key_Control) {
+        mColorPickMode = true;
+        setCursor(mPipetteCursor);
+    }
+}
+
+
+void ImageWidget::keyReleaseEvent(QKeyEvent* e)
+{
+    if (e->key() == Qt::Key_Control) {
+        mColorPickMode = false;
+        setCursor(Qt::ArrowCursor);
+    }
+}
+
+
+bool ImageWidget::cursorOnImage(const QPoint& cursorPos, /*out*/QPoint& pos) const
+{
+    if (mDestRect.width() == 0)
+        return false;
+    pos = ((qreal)mImage.width() / (qreal)mDestRect.width()) * (cursorPos - mDestRect.topLeft());
+    return pos.x() >= 0 && pos.y() >= 0 && pos.x() < mImage.width() && pos.y() < mImage.height();
 }
 
 
 void ImageWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    const QPoint& pos = ((qreal)mImage.width() / (qreal)mDestRect.width()) * (e->pos() - mDestRect.topLeft());
-    if (pos.x() >= 0 && pos.y() >= 0 && pos.x() < mImage.width() && pos.y() < mImage.height())
-        emit colorChanged(mImage.pixel(pos));
+    if (mColorPickMode) {
+        QPoint posInImage;
+        if (cursorOnImage(e->pos(), posInImage))
+            emit colorChanged(mImage.pixel(posInImage));
+    }
 }
 
 
 void ImageWidget::mousePressEvent(QMouseEvent* e)
 {
-    if (e->button() == Qt::LeftButton) {
-        const QPoint& pos = ((qreal)mImage.width() / (qreal)mDestRect.width()) * (e->pos() - mDestRect.topLeft());
-        if (pos.x() >= 0 && pos.y() >= 0 && pos.x() < mImage.width() && pos.y() < mImage.height())
-            emit colorSelected(mImage.pixel(pos));
+    if (mColorPickMode) {
+        if (e->button() == Qt::LeftButton) {
+            QPoint posInImage;
+            if (cursorOnImage(e->pos(), posInImage))
+                emit colorSelected(mImage.pixel(posInImage));
+        }
     }
 }
 

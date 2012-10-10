@@ -19,7 +19,6 @@ GenerationWidget::GenerationWidget(QWidget* parent)
     setMouseTracking(true);
     setSizePolicy(sizePolicy);
     setAcceptDrops(true);
-    setStyleSheet("background-color: #333333;");
 }
 
 

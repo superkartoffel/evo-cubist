@@ -62,6 +62,8 @@ MainWindow::MainWindow(QWidget* parent)
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
+    QObject::connect(mImageWidget, SIGNAL(colorChanged(QRgb)), mOptionsForm, SLOT(backgroundColorChanged(QRgb)));
+    QObject::connect(mImageWidget, SIGNAL(colorSelected(QRgb)), mOptionsForm, SLOT(backgroundColorSelected()));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
     QObject::connect(mGenerationWidget, SIGNAL(clickAt(const QPointF&)), &mBreeder, SLOT(spliceAt(const QPointF&)));
     QObject::connect(&mBreeder, SIGNAL(spliced(Gene, QVector<Gene>)), mGenerationWidget, SLOT(spliced(Gene, QVector<Gene>)));
@@ -71,6 +73,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
     QObject::connect(mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
     QObject::connect(mOptionsForm, SIGNAL(changeStartDistribution()), SLOT(startDistributionChanged()));
+    QObject::connect(mOptionsForm, SIGNAL(backgroundColorSelected(QRgb)), SLOT(setBackgroundColor(QRgb)));
 
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
     QObject::connect(ui->resetPushButton, SIGNAL(clicked()), SLOT(resetBreeder()));
@@ -360,6 +363,13 @@ void MainWindow::autoSaveToggled(bool enabled)
     else {
         mAutoSaveTimer.stop();
     }
+}
+
+
+void MainWindow::setBackgroundColor(QRgb)
+{
+    mBreeder.generate();
+    evolved();
 }
 
 
@@ -759,6 +769,13 @@ void MainWindow::updateRecentFileActions(const QString& listName, QMenu* menu, Q
 }
 
 
+void MainWindow::evolved(void)
+{
+    proceeded(mBreeder.generation());
+    evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.selectedGeneration());
+}
+
+
 void MainWindow::resetBreeder(void)
 {
     bool ok = !mBreeder.isDirty();
@@ -768,8 +785,7 @@ void MainWindow::resetBreeder(void)
         stopBreeding();
         mStartTime = QDateTime::currentDateTime();
         mBreeder.reset();
-        proceeded(1);
-        evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.selectedGeneration());
+        evolved();
         ui->startStopPushButton->setText(tr("Start"));
     }
 }

@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QtCore/QDebug>
 #include "dna.h"
+#include "breedersettings.h"
 
 
 class Individual {
@@ -29,17 +30,10 @@ public:
     inline quint64 fitness(void) const { return mFitness; }
     inline void operator()(Individual& individual) { individual.evolve(); }
 
-    inline unsigned int rgbDelta(QRgb c1, QRgb c2) {
-        const int r = qRed(c1) - qRed(c2);
-        const int g = qGreen(c1) - qGreen(c2);
-        const int b = qBlue(c1) - qBlue(c2);
-        return r*r + g*g + b*b;
-    }
-
     inline void draw(void) {
         QPainter p(&mGenerated);
         p.setPen(Qt::transparent);
-        p.setBrush(Qt::white);
+        p.setBrush(QBrush(QColor(gSettings.backgroundColor())));
         p.drawRect(0, 0, mGenerated.width(), mGenerated.height());
         p.setRenderHint(QPainter::Antialiasing);
         p.scale(mGenerated.width(), mGenerated.height());
@@ -70,6 +64,12 @@ private:
     const QImage* mOriginal;
     quint64 mFitness;
     QImage mGenerated;
+
+private: // methods
+    static inline unsigned int square(unsigned int x) { return x*x; }
+    static inline unsigned int rgbDelta(QRgb c1, QRgb c2) {
+        return square(qRed(c1) - qRed(c2)) + square(qGreen(c1) - qGreen(c2)) + square(qBlue(c1) - qBlue(c2));
+    }
 };
 
 

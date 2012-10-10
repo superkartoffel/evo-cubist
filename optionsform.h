@@ -4,8 +4,10 @@
 #ifndef __OPTIONSFORM_H_
 #define __OPTIONSFORM_H_
 
+#include <QString>
 #include <QWidget>
 #include <QThread>
+#include <QRgb>
 #include "breedersettings.h"
 #include "ui_optionsform.h"
 
@@ -88,6 +90,7 @@ signals:
     void autoSaveToggled(bool);
     void logFileChanged(const QString&);
     void changeStartDistribution(void);
+    void backgroundColorSelected(QRgb);
 
 private slots:
     void selectImageSaveDirectory(void);
@@ -100,6 +103,9 @@ private slots:
     void maxPointsPerGeneChanged(int);
     void minAlphaChanged(int);
     void maxAlphaChanged(int);
+    void backgroundColorChanged(const QString&);
+    void backgroundColorChanged(QRgb);
+    void backgroundColorSelected(void);
 
 private:
     static const QString SaveFilenameTemplate;

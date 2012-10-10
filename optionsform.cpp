@@ -34,6 +34,9 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->saveIntervalSpinBox, SIGNAL(valueChanged(int)), SIGNAL(autoSaveIntervalChanged(int)));
     QObject::connect(ui->autoSaveCheckBox, SIGNAL(toggled(bool)), SIGNAL(autoSaveToggled(bool)));
 
+    QObject::connect(ui->backgroundColorLineEdit, SIGNAL(textChanged(const QString&)), SLOT(backgroundColorChanged(const QString&)));
+    QObject::connect(ui->setBackgroundColorPushButton, SIGNAL(clicked()), SLOT(backgroundColorSelected()));
+
     // save form values into global settings object
     QObject::connect(ui->colorMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setColorMutationProbability(int)));
     QObject::connect(ui->pointMutationProbabilitySpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setPointMutationProbability(int)));
@@ -338,6 +341,35 @@ void OptionsForm::setDNASaveFilenameTemplate(const QString& filenameTemplate)
 void OptionsForm::setLogFile(const QString& filename)
 {
     ui->logFileLineEdit->setText(filename);
+}
+
+
+void OptionsForm::backgroundColorChanged(const QString& colorString)
+{
+    const QColor newColor(colorString);
+    ui->backgroundColorFrame->setStyleSheet(newColor.isValid()
+                                            ? QString("background-color: %1").arg(colorString)
+                                            : "background-image: url(:/images/checkered-pattern.png)");
+}
+
+
+void OptionsForm::backgroundColorChanged(QRgb rgb)
+{
+    const QString& colorString = QString("#%1%2%3")
+            .arg(qRed(rgb), 2, 16, QChar('0'))
+            .arg(qGreen(rgb), 2, 16, QChar('0'))
+            .arg(qBlue(rgb), 2, 16, QChar('0'));
+    ui->backgroundColorLineEdit->setText(colorString);
+    ui->backgroundColorFrame->setStyleSheet(QString("background-color: %1").arg(colorString));
+}
+
+
+void OptionsForm::backgroundColorSelected(void)
+{
+    const QColor newColor(ui->backgroundColorLineEdit->text());
+    const QRgb rgb = newColor.rgba();
+    gSettings.setBackgroundColor(rgb);
+    emit backgroundColorSelected(rgb);
 }
 
 

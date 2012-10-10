@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QRgb>
 #include <QIODevice>
 #include <QXmlStreamReader>
 
@@ -41,12 +42,13 @@ public:
         , mAutoSave(false)
         , mAutoSaveInterval(10)
         , mCores(2)
+        , mBackgroundColor(0xffffffffU)
     {
         // ...
     }
 
-
-    qreal dXY(void) const { return mdXY; }
+    inline QRgb backgroundColor(void) const { return mBackgroundColor; }
+    inline qreal dXY(void) const { return mdXY; }
     inline int dR(void) const { return mdR; }
     inline int dG(void) const { return mdG; }
     inline int dB(void) const { return mdB; }
@@ -103,6 +105,7 @@ public slots:
     void setMaxGenes(int);
     void setCores(int);
     void setGPUComputing(bool);
+    void setBackgroundColor(QRgb);
     void setAutoSaveInterval(int);
     void setAutoSave(bool);
     void setStartDistribution(int);
@@ -148,6 +151,7 @@ private:
     QString mImageSaveFilenameTemplate;
     QString mDNASaveDirectory;
     QString mDNASaveFilenameTemplate;
+    QRgb mBackgroundColor;
 
     QXmlStreamReader mXml;
 
@@ -177,6 +181,7 @@ private:
     void readAutoSaveDNAFilenameTemplate(void);
     void readCores(void);
     void readGPUComputing(void);
+    void readBackgroundColor(void);
     void readXY(void);
     void readRed(void);
     void readGreen(void);

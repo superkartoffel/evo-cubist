@@ -4,6 +4,7 @@
 #include <QtCore/QDebug>
 #include <QString>
 #include <QFile>
+#include <QColor>
 #include <QTextStream>
 #include <QTextCodec>
 #include "breedersettings.h"
@@ -11,6 +12,12 @@
 
 /// global settings object
 BreederSettings gSettings;
+
+
+void BreederSettings::setBackgroundColor(QRgb v)
+{
+    mBackgroundColor = v;
+}
 
 
 void BreederSettings::setDeltaR(int v)
@@ -183,7 +190,7 @@ void BreederSettings::setAutoSaveInterval(int v)
 
 void BreederSettings::setAutoSave(bool v)
 {
-    mAutoSave= v;
+    mAutoSave = v;
 }
 
 
@@ -245,6 +252,10 @@ bool BreederSettings::save(const QString& fileName)
     QTextStream out(&file);
     out.setAutoDetectUnicode(false);
     out.setCodec(QTextCodec::codecForMib(106/* UTF-8 */));
+    const QString& colorString = QString("rgb(%1,%2,%3)")
+            .arg(qRed(mBackgroundColor))
+            .arg(qGreen(mBackgroundColor))
+            .arg(qBlue(mBackgroundColor));
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
         << "<evocubist-settings version=\"" << AppVersionNoDebug << "\">\n"
         << "  <deltas>\n"
@@ -255,6 +266,7 @@ bool BreederSettings::save(const QString& fileName)
         << "    <xy>" << mdXY << "</xy>\n"
         << "  </deltas>\n"
         << "  <breeder>\n"
+        << "    <backgroundColor>" << colorString << "</backgroundColor>\n"
         << "    <colorMutationProbability>" << mColorMutationProbability << "</colorMutationProbability>\n"
         << "    <pointMutationProbability>" << mPointMutationProbability << "</pointMutationProbability>\n"
         << "    <pointKillProbability>" << mPointKillProbability << "</pointKillProbability>\n"
@@ -302,6 +314,14 @@ bool BreederSettings::load(const QString& fileName)
     success = read(&file);
     file.close();
     return success;
+}
+
+
+void BreederSettings::readBackgroundColor(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "backgroundColor");
+    const QColor c(mXml.readElementText());
+    mBackgroundColor = c.isValid()? c.rgba() : 0xffffffffU;
 }
 
 
@@ -633,7 +653,10 @@ void BreederSettings::readBreeder(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "breeder");
     while (mXml.readNextStartElement()) {
-        if (mXml.name() == "minA") {
+        if (mXml.name() == "backgroundColor") {
+            readBackgroundColor();
+        }
+        else if (mXml.name() == "minA") {
             readMinA();
         }
         else if (mXml.name() == "maxA") {

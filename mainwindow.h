@@ -61,6 +61,7 @@ private:
     QString mostRecentFileInList(const QString&);
     void doLog(unsigned long generation, unsigned long selected, int numPoints, int numgenes, quint64 fitness, const QImage& image);
     void doLog(const QString& message);
+    void evolved(void);
 
     QTimer mAutoSaveTimer;
 
@@ -90,7 +91,7 @@ private slots:
     void showPicture(int generation, int selected);
     void gotoPicture(int generation, int selected);
     void startDistributionChanged(void);
-
+    void setBackgroundColor(QRgb);
     void setDeltaR(int);
     void setDeltaG(int);
     void setDeltaB(int);

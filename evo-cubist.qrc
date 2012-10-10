@@ -4,11 +4,15 @@
     </qresource>
     <qresource prefix="/images">
         <file alias="KWA10.jpg">test/images/KWA10.jpg</file>
+        <file alias="checkered-pattern.png">images/checkered-pattern.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file>icons/evo-cubist.ico.png</file>
         <file alias="copy-to-clipboard.png">icons/copy-to-clipboard.png</file>
         <file alias="go-to-folder.png">icons/go-to-folder.png</file>
         <file alias="show-picture.png">icons/show-picture.png</file>
+    </qresource>
+    <qresource prefix="/cursors">
+        <file alias="pipette.png">cursors/pipette.png</file>
     </qresource>
 </RCC>
