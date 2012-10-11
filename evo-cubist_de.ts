@@ -136,9 +136,9 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="269"/>
-        <location filename="mainwindow.cpp" line="423"/>
-        <location filename="mainwindow.cpp" line="455"/>
-        <location filename="mainwindow.cpp" line="787"/>
+        <location filename="mainwindow.cpp" line="433"/>
+        <location filename="mainwindow.cpp" line="465"/>
+        <location filename="mainwindow.cpp" line="800"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
@@ -309,13 +309,15 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="149"/>
-        <source>&lt;b&gt;DNA has been modified.&lt;/b&gt;</source>
-        <translation>&lt;b&gt;DNA wurde geändert.&lt;/b&gt;</translation>
+        <source>&lt;b&gt;DNA/settings have been modified.&lt;/b&gt;</source>
+        <oldsource>&lt;b&gt;DNA has been modified.&lt;/b&gt;</oldsource>
+        <translation>&lt;b&gt;DNS/Einstellungen wurden geändert.&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="150"/>
-        <source>You have unsaved DNA. Do you want to save it?</source>
-        <translation>Sie haben ungespeicherte DNA. Möchten Sie sie jetzt speichern?</translation>
+        <source>You have unsaved DNA/settings. Do you want to save them?</source>
+        <oldsource>You have unsaved DNA. Do you want to save it?</oldsource>
+        <translation>Sie haben ungespeicherte DNS/Einstellungen. Möchten Sie sie jetzt speichern?</translation>
     </message>
     <message>
         <source>%1 %2 </source>
@@ -330,17 +332,17 @@
         <translation type="obsolete">Tag</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="296"/>
+        <location filename="mainwindow.cpp" line="295"/>
         <source>n/a</source>
         <translation>n/a</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="319"/>
+        <location filename="mainwindow.cpp" line="330"/>
         <source>Automatically saved mutation %1 out of %2 generations.</source>
         <translation>Mutation %1 von %2 Generationen automatisch gespeichert.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="324"/>
+        <location filename="mainwindow.cpp" line="334"/>
         <source>Automatic saving failed.</source>
         <translation>Automatisches Speichern fehlgeschlagen.</translation>
     </message>
@@ -349,7 +351,7 @@
         <translation type="obsolete">Automatisches Speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="380"/>
+        <location filename="mainwindow.cpp" line="390"/>
         <source>DNA save directory missing</source>
         <translation>Verzeichnis zum Speichern der DNA nicht vorhanden</translation>
     </message>
@@ -358,7 +360,7 @@
         <translation type="obsolete">Das gewählte Verzeichnis zum Speichern der DNS ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="387"/>
+        <location filename="mainwindow.cpp" line="397"/>
         <source>Image save directory missing</source>
         <translation>Verzeichnis zum Speichern der Bilder ist nicht vorhanden</translation>
     </message>
@@ -367,7 +369,7 @@
         <translation type="obsolete">Das gewählte Verzeichnis zum Speichern der Bilder ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="177"/>
+        <location filename="mainwindow.cpp" line="179"/>
         <source>Image NOT copied</source>
         <translation>Bild NICHT kopiert</translation>
     </message>
@@ -380,7 +382,7 @@
         <translation type="obsolete">Bild in Zwischenablage kopiert.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="190"/>
+        <location filename="mainwindow.cpp" line="192"/>
         <source>DNA missing</source>
         <oldsource>Image missing</oldsource>
         <translation>DNA fehlt</translation>
@@ -402,17 +404,17 @@
         <translation type="obsolete">Das gewählte Bild konnte nicht gefunden werden. Möglicherweise haben Sie ein Bild ausgewählt, das nicht automatisch gespeichert wurde. Entspannen Sie sich.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="177"/>
+        <location filename="mainwindow.cpp" line="179"/>
         <source>The selected image could not be copied to the clipboard. Probably you selected an image which hasn&apos;t been automatically saved.</source>
         <translation>Das gewählte Bild konnte nicht in die Zwischenablage kopiert werden. Möglicherweise haben Sie ein Bild ausgewählt, das nicht automatisch gespeichert wurde.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="181"/>
+        <location filename="mainwindow.cpp" line="183"/>
         <source>Image copied to clipboard</source>
         <translation>Bild in Zwischenablage kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="181"/>
+        <location filename="mainwindow.cpp" line="183"/>
         <source>The selected image has been copied to the clipboard.</source>
         <translation>Das ausgewählte Bild wurde in die Zwischenablage kopiert.</translation>
     </message>
@@ -425,169 +427,169 @@
         <translation type="obsolete">Das gewählte Bild konnte nicht gefunden werden. Möglicherweise haben Sie ein Bild ausgewählt, das nicht automatisch gespeichert wurde.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="190"/>
+        <location filename="mainwindow.cpp" line="192"/>
         <source>The selected DNA could not be found or is invalid. Probably you selected a generation which hasn&apos;t been automatically saved.</source>
         <translation>Die ausgewählte DNS konnte nicht gefunden werden oder ist ungültig. Möglicherweise haben Sie eine Generation ausgewählt, die nicht automatisch gespeichert wurde.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="206"/>
+        <location filename="mainwindow.cpp" line="208"/>
         <source>DNA not found</source>
         <translation>DNS nicht gefunden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="206"/>
+        <location filename="mainwindow.cpp" line="208"/>
         <source>The selected DNA could not be found. Probably you selected a generation which hasn&apos;t been automatically saved.</source>
         <translation>Die ausgewählte DNS konnte nicht gefunden werden oder ist ungültig. Möglicherweise haben Sie eine Generation ausgewählt, die nicht automatisch gespeichert wurde.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="212"/>
+        <location filename="mainwindow.cpp" line="214"/>
         <source>Directory not found</source>
         <translation>Verzeichnis nicht gefunden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="212"/>
+        <location filename="mainwindow.cpp" line="214"/>
         <source>The configured save directory &apos;%1&apos; could not be found. Please check the corresponding form field in the options dialog.</source>
         <translation>Das konfigurierte Autospeichern-Verzeichnis &apos;%1&apos; konnte nicht gefunden werden. Bitte wählen Sie ein neues im Optionen-Dialog.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="380"/>
+        <location filename="mainwindow.cpp" line="390"/>
         <source>The selected DNA save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again.</source>
         <translation>Das gewählte Verzeichnis zum Speichern der DNS ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="387"/>
+        <location filename="mainwindow.cpp" line="397"/>
         <source>The selected image save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again.</source>
         <translation>Das gewählte Verzeichnis zum Speichern der Bilder ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="396"/>
+        <location filename="mainwindow.cpp" line="406"/>
         <source>Log file is not writable</source>
         <translation>Log-Datei ist nicht beschreibbar</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="396"/>
+        <location filename="mainwindow.cpp" line="406"/>
         <source>The selected log file is not writable. Please go to the options dialog and choose a new one. Then try starting again.</source>
         <translation>Die gewählte Log-Datei ist nicht beschreibbar. Bitte wählen Sie eine neue im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="402"/>
+        <location filename="mainwindow.cpp" line="412"/>
         <source>Starting ...</source>
         <translation>Starten ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="426"/>
+        <location filename="mainwindow.cpp" line="436"/>
         <source>Pause</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="434"/>
+        <location filename="mainwindow.cpp" line="444"/>
         <source>Stopping ...</source>
         <translation>Anhalten ...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="435"/>
-        <location filename="mainwindow.cpp" line="455"/>
+        <location filename="mainwindow.cpp" line="445"/>
+        <location filename="mainwindow.cpp" line="465"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="549"/>
+        <location filename="mainwindow.cpp" line="562"/>
         <source>Save settings</source>
         <translation>Einstellungen speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="549"/>
+        <location filename="mainwindow.cpp" line="562"/>
         <source>Settings file (*.evo; *.xml)</source>
         <translation>Einstellungen (*.evo; *.xml)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="559"/>
+        <location filename="mainwindow.cpp" line="572"/>
         <source>Save DNA</source>
         <translation>DNA speichern</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="559"/>
-        <location filename="mainwindow.cpp" line="694"/>
+        <location filename="mainwindow.cpp" line="572"/>
+        <location filename="mainwindow.cpp" line="707"/>
         <source>DNA files (*.svg; *.json; *.dna)</source>
         <translation>DNA-Dateien (*.svg; *.json; *.dna)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="565"/>
+        <location filename="mainwindow.cpp" line="578"/>
         <source>DNA saved as &apos;%1&apos;.</source>
         <translation>DNA gespeichert unter &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="568"/>
+        <location filename="mainwindow.cpp" line="581"/>
         <source>Error saving DNA</source>
         <translation>Fehler beim Speichern der DNA</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="568"/>
+        <location filename="mainwindow.cpp" line="581"/>
         <source>DNA could not be saved as &apos;%1&apos;.</source>
         <translation>DNA konnte nicht unter &apos;%1&apos; gespeichert werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="582"/>
+        <location filename="mainwindow.cpp" line="595"/>
         <source>Load original picture</source>
         <translation>Laden des Originalbildes</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="592"/>
+        <location filename="mainwindow.cpp" line="605"/>
         <source>Original picture &apos;%1&apos; loaded.</source>
         <translation>Originalbild &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="598"/>
+        <location filename="mainwindow.cpp" line="611"/>
         <source>Error loading the original picture.</source>
         <translation>Fehler beim Laden des Originalbildes.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="598"/>
+        <location filename="mainwindow.cpp" line="611"/>
         <source>Original picture could not be loaded.</source>
         <translation>Originalbild konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="642"/>
+        <location filename="mainwindow.cpp" line="655"/>
         <source>Settings file &apos;%1&apos; loaded.</source>
         <translation>Einstellungen &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="645"/>
+        <location filename="mainwindow.cpp" line="658"/>
         <source>Error loading settings</source>
         <translation>Fehler beim Laden der Einstellungen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="645"/>
+        <location filename="mainwindow.cpp" line="658"/>
         <source>Settings could not be loaded. (%1)</source>
         <translation>Einstellungen konnten nicht geladen werden. (%1)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="653"/>
+        <location filename="mainwindow.cpp" line="666"/>
         <source>Load Settings</source>
         <translation>Einstellungen laden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="653"/>
+        <location filename="mainwindow.cpp" line="666"/>
         <source>Settings files (*.evo; *.xml)</source>
         <translation>Einstellungen (*.evo; *.xml)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="680"/>
+        <location filename="mainwindow.cpp" line="693"/>
         <source>DNA &apos;%1&apos; loaded.</source>
-        <translation>DNA &apos;%1&apos; geladen.</translation>
+        <translation>DNS &apos;%1&apos; geladen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="686"/>
+        <location filename="mainwindow.cpp" line="699"/>
         <source>Error loading DNA</source>
         <translation>Fehler beim Laden der DNA</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="686"/>
+        <location filename="mainwindow.cpp" line="699"/>
         <source>DNA could not be loaded. (%1)</source>
         <translation>DNS kann nicht geladen werden. (%1)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="795"/>
+        <location filename="mainwindow.cpp" line="808"/>
         <source>&lt;p&gt;&lt;b&gt;%1&lt;/b&gt; calculates vector images from bitmaps by using genetic algorithms. See &lt;a href=&quot;%2&quot; title=&quot;%1 project homepage&quot;&gt;%2&lt;/a&gt; for more info.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 %3 &amp;lt;%4&amp;gt;&lt;/p&gt;&lt;p&gt;This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.&lt;/p&gt;&lt;p&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.&lt;/p&gt;You should have received a copy of the GNU General Public License along with this program. If not, see &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0&quot;&gt;http://www.gnu.org/licenses&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;&lt;b&gt;%1&lt;/b&gt; berechnet Vektorgrafiken aus Pixelgrafiken mit Hilfe genetischer Algorithmen. Siehe &lt;a href=&quot;%2&quot; title=&quot;%1-Projektseite&quot;&gt;%2&lt;/a&gt; für weitere Informationen.&lt;/p&gt;&lt;p&gt;Copyright &amp;copy; 2012 %3 &amp;lt;%4&amp;gt;&lt;/p&gt;&lt;p&gt;Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Wahll) jeder späteren Version.&lt;/p&gt;
 &lt;p&gt;Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm erhalten haben. Falls nicht, siehe &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0&quot;&gt;http://www.gnu.org/licenses&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Die Software &lt;b&gt;Evo Cubist&lt;/b&gt; wurde zu Lehr- und Demonstrationszwecken geschaffen und ist nicht für den produktiven Einsatz vorgesehen. Der Autor und der Heise Zeitschriften Verlag haften  nicht für Schäden, die aus der Nutzung der Software entstehen, und übernehmen keine Gewähr für ihre Vollständigkeit, Fehlerfreiheit und Eignung für einen bestimmten Zweck.&lt;/p&gt;</translation>
@@ -597,12 +599,12 @@
         <translation type="obsolete">DNA konnte nicht geladen werden. Grund: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="755"/>
+        <location filename="mainwindow.cpp" line="768"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="794"/>
+        <location filename="mainwindow.cpp" line="807"/>
         <source>About %1 %2</source>
         <translation>Über %1 %2</translation>
     </message>
@@ -616,17 +618,17 @@
         <translation type="obsolete">DNA konnte nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="694"/>
+        <location filename="mainwindow.cpp" line="707"/>
         <source>Load DNA</source>
         <translation>DNA laden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="781"/>
+        <location filename="mainwindow.cpp" line="794"/>
         <source>Really reset breeder?</source>
         <translation>Den Brutkasten wirklich zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="781"/>
+        <location filename="mainwindow.cpp" line="794"/>
         <source>Do you really want to reset the breeder?</source>
         <translation>Wollen Sie den Brutkasten wirklich zurücksetzen?</translation>
     </message>

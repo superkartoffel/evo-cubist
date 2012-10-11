@@ -28,6 +28,7 @@ void Breeder::setOriginalImage(const QImage& original)
     mOriginal = original.convertToFormat(QImage::Format_ARGB32);;
     mGenerated = QImage(mOriginal.size(), mOriginal.format());
     mDNA.setScale(mOriginal.size());
+    qDebug() << "Breeder::setOriginalImage() size =" << mGenerated.size();
     reset();
 }
 

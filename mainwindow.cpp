@@ -476,7 +476,8 @@ void MainWindow::saveAppSettings(void)
     QSettings settings(Company, AppName);
     settings.setValue("MainWindow/geometry", saveGeometry());
     settings.setValue("MainWindow/windowState", saveState());
-    settings.setValue("MainWindow/imageFilename", mImageWidget->imageFileName());
+    settings.setValue("MainWindow/imageFilename", gSettings.currentImageFile());
+    settings.setValue("MainWindow/dnaFilename", gSettings.currentDNAFile());
     settings.setValue("LogViewer/geometry", mLogViewerForm->saveGeometry());
     settings.setValue("Options/geometry", mOptionsForm->saveGeometry());
     settings.setValue("Options/deltaR", ui->redSlider->value());
@@ -516,7 +517,11 @@ void MainWindow::restoreAppSettings(void)
     restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
     restoreState(settings.value("MainWindow/windowState").toByteArray());
     QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/KWA10.jpg").toString();
+    qDebug() << "calling mImageWidget->loadImage(" << imageFileName << ") ...";
     mImageWidget->loadImage(imageFileName);
+    gSettings.setCurrentDNAFile(settings.value("MainWindow/dnaFilename").toString());
+    qDebug() << "calling loadDNA() ...";
+    loadDNA(gSettings.currentDNAFile());
     ui->redSlider->setValue(settings.value("Options/deltaR", 50).toInt());
     ui->greenSlider->setValue(settings.value("Options/deltaG", 50).toInt());
     ui->blueSlider->setValue(settings.value("Options/deltaB", 50).toInt());
@@ -550,7 +555,6 @@ void MainWindow::restoreAppSettings(void)
     updateRecentFileActions("Options/recentImageFileList", ui->menuOpenRecentImage, mRecentImageFileActs);
     updateRecentFileActions("Options/recentDNAFileList", ui->menuOpenRecentDNA, mRecentDNAFileActs);
     updateRecentFileActions("Options/recentSettingsFileList", ui->menuOpenRecentSettings, mRecentSettingsFileActs);
-    mBreeder.reset();
 }
 
 
@@ -801,7 +805,7 @@ void MainWindow::resetBreeder(void)
 
 void MainWindow::about(void)
 {
-    QMessageBox::about(this, tr("About %1 %2").arg(AppName).arg(AppVersionNoDebug),
+    QMessageBox::about(this, tr("About %1 %2%3").arg(AppName).arg(AppVersionNoDebug).arg(AppMinorVersion),
                        tr("<p><b>%1</b> calculates vector images from bitmaps by using genetic algorithms. "
                           "See <a href=\"%2\" title=\"%1 project homepage\">%2</a> for more info.</p>"
                           "<p>Copyright &copy; 2012 %3 &lt;%4&gt;</p>"

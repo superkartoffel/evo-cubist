@@ -5,7 +5,6 @@ BUGS
 FEATURES
 
 [ ] Zeichnen der Polygone auf eine beliebig große Leinwand, um feinere Auflösung zu erreichen. Dann Vergleich mit entsprechend hochskalierter Version des Originalbilds.
-[ ] Namen der DNA-Datei beim automatischen Speichern in Registry ablegen und beim nächsten Programmstart automatisch diese DNA einlesen.
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
 [?] GenerationWidget: markiertes Polygon löschen
 
