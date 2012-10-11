@@ -50,10 +50,8 @@ void Breeder::generate(void)
 void Breeder::setDNA(const DNA& dna)
 {
     QMutexLocker locker(&mMutex);
-    mDNA = dna;
-    mMutation = dna;
-    mGeneration = dna.generation();
-    mSelectedGenerations = mGeneration;
+    mDNA = mMutation = dna;
+    mGeneration = mSelectedGenerations = dna.generation();
     mSelected = dna.selected();
     mTotalSeconds = dna.totalSeconds();
     generate();
@@ -62,8 +60,7 @@ void Breeder::setDNA(const DNA& dna)
 
 void Breeder::setGeneration(unsigned long generation)
 {
-    mGeneration = generation;
-    mSelectedGenerations = generation;
+    mGeneration = mSelectedGenerations = generation;
 }
 
 
@@ -101,11 +98,8 @@ void Breeder::spliceAt(const QPointF& p)
 
 void Breeder::reset(void)
 {
-    mGeneration = 1;
-    mSelectedGenerations = 1;
-    mSelected = 1;
-    mDirty = false;
-    mStopped = false;
+    mGeneration = mSelectedGenerations = mSelected = 1;
+    mDirty = mStopped = false;
     mTotalSeconds = 0;
     populate();
     generate();
