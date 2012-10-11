@@ -64,6 +64,8 @@ private:
     void doLog(unsigned long generation, unsigned long selected, int numPoints, int numgenes, quint64 fitness, const QImage& image);
     void doLog(const QString& message);
     void evolved(void);
+    bool autoSaveImage(void);
+    bool autoSaveDNA(void);
 
     QTimer mAutoSaveTimer;
 
@@ -82,7 +84,7 @@ private slots:
     void resetBreeder(void);
     void about(void);
     void aboutQt(void);
-    void autoSaveGeneratedImage(void);
+    void autoSave(void);
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
     void loadRecentImageFile(void);

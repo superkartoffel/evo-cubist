@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(mGenerationWidget, SIGNAL(clickAt(const QPointF&)), &mBreeder, SLOT(spliceAt(const QPointF&)));
     QObject::connect(&mBreeder, SIGNAL(spliced(Gene, QVector<Gene>)), mGenerationWidget, SLOT(spliced(Gene, QVector<Gene>)));
 
-    QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSaveGeneratedImage()));
+    QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSave()));
 
     QObject::connect(mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
     QObject::connect(mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
@@ -146,14 +146,16 @@ void MainWindow::closeEvent(QCloseEvent* e)
     stopBreeding();
     if (mBreeder.isDirty()) {
         QMessageBox msgBox;
-        msgBox.setText(tr("<b>DNA has been modified.</b>"));
-        msgBox.setInformativeText(tr("You have unsaved DNA. Do you want to save it?"));
+        msgBox.setText(tr("<b>DNA/settings have been modified.</b>"));
+        msgBox.setInformativeText(tr("You have unsaved DNA/settings. Do you want to save them?"));
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
         int ret = msgBox.exec();
         switch (ret) {
         case QMessageBox::Save:
-            saveDNA();
+            autoSaveImage();
+            autoSaveDNA();
+            saveSettings();
             break;
         case QMessageBox::Cancel:
             e->ignore();
@@ -303,21 +305,32 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, u
 }
 
 
-void MainWindow::autoSaveGeneratedImage(void)
+bool MainWindow::autoSaveImage(void)
+{
+    QString imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), mBreeder.selectedGeneration(), mBreeder.selected());
+    avoidDuplicateFilename(imageFilename);
+    return mGenerationWidget->image().save(imageFilename);
+}
+
+
+bool MainWindow::autoSaveDNA(void)
+{
+    QString dnaFilename = mOptionsForm->makeDNAFilename(mImageWidget->imageFileName(), mBreeder.selectedGeneration(), mBreeder.selected());
+    gSettings.setCurrentDNAFile(dnaFilename);
+    DNA dna = mBreeder.dna(); // gives a clone
+    return dna.save(dnaFilename, mBreeder.selectedGeneration(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
+}
+
+
+void MainWindow::autoSave(void)
 {
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
-    const unsigned long selectedGeneration = mBreeder.selectedGeneration();
-    const unsigned long selected = mBreeder.selected();
-    QString imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), selectedGeneration, mBreeder.selected());
-    avoidDuplicateFilename(imageFilename);
-    mGenerationWidget->image().save(imageFilename);
-    QString dnaFilename = mOptionsForm->makeDNAFilename(mImageWidget->imageFileName(), selectedGeneration, mBreeder.selected());
-    DNA dna = mBreeder.dna(); // gives a clone
-    bool success = dna.save(dnaFilename, selectedGeneration, selected, mBreeder.currentFitness(), totalSeconds());
+    bool success;
+    success = autoSaveImage();
+    success &= autoSaveDNA();
     if (success) {
-        statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(selected).arg(selectedGeneration), 3000);
-        gSettings.setCurrentDNAFile(dnaFilename);
+        statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.selectedGeneration()), 3000);
         mLogViewerForm->highlightLastRow();
     }
     else {
@@ -421,7 +434,7 @@ void MainWindow::startBreeding(void)
         mAutoSaveTimer.setInterval(1000 * mOptionsForm->saveInterval());
         mAutoSaveTimer.start();
         if (ui->startStopPushButton->text() == tr("Start"))
-            autoSaveGeneratedImage();
+            autoSave();
     }
     ui->startStopPushButton->setText(tr("Pause"));
 }
