@@ -88,6 +88,7 @@ void Breeder::spliceAt(const QPointF& p)
                 emit spliced(gene, offsprings);
                 mMutation = mDNA;
                 generate();
+                emit evolved(mGenerated, mDNA, mFitness, mSelected, mSelectedGenerations);
             }
             break;
         }

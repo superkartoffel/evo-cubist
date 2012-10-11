@@ -1,8 +1,8 @@
 BUGS
 
-[ ] GenerationWidget: Gesplittete Polygone sind erst beim nächsten update() sichtbar.
 [ ] Startverteilung "Gekachelte Dreiecke" nur zulässig, wenn Mindestpunktzahl pro Polygon >= 3.
 [ ] Startverteilungen mit Kacheln nur zulässig, wenn Mindestpunktzahl pro Polygon >= 4.
+[ ] Aufsplitten von Quadraten (Polygonen mit mehr als 3 Ecken) funktioniert nicht. Bei Rechtecken entstehen zum Beispiel zwei *überlappende* Dreiecke.
 
 FEATURES
 
