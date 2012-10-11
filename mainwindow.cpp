@@ -268,7 +268,9 @@ void MainWindow::doLog(const QString& message)
 {
     if (mLog.isOpen()) {
         QTextStream f(&mLog);
-        f << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " " << message << "\n";
+        f << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " "
+          << message
+          << "\n";
     }
 }
 
@@ -279,13 +281,8 @@ void MainWindow::doLog(unsigned long generation, unsigned long selected, int num
         mLogViewerForm->log(generation, selected, numPoints, numGenes, fitness, image);
     if (mLog.isOpen()) {
         QTextStream f(&mLog);
-        f << QString("%1 %2 %3 %4 %5 %6")
-             .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz"))
-             .arg(generation)
-             .arg(selected)
-             .arg(numPoints)
-             .arg(numGenes)
-             .arg(fitness)
+        f << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " "
+          << QString("%1 %2 %3 %4 %5").arg(generation).arg(selected).arg(numPoints).arg(numGenes).arg(fitness)
           << "\n";
     }
 }
