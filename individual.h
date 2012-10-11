@@ -31,6 +31,8 @@ public:
     inline void operator()(Individual& individual) { individual.evolve(); }
 
     inline void draw(void) {
+        if (mGenerated.isNull())
+            return;
         QPainter p(&mGenerated);
         p.setPen(Qt::transparent);
         p.setBrush(QBrush(QColor(gSettings.backgroundColor())));

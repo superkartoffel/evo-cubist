@@ -155,7 +155,7 @@ void OptionsForm::maxAlphaChanged(int v)
 void OptionsForm::startDistributionChanged(int index)
 {
     ui->scatterFactorSpinBox->setEnabled(index == 3 || index == 4);
-    emit changeStartDistribution();
+    emit startDistributionChanged();
 }
 
 
@@ -297,7 +297,9 @@ void OptionsForm::setCores(int v)
 void OptionsForm::setStartDistribution(int index)
 {
     Q_ASSERT(index >= 0);
+    ui->startDistributionComboBox->blockSignals(true);
     ui->startDistributionComboBox->setCurrentIndex(index);
+    ui->startDistributionComboBox->blockSignals(false);
 }
 
 

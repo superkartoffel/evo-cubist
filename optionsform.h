@@ -89,7 +89,7 @@ signals:
     void autoSaveIntervalChanged(int);
     void autoSaveToggled(bool);
     void logFileChanged(const QString&);
-    void changeStartDistribution(void);
+    void startDistributionChanged(void);
     void backgroundColorSelected(QRgb);
 
 private slots:

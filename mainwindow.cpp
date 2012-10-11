@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "random/rnd.h"
+#include "dna.h"
 #include "breedersettings.h"
 #include "main.h"
 #include "helper.h"
@@ -48,17 +49,11 @@ MainWindow::MainWindow(QWidget* parent)
     ui->generatedGroupBox->setLayout(hbox2);
 
     mOptionsForm = new OptionsForm;
-#ifndef QT_NO_DEBUG
-    mOptionsForm->show();
-#endif
 
     mLogViewerForm = new LogViewerForm;
     QObject::connect(mLogViewerForm, SIGNAL(copyPicture(int, int)), SLOT(copyPicture(int, int)));
     QObject::connect(mLogViewerForm, SIGNAL(showPicture(int, int)), SLOT(showPicture(int, int)));
     QObject::connect(mLogViewerForm, SIGNAL(gotoPicture(int, int)), SLOT(gotoPicture(int, int)));
-#ifndef QT_NO_DEBUG
-    mLogViewerForm->show();
-#endif
 
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), &mBreeder, SLOT(setOriginalImage(QImage)));
     QObject::connect(mImageWidget, SIGNAL(imageDropped(QImage)), SLOT(imageDropped(QImage)));
@@ -72,7 +67,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     QObject::connect(mOptionsForm, SIGNAL(autoSaveIntervalChanged(int)), SLOT(autoSaveIntervalChanged(int)));
     QObject::connect(mOptionsForm, SIGNAL(autoSaveToggled(bool)), SLOT(autoSaveToggled(bool)));
-    QObject::connect(mOptionsForm, SIGNAL(changeStartDistribution()), SLOT(startDistributionChanged()));
+    QObject::connect(mOptionsForm, SIGNAL(startDistributionChanged()), SLOT(startDistributionChanged()));
     QObject::connect(mOptionsForm, SIGNAL(backgroundColorSelected(QRgb)), SLOT(setBackgroundColor(QRgb)));
 
     QObject::connect(ui->startStopPushButton, SIGNAL(clicked()), SLOT(startStop()));
@@ -121,7 +116,15 @@ MainWindow::MainWindow(QWidget* parent)
     }
 
     restoreAppSettings();
-    resetBreeder();
+
+    qRegisterMetaType<DNA>("DNA");
+    QObject::connect(&mBreeder, SIGNAL(evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long)), SLOT(evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long)));
+    QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned long)), SLOT(proceeded(unsigned long)));
+
+#ifndef QT_NO_DEBUG
+    mOptionsForm->show();
+    mLogViewerForm->show();
+#endif
 }
 
 
@@ -174,7 +177,7 @@ void MainWindow::closeEvent(QCloseEvent* e)
 void MainWindow::copyPicture(int generation, int selected)
 {
     const QString& imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), generation, selected);
-    const QImage& img = QImage(imageFilename);
+    const QImage img(imageFilename);
     if (img.isNull()) {
         QMessageBox::warning(this, tr("Image NOT copied"), tr("The selected image could not be copied to the clipboard. Probably you selected an image which hasn't been automatically saved."));
         return;
@@ -302,6 +305,13 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, u
 }
 
 
+void MainWindow::evolved(void)
+{
+    proceeded(mBreeder.generation());
+    evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.selectedGeneration());
+}
+
+
 bool MainWindow::autoSaveImage(void)
 {
     QString imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), mBreeder.selectedGeneration(), mBreeder.selected());
@@ -416,16 +426,6 @@ void MainWindow::startBreeding(void)
         doLog("START.");
     }
     mStartTime = QDateTime::currentDateTime();
-    QObject::connect(&mBreeder,
-                     SIGNAL(evolved(QImage, DNA, quint64, unsigned long, unsigned long)),
-                     this,
-                     SLOT(evolved(QImage, DNA, quint64, unsigned long, unsigned long)),
-                     Qt::BlockingQueuedConnection);
-    QObject::connect(&mBreeder,
-                     SIGNAL(proceeded(unsigned long)),
-                     this,
-                     SLOT(proceeded(unsigned long)),
-                     Qt::BlockingQueuedConnection);
     mBreeder.breed();
     if (mOptionsForm->autoSave()) {
         mAutoSaveTimer.setInterval(1000 * mOptionsForm->saveInterval());
@@ -446,14 +446,6 @@ void MainWindow::stopBreeding(void)
     mAutoSaveTimer.stop();
     mBreeder.stop();
     mBreeder.addTotalSeconds(QDateTime::currentDateTime().toTime_t() - mStartTime.toTime_t());
-    QObject::disconnect(&mBreeder,
-                        SIGNAL(evolved(QImage, DNA, quint64, unsigned long, unsigned long)),
-                        this,
-                        SLOT(evolved(QImage, DNA, quint64, unsigned long, unsigned long)));
-    QObject::disconnect(&mBreeder,
-                        SIGNAL(proceeded(unsigned long)),
-                        this,
-                        SLOT(proceeded(unsigned long)));
     doLog("STOP.");
     if (mLog.isOpen())
         mLog.close();
@@ -479,6 +471,8 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("MainWindow/imageFilename", gSettings.currentImageFile());
     settings.setValue("MainWindow/dnaFilename", gSettings.currentDNAFile());
     settings.setValue("LogViewer/geometry", mLogViewerForm->saveGeometry());
+    settings.setValue("LogViewer/visible", mLogViewerForm->isVisible());
+    settings.setValue("Options/visible", mOptionsForm->isVisible());
     settings.setValue("Options/geometry", mOptionsForm->saveGeometry());
     settings.setValue("Options/deltaR", ui->redSlider->value());
     settings.setValue("Options/deltaG", ui->greenSlider->value());
@@ -516,12 +510,6 @@ void MainWindow::restoreAppSettings(void)
     QSettings settings(Company, AppName);
     restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
     restoreState(settings.value("MainWindow/windowState").toByteArray());
-    QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/KWA10.jpg").toString();
-    qDebug() << "calling mImageWidget->loadImage(" << imageFileName << ") ...";
-    mImageWidget->loadImage(imageFileName);
-    gSettings.setCurrentDNAFile(settings.value("MainWindow/dnaFilename").toString());
-    qDebug() << "calling loadDNA() ...";
-    loadDNA(gSettings.currentDNAFile());
     ui->redSlider->setValue(settings.value("Options/deltaR", 50).toInt());
     ui->greenSlider->setValue(settings.value("Options/deltaG", 50).toInt());
     ui->blueSlider->setValue(settings.value("Options/deltaB", 50).toInt());
@@ -552,6 +540,13 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm->setMaxGenes(settings.value("Options/maxGenes", 500).toInt());
     mOptionsForm->setMinAlpha(settings.value("Options/minAlpha", 5).toInt());
     mOptionsForm->setMaxAlpha(settings.value("Options/maxAlpha", 45).toInt());
+    if (settings.value("Options/visible").toBool())
+        mOptionsForm->show();
+    if (settings.value("LogViewer/visible").toBool())
+        mLogViewerForm->show();
+    QString imageFileName = settings.value("MainWindow/imageFilename", ":/images/KWA10.jpg").toString();
+    mImageWidget->loadImage(imageFileName);
+    loadDNA(settings.value("MainWindow/dnaFilename").toString());
     updateRecentFileActions("Options/recentImageFileList", ui->menuOpenRecentImage, mRecentImageFileActs);
     updateRecentFileActions("Options/recentDNAFileList", ui->menuOpenRecentDNA, mRecentDNAFileActs);
     updateRecentFileActions("Options/recentSettingsFileList", ui->menuOpenRecentSettings, mRecentSettingsFileActs);
@@ -781,13 +776,6 @@ void MainWindow::updateRecentFileActions(const QString& listName, QMenu* menu, Q
 }
 
 
-void MainWindow::evolved(void)
-{
-    proceeded(mBreeder.generation());
-    evolved(mBreeder.image(), mBreeder.constDNA(), mBreeder.currentFitness(), mBreeder.selected(), mBreeder.selectedGeneration());
-}
-
-
 void MainWindow::resetBreeder(void)
 {
     bool ok = !mBreeder.isDirty();
@@ -797,7 +785,6 @@ void MainWindow::resetBreeder(void)
         stopBreeding();
         mStartTime = QDateTime::currentDateTime();
         mBreeder.reset();
-        evolved();
         ui->startStopPushButton->setText(tr("Start"));
     }
 }

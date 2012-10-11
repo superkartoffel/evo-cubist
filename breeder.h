@@ -49,6 +49,15 @@ public:
     void addTotalSeconds(quint64 s) { mTotalSeconds += s; }
     quint64 totalSeconds(void) const { return mTotalSeconds; }
 
+    enum StartDistribution {
+        RandomDistribution = 0,
+        TiledDistribution = 1,
+        TiledWithColorHintDistribution = 2,
+        ScatteredDistribution = 3,
+        ScatteredWithColorHintDistribution = 4,
+        TiledTrianglesWithColorHintDistribution = 5
+    };
+
 protected:
     virtual void run(void);
     

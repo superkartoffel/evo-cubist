@@ -153,60 +153,60 @@ bool DNA::save(QString& filename, unsigned long generation, unsigned long select
 // XXX: move method to Breeder
 bool DNA::load(const QString& filename)
 {
-    bool rc;
     QFile file(filename);
-    rc = file.open(QIODevice::ReadOnly);
-    if (!rc)
+    bool success = file.open(QIODevice::ReadOnly);
+    if (!success) {
+        mErrorString = file.errorString();
         return false;
+    }
     QTextStream in(&file);
-    bool ok = false;
+    success = false;
     if (filename.endsWith(".json") || filename.endsWith(".dna")) {
         QString jsonDNA = in.readAll();
-        const QVariant& v = Json::parse(jsonDNA, ok);
+        const QVariant& v = Json::parse(jsonDNA, success);
+        if (!success) {
+            mErrorString = "JSON data parse error";
+            return false;
+        }
         const QVariantMap& result = v.toMap();
-        if (ok) {
-            clear();
-            const QVariantMap& size = result["size"].toMap();
-            mSize = QSize(size["width"].toInt(), size["height"].toInt());
-            mTotalSeconds = result["datetime"].toString().toULongLong();
-            mGeneration = result["generation"].toString().toULong();
-            mSelected = result["selected"].toString().toULong();
-            mFitness = result["fitness"].toString().toULongLong();
-            const QVariantList& dna = result["dna"].toList();
-            for (QVariantList::const_iterator gene = dna.constBegin(); gene != dna.constEnd(); ++gene) {
-                const QVariantMap& g = gene->toMap();
-                const QVariantMap& rgb = g["color"].toMap();
-                QColor color(rgb["r"].toInt(), rgb["g"].toInt(), rgb["b"].toInt());
-                color.setAlphaF(rgb["a"].toDouble());
-                const QVariantList& vertices = g["vertices"].toList();
-                QPolygonF polygon;
-                for (QVariantList::const_iterator point = vertices.constBegin(); point != vertices.constEnd(); ++point) {
-                    const QVariantMap& p = point->toMap();
-                    polygon << QPointF(p["x"].toDouble(), p["y"].toDouble());
-                }
-                mDNA.append(Gene(polygon, color));
+        clear();
+        const QVariantMap& size = result["size"].toMap();
+        mSize = QSize(size["width"].toInt(), size["height"].toInt());
+        mTotalSeconds = result["datetime"].toString().toULongLong();
+        mGeneration = result["generation"].toString().toULong();
+        mSelected = result["selected"].toString().toULong();
+        mFitness = result["fitness"].toString().toULongLong();
+        const QVariantList& dna = result["dna"].toList();
+        for (QVariantList::const_iterator gene = dna.constBegin(); gene != dna.constEnd(); ++gene) {
+            const QVariantMap& g = gene->toMap();
+            const QVariantMap& rgb = g["color"].toMap();
+            QColor color(rgb["r"].toInt(), rgb["g"].toInt(), rgb["b"].toInt());
+            color.setAlphaF(rgb["a"].toDouble());
+            const QVariantList& vertices = g["vertices"].toList();
+            QPolygonF polygon;
+            for (QVariantList::const_iterator point = vertices.constBegin(); point != vertices.constEnd(); ++point) {
+                const QVariantMap& p = point->toMap();
+                polygon << QPointF(p["x"].toDouble(), p["y"].toDouble());
             }
+            mDNA.append(Gene(polygon, color));
         }
     }
     else if (filename.endsWith(".svg")) {
         SVGReader xml;
-        ok = xml.readSVG(&file);
-        if (ok) {
-            clear();
-            *this = xml.dna();
-        }
-        else {
+        success = xml.readSVG(&file);
+        if (!success) {
             mErrorString = xml.errorString();
-            qWarning() << xml.errorString();
+            return false;
         }
+        clear();
+        *this = xml.dna();
     }
     else {
-        qWarning() << "DNA::load() unknown file format";
-        ok = false;
+        mErrorString = "unknown file format";
+        return false;
     }
     file.close();
-
-    return rc && ok;
+    return true;
 }
 
 

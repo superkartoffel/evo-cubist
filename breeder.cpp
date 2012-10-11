@@ -18,6 +18,8 @@
 
 Breeder::Breeder(QThread* parent)
     : QThread(parent)
+    , mDirty(false)
+    , mStopped(true)
 {
     /*...*/
 }
@@ -28,7 +30,6 @@ void Breeder::setOriginalImage(const QImage& original)
     mOriginal = original.convertToFormat(QImage::Format_ARGB32);;
     mGenerated = QImage(mOriginal.size(), mOriginal.format());
     mDNA.setScale(mOriginal.size());
-    qDebug() << "Breeder::setOriginalImage() size =" << mGenerated.size();
     reset();
 }
 
@@ -113,28 +114,25 @@ void Breeder::populate(void)
     QMutexLocker locker(&mMutex);
     mDNA.clear();
     switch (gSettings.startDistribution()) {
-    case 0: // random
+    case RandomDistribution:
     {
         for (int i = 0; i < gSettings.minGenes(); ++i)
             mDNA.append(Gene(true));
         break;
     }
-    case 1: // tiled
+    case TiledDistribution:
         // fall-through
-    case 2: // tiled with color hint
+    case TiledWithColorHintDistribution:
         // fall-through
-    case 5: // tiled trianges with color hint
+    case TiledTrianglesWithColorHintDistribution:
     {
-        const int N = qFloor(qSqrt(((gSettings.startDistribution() == 5)? 0.5 : 1) * gSettings.minGenes()));
+        const int N = qFloor(qSqrt(((gSettings.startDistribution() == TiledTrianglesWithColorHintDistribution)? 0.5 : 1) * gSettings.minGenes()));
         const qreal stepX = 1.0 / N;
         const qreal stepY = 1.0 / N;
         for (qreal y = 0; y < 1.0; y += stepY) {
             for (qreal x = 0; x < 1.0; x += stepX) {
                 QColor color;
-                if (gSettings.startDistribution() == 1) {
-                    color = QColor(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
-                }
-                else {
+                if (gSettings.startDistribution() == TiledWithColorHintDistribution || gSettings.startDistribution() == TiledTrianglesWithColorHintDistribution) {
                     const int px = (int)((x + stepX/2) * mOriginal.width());
                     const int py = (int)((y + stepY/2) * mOriginal.height());
                     if (px < mOriginal.width() && py < mOriginal.height()) {
@@ -142,8 +140,11 @@ void Breeder::populate(void)
                         color.setAlpha(RAND::rnd(gSettings.minA(), gSettings.maxA()));
                     }
                 }
+                else {
+                    color = QColor(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
+                }
                 QPolygonF polygon;
-                if (gSettings.startDistribution() == 5) {
+                if (gSettings.startDistribution() == TiledTrianglesWithColorHintDistribution) {
                     polygon << QPointF(x, y) << QPointF(x + stepX, y) << QPointF(x + stepX, y + stepY);
                     QPolygonF polygon2;
                     polygon2 << QPointF(x, y) << QPointF(x, y + stepY) << QPointF(x + stepX, y + stepY);
@@ -157,9 +158,9 @@ void Breeder::populate(void)
         }
         break;
     }
-    case 3: // scattered
+    case ScatteredDistribution:
         // fall-through
-    case 4: // scattered with color hint
+    case ScatteredWithColorHintDistribution:
     {
         for (int i = 0; i < gSettings.minGenes(); ++i) {
             QPolygonF polygon;
@@ -170,16 +171,16 @@ void Breeder::populate(void)
                 polygon << (mid + QPointF(xoff, yoff));
             }
             QColor color;
-            if (gSettings.startDistribution() == 3) {
-                color = QColor(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
-            }
-            else {
+            if (gSettings.startDistribution() == ScatteredWithColorHintDistribution) {
                 const int px = (int)(mid.x() * mOriginal.width());
                 const int py = (int)(mid.y() * mOriginal.height());
                 if (px < mOriginal.width() && py < mOriginal.height()) {
                     color = QColor(mOriginal.pixel(px, py));
                     color.setAlpha(RAND::rnd(gSettings.minA(), gSettings.maxA()));
                 }
+            }
+            else {
+                color = QColor(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
             }
             mDNA.append(Gene(polygon, color));
         }

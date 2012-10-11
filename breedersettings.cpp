@@ -118,13 +118,6 @@ void BreederSettings::setGeneMoveProbability(int v)
 }
 
 
-void BreederSettings::setGeneSliceProbability(int v)
-{
-    Q_ASSERT(v > 0);
-    mGeneSliceProbability = v;
-}
-
-
 void BreederSettings::setGeneEmergenceProbability(int v)
 {
     Q_ASSERT(v > 0);
@@ -273,7 +266,6 @@ bool BreederSettings::save(const QString& fileName)
         << "    <pointEmergenceProbability>" << mPointEmergenceProbability << "</pointEmergenceProbability>\n"
         << "    <geneKillProbability>" << mGeneKillProbability << "</geneKillProbability>\n"
         << "    <geneMoveProbability>" << mGeneMoveProbability << "</geneMoveProbability>\n"
-        << "    <geneSliceProbability>" << mGeneSliceProbability << "</geneSliceProbability>\n"
         << "    <geneEmergenceProbability>" << mGeneEmergenceProbability << "</geneEmergenceProbability>\n"
         << "    <minPointsPerGene>" << mMinPointsPerGene << "</minPointsPerGene>\n"
         << "    <maxPointsPerGene>" << mMaxPointsPerGene << "</maxPointsPerGene>\n"
@@ -519,19 +511,6 @@ void BreederSettings::readGeneMoveProbability(void)
 }
 
 
-void BreederSettings::readGeneSliceProbability(void)
-{
-    Q_ASSERT(mXml.isStartElement() && mXml.name() == "geneSliceProbability");
-    bool ok = false;
-    const QString& str = mXml.readElementText();
-    const int v = str.toInt(&ok);
-    if (ok)
-        mGeneSliceProbability = v;
-    else
-        mXml.raiseError(QObject::tr("invalid geneSliceProbability: %1").arg(str));
-}
-
-
 void BreederSettings::readGeneEmergenceProbability(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "geneEmergenceProbability");
@@ -679,9 +658,6 @@ void BreederSettings::readBreeder(void)
         }
         else if (mXml.name() == "geneMoveProbability") {
             readGeneMoveProbability();
-        }
-        else if (mXml.name() == "geneSliceProbability") {
-            readGeneSliceProbability();
         }
         else if (mXml.name() == "geneEmergenceProbability") {
             readGeneEmergenceProbability();

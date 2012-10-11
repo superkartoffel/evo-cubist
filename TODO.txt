@@ -1,12 +1,17 @@
 BUGS
 
 [ ] GenerationWidget: Gesplittete Polygone sind erst beim nächsten update() sichtbar.
+[ ] Polygone dürfen nur gesplittet werden, wenn die Mindestpunktzahl pro Polygon >= 3.
+[ ] Startverteilung "Gekachelte Dreiecke" nur zulässig, wenn Mindestpunktzahl pro Polygon >= 3.
+[ ] Startverteilungen mit Kacheln nur zulässig, wenn Mindestpunktzahl pro Polygon >= 4.
 
 FEATURES
 
+[ ] Bildbetrachter als eigenständiges Widget implementieren, damit es sich nur so skalieren lässt, dass das Seitenverhältnis beibehalten bleibt.
 [ ] Zeichnen der Polygone auf eine beliebig große Leinwand, um feinere Auflösung zu erreichen. Dann Vergleich mit entsprechend hochskalierter Version des Originalbilds.
-[?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert
-[?] GenerationWidget: markiertes Polygon löschen
+[?] Nur konvexe Polygone zulassen.
+[?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert.
+[?] GenerationWidget: markiertes Polygon löschen.
 
 POSSIBLE SPEED-UPS
 

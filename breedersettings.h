@@ -29,10 +29,9 @@ public:
         , mPointMutationProbability(700)
         , mPointKillProbability(700)
         , mPointEmergenceProbability(700)
-        , mGeneKillProbability(700)
-        , mGeneMoveProbability(700)
-        , mGeneSliceProbability(7000)
-        , mGeneEmergenceProbability(700)
+        , mGeneKillProbability(1000000)
+        , mGeneMoveProbability(1000000)
+        , mGeneEmergenceProbability(1000000)
         , mMinPointsPerGene(3)
         , mMaxPointsPerGene(9)
         , mMinGenes(200)
@@ -61,7 +60,6 @@ public:
     inline int pointEmergenceProbability(void) const { return mPointEmergenceProbability; }
     inline int geneKillProbability(void) const { return mGeneKillProbability; }
     inline int geneMoveProbability(void) const { return mGeneMoveProbability; }
-    inline int geneSliceProbability(void) const { return mGeneSliceProbability; }
     inline int geneEmergenceProbability(void) const { return mGeneEmergenceProbability; }
     inline int minPointsPerGene(void) const { return mMinPointsPerGene; }
     inline int maxPointsPerGene(void) const { return mMaxPointsPerGene; }
@@ -79,6 +77,7 @@ public:
     inline const QString& imageSaveFilenameTemplate(void) const { return mImageSaveFilenameTemplate; }
     inline const QString& dnaSaveDirectory(void) const { return mDNASaveDirectory; }
     inline const QString& dnaSaveFilenameTemplate(void) const { return mDNASaveFilenameTemplate; }
+
     bool save(const QString& fileName);
     bool load(const QString& fileName);
     QString errorString(void) const;
@@ -97,7 +96,6 @@ public slots:
     void setPointEmergenceProbability(int);
     void setGeneKillProbability(int);
     void setGeneMoveProbability(int);
-    void setGeneSliceProbability(int);
     void setGeneEmergenceProbability(int);
     void setMinPointsPerGene(int);
     void setMaxPointsPerGene(int);
@@ -132,7 +130,6 @@ private:
     int mPointEmergenceProbability;
     int mGeneKillProbability;
     int mGeneMoveProbability;
-    int mGeneSliceProbability;
     int mGeneEmergenceProbability;
     int mMinPointsPerGene; // [3..n]
     int mMaxPointsPerGene; // [n..n+x]
@@ -165,7 +162,6 @@ private:
     void readPointEmergenceProbability(void);
     void readGeneKillProbability(void);
     void readGeneMoveProbability(void);
-    void readGeneSliceProbability(void);
     void readGeneEmergenceProbability(void);
     void readMinPointsPerGene(void);
     void readMaxPointsPerGene(void);
