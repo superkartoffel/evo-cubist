@@ -42,7 +42,7 @@ signals:
 public slots:
     void setImage(const QImage&);
     void setDNA(const DNA&);
-    void spliced(const Gene& gene, const QVector<Gene>& offsprings);
+    void setSplices(const Gene& gene, const QVector<Gene>& offsprings);
 
 
 private:

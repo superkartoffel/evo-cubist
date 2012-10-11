@@ -76,7 +76,7 @@ void Breeder::spliceAt(const QPointF& p)
     QMutexLocker locker(&mMutex);
     int i = mDNA.size();
     while (i--) {
-        const Gene& gene = mDNA.at(i);
+        const Gene gene = mDNA.at(i);
         if (gene.polygon().containsPoint(p, Qt::OddEvenFill)) {
             QVector<Gene> offsprings =  gene.splice();
             if (offsprings.size() > 0) {
@@ -86,10 +86,6 @@ void Breeder::spliceAt(const QPointF& p)
                 emit spliced(gene, offsprings);
                 mMutation = mDNA;
                 generate();
-                // would like to emit evolved(...) but cannot because that
-                // would cause a deadlock situation because of the
-                // BlockingQueuedConnection between this thread and the
-                // main thread.
             }
             break;
         }

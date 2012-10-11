@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(mImageWidget, SIGNAL(colorSelected(QRgb)), mOptionsForm, SLOT(backgroundColorSelected()));
     QObject::connect(mGenerationWidget, SIGNAL(fileDropped(QString)), SLOT(loadDNA(QString)));
     QObject::connect(mGenerationWidget, SIGNAL(clickAt(const QPointF&)), &mBreeder, SLOT(spliceAt(const QPointF&)));
-    QObject::connect(&mBreeder, SIGNAL(spliced(Gene, QVector<Gene>)), mGenerationWidget, SLOT(spliced(Gene, QVector<Gene>)));
+    QObject::connect(&mBreeder, SIGNAL(spliced(const Gene&, QVector<Gene>)), mGenerationWidget, SLOT(setSplices(const Gene&, QVector<Gene>)));
 
     QObject::connect(&mAutoSaveTimer, SIGNAL(timeout()), SLOT(autoSave()));
 
@@ -100,13 +100,13 @@ MainWindow::MainWindow(QWidget* parent)
     for (int i = 0; i < MaxRecentFiles; ++i) {
         mRecentImageFileActs[i] = new QAction(this);
         mRecentImageFileActs[i]->setVisible(false);
-        QObject::connect(mRecentImageFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentImageFile()));
+        QObject::connect(mRecentImageFileActs[i], SIGNAL(triggered()), SLOT(loadRecentImageFile()));
         mRecentDNAFileActs[i] = new QAction(this);
         mRecentDNAFileActs[i]->setVisible(false);
-        QObject::connect(mRecentDNAFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentDNAFile()));
+        QObject::connect(mRecentDNAFileActs[i], SIGNAL(triggered()), SLOT(loadRecentDNAFile()));
         mRecentSettingsFileActs[i] = new QAction(this);
         mRecentSettingsFileActs[i]->setVisible(false);
-        QObject::connect(mRecentSettingsFileActs[i], SIGNAL(triggered()), this, SLOT(loadRecentSettingsFile()));
+        QObject::connect(mRecentSettingsFileActs[i], SIGNAL(triggered()), SLOT(loadRecentSettingsFile()));
     }
 
     for (int i = 0; i < MaxRecentFiles; ++i) {
@@ -778,9 +778,9 @@ void MainWindow::updateRecentFileActions(const QString& listName, QMenu* menu, Q
 
 void MainWindow::resetBreeder(void)
 {
-    bool ok = !mBreeder.isDirty();
-    if (!ok)
-        ok = QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?")) == QMessageBox::Ok;
+    bool ok = true;
+    if (mBreeder.isDirty())
+        ok = QMessageBox::question(this, tr("Really reset breeder?"), tr("Do you really want to reset the breeder?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
     if (ok) {
         stopBreeding();
         mStartTime = QDateTime::currentDateTime();

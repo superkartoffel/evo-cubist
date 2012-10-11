@@ -37,9 +37,10 @@ void GenerationWidget::setDNA(const DNA& dna)
 }
 
 
-void GenerationWidget::spliced(const Gene& gene, const QVector<Gene>& offsprings)
+void GenerationWidget::setSplices(const Gene& gene, const QVector<Gene>& offsprings)
 {
-    mSplicedGene = gene;
+    // mSplicedGene = gene;
+    qDebug() << gene.polygon().size() << offsprings.size();
     mSplices = offsprings;
     update();
 }
