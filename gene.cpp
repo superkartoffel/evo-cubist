@@ -74,7 +74,9 @@ inline bool pointLessThan(const QPointF& a, const QPointF& b)
 
 QPolygonF Gene::evaluateTriangle(int i, int j, int k) const
 {
+    qDebug() << "  POINTS: " << mPolygon.at(i) << mPolygon.at(j) << mPolygon.at(k);
     Circle circle(mPolygon.at(i), mPolygon.at(j), mPolygon.at(k));
+    qDebug() << "  => CIRCLE: " << circle.center() << circle.radius() << "\n";
     for (int w = 0; w < mPolygon.size(); ++w) {
         if (w == i || w == j || w == k)
             continue;
@@ -93,6 +95,7 @@ QVector<Gene> Gene::triangulize(void) const
 {
     Q_ASSERT(mPolygon.size() > 3);
     QVector<Gene> result;
+    qDebug() << "POLYGON: " << mPolygon;
     for (int i = 0; i < mPolygon.size()-2; ++i) {
         for (int j = i + 1; j < mPolygon.size()-1; ++j) {
             for (int k = j + 1; k < mPolygon.size(); ++k) {

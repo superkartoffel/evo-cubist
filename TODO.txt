@@ -2,7 +2,7 @@ BUGS
 
 [ ] Startverteilung "Gekachelte Dreiecke" nur zulässig, wenn Mindestpunktzahl pro Polygon >= 3.
 [ ] Startverteilungen mit Kacheln nur zulässig, wenn Mindestpunktzahl pro Polygon >= 4.
-[ ] Aufsplitten von Quadraten (Polygonen mit mehr als 3 Ecken) funktioniert nicht. Bei Rechtecken entstehen zum Beispiel zwei *überlappende* Dreiecke.
+[ ] Gene::triangulize(): Bei Rechtecken entstehen zum Beispiel manchmal zwei *überlappende* Dreiecke.
 
 FEATURES
 

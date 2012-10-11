@@ -29,10 +29,6 @@ public:
     void setRadius(qreal radius) { mRadius = radius; }
     bool contains(const QPointF& p) const { return QLineF(mCenter, p).length() <= mRadius; }
 
-private: // methods
-    void from3Points(const QPointF& p1, const QPointF& p2, const QPointF& p3);
-    bool isPerpendicular(const QPointF& p1, const QPointF& p2, const QPointF& p3);
-
 private:
     QPointF mCenter;
     qreal mRadius;
