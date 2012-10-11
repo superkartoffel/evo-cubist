@@ -9,6 +9,7 @@
 #include "generationwidget.h"
 #include "breedersettings.h"
 
+
 GenerationWidget::GenerationWidget(QWidget* parent)
     : QWidget(parent)
     , mWindowAspectRatio(0)
@@ -39,8 +40,7 @@ void GenerationWidget::setDNA(const DNA& dna)
 
 void GenerationWidget::setSplices(const Gene& gene, const QVector<Gene>& offsprings)
 {
-    // mSplicedGene = gene;
-    qDebug() << gene.polygon().size() << offsprings.size();
+    mSplicedGene = gene;
     mSplices = offsprings;
     update();
 }

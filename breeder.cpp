@@ -73,6 +73,8 @@ void Breeder::setSelected(unsigned long selected)
 
 void Breeder::spliceAt(const QPointF& p)
 {
+    if (gSettings.minPointsPerGene() > 3)
+        return;
     QMutexLocker locker(&mMutex);
     int i = mDNA.size();
     while (i--) {
