@@ -2,6 +2,7 @@
 // All rights reserved.
 
 #include <QLineF>
+#include "helper.h"
 #include "circle.h"
 #include <qmath.h>
 
@@ -17,5 +18,5 @@ Circle::Circle(const QPointF& p1, const QPointF& p2, const QPointF& p3) {
     const qreal ox = (y11 * dx1 * dx2 + x2 * dx1 * dy2 - x1 * dy1 * dx2 - y2 * dx1 * dx2) / (dx1 * dy2 - dy1 * dx2);
     const qreal oy = (ox - x1) * dy1 / dx1 + y11;
     mCenter = QPointF(ox - p1.x(), oy - p1.y());
-    mRadius = qSqrt(mCenter.x() * mCenter.x() + mCenter.y() * mCenter.y());
+    mRadius = qSqrt(square(mCenter.x()) + square(mCenter.y()));
 }

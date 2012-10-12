@@ -1,8 +1,6 @@
 BUGS
 
-[ ] Startverteilung "Gekachelte Dreiecke" nur zulässig, wenn Mindestpunktzahl pro Polygon >= 3.
-[ ] Startverteilungen mit Kacheln nur zulässig, wenn Mindestpunktzahl pro Polygon >= 4.
-[ ] Gene::triangulize(): Bei Rechtecken entstehen zum Beispiel manchmal zwei *überlappende* Dreiecke.
+[ ] Gene::triangulize(): Bei Rechtecken entstehen manchmal zwei überlappende Dreiecke.
 
 FEATURES
 

@@ -17,7 +17,7 @@ class Gene
 public:
     explicit Gene(bool randomize = false);
 
-    Gene(const QPolygonF& polygon, const QColor& color)
+    explicit Gene(const QPolygonF& polygon, const QColor& color)
         : mColor(color)
     {
         deepCopy(polygon);
@@ -50,9 +50,9 @@ private:
 
     bool willMutate(int rate) const;
 
-    void deepCopy(const QPolygonF& polygon);
+    void deepCopy(const QPolygonF&);
 
-    QPolygonF evaluateTriangle(int i, int j, int k) const;
+    QPolygonF evaluateTriangle(int, int, int) const;
 };
 
 

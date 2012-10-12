@@ -21,7 +21,7 @@ class LogViewerForm : public QWidget
     Q_OBJECT
     
 public:
-    LogViewerForm(QWidget* parent = NULL);
+    explicit LogViewerForm(QWidget* parent = NULL);
     ~LogViewerForm();
     void log(unsigned long generation, unsigned long selected, int numPoints, int numGenes, quint64 fitness, const QImage& image);
     void highlightLastRow(void);

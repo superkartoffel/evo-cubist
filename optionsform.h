@@ -112,6 +112,8 @@ private:
 
     Ui::OptionsForm* ui;
 
+private: // methods
+    void setStartDistributionComboBoxItemEnabled(int index, bool enabled);
 
 };
 

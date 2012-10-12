@@ -9,18 +9,18 @@
 
 class Circle {
 public:
-    Circle(void)
+    explicit Circle(void)
         : mRadius(-1)
     { /* ... */ }
-    Circle(const Circle& other)
+    explicit Circle(const Circle& other)
         : mCenter(other.mCenter)
         , mRadius(other.mRadius)
     { /* ... */ }
-    Circle(const QPointF& center, qreal radius)
+    explicit Circle(const QPointF& center, qreal radius)
         : mCenter(center)
         , mRadius(radius)
     { /* ... */ }
-    Circle(const QPointF& p1, const QPointF& p2, const QPointF& p3);
+    explicit Circle(const QPointF& p1, const QPointF& p2, const QPointF& p3);
 
     const QPointF& center(void) const { return mCenter; }
     qreal radius(void) const { return mRadius; }

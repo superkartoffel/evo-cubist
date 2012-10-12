@@ -18,6 +18,7 @@
 #include "gene.h"
 #include "random/mersenne_twister.h"
 #include "breedersettings.h"
+#include "helper.h"
 
 
 class Breeder : public QThread
@@ -25,7 +26,7 @@ class Breeder : public QThread
     Q_OBJECT
 
 public:
-    Breeder(QThread* parent = NULL);
+    explicit Breeder(QThread* parent = NULL);
     void reset(void);
     void populate(void);
 
@@ -49,21 +50,14 @@ public:
     void addTotalSeconds(quint64 s) { mTotalSeconds += s; }
     quint64 totalSeconds(void) const { return mTotalSeconds; }
 
-    enum StartDistribution {
-        RandomDistribution = 0,
-        TiledDistribution = 1,
-        TiledWithColorHintDistribution = 2,
-        ScatteredDistribution = 3,
-        ScatteredWithColorHintDistribution = 4,
-        TiledTrianglesWithColorHintDistribution = 5
-    };
+public slots:
+    void setOriginalImage(const QImage&);
+    void spliceAt(const QPointF&);
 
 protected:
-    virtual void run(void);
+    void run(void);
     
 private:
-    void draw(void);
-
     bool mDirty;
     volatile bool mStopped;
     unsigned long mGeneration;
@@ -77,14 +71,14 @@ private:
     DNA mMutation;
     QMutex mMutex;
 
+private: // methods
+    void draw(void);
+
 signals:
     void evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long);
     void proceeded(unsigned long);
     void spliced(const Gene& gene, const QVector<Gene>& offsprings);
     
-public slots:
-    void setOriginalImage(const QImage&);
-    void spliceAt(const QPointF&);
 };
 
 #endif // __BREEDER_H_

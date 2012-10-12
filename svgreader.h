@@ -17,7 +17,7 @@ class SVGReader : public QObject
     Q_OBJECT
 
 public:
-    SVGReader(QObject* parent = NULL)
+    explicit SVGReader(QObject* parent = NULL)
         : QObject(parent)
     { /* ... */ }
     const DNA& dna(void) const { return mDNA; }

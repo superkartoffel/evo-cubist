@@ -7,18 +7,19 @@
 #include <QImage>
 #include <QPainter>
 #include <QtCore/QDebug>
+#include "helper.h"
 #include "dna.h"
 #include "breedersettings.h"
 
 
 class Individual {
 public:
-    Individual(void)
+    explicit Individual(void)
         : mOriginal(NULL)
         , mFitness(std::numeric_limits<quint64>::max())
     { /* ... */ }
 
-    Individual(DNA dna, const QImage& original)
+    explicit Individual(DNA dna, const QImage& original)
         : mDNA(dna)
         , mOriginal(&original)
         , mFitness(std::numeric_limits<quint64>::max())
@@ -68,7 +69,6 @@ private:
     QImage mGenerated;
 
 private: // methods
-    static inline unsigned int square(unsigned int x) { return x*x; }
     static inline unsigned int rgbDelta(QRgb c1, QRgb c2) {
         return square(qRed(c1) - qRed(c2)) + square(qGreen(c1) - qGreen(c2)) + square(qBlue(c1) - qBlue(c2));
     }

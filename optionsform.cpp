@@ -6,9 +6,11 @@
 #include <QtCore/QDebug>
 #include <QThread>
 #include <QMessageBox>
+#include <QStandardItemModel>
 
 #include "breedersettings.h"
 #include "optionsform.h"
+#include "helper.h"
 #include "ui_optionsform.h"
 
 /*
@@ -67,7 +69,6 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->dnaSaveDirectoryLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setDNASaveDirectory(QString)));
     QObject::connect(ui->imageFilenameTemplateLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setImageSaveFilenameTemplate(QString)));
     QObject::connect(ui->dnaFilenameTemplateLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setDNASaveFilenameTemplate(QString)));
-//  QObject::connect(ui->gpuComputingCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setGPUComputing(bool)));
 }
 
 
@@ -105,7 +106,6 @@ void OptionsForm::go(const QString& where, const QString& what)
 void OptionsForm::minGenesChanged(int v)
 {
     Q_ASSERT(v >= 0);
-//    Q_ASSERT(v <= ui->maxGenesSpinBox->value());
     ui->maxGenesSpinBox->setMinimum(v);
 }
 
@@ -113,16 +113,28 @@ void OptionsForm::minGenesChanged(int v)
 void OptionsForm::maxGenesChanged(int v)
 {
     Q_ASSERT(v >= 0);
-//    Q_ASSERT(v >= ui->minGenesSpinBox->value());
     ui->minGenesSpinBox->setMaximum(v);
+}
+
+
+void OptionsForm::setStartDistributionComboBoxItemEnabled(int idx, bool enabled)
+{
+    QStandardItemModel* model = qobject_cast<QStandardItemModel*>(ui->startDistributionComboBox->model());
+    if (model) {
+        QModelIndex index = model->index(idx, ui->startDistributionComboBox->modelColumn(), ui->startDistributionComboBox->rootModelIndex());
+        QStandardItem* item = model->itemFromIndex(index);
+        if (item)
+            item->setEnabled(enabled);
+    }
 }
 
 
 void OptionsForm::minPointsPerGeneChanged(int v)
 {
     Q_ASSERT(v >= 3);
-//    Q_ASSERT(v <= ui->maxPointsSpinBox->value());
     ui->maxPointsSpinBox->setMinimum(v);
+    setStartDistributionComboBoxItemEnabled(TiledDistribution, v > 3);
+    setStartDistributionComboBoxItemEnabled(TiledWithColorHintDistribution, v > 3);
 }
 
 
@@ -138,7 +150,6 @@ void OptionsForm::minAlphaChanged(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-//    Q_ASSERT(v <= ui->maxAlphaSpinBox->value());
     ui->maxAlphaSpinBox->setMinimum(v);
 }
 
@@ -147,14 +158,13 @@ void OptionsForm::maxAlphaChanged(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-//    Q_ASSERT(v >= ui->minAlphaSpinBox->value());
     ui->minAlphaSpinBox->setMaximum(v);
 }
 
 
 void OptionsForm::startDistributionChanged(int index)
 {
-    ui->scatterFactorSpinBox->setEnabled(index == 3 || index == 4);
+    ui->scatterFactorSpinBox->setEnabled(index == ScatteredDistribution || index == ScatteredWithColorHintDistribution);
     emit startDistributionChanged();
 }
 
@@ -235,7 +245,6 @@ void OptionsForm::setGeneKillProbability(int v)
 void OptionsForm::setMinPointsPerGene(int v)
 {
     Q_ASSERT(v >= 3);
-//    Q_ASSERT(v <= ui->maxPointsSpinBox->value());
     ui->minPointsSpinBox->setValue(v);
 }
 
@@ -243,7 +252,6 @@ void OptionsForm::setMinPointsPerGene(int v)
 void OptionsForm::setMaxPointsPerGene(int v)
 {
     Q_ASSERT(v >= 3);
-//    Q_ASSERT(v >= ui->minPointsSpinBox->value());
     ui->maxPointsSpinBox->setValue(v);
 }
 
@@ -266,7 +274,6 @@ void OptionsForm::setMinAlpha(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-//    Q_ASSERT(v <= ui->maxAlphaSpinBox->value());
     ui->minAlphaSpinBox->setValue(v);
 }
 
@@ -275,7 +282,6 @@ void OptionsForm::setMaxAlpha(int v)
 {
     Q_ASSERT(v >= 0);
     Q_ASSERT(v < 256);
-//    Q_ASSERT(v >= ui->minAlphaSpinBox->value());
     ui->maxAlphaSpinBox->setValue(v);
 }
 
