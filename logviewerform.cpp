@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QString>
 #include <QtCore/QDebug>
+#include "main.h"
 #include "logviewerform.h"
 #include "ui_logviewerform.h"
 
@@ -17,6 +18,7 @@ LogViewerForm::LogViewerForm(QWidget* parent)
     , ui(new Ui::LogViewerForm)
 {
     ui->setupUi(this);
+    setWindowTitle(QString("%1 - Log Viewer").arg(AppName));
     mMenu = new QMenu(this);
     ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     mMenu->addAction(QIcon(":/icons/show-picture.png"), tr("Show picture"))->setData(ShowPicture);

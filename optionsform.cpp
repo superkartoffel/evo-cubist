@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QStandardItemModel>
 
+#include "main.h"
 #include "breedersettings.h"
 #include "optionsform.h"
 #include "helper.h"
@@ -26,6 +27,7 @@ OptionsForm::OptionsForm(QWidget* parent)
     , ui(new Ui::OptionsForm)
 {
     ui->setupUi(this);
+    setWindowTitle(QString("%1 - Options").arg(AppName));
 
     QObject::connect(ui->selectImageDirectoryPushButton, SIGNAL(clicked()), SLOT(selectImageSaveDirectory()));
     QObject::connect(ui->selectDNADirectoryPushButton, SIGNAL(clicked()), SLOT(selectDNASaveDirectory()));

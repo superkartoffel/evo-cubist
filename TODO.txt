@@ -4,7 +4,6 @@ BUGS
 
 FEATURES
 
-[ ] Bildbetrachter als eigenständiges Widget implementieren, damit es sich nur so skalieren lässt, dass das Seitenverhältnis beibehalten bleibt.
 [ ] Zeichnen der Polygone auf eine beliebig große Leinwand, um feinere Auflösung zu erreichen. Dann Vergleich mit entsprechend hochskalierter Version des Originalbilds.
 [?] Nur konvexe Polygone zulassen.
 [?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert.

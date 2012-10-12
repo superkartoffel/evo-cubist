@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->generatedGroupBox->setLayout(hbox2);
 
     mOptionsForm = new OptionsForm;
+    mSVGViewer = new SVGViewer;
 
     mLogViewerForm = new LogViewerForm;
     QObject::connect(mLogViewerForm, SIGNAL(copyPicture(int, int)), SLOT(copyPicture(int, int)));
@@ -195,11 +196,7 @@ void MainWindow::showPicture(int generation, int selected)
         QMessageBox::warning(this, tr("DNA missing"), tr("The selected DNA could not be found or is invalid. Probably you selected a generation which hasn't been automatically saved."));
         return;
     }
-    mSVGWidget.load(svgFilename);
-    mSVGWidget.setBaseSize(mBreeder.image().size());
-    mSVGWidget.setMinimumSize(mBreeder.image().size()/2);
-    mSVGWidget.setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-    mSVGWidget.show();
+    mSVGViewer->show(svgFilename, mImageWidget->image().size());
 }
 
 
