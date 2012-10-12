@@ -48,6 +48,9 @@ private:
     QDateTime mStartTime;
     QFile mLog;
 
+    unsigned long mRecentEvolvedGeneration;
+    unsigned long mRecentEvolvedSelection;
+
     static const int MaxRecentFiles = 10;
     QAction* mRecentImageFileActs[MaxRecentFiles];
     QAction* mRecentDNAFileActs[MaxRecentFiles];

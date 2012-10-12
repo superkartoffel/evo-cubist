@@ -60,19 +60,30 @@
         <translation>Zeilen/Spalten einpassen</translation>
     </message>
     <message>
-        <location filename="logviewerform.cpp" line="22"/>
         <source>Show picture</source>
-        <translation>Bild anzeigen</translation>
+        <translation type="obsolete">Bild anzeigen</translation>
     </message>
     <message>
-        <location filename="logviewerform.cpp" line="23"/>
         <source>Copy picture to clipboard</source>
-        <translation>Bild in Zwischenablage kopieren</translation>
+        <translation type="obsolete">Bild in Zwischenablage kopieren</translation>
     </message>
     <message>
         <location filename="logviewerform.cpp" line="24"/>
-        <source>Go to folder containing picture</source>
-        <translation>Zum Verzeichnis des Bildes gehen</translation>
+        <source>Show vector image</source>
+        <oldsource>Show picture (SVG)</oldsource>
+        <translation>Vektorgrafik anzeigen</translation>
+    </message>
+    <message>
+        <location filename="logviewerform.cpp" line="25"/>
+        <source>Copy bitmap image to clipboard</source>
+        <oldsource>Copy picture (pixels) to clipboard</oldsource>
+        <translation>Bitmap in Zwischenablage kopieren</translation>
+    </message>
+    <message>
+        <location filename="logviewerform.cpp" line="26"/>
+        <source>Go to folder containing vector image</source>
+        <oldsource>Go to folder containing picture</oldsource>
+        <translation>Zum Verzeichnis der Vektorgafik gehen</translation>
     </message>
 </context>
 <context>
@@ -303,18 +314,18 @@
         <translation>Protokoll</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="37"/>
+        <location filename="mainwindow.cpp" line="39"/>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="152"/>
+        <location filename="mainwindow.cpp" line="155"/>
         <source>&lt;b&gt;DNA/settings have been modified.&lt;/b&gt;</source>
         <oldsource>&lt;b&gt;DNA has been modified.&lt;/b&gt;</oldsource>
         <translation>&lt;b&gt;DNS/Einstellungen wurden geändert.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="153"/>
+        <location filename="mainwindow.cpp" line="156"/>
         <source>You have unsaved DNA/settings. Do you want to save them?</source>
         <oldsource>You have unsaved DNA. Do you want to save it?</oldsource>
         <translation>Sie haben ungespeicherte DNS/Einstellungen. Möchten Sie sie jetzt speichern?</translation>
@@ -332,7 +343,7 @@
         <translation type="obsolete">Tag</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="298"/>
+        <location filename="mainwindow.cpp" line="299"/>
         <source>n/a</source>
         <translation>n/a</translation>
     </message>
@@ -369,7 +380,7 @@
         <translation type="obsolete">Das gewählte Verzeichnis zum Speichern der Bilder ist nicht vorhanden. Bitte wählen Sie ein neues im Optionen-Dialog. Dann versuchen Sie bitte den Start erneut.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="182"/>
+        <location filename="mainwindow.cpp" line="185"/>
         <source>Image NOT copied</source>
         <translation>Bild NICHT kopiert</translation>
     </message>
@@ -382,7 +393,7 @@
         <translation type="obsolete">Bild in Zwischenablage kopiert.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="195"/>
+        <location filename="mainwindow.cpp" line="198"/>
         <source>DNA missing</source>
         <oldsource>Image missing</oldsource>
         <translation>DNA fehlt</translation>
@@ -404,17 +415,17 @@
         <translation type="obsolete">Das gewählte Bild konnte nicht gefunden werden. Möglicherweise haben Sie ein Bild ausgewählt, das nicht automatisch gespeichert wurde. Entspannen Sie sich.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="182"/>
+        <location filename="mainwindow.cpp" line="185"/>
         <source>The selected image could not be copied to the clipboard. Probably you selected an image which hasn&apos;t been automatically saved.</source>
         <translation>Das gewählte Bild konnte nicht in die Zwischenablage kopiert werden. Möglicherweise haben Sie ein Bild ausgewählt, das nicht automatisch gespeichert wurde.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="186"/>
+        <location filename="mainwindow.cpp" line="189"/>
         <source>Image copied to clipboard</source>
         <translation>Bild in Zwischenablage kopiert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="186"/>
+        <location filename="mainwindow.cpp" line="189"/>
         <source>The selected image has been copied to the clipboard.</source>
         <translation>Das ausgewählte Bild wurde in die Zwischenablage kopiert.</translation>
     </message>
@@ -427,27 +438,27 @@
         <translation type="obsolete">Das gewählte Bild konnte nicht gefunden werden. Möglicherweise haben Sie ein Bild ausgewählt, das nicht automatisch gespeichert wurde.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="195"/>
+        <location filename="mainwindow.cpp" line="198"/>
         <source>The selected DNA could not be found or is invalid. Probably you selected a generation which hasn&apos;t been automatically saved.</source>
         <translation>Die ausgewählte DNS konnte nicht gefunden werden oder ist ungültig. Möglicherweise haben Sie eine Generation ausgewählt, die nicht automatisch gespeichert wurde.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="211"/>
+        <location filename="mainwindow.cpp" line="210"/>
         <source>DNA not found</source>
         <translation>DNS nicht gefunden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="211"/>
+        <location filename="mainwindow.cpp" line="210"/>
         <source>The selected DNA could not be found. Probably you selected a generation which hasn&apos;t been automatically saved.</source>
         <translation>Die ausgewählte DNS konnte nicht gefunden werden oder ist ungültig. Möglicherweise haben Sie eine Generation ausgewählt, die nicht automatisch gespeichert wurde.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="217"/>
+        <location filename="mainwindow.cpp" line="216"/>
         <source>Directory not found</source>
         <translation>Verzeichnis nicht gefunden</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="217"/>
+        <location filename="mainwindow.cpp" line="216"/>
         <source>The configured save directory &apos;%1&apos; could not be found. Please check the corresponding form field in the options dialog.</source>
         <translation>Das konfigurierte Autospeichern-Verzeichnis &apos;%1&apos; konnte nicht gefunden werden. Bitte wählen Sie ein neues im Optionen-Dialog.</translation>
     </message>
@@ -924,17 +935,17 @@
         <translation type="obsolete">Wollen Sie die Parameter wirklich auf die Voreinstellungen zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="164"/>
+        <location filename="optionsform.cpp" line="176"/>
         <source>Choose image save directory</source>
         <translation>Verzeichnis zum Speichern der generierten Bilder auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="172"/>
+        <location filename="optionsform.cpp" line="184"/>
         <source>Choose DNA save directory</source>
         <translation>Verzeichnis zum Speichern der DNS auswählen</translation>
     </message>
     <message>
-        <location filename="optionsform.cpp" line="180"/>
+        <location filename="optionsform.cpp" line="192"/>
         <source>Choose log file</source>
         <translation>Protokolldatei wählen</translation>
     </message>
@@ -1212,6 +1223,14 @@ Zeile %2, Spalte %3</translation>
         <location filename="helper.cpp" line="20"/>
         <source>day</source>
         <translation>Tag</translation>
+    </message>
+</context>
+<context>
+    <name>SVGViewer</name>
+    <message>
+        <location filename="svgviewer.ui" line="14"/>
+        <source>SVG Viewer</source>
+        <translation>SVG-Betrachter</translation>
     </message>
 </context>
 </TS>

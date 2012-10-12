@@ -21,9 +21,9 @@ LogViewerForm::LogViewerForm(QWidget* parent)
     setWindowTitle(QString("%1 - Log Viewer").arg(AppName));
     mMenu = new QMenu(this);
     ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    mMenu->addAction(QIcon(":/icons/show-picture.png"), tr("Show picture"))->setData(ShowPicture);
-    mMenu->addAction(QIcon(":/icons/copy-to-clipboard.png"), tr("Copy picture to clipboard"))->setData(CopyToClipboard);
-    mMenu->addAction(QIcon(":/icons/go-to-folder.png"), tr("Go to folder containing picture"))->setData(GoToFolder);
+    mMenu->addAction(QIcon(":/icons/show-picture.png"), tr("Show vector image"))->setData(ShowPicture);
+    mMenu->addAction(QIcon(":/icons/copy-to-clipboard.png"), tr("Copy bitmap image to clipboard"))->setData(CopyToClipboard);
+    mMenu->addAction(QIcon(":/icons/go-to-folder.png"), tr("Go to folder containing vector image"))->setData(GoToFolder);
     QObject::connect(ui->tableWidget, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(provideContextMenu(const QPoint&)));
     QObject::connect(ui->clearPushButton, SIGNAL(clicked()), SLOT(clear()));
     QObject::connect(ui->autofitPushButton, SIGNAL(clicked()), SLOT(autofitTableContents()));

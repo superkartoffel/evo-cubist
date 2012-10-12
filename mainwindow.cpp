@@ -30,6 +30,8 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , mRecentEvolvedGeneration(0)
+    , mRecentEvolvedSelection(0)
 {
     QSettings::setDefaultFormat(QSettings::NativeFormat);
 
@@ -290,6 +292,8 @@ void MainWindow::doLog(unsigned long generation, unsigned long selected, int num
 
 void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, unsigned long selected, unsigned long generation)
 {
+    mRecentEvolvedSelection = selected;
+    mRecentEvolvedGeneration = generation;
     const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
     ui->fitnessLineEdit->setText((fitness == std::numeric_limits<quint64>::max())? tr("n/a") : QString("%1").arg(fitness));
@@ -311,7 +315,7 @@ void MainWindow::evolved(void)
 
 bool MainWindow::autoSaveImage(void)
 {
-    QString imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), mBreeder.selectedGeneration(), mBreeder.selected());
+    QString imageFilename = mOptionsForm->makeImageFilename(mImageWidget->imageFileName(), mRecentEvolvedGeneration, mRecentEvolvedSelection);
     avoidDuplicateFilename(imageFilename);
     return mGenerationWidget->image().save(imageFilename);
 }
@@ -319,10 +323,10 @@ bool MainWindow::autoSaveImage(void)
 
 bool MainWindow::autoSaveDNA(void)
 {
-    QString dnaFilename = mOptionsForm->makeDNAFilename(mImageWidget->imageFileName(), mBreeder.selectedGeneration(), mBreeder.selected());
+    QString dnaFilename = mOptionsForm->makeDNAFilename(mImageWidget->imageFileName(), mRecentEvolvedGeneration, mRecentEvolvedSelection);
     gSettings.setCurrentDNAFile(dnaFilename);
     DNA dna = mBreeder.dna(); // gives a clone
-    return dna.save(dnaFilename, mBreeder.selectedGeneration(), mBreeder.selected(), mBreeder.currentFitness(), totalSeconds());
+    return dna.save(dnaFilename, mRecentEvolvedGeneration, mRecentEvolvedSelection, mBreeder.currentFitness(), totalSeconds());
 }
 
 
@@ -330,11 +334,10 @@ void MainWindow::autoSave(void)
 {
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
-    bool success;
-    success = autoSaveImage();
+    bool success = autoSaveImage();
     success &= autoSaveDNA();
     if (success) {
-        statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mBreeder.selected()).arg(mBreeder.selectedGeneration()), 3000);
+        statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mRecentEvolvedSelection).arg(mRecentEvolvedGeneration), 3000);
         mLogViewerForm->highlightLastRow();
     }
     else {
