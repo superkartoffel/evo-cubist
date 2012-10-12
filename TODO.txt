@@ -1,6 +1,7 @@
 BUGS
 
 [ ] Gene::triangulize(): Bei Rechtecken entstehen manchmal zwei überlappende Dreiecke.
+[ ] gelegentlich Segmentation Fault unter Linux beim Splitten von Polygonen per Mausklick ins GenerationWidget.
 
 FEATURES
 
