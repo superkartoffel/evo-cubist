@@ -9,18 +9,18 @@
 
 class Circle {
 public:
-    explicit Circle(void)
+    Circle(void)
         : mRadius(-1)
     { /* ... */ }
-    explicit Circle(const Circle& other)
+    Circle(const Circle& other)
         : mCenter(other.mCenter)
         , mRadius(other.mRadius)
     { /* ... */ }
-    explicit Circle(const QPointF& center, qreal radius)
+    Circle(const QPointF& center, qreal radius)
         : mCenter(center)
         , mRadius(radius)
     { /* ... */ }
-    explicit Circle(const QPointF& p1, const QPointF& p2, const QPointF& p3);
+    Circle(const QPointF& p1, const QPointF& p2, const QPointF& p3);
 
     const QPointF& center(void) const { return mCenter; }
     qreal radius(void) const { return mRadius; }
@@ -28,6 +28,10 @@ public:
     void setCenter(const QPointF& center) { mCenter = center; }
     void setRadius(qreal radius) { mRadius = radius; }
     bool contains(const QPointF& p) const { return QLineF(mCenter, p).length() <= mRadius; }
+
+private: // methods
+    void from3Points(const QPointF& p1, const QPointF& p2, const QPointF& p3);
+    bool isPerpendicular(const QPointF& p1, const QPointF& p2, const QPointF& p3);
 
 private:
     QPointF mCenter;
