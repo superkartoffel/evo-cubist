@@ -4,16 +4,11 @@
 #include <QPolygonF>
 #include <QLineF>
 #include "circle.h"
+#include "helper.h"
 
 
-
-static bool pointLessThan(const QPointF& p0, const QPointF& p1)
-{
-    return p0.x() < p1.x();
-}
-
-
-#define CHECK_AND_MAKE(a, b, c) (!isPerpendicular(poly.at(a), poly.at(b), poly.at(c))) from3Points(poly.at(a), poly.at(b), poly.at(c));
+#define CHECK_AND_MAKE(a, b, c) (!isPerpendicular(poly.at(a), poly.at(b), poly.at(c))) \
+                                from3Points(poly.at(a), poly.at(b), poly.at(c));
 
 
 Circle::Circle(const QPointF& p1, const QPointF& p2, const QPointF& p3) {

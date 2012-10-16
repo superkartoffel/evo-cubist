@@ -66,12 +66,6 @@ QVector<Gene> Gene::bisect(void) const
 }
 
 
-inline bool pointLessThan(const QPointF& a, const QPointF& b)
-{
-    return a.x() < b.x() || (a.x() == b.x() && a.y() < b.y());
-}
-
-
 QPolygonF Gene::evaluateTriangle(int i, int j, int k) const
 {
     Circle circle(mPolygon.at(i), mPolygon.at(j), mPolygon.at(k));

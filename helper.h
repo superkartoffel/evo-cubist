@@ -23,4 +23,9 @@ enum StartDistribution {
     TiledTrianglesWithColorHintDistribution = 5
 };
 
+inline bool pointLessThan(const QPointF& a, const QPointF& b)
+{
+    return a.x() < b.x() || (a.x() == b.x() && a.y() < b.y());
+}
+
 #endif // __HELPER_H_
