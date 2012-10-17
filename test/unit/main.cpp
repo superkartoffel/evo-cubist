@@ -6,8 +6,8 @@
 #include <QDateTime>
 #include <QTest>
 
-#include "../random/rnd.h"
-#include "../gene.h"
+#include "../../random/rnd.h"
+#include "../../gene.h"
 
 class RNGTest: public QObject
 {

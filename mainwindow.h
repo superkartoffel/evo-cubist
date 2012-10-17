@@ -12,8 +12,8 @@
 #include <QEvent>
 #include <QAction>
 #include <QtCore/QDebug>
-#include <svgviewer.h>
 
+#include "svgviewer.h"
 #include "imagewidget.h"
 #include "generationwidget.h"
 #include "breeder.h"

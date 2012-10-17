@@ -7,10 +7,10 @@ CONFIG -= app_bundle
 TEMPLATE = app
 INCLUDEPATH += ..
 SOURCES += main.cpp \
-    ../random/mersenne_twister.cpp \
-    ../random/rnd.cpp
+    ../../random/mersenne_twister.cpp \
+    ../../random/rnd.cpp
 
 HEADERS += \
-    ../random/mersenne_twister.h \
-    ../random/abstract_random_number_generator.h \
-    ../random/rnd.h
+    ../../random/mersenne_twister.h \
+    ../../random/abstract_random_number_generator.h \
+    ../../random/rnd.h
