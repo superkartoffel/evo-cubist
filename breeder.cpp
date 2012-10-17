@@ -20,6 +20,7 @@ Breeder::Breeder(QThread* parent)
     : QThread(parent)
     , mDirty(false)
     , mStopped(true)
+    , mMaximumFitnessDelta(std::numeric_limits<quint64>::max())
 {
     /*...*/
 }
@@ -30,6 +31,7 @@ void Breeder::setOriginalImage(const QImage& original)
     mOriginal = original.convertToFormat(QImage::Format_ARGB32);;
     mGenerated = QImage(mOriginal.size(), mOriginal.format());
     mDNA.setScale(mOriginal.size());
+    mMaximumFitnessDelta = Individual(mDNA, mOriginal).maximumFitnessDelta();
     reset();
 }
 

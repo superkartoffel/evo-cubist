@@ -100,40 +100,6 @@ QVector<Gene> Gene::triangulize(void) const
 }
 
 
-inline int cross(const QPointF& O, const QPointF& A, const QPointF& B)
-{
-    return (A.x() - O.x()) * (B.y() - O.y()) - (A.y() - O.y()) * (B.x() - O.x());
-}
-
-
-QPolygonF Gene::convexHull(void) const
-{
-    QPolygonF P = mPolygon;
-    const int n = P.size();
-    int k = 0;
-    QPolygonF H(2*n);
-
-    // sort points lexicographically
-    qSort(P.begin(), P.end(), pointLessThan);
-
-    // build lower hull
-    for (int i = 0; i < n; ++i) {
-        while (k >= 2 && cross(H[k-2], H[k-1], P.at(i)) <= 0)
-            --k;
-        H[k++] = P.at(i);
-    }
-    // build upper hull
-    for (int i = n-2, t = k+1; i >= 0; --i) {
-        while (k >= t && cross(H[k-2], H[k-1], P.at(i)) <= 0)
-            --k;
-        H[k++] = P.at(i);
-    }
-
-    H.resize(k-1);
-    return H;
-}
-
-
 inline bool Gene::willMutate(int probability) const {
     return RAND::rnd(probability) == 0;
 }

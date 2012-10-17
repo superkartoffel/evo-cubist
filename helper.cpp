@@ -41,24 +41,46 @@ bool isConvexPolygon(const QPolygonF& polygon) {
     points.append(points.at(1));
     static const int NO_SIGN = 0;
     int oldSign = NO_SIGN;
-    for (int i = 0; i < points.size() - 2; ++i) {
-        const QPointF& p0 = points.at(i);
-        const QPointF& p1 = points.at(i+1);
-        const QPointF& p2 = points.at(i+2);
-        const qreal dx1 = p1.x() - p0.x();
-        const qreal dy1 = p1.y() - p0.y();
-        const qreal dx2 = p2.x() - p1.x();
-        const qreal dy2 = p2.y() - p1.y();
-        const qreal cross = dx1 * dy2 - dy1 * dx2;
+    for (int i = 0; i < points.size()-2; ++i) {
+        const qreal c = cross(points.at(i), points.at(i+1), points.at(i+2));
         if (oldSign == NO_SIGN) {
-            oldSign = (cross < 0)? -1 : 1;
+            oldSign = (c < 0)? -1 : 1;
         }
         else {
-            if (cross < 0 && oldSign > 0)
+            if (c < 0 && oldSign > 0)
                 return false;
-            if (cross > 0 && oldSign < 0)
+            if (c > 0 && oldSign < 0)
                 return false;
         }
     }
     return true;
 }
+
+
+QPolygonF convexHull(QPolygonF P)
+{
+    const int n = P.size();
+    int k = 0;
+    QPolygonF H(2*n);
+
+    // sort points lexicographically
+    qSort(P.begin(), P.end(), pointLessThan);
+
+    // build lower hull
+    for (int i = 0; i < n; ++i) {
+        while (k >= 2 && cross(H[k-2], H[k-1], P.at(i)) <= 0)
+            --k;
+        H[k++] = P.at(i);
+    }
+    // build upper hull
+    for (int i = n-2, t = k+1; i >= 0; --i) {
+        while (k >= t && cross(H[k-2], H[k-1], P.at(i)) <= 0)
+            --k;
+        H[k++] = P.at(i);
+    }
+
+    H.resize(k-1);
+    return H;
+}
+
+

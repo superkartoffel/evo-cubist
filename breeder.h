@@ -63,6 +63,7 @@ private:
     unsigned long mGeneration;
     unsigned long mSelectedGenerations;
     quint64 mFitness;
+    quint64 mMaximumFitnessDelta;
     unsigned long mSelected;
     quint64 mTotalSeconds;
     QImage mOriginal;

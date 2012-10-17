@@ -57,6 +57,15 @@ public:
         return mFitness;
     }
 
+    quint64 maximumFitnessDelta(void) const {
+        quint64 maxDelta = 0;
+        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
+        const QRgb* const oEnd = o + mOriginal->width() * mOriginal->height();
+        while (o < oEnd)
+            maxDelta += rgbDelta(*o++, qRgba(255, 255, 255, 255));
+        return maxDelta;
+    }
+
     inline void evolve(void) {
         mDNA.mutate();
         calcFitness();

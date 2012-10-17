@@ -1,13 +1,12 @@
 BUGS
 
-[ ] Gene::triangulize(): Bei Rechtecken entstehen manchmal zwei überlappende Dreiecke.
 [ ] gelegentlich Segmentation Fault unter Linux beim Splitten von Polygonen per Mausklick ins GenerationWidget.
 
 FEATURES
 
 [ ] Zeichnen der Polygone auf eine beliebig große Leinwand, um feinere Auflösung zu erreichen. Dann Vergleich mit entsprechend hochskalierter Version des Originalbilds.
 [?] Nur konvexe Polygone zulassen.
-[?] R/G/B/A/xy-Regler automatisch anpassen, wenn Evolution stagniert.
+[?] Mutationsparameter im Laufe der Evolution anpassen. Das Ziel muss es sein, ein möglichst großes Fitness-Delta von Mutation zu Mutation zu erreichen oder über die Zeit möglichst viele Mutationen auszuwählen oder am besten beides.
 [?] GenerationWidget: markiertes Polygon löschen.
 
 POSSIBLE SPEED-UPS
