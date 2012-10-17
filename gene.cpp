@@ -8,6 +8,7 @@
 #include "breedersettings.h"
 #include "random/rnd.h"
 #include "circle.h"
+#include "helper.h"
 
 
 Gene::Gene(bool randomize)
@@ -17,6 +18,8 @@ Gene::Gene(bool randomize)
         for (int x = 0; x < N; ++x)
             mPolygon.append(QPointF(RAND::rnd1(), RAND::rnd1()));
         mColor.setRgb(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
+        if (mPolygon.size() > 3 && gSettings.onlyConvex())
+            mPolygon = convexHull(mPolygon);
     }
 }
 
@@ -123,6 +126,8 @@ void Gene::mutate(void)
         QPointF newP = (p0 + p1) / 2;
         randomlyTranslatePoint(newP);
         mPolygon.insert(j, newP);
+        if (gSettings.onlyConvex())
+            mPolygon = convexHull(mPolygon);
     }
     // kill
     if (willMutate(gSettings.pointKillProbability()) && mPolygon.size() > gSettings.minPointsPerGene())
@@ -131,6 +136,8 @@ void Gene::mutate(void)
     for (QPolygonF::iterator p = mPolygon.begin(); p != mPolygon.end(); ++p) {
         if (willMutate(gSettings.pointMutationProbability()))
             randomlyTranslatePoint(*p);
+        if (mPolygon.size() > 3 && gSettings.onlyConvex())
+            mPolygon = convexHull(mPolygon);
     }
     // change color
     if (willMutate(gSettings.colorMutationProbability())) {

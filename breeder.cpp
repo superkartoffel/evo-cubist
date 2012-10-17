@@ -183,6 +183,8 @@ void Breeder::populate(void)
             else {
                 color = QColor(RAND::rnd(256), RAND::rnd(256), RAND::rnd(256), RAND::rnd(gSettings.minA(), gSettings.maxA()));
             }
+            if (gSettings.onlyConvex())
+                polygon = convexHull(polygon);
             mDNA.append(Gene(polygon, color));
         }
         break;

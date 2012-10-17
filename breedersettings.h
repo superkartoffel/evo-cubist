@@ -36,6 +36,7 @@ public:
         , mMaxPointsPerGene(9)
         , mMinGenes(200)
         , mMaxGenes(400)
+        , mOnlyConvex(true)
         , mStartDistribution(0)
         , mScatterFactor(0.5)
         , mAutoSave(false)
@@ -65,6 +66,7 @@ public:
     inline int maxPointsPerGene(void) const { return mMaxPointsPerGene; }
     inline int minGenes(void) const { return mMinGenes; }
     inline int maxGenes(void) const { return mMaxGenes; }
+    inline bool onlyConvex(void) const { return mOnlyConvex; }
     inline int startDistribution(void) const {  return mStartDistribution; }
     inline qreal scatterFactor(void) const { return mScatterFactor; }
     inline int cores(void) const { return mCores; }
@@ -101,6 +103,7 @@ public slots:
     void setMaxPointsPerGene(int);
     void setMinGenes(int);
     void setMaxGenes(int);
+    void setOnlyConvex(bool);
     void setCores(int);
     void setGPUComputing(bool);
     void setBackgroundColor(QRgb);
@@ -135,6 +138,7 @@ private:
     int mMaxPointsPerGene; // [n..n+x]
     int mMinGenes;
     int mMaxGenes;
+    bool mOnlyConvex;
     int mStartDistribution;
     qreal mScatterFactor;
     bool mAutoSave;

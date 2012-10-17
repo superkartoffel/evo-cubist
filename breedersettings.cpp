@@ -154,6 +154,12 @@ void BreederSettings::setMaxGenes(int v)
 }
 
 
+void BreederSettings::setOnlyConvex(bool v)
+{
+    mOnlyConvex = v;
+}
+
+
 void BreederSettings::setScatterFactor(double v)
 {
     Q_ASSERT(v > 0);
