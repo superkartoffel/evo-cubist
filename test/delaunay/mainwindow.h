@@ -11,6 +11,10 @@
 #include <QPolygonF>
 #include <QPointF>
 #include <QVector>
+#include <QGraphicsItem>
+#include <QGraphicsScene>
+#include <QGraphicsScale>
+#include <QGraphicsView>
 
 #include "../../gene.h"
 
@@ -39,6 +43,10 @@ private:
     Gene mGene;
     QVector<Gene> mSplices;
     bool mShowSplices;
+
+    QGraphicsScene mScene;
+    QGraphicsView mView;
 };
 
 #endif // __MAINWINDOW_H_
+

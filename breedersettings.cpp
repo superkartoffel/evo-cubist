@@ -319,7 +319,7 @@ void BreederSettings::readBackgroundColor(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "backgroundColor");
     const QColor c(mXml.readElementText());
-    mBackgroundColor = c.isValid()? c.rgba() : 0xffffffffU;
+    mBackgroundColor = c.isValid()? c.rgba() : qRgba(255, 255, 255, 255);
 }
 
 

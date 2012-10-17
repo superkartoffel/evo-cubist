@@ -18,6 +18,12 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
     RAND::initialize();
+
+    mScene.setSceneRect(0, 0, 1, 1);
+    mView.fitInView(mScene.sceneRect());
+    mView.setScene(&mScene);
+    mView.scale(width(), height());
+    mView.show();
 }
 
 
@@ -98,6 +104,18 @@ void MainWindow::mousePressEvent(QMouseEvent* e)
 void MainWindow::keyPressEvent(QKeyEvent* e)
 {
     switch (e->key()) {
+    case Qt::Key_F:
+    {
+        // fill plane with similar polygons
+        break;
+    }
+    case Qt::Key_Escape:
+    {
+        mPolygon.clear();
+        mGene = Gene();
+        update();
+        break;
+    }
     case Qt::Key_R:
     {
         QPolygonF polygon;
@@ -112,12 +130,18 @@ void MainWindow::keyPressEvent(QKeyEvent* e)
         break;
     }
     case Qt::Key_S:
+    {
         mShowSplices = !mShowSplices;
         update();
         break;
+    }
     case Qt::Key_C:
+    {
         mGene = Gene();
         update();
+        break;
+    }
+    default:
         break;
     }
 }
