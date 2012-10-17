@@ -851,7 +851,7 @@ bool BreederSettings::read(QIODevice* device)
     Q_ASSERT(device != NULL);
     mXml.setDevice(device);
     if (mXml.readNextStartElement()) {
-        if (mXml.name() == "evocubist-settings" && mXml.attributes().value("version").startsWith("1.")) {
+        if (mXml.name() == "evocubist-settings" && mXml.attributes().value("version").toString().startsWith("1.")) {
             read();
         }
         else {
