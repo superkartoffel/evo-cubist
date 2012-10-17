@@ -36,13 +36,13 @@ public:
         , mMaxPointsPerGene(9)
         , mMinGenes(200)
         , mMaxGenes(400)
-        , mOnlyConvex(true)
+        , mOnlyConvex(false)
         , mStartDistribution(0)
         , mScatterFactor(0.5)
         , mAutoSave(false)
         , mAutoSaveInterval(10)
         , mCores(2)
-        , mBackgroundColor(0xffffffffU)
+        , mBackgroundColor(qRgba(255, 255, 255, 2555))
     {
         // ...
     }

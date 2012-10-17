@@ -37,6 +37,7 @@ public:
     inline unsigned long generation(void) const { return mGeneration; }
     inline unsigned long selectedGeneration(void) const { return mSelectedGenerations; }
     inline quint64 currentFitness(void) const { return mFitness; }
+    inline quint64 worstFitness(void) const { return mMaximumFitnessDelta; }
     inline unsigned long selected(void) const { return mSelected; }
 
     void breed(QThread::Priority priority = QThread::LowPriority);

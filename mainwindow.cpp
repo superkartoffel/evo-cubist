@@ -296,9 +296,10 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, u
     mRecentEvolvedGeneration = generation;
     const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
-    ui->fitnessLineEdit->setText((fitness == std::numeric_limits<quint64>::max())? tr("n/a") : QString("%1").arg(fitness));
+    const qreal reached = 100 * (1.0 - (qreal)fitness / mBreeder.worstFitness());
+    ui->fitnessLineEdit->setText((fitness == std::numeric_limits<quint64>::max())? tr("n/a") : QString("%1%").arg(reached, 0, 'g', 9));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
-    ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation));
+    ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation, 0, 'g', 5));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
     ui->pointsLineEdit->setText(QString("%1").arg(numPoints));
     mGenerationWidget->setDNA(dna);
