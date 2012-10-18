@@ -11,10 +11,12 @@
 #include <QPolygonF>
 #include <QPointF>
 #include <QVector>
-#include <QGraphicsItem>
 #include <QGraphicsScene>
-#include <QGraphicsScale>
 #include <QGraphicsView>
+#include <QtConcurrentRun>
+#include <QFutureWatcher>
+#include <QtScript>
+
 
 #include "../../gene.h"
 
@@ -28,13 +30,14 @@ class MainWindow : public QWidget
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget* parent = NULL);
     ~MainWindow();
 
 protected:
     void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
+    void closeEvent(QCloseEvent*);
     
 private:
     Ui::MainWindow *ui;
@@ -46,6 +49,24 @@ private:
 
     QGraphicsScene mScene;
     QGraphicsView mView;
+
+    QFuture<void> mTileThread;
+    QFutureWatcher<void> mTileThreadWatcher;
+
+    QScriptEngine mScriptEngine;
+
+public slots:
+    void tileThreadFinished(void);
+    void executeScript(void);
+    void startTiling(void);
+
+signals:
+    void tilingProgressed(int);
+
+private: // methods
+    void tileRandomly(void);
+    void saveSettings(void);
+    void restoreSettings(void);
 };
 
 #endif // __MAINWINDOW_H_

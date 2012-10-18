@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 
-QT += core gui
+QT += core gui script
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
