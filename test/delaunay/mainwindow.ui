@@ -24,6 +24,11 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QTextEdit" name="scriptEditor">
+       <property name="font">
+        <font>
+         <family>Courier New</family>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">color: White;
 background-color: rgba(33, 33, 33, 200);</string>

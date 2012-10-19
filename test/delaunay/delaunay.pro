@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 
-QT += core gui script
+QT += core gui script scripttools
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,7 +15,9 @@ SOURCES += \
     ../../breedersettings.cpp \
     ../../random/rnd.cpp \
     ../../random/mersenne_twister.cpp \
-    ../../helper.cpp
+    ../../helper.cpp \
+    painterpathprototype.cpp \
+    painterpathclass.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -27,7 +29,8 @@ HEADERS += \
     ../../random/rnd.h \
     ../../random/mersenne_twister.h \
     ../../random/abstract_random_number_generator.h \
-    bindings.h
+    painterpathprototype.h \
+    painterpathclass.h
 
 
 FORMS += mainwindow.ui

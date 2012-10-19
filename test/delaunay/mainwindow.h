@@ -14,8 +14,8 @@
 #include <QGraphicsView>
 #include <QtConcurrentRun>
 #include <QFutureWatcher>
-#include <QtScript>
-
+#include <QScriptEngine>
+#include <QScriptEngineDebugger>
 
 #include "../../gene.h"
 
@@ -53,6 +53,9 @@ private:
     QFutureWatcher<void> mTileThreadWatcher;
 
     QScriptEngine mScriptEngine;
+#ifndef QT_NO_DEBUG
+    QScriptEngineDebugger mDebugger;
+#endif
     bool mStopped;
 
 public slots:

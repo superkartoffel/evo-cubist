@@ -4,7 +4,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "main.h"
-#include "bindings.h"
+#include "painterpathclass.h"
 #include "../../circle.h"
 #include "../../random/rnd.h"
 #include "../../helper.h"
@@ -26,6 +26,8 @@
 #include <qmath.h>
 
 
+
+
 MainWindow::MainWindow(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
@@ -42,20 +44,20 @@ MainWindow::MainWindow(QWidget* parent)
     QScriptValue m = mScriptEngine.newQObject(this);
     mScriptEngine.globalObject().setProperty("MainWindow", m);
 
-    QScriptValue qPointFproto = mScriptEngine.newObject();
-    QScriptValue qPointFctor = mScriptEngine.newFunction(constructQPointF, qPointFproto);
-    mScriptEngine.globalObject().setProperty("Point", qPointFctor);
+    PainterPathClass* ppClass = new PainterPathClass(&mScriptEngine);
+    mScriptEngine.globalObject().setProperty("PainterPath", ppClass->constructor());
 
-    QScriptValue qPolygonFproto = mScriptEngine.newObject();
-    qPolygonFproto.setProperty("append", mScriptEngine.newFunction(qPolygonF_append));
-    QScriptValue qPolygonFctor = mScriptEngine.newFunction(constructQPolygonF, qPolygonFproto);
-    mScriptEngine.globalObject().setProperty("Polygon", qPolygonFctor);
+#ifndef QT_NO_DEBUG
+    mDebugger.attachTo(&mScriptEngine);
+    mDebugger.action(QScriptEngineDebugger::InterruptAction)->trigger();
+    mDebugger.widget(QScriptEngineDebugger::DebugOutputWidget)->show();
+#endif
 
     mScene.setSceneRect(0, 0, 1, 1);
     mScene.setItemIndexMethod(QGraphicsScene::NoIndex);
     mView.fitInView(mScene.sceneRect());
     mView.setRenderHint(QPainter::Antialiasing);
-    mView.scale(width(), height());
+    mView.scale(640, 640);
     mView.setBackgroundBrush(QColor(20, 20, 20));
     mView.setWindowTitle("Random Tiling Test");
     mView.setScene(&mScene);
@@ -91,16 +93,19 @@ void MainWindow::restoreSettings(void)
                                    "C = 0.998\n"
                                    "N = 2000\n"
                                    "MAX_TRIALS = 1000\n"
+                                   "\n"
                                    "function proceed() {\n"
                                    "  A = A * C;\n"
                                    "  S = A / 2;\n"
-                                   "  polygon = [\n"
-                                   "    { xd: -S, yd: -S },\n"
-                                   "    { xd: +S, yd: -S },\n"
-                                   "    { xd: +S, yd: +S },\n"
-                                   "    { xd: -S, yd: +S }\n"
-                                   "  ]\n"
                                    "}\n"
+                                   "\n"
+                                   "function getShape(x0, y0)\n"
+                                   "{\n"
+                                   "  var path = new PainterPath;\n"
+                                   "  path.addEllipse(x0-S/2, y0-S/2, S, S);\n"
+                                   "  return path;\n"
+                                   "}\n"
+                                   "\n"
                                    "MainWindow.startTiling()"
                                    )
                                ).toString()
@@ -219,6 +224,7 @@ void MainWindow::startTiling(void)
 void MainWindow::runStopScript(void)
 {
     if (ui->runStopPushButton->text() == tr("Run")) {
+        mStopped = false;
         mScriptEngine.evaluate(ui->scriptEditor->toPlainText());
         if (mScriptEngine.hasUncaughtException()) {
             qWarning() << mScriptEngine.uncaughtExceptionBacktrace() << mScriptEngine.uncaughtException().toString();
@@ -265,8 +271,15 @@ void MainWindow::tileRandomly(void)
         return;
     const int MAX_TRIALS =  vMaxTrials.toInt32();
     QScriptValue proceed = mScriptEngine.globalObject().property("proceed");
-    if (proceed.isUndefined())
+    if (proceed.isUndefined()) {
+        qWarning() << "proceed.isUndefined()";
         return;
+    }
+    QScriptValue getShape = mScriptEngine.globalObject().property("getShape");
+    if (getShape.isUndefined()) {
+        qWarning() << "getShape.isUndefined()";
+        return;
+    }
     while (mScene.items().size() < N) {
         proceed.call();
         int numTrials = 0;
@@ -275,21 +288,10 @@ void MainWindow::tileRandomly(void)
             if (mStopped)
                 goto end;
             ++numTrials;
-            const qsreal x0 = RAND::rnd1();
-            const qsreal y0 = RAND::rnd1();
-            QScriptValue vPolygon = mScriptEngine.globalObject().property("polygon");
-            if (vPolygon.isUndefined())
-                return;
-            QVector<QVariantMap> points;
-            qScriptValueToSequence(vPolygon, points);
-            QPolygonF polygon;
-            for (QVector<QVariantMap>::const_iterator p = points.constBegin(); p != points.constEnd(); ++p) {
-                const qreal xd = (*p)["xd"].toDouble();
-                const qreal yd = (*p)["yd"].toDouble();
-                polygon.append(QPointF(x0+xd, y0+yd));
-            }
-            QPainterPath path;
-            path.addPolygon(polygon);
+            QScriptValueList vShapeArgs;
+            vShapeArgs << QScriptValue(RAND::rnd1()) << QScriptValue(RAND::rnd1());
+            QScriptValue vShape = getShape.call(QScriptValue(), vShapeArgs);
+            QPainterPath path = qscriptvalue_cast<QPainterPath>(vShape);
             bool colliding = false;
             const QList<QGraphicsItem*>& items = mScene.items();
             for (QList<QGraphicsItem*>::const_iterator it = items.constBegin(); it != items.constEnd(); ++it) {
@@ -300,13 +302,13 @@ void MainWindow::tileRandomly(void)
             }
             if (!colliding) {
                 fitting = true;
-                mScene.addPolygon(polygon, pen, brush[mScene.items().size() % 3]);
+                mScene.addPath(path, pen, brush[mScene.items().size() % 3]);
             }
             else {
                 fitting = false;
             }
         }
-        emit tilingProgressed(1000 * mScene.items().size() / N);
+        emit tilingProgressed(ui->progressBar->maximum() * mScene.items().size() / N);
     }
 end:;
 }
