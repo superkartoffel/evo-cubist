@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "main.h"
+#include "bindings.h"
 #include "../../circle.h"
 #include "../../random/rnd.h"
 #include "../../helper.h"
@@ -17,6 +18,10 @@
 #include <QColor>
 #include <QBrush>
 #include <QRectF>
+#include <QVector>
+#include <QPointF>
+#include <QPolygonF>
+#include <QSharedPointer>
 #include <QSettings>
 #include <qmath.h>
 
@@ -25,6 +30,7 @@ MainWindow::MainWindow(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
     , mShowSplices(false)
+    , mStopped(false)
 {
     ui->setupUi(this);
 
@@ -35,6 +41,15 @@ MainWindow::MainWindow(QWidget* parent)
 
     QScriptValue m = mScriptEngine.newQObject(this);
     mScriptEngine.globalObject().setProperty("MainWindow", m);
+
+    QScriptValue qPointFproto = mScriptEngine.newObject();
+    QScriptValue qPointFctor = mScriptEngine.newFunction(constructQPointF, qPointFproto);
+    mScriptEngine.globalObject().setProperty("Point", qPointFctor);
+
+    QScriptValue qPolygonFproto = mScriptEngine.newObject();
+    qPolygonFproto.setProperty("append", mScriptEngine.newFunction(qPolygonF_append));
+    QScriptValue qPolygonFctor = mScriptEngine.newFunction(constructQPolygonF, qPolygonFproto);
+    mScriptEngine.globalObject().setProperty("Polygon", qPolygonFctor);
 
     mScene.setSceneRect(0, 0, 1, 1);
     mScene.setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -49,9 +64,11 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(this, SIGNAL(tilingProgressed(int)), ui->progressBar, SLOT(setValue(int)));
     QObject::connect(this, SIGNAL(tilingProgressed(int)), &mScene, SLOT(update()), Qt::BlockingQueuedConnection);
     QObject::connect(&mTileThreadWatcher, SIGNAL(finished()), SLOT(tileThreadFinished()));
+    QObject::connect(ui->runStopPushButton, SIGNAL(clicked()), SLOT(runStopScript()));
     QObject::connect(ui->executePushButton, SIGNAL(clicked()), SLOT(executeScript()));
 
     restoreSettings();
+
 }
 
 
@@ -70,12 +87,19 @@ void MainWindow::restoreSettings(void)
     ui->scriptEditor->setPlainText(
                 settings.value("MainWindow/script",
                                QString(
-                                   "A = 0.1\n"
-                                   "C = 0.999\n"
+                                   "A = 0.075\n"
+                                   "C = 0.998\n"
                                    "N = 2000\n"
                                    "MAX_TRIALS = 1000\n"
                                    "function proceed() {\n"
                                    "  A = A * C;\n"
+                                   "  S = A / 2;\n"
+                                   "  polygon = [\n"
+                                   "    { xd: -S, yd: -S },\n"
+                                   "    { xd: +S, yd: -S },\n"
+                                   "    { xd: +S, yd: +S },\n"
+                                   "    { xd: -S, yd: +S }\n"
+                                   "  ]\n"
                                    "}\n"
                                    "MainWindow.startTiling()"
                                    )
@@ -175,8 +199,9 @@ void MainWindow::tileThreadFinished(void)
 {
     mScene.update();
     mView.setCursor(Qt::ArrowCursor);
-    ui->executePushButton->setText("Go");
-    ui->executePushButton->setEnabled(true);
+    ui->runStopPushButton->setText(tr("Run"));
+    ui->progressBar->setValue(0);
+    ui->progressBar->setEnabled(false);
 }
 
 
@@ -186,15 +211,37 @@ void MainWindow::startTiling(void)
         mView.setCursor(Qt::WaitCursor);
         mTileThread = QtConcurrent::run(this, &MainWindow::tileRandomly);
         mTileThreadWatcher.setFuture(mTileThread);
+        ui->progressBar->setEnabled(true);
+    }
+}
+
+
+void MainWindow::runStopScript(void)
+{
+    if (ui->runStopPushButton->text() == tr("Run")) {
+        mScriptEngine.evaluate(ui->scriptEditor->toPlainText());
+        if (mScriptEngine.hasUncaughtException()) {
+            qWarning() << mScriptEngine.uncaughtExceptionBacktrace() << mScriptEngine.uncaughtException().toString();
+        }
+        else {
+            ui->runStopPushButton->setText(tr("Stop"));
+        }
+    }
+    else {
+        mStopped = true;
     }
 }
 
 
 void MainWindow::executeScript(void)
 {
-    ui->executePushButton->setText("Running ...");
-    ui->executePushButton->setEnabled(false);
     mScriptEngine.evaluate(ui->scriptEditor->toPlainText());
+    if (mScriptEngine.hasUncaughtException()) {
+        qWarning() << mScriptEngine.uncaughtExceptionBacktrace() << mScriptEngine.uncaughtException().toString();
+    }
+    else {
+        qDebug() << "READY.";
+    }
 }
 
 
@@ -222,19 +269,25 @@ void MainWindow::tileRandomly(void)
         return;
     while (mScene.items().size() < N) {
         proceed.call();
-        QScriptValue vA = mScriptEngine.globalObject().property("A");
-        if (vA.isUndefined())
-            break;
-        qsreal A = vA.toNumber();
-        const qsreal s = A / 2;
         int numTrials = 0;
         bool fitting = false;
         while (!fitting && numTrials < MAX_TRIALS) {
+            if (mStopped)
+                goto end;
             ++numTrials;
             const qsreal x0 = RAND::rnd1();
             const qsreal y0 = RAND::rnd1();
+            QScriptValue vPolygon = mScriptEngine.globalObject().property("polygon");
+            if (vPolygon.isUndefined())
+                return;
+            QVector<QVariantMap> points;
+            qScriptValueToSequence(vPolygon, points);
             QPolygonF polygon;
-            polygon << QPointF(x0-s, y0-s) << QPointF(x0+s, y0-s) << QPointF(x0+s, y0+s) << QPointF(x0-s, y0+s);
+            for (QVector<QVariantMap>::const_iterator p = points.constBegin(); p != points.constEnd(); ++p) {
+                const qreal xd = (*p)["xd"].toDouble();
+                const qreal yd = (*p)["yd"].toDouble();
+                polygon.append(QPointF(x0+xd, y0+yd));
+            }
             QPainterPath path;
             path.addPolygon(polygon);
             bool colliding = false;
@@ -255,8 +308,8 @@ void MainWindow::tileRandomly(void)
         }
         emit tilingProgressed(1000 * mScene.items().size() / N);
     }
+end:;
 }
-
 
 
 void MainWindow::keyPressEvent(QKeyEvent* e)

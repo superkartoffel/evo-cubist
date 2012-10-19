@@ -9,7 +9,6 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QPolygonF>
-#include <QPointF>
 #include <QVector>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -54,9 +53,11 @@ private:
     QFutureWatcher<void> mTileThreadWatcher;
 
     QScriptEngine mScriptEngine;
+    bool mStopped;
 
 public slots:
     void tileThreadFinished(void);
+    void runStopScript(void);
     void executeScript(void);
     void startTiling(void);
 

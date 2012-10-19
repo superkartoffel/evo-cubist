@@ -26,7 +26,8 @@ HEADERS += \
     ../../breedersettings.h \
     ../../random/rnd.h \
     ../../random/mersenne_twister.h \
-    ../../random/abstract_random_number_generator.h
+    ../../random/abstract_random_number_generator.h \
+    bindings.h
 
 
 FORMS += mainwindow.ui
