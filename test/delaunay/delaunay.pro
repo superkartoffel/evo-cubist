@@ -34,3 +34,9 @@ HEADERS += \
 
 
 FORMS += mainwindow.ui
+
+RESOURCES += \
+    scripts.qrc
+
+OTHER_FILES += \
+    scripts/default.js

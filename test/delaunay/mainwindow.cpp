@@ -17,15 +17,9 @@
 #include <QPen>
 #include <QColor>
 #include <QBrush>
-#include <QRectF>
 #include <QVector>
-#include <QPointF>
-#include <QPolygonF>
-#include <QSharedPointer>
 #include <QSettings>
 #include <qmath.h>
-
-
 
 
 MainWindow::MainWindow(QWidget* parent)
@@ -55,6 +49,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     mScene.setSceneRect(0, 0, 1, 1);
     mScene.setItemIndexMethod(QGraphicsScene::NoIndex);
+    mView.resize(640, 640);
     mView.fitInView(mScene.sceneRect());
     mView.setRenderHint(QPainter::Antialiasing);
     mView.scale(640, 640);
@@ -86,30 +81,11 @@ void MainWindow::restoreSettings(void)
     QSettings settings(Company, AppName);
     restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
     mView.restoreGeometry(settings.value("GraphicsView/geometry").toByteArray());
-    ui->scriptEditor->setPlainText(
-                settings.value("MainWindow/script",
-                               QString(
-                                   "A = 0.075\n"
-                                   "C = 0.998\n"
-                                   "N = 2000\n"
-                                   "MAX_TRIALS = 1000\n"
-                                   "\n"
-                                   "function proceed() {\n"
-                                   "  A = A * C;\n"
-                                   "  S = A / 2;\n"
-                                   "}\n"
-                                   "\n"
-                                   "function getShape(x0, y0)\n"
-                                   "{\n"
-                                   "  var path = new PainterPath;\n"
-                                   "  path.addEllipse(x0-S/2, y0-S/2, S, S);\n"
-                                   "  return path;\n"
-                                   "}\n"
-                                   "\n"
-                                   "MainWindow.startTiling()"
-                                   )
-                               ).toString()
-                );
+    QFile script(":/scripts/default.js");
+    script.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString scriptText = script.readAll();
+    script.close();
+    ui->scriptEditor->setPlainText(settings.value("MainWindow/script", scriptText).toString());
 }
 
 
@@ -244,9 +220,6 @@ void MainWindow::executeScript(void)
     mScriptEngine.evaluate(ui->scriptEditor->toPlainText());
     if (mScriptEngine.hasUncaughtException()) {
         qWarning() << mScriptEngine.uncaughtExceptionBacktrace() << mScriptEngine.uncaughtException().toString();
-    }
-    else {
-        qDebug() << "READY.";
     }
 }
 
