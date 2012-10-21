@@ -1,7 +1,7 @@
 var A = 0.1;
 var C = 0.9993;
-var N = 2000;
-var MAX_TRIALS = 5000;
+var N = 2560;
+var MAX_TRIALS = 6000;
 var S = undefined;
 var i = 0;
 
@@ -33,7 +33,7 @@ function getShape(x0, y0)
 
 function getColor()
 {
-  return [ i%256, 0, 256-i%256 ];
+  return [ 256*(1-i/N), 256, 0 ];
 }
 
 MainWindow.startTiling()
