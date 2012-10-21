@@ -19,6 +19,7 @@
 #include <QBrush>
 #include <QVector>
 #include <QSettings>
+#include <QSyntaxHighlighter>
 #include <qmath.h>
 
 
@@ -42,27 +43,25 @@ MainWindow::MainWindow(QWidget* parent)
     mScriptEngine.globalObject().setProperty("PainterPath", ppClass->constructor());
 
 #ifndef QT_NO_DEBUG
-    mDebugger.attachTo(&mScriptEngine);
-    mDebugger.action(QScriptEngineDebugger::InterruptAction)->trigger();
-    mDebugger.widget(QScriptEngineDebugger::DebugOutputWidget)->show();
+//    mDebugger.attachTo(&mScriptEngine);
+//    mDebugger.action(QScriptEngineDebugger::InterruptAction)->trigger();
+//    mDebugger.widget(QScriptEngineDebugger::DebugOutputWidget)->show();
 #endif
 
     mScene.setSceneRect(0, 0, 1, 1);
     mScene.setItemIndexMethod(QGraphicsScene::NoIndex);
-    mView.resize(640, 640);
-    mView.fitInView(mScene.sceneRect());
-    mView.setRenderHint(QPainter::Antialiasing);
-    mView.scale(640, 640);
-    mView.setBackgroundBrush(QColor(20, 20, 20));
-    mView.setWindowTitle("Random Tiling Test");
-    mView.setScene(&mScene);
-    mView.show();
+    ui->graphicsView->fitInView(mScene.sceneRect());
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    ui->graphicsView->scale(512, 512);
+    ui->graphicsView->setBackgroundBrush(QColor(20, 20, 20));
+    ui->graphicsView->setWindowTitle("Random Tiling Test");
+    ui->graphicsView->setScene(&mScene);
+    ui->graphicsView->show();
 
     QObject::connect(this, SIGNAL(tilingProgressed(int)), ui->progressBar, SLOT(setValue(int)));
     QObject::connect(this, SIGNAL(tilingProgressed(int)), &mScene, SLOT(update()), Qt::BlockingQueuedConnection);
     QObject::connect(&mTileThreadWatcher, SIGNAL(finished()), SLOT(tileThreadFinished()));
     QObject::connect(ui->runStopPushButton, SIGNAL(clicked()), SLOT(runStopScript()));
-    QObject::connect(ui->executePushButton, SIGNAL(clicked()), SLOT(executeScript()));
 
     restoreSettings();
 
@@ -80,7 +79,7 @@ void MainWindow::restoreSettings(void)
 {
     QSettings settings(Company, AppName);
     restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
-    mView.restoreGeometry(settings.value("GraphicsView/geometry").toByteArray());
+    ui->graphicsView->restoreGeometry(settings.value("GraphicsView/geometry").toByteArray());
     QFile script(":/scripts/default.js");
     script.open(QIODevice::ReadOnly | QIODevice::Text);
     QString scriptText = script.readAll();
@@ -94,15 +93,14 @@ void MainWindow::saveSettings(void)
     QSettings settings(Company, AppName);
     settings.setValue("MainWindow/geometry", saveGeometry());
     settings.setValue("MainWindow/script", ui->scriptEditor->toPlainText());
-    settings.setValue("GraphicsView/geometry", mView.saveGeometry());
+    settings.setValue("GraphicsView/geometry", ui->graphicsView->saveGeometry());
 }
 
 
 void MainWindow::closeEvent(QCloseEvent* e)
 {
     saveSettings();
-    mView.close();
-    mTileThread.cancel();
+    mStopped = true;
     mTileThread.waitForFinished();
     e->accept();
 }
@@ -179,7 +177,7 @@ void MainWindow::mousePressEvent(QMouseEvent* e)
 void MainWindow::tileThreadFinished(void)
 {
     mScene.update();
-    mView.setCursor(Qt::ArrowCursor);
+    ui->graphicsView->setCursor(Qt::ArrowCursor);
     ui->runStopPushButton->setText(tr("Run"));
     ui->progressBar->setValue(0);
     ui->progressBar->setEnabled(false);
@@ -189,7 +187,7 @@ void MainWindow::tileThreadFinished(void)
 void MainWindow::startTiling(void)
 {
     if (!mTileThread.isRunning()) {
-        mView.setCursor(Qt::WaitCursor);
+        ui->graphicsView->setCursor(Qt::WaitCursor);
         mTileThread = QtConcurrent::run(this, &MainWindow::tileRandomly);
         mTileThreadWatcher.setFuture(mTileThread);
         ui->progressBar->setEnabled(true);
@@ -211,15 +209,8 @@ void MainWindow::runStopScript(void)
     }
     else {
         mStopped = true;
-    }
-}
-
-
-void MainWindow::executeScript(void)
-{
-    mScriptEngine.evaluate(ui->scriptEditor->toPlainText());
-    if (mScriptEngine.hasUncaughtException()) {
-        qWarning() << mScriptEngine.uncaughtExceptionBacktrace() << mScriptEngine.uncaughtException().toString();
+        mScene.clear();
+        ui->graphicsView->update();
     }
 }
 
@@ -236,22 +227,33 @@ void MainWindow::tileRandomly(void)
     };
     mScene.clear();
     QScriptValue vN = mScriptEngine.globalObject().property("N");
-    if (vN.isUndefined())
+    if (!vN.isNumber()) {
+        qWarning() << "`N` is not a number";
         return;
+    }
     const int N = vN.toInt32();
     QScriptValue vMaxTrials = mScriptEngine.globalObject().property("MAX_TRIALS");
-    if (vMaxTrials.isUndefined())
+    if (!vMaxTrials.isNumber()) {
+        qWarning() << "`MAX_TRIALS` is not a number";
         return;
+    }
     const int MAX_TRIALS =  vMaxTrials.toInt32();
+    if (!mScriptEngine.globalObject().property("S").isNumber()) {
+        qWarning() << "`S` is not a number";
+        return;
+    }
     QScriptValue proceed = mScriptEngine.globalObject().property("proceed");
-    if (proceed.isUndefined()) {
-        qWarning() << "proceed.isUndefined()";
+    if (!proceed.isFunction()) {
+        qWarning() << "`proceed` is not a function";
         return;
     }
     QScriptValue getShape = mScriptEngine.globalObject().property("getShape");
-    if (getShape.isUndefined()) {
-        qWarning() << "getShape.isUndefined()";
-        return;
+    if (!getShape.isFunction()) {
+        qWarning() << "`getShape` is not a function. Using defaults.";
+    }
+    QScriptValue getColor = mScriptEngine.globalObject().property("getColor");
+    if (!getColor.isFunction()) {
+        qWarning() << "`getColor` is not a function. Using defaults.";
     }
     while (mScene.items().size() < N) {
         proceed.call();
@@ -261,10 +263,19 @@ void MainWindow::tileRandomly(void)
             if (mStopped)
                 goto end;
             ++numTrials;
-            QScriptValueList vShapeArgs;
-            vShapeArgs << QScriptValue(RAND::rnd1()) << QScriptValue(RAND::rnd1());
-            QScriptValue vShape = getShape.call(QScriptValue(), vShapeArgs);
-            QPainterPath path = qscriptvalue_cast<QPainterPath>(vShape);
+            QPainterPath path;
+            const qreal x0 = RAND::rnd1();
+            const qreal y0 = RAND::rnd1();
+            if (getShape.isFunction()) {
+                QScriptValueList vShapeArgs;
+                vShapeArgs << QScriptValue(x0) << QScriptValue(y0);
+                QScriptValue vShape = getShape.call(QScriptValue(), vShapeArgs);
+                path = qscriptvalue_cast<QPainterPath>(vShape);
+            }
+            else {
+                const qreal S = mScriptEngine.globalObject().property("S").toNumber() / 2;
+                path.addRect(x0-S, y0-S, S, S);
+            }
             bool colliding = false;
             const QList<QGraphicsItem*>& items = mScene.items();
             for (QList<QGraphicsItem*>::const_iterator it = items.constBegin(); it != items.constEnd(); ++it) {
@@ -275,7 +286,15 @@ void MainWindow::tileRandomly(void)
             }
             if (!colliding) {
                 fitting = true;
-                mScene.addPath(path, pen, brush[mScene.items().size() % 3]);
+                QBrush br = brush[mScene.items().size() % 3];
+                if (getColor.isFunction()) {
+                    QScriptValue vColor = getColor.call();
+                    QVector<int> rgb;
+                    qScriptValueToSequence(vColor, rgb);
+                    if (rgb.size() == 3)
+                        br = QBrush(QColor(rgb[0], rgb[1], rgb[2]));
+                }
+                mScene.addPath(path, pen, br);
             }
             else {
                 fitting = false;

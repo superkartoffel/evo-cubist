@@ -17,7 +17,8 @@ SOURCES += \
     ../../random/mersenne_twister.cpp \
     ../../helper.cpp \
     painterpathprototype.cpp \
-    painterpathclass.cpp
+    painterpathclass.cpp \
+    jsedit/jsedit.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -30,7 +31,8 @@ HEADERS += \
     ../../random/mersenne_twister.h \
     ../../random/abstract_random_number_generator.h \
     painterpathprototype.h \
-    painterpathclass.h
+    painterpathclass.h \
+    jsedit/jsedit.h
 
 
 FORMS += mainwindow.ui
@@ -39,4 +41,5 @@ RESOURCES += \
     scripts.qrc
 
 OTHER_FILES += \
-    scripts/default.js
+    scripts/default.js \
+    scripts/triangles.js

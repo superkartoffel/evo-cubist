@@ -47,7 +47,6 @@ private:
     bool mShowSplices;
 
     QGraphicsScene mScene;
-    QGraphicsView mView;
 
     QFuture<void> mTileThread;
     QFutureWatcher<void> mTileThreadWatcher;
@@ -61,7 +60,6 @@ private:
 public slots:
     void tileThreadFinished(void);
     void runStopScript(void);
-    void executeScript(void);
     void startTiling(void);
 
 signals:
