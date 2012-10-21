@@ -19,7 +19,6 @@
 #include <QBrush>
 #include <QVector>
 #include <QSettings>
-#include <QSyntaxHighlighter>
 #include <qmath.h>
 
 
@@ -48,12 +47,9 @@ MainWindow::MainWindow(QWidget* parent)
 //    mDebugger.widget(QScriptEngineDebugger::DebugOutputWidget)->show();
 #endif
 
-    mScene.setSceneRect(0, 0, 1, 1);
     mScene.setItemIndexMethod(QGraphicsScene::NoIndex);
     ui->graphicsView->fitInView(mScene.sceneRect());
-    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
     ui->graphicsView->scale(512, 512);
-    ui->graphicsView->setBackgroundBrush(QColor(20, 20, 20));
     ui->graphicsView->setWindowTitle("Random Tiling Test");
     ui->graphicsView->setScene(&mScene);
     ui->graphicsView->show();
@@ -63,8 +59,29 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(&mTileThreadWatcher, SIGNAL(finished()), SLOT(tileThreadFinished()));
     QObject::connect(ui->runStopPushButton, SIGNAL(clicked()), SLOT(runStopScript()));
 
-    restoreSettings();
 
+    mEditor.setTabStopWidth(2);
+    mEditor.setWordWrapMode(QTextOption::NoWrap);
+    mEditor.setLineNumbersVisible(false);
+    mEditor.setFont(QFont("Courier New", 8));
+    mEditor.setStyleSheet("background-color: rgba(20, 20, 20, 60)");
+    mEditor.setColor(JSEdit::Background,    QColor("#0C152B"));
+    mEditor.setColor(JSEdit::Normal,        QColor("#FFFFFF"));
+    mEditor.setColor(JSEdit::Comment,       QColor("#666666"));
+    mEditor.setColor(JSEdit::Number,        QColor("#DBF76C"));
+    mEditor.setColor(JSEdit::String,        QColor("#5ED363"));
+    mEditor.setColor(JSEdit::Operator,      QColor("#FF7729"));
+    mEditor.setColor(JSEdit::Identifier,    QColor("#FFFFFF"));
+    mEditor.setColor(JSEdit::Keyword,       QColor("#FDE15D"));
+    mEditor.setColor(JSEdit::BuiltIn,       QColor("#9CB6D4"));
+    mEditor.setColor(JSEdit::Cursor,        QColor("#1E346B"));
+    mEditor.setColor(JSEdit::Marker,        QColor("#DBF76C"));
+    mEditor.setColor(JSEdit::BracketMatch,  QColor("#1AB0A6"));
+    mEditor.setColor(JSEdit::BracketError,  QColor("#A82224"));
+    mEditor.setColor(JSEdit::FoldIndicator, QColor("#555555"));
+
+    ui->verticalLayout->insertWidget(0, &mEditor);
+    restoreSettings();
 }
 
 
@@ -84,7 +101,7 @@ void MainWindow::restoreSettings(void)
     script.open(QIODevice::ReadOnly | QIODevice::Text);
     QString scriptText = script.readAll();
     script.close();
-    ui->scriptEditor->setPlainText(settings.value("MainWindow/script", scriptText).toString());
+    mEditor.setPlainText(settings.value("MainWindow/script", scriptText).toString());
 }
 
 
@@ -92,7 +109,7 @@ void MainWindow::saveSettings(void)
 {
     QSettings settings(Company, AppName);
     settings.setValue("MainWindow/geometry", saveGeometry());
-    settings.setValue("MainWindow/script", ui->scriptEditor->toPlainText());
+    settings.setValue("MainWindow/script", mEditor.toPlainText());
     settings.setValue("GraphicsView/geometry", ui->graphicsView->saveGeometry());
 }
 
@@ -199,7 +216,7 @@ void MainWindow::runStopScript(void)
 {
     if (ui->runStopPushButton->text() == tr("Run")) {
         mStopped = false;
-        mScriptEngine.evaluate(ui->scriptEditor->toPlainText());
+        mScriptEngine.evaluate(mEditor.toPlainText());
         if (mScriptEngine.hasUncaughtException()) {
             qWarning() << mScriptEngine.uncaughtExceptionBacktrace() << mScriptEngine.uncaughtException().toString();
         }

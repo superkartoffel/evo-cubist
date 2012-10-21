@@ -15,9 +15,12 @@
 #include <QtConcurrentRun>
 #include <QFutureWatcher>
 #include <QScriptEngine>
+#ifndef QT_NO_DEBUG
 #include <QScriptEngineDebugger>
+#endif
 
 #include "../../gene.h"
+#include "jsedit/jsedit.h"
 
 
 namespace Ui {
@@ -56,6 +59,8 @@ private:
     QScriptEngineDebugger mDebugger;
 #endif
     bool mStopped;
+
+    JSEdit mEditor;
 
 public slots:
     void tileThreadFinished(void);

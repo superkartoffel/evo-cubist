@@ -17,28 +17,6 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTextEdit" name="scriptEditor">
-       <property name="font">
-        <font>
-         <family>Courier New</family>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: White;
-background-color: rgba(33, 33, 33, 200);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-      </widget>
-     </item>
-     <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="runStopPushButton">
@@ -65,7 +43,34 @@ background-color: rgba(33, 33, 33, 200);</string>
     </layout>
    </item>
    <item row="0" column="1">
-    <widget class="QGraphicsView" name="graphicsView"/>
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(20, 20, 20, 200)</string>
+     </property>
+     <property name="backgroundBrush">
+      <brush brushstyle="SolidPattern">
+       <color alpha="150">
+        <red>20</red>
+        <green>20</green>
+        <blue>20</blue>
+       </color>
+      </brush>
+     </property>
+     <property name="interactive">
+      <bool>false</bool>
+     </property>
+     <property name="sceneRect">
+      <rectf>
+       <x>0.000000000000000</x>
+       <y>0.000000000000000</y>
+       <width>1.000000000000000</width>
+       <height>1.000000000000000</height>
+      </rectf>
+     </property>
+     <property name="renderHints">
+      <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
