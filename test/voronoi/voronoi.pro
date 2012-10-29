@@ -15,7 +15,14 @@ HEADERS += \
     ../../helper.h \
     binaryheap.h \
     point.h \
-    voronoi.h
+    voronoi.h \
+    mainwindow.h \
+    main.h
 
 SOURCES += \
-    voronoi.cpp
+    voronoi.cpp \
+    main.cpp \
+    mainwindow.cpp
+
+FORMS += \
+    mainwindow.ui
