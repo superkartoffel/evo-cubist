@@ -1,3 +1,6 @@
+// Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
+// Alle Rechte vorbehalten.
+
 #ifndef __BINARYHEAP_H_
 #define __BINARYHEAP_H_
 
@@ -10,10 +13,8 @@ public:
         mList.append(item);
         int i = mList.count() - 1;
         int parent = (i-1)/2;
-        while (parent >= 0 && mList[i] < mList[parent]) {
-            T temp = mList[parent];
-            mList[parent] = mList[i];
-            mList[i] = temp;
+        while (parent >= 0 && mList.at(i) < mList.at(parent)) {
+            qSwap(mList[parent], mList[i]);
             i = parent;
             parent = (i-1)/2;
         }
@@ -47,9 +48,11 @@ public:
         return item;
     }
 
+    inline const QList<T>& list(void) const { return mList; }
     inline int count(void) const { return mList.count(); }
     inline bool isEmpty(void) const { return mList.isEmpty(); }
     T top(void) const { return !mList.isEmpty()? mList.first() : T(); }
+    inline void clear(void) { mList.clear(); }
 
 private:
     QList<T> mList;

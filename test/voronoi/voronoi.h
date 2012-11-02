@@ -1,13 +1,16 @@
+// Ported to C++ by Oliver Lau <oliver@von-und-fuer-lau.de>
+// See http://www.cs.hmc.edu/~mbrubeck/voronoi.html
+
 #ifndef __VORONOI_H_
 #define __VORONOI_H_
 
-// See http://www.cs.hmc.edu/~mbrubeck/voronoi.html
 
 #include <QVector>
 #include <QRectF>
+#include <QScopedPointer>
 #include <qmath.h>
+#include <queue>
 #include "point.h"
-#include "binaryheap.h"
 #include "../../helper.h"
 
 struct Arc;
@@ -27,7 +30,6 @@ struct Event
         , valid(true)
     { /* ... */ }
 
-    inline bool operator<(Event* o) {return x > o->x;}
 };
 
 
@@ -53,15 +55,11 @@ struct Arc
 
 struct Seg
 {
-    Point start, end;
-    bool done;
     Seg(const Point& p)
         : start(p)
         , end(0, 0)
         , done(false)
-    {
-        // add this to result;
-    }
+    { /* ... */ }
 
     void finish(const Point& p)
     {
@@ -70,6 +68,10 @@ struct Seg
         end = p;
         done = true;
     }
+
+    Point start;
+    Point end;
+    bool done;
 };
 
 
@@ -82,8 +84,53 @@ public:
     { /* ... */ }
     ~Voronoi() { /* ... */ }
 
+    void add(const Point& p)
+    {
+        mPoints.push(p);
+        if (p.x() < mBoundingBox.left())
+            mBoundingBox.setLeft(p.x());
+        if (p.x() > mBoundingBox.right())
+            mBoundingBox.setRight(p.x());
+        if (p.y() < mBoundingBox.top())
+            mBoundingBox.setTop(p.y());
+        if (p.y() > mBoundingBox.bottom())
+            mBoundingBox.setBottom(p.y());
+
+        while (!mPoints.empty()) {
+            if (!mEvents.empty() && mEvents.top()->x <= mPoints.top().x())
+                processEvent();
+            else
+                processPoint();
+        }
+
+        while (!mEvents.empty())
+            processEvent();
+
+        finishEdges();
+    }
 
 
+    void clear(void)
+    {
+        mResult.clear();
+        while (!mPoints.empty())
+            mPoints.pop();
+    }
+
+
+    QVector<Seg*> segments(void) const
+    {
+        return mResult;
+    }
+
+
+    const QRectF& rect(void) const
+    {
+        return mBoundingBox;
+    }
+
+
+private:
     bool circle(const Point& a, const Point& b, const Point& c, qreal& x, Point& o)
     {
         // Check that bc is a "right turn" from ab.
@@ -99,7 +146,7 @@ public:
         const qreal F = C*(a.x()+c.x()) + D*(a.y()+c.y());
         const qreal G = 2*(A*(c.y()-b.y()) - B*(c.x()-b.x()));
         if (qFuzzyIsNull(G))
-            return false;  // Points are co-linear.
+            return false; // Points are co-linear.
 
         // Point o is the center of the circle.
         o.setX((D*E-B*F)/G);
@@ -110,18 +157,30 @@ public:
         return true;
     }
 
+
     void processPoint(void)
     {
-       // Add a new arc to the parabolic front.
-       frontInsert(mPoints.dequeue());
+       Point p = mPoints.top();
+       mPoints.pop();
+       frontInsert(p);
+    }
+
+
+    Seg* makeSeg(const Point& p)
+    {
+        Seg* s = new Seg(p);
+        mResult.append(s);
+        return s;
     }
 
 
     void processEvent(void)
     {
-        Event* e = mEvents.dequeue();
+        Event* e = mEvents.top();
+        mEvents.pop();
+
         if (e->valid) {
-            Seg* s = new Seg(e->p);
+            Seg* s = makeSeg(e->p);
             Arc* a = e->a;
             if (a->prev) {
                 a->prev->next = a->next;
@@ -143,27 +202,30 @@ public:
             if (a->next)
                 checkCircleEvent(a->next, e->x);
         }
+
         delete e;
     }
 
 
     void frontInsert(const Point& p)
     {
-       if (mRoot == NULL) {
+       if (!mRoot) {
           mRoot = new Arc(p);
           return;
        }
 
        // Find the current arc(s) at height p.y (if there are any).
-       for (Arc* i = mRoot; i != NULL; i = i->next) {
+       for (Arc* i = mRoot; i; i = i->next) {
           Point z, zz;
           if (intersect(p, i, &z)) {
              // New parabola intersects arc i.  If necessary, duplicate i.
-             if (i->next && !intersect(p,i->next, &zz)) {
+             if (i->next && !intersect(p, i->next, &zz)) {
                 i->next->prev = new Arc(i->p, i, i->next);
                 i->next = i->next->prev;
              }
-             else i->next = new Arc(i->p, i);
+             else {
+                 i->next = new Arc(i->p, i);
+             }
              i->next->s1 = i->s1;
 
              // Add p between i and i->next.
@@ -173,8 +235,8 @@ public:
              i = i->next; // Now i points to the new arc.
 
              // Add new half-edges connected to i's endpoints.
-             i->prev->s1 = i->s0 = new Seg(z);
-             i->next->s0 = i->s1 = new Seg(z);
+             i->prev->s1 = i->s0 = makeSeg(z);
+             i->next->s0 = i->s1 = makeSeg(z);
 
              // Check for new circle events around the new arc:
              checkCircleEvent(i, p.x());
@@ -185,14 +247,14 @@ public:
        }
 
        // Special case: If p never intersects an arc, append it to the list.
-       Arc *i = mRoot;
-       while (i->next != NULL) // Find the last node.
-           i = i->next;
+       Arc *i;
+       for (i = mRoot; i->next; i = i->next)
+           ;
 
        i->next = new Arc(p, i);
        // Insert segment between p and i
        Point start(mBoundingBox.left(), (i->next->p.y() + i->p.y()) / 2);
-       i->s1 = i->next->s0 = new Seg(start);
+       i->s1 = i->next->s0 = makeSeg(start);
     }
 
 
@@ -210,7 +272,7 @@ public:
        if (circle(i->prev->p, i->p, i->next->p, x, o) && x > x0) {
           // Create new event.
           i->e = new Event(x, o, i);
-          mEvents.enqueue(i->e);
+          mEvents.push(i->e);
        }
     }
 
@@ -220,7 +282,7 @@ public:
     {
        if (i->p.x() == p.x())
            return false;
-       qreal a,b;
+       qreal a, b;
        if (i->prev) // Get the intersection of i->prev, i.
           a = intersection(i->prev->p, i->p, p.x()).y();
        if (i->next) // Get the intersection of i->next, i.
@@ -272,39 +334,15 @@ public:
              i->s1->finish(intersection(i->p, i->next->p, l*2));
     }
 
-
-    void add(const Point& p)
-    {
-        mPoints.enqueue(p);
-        if (p.x() < mBoundingBox.left())
-            mBoundingBox.setLeft(p.x());
-        if (p.x() > mBoundingBox.right())
-            mBoundingBox.setRight(p.x());
-        if (p.y() < mBoundingBox.top())
-            mBoundingBox.setTop(p.y());
-        if (p.y() > mBoundingBox.bottom())
-            mBoundingBox.setBottom(p.y());
-
-        while (!mPoints.isEmpty()) {
-            if (!mEvents.isEmpty() && mEvents.top()->x <= mPoints.top().x()) {
-                processEvent();
-            }
-            else {
-                processPoint();
-            }
-        }
-
-        while (!mEvents.isEmpty())
-            processEvent();
-
-        finishEdges();
-    }
-
-
 private:
-    BinaryHeap<Point> mPoints;
-    BinaryHeap<Event*> mEvents;
-    QRect mBoundingBox;
+    struct gt {
+       bool operator()(Point a, Point b) { return a.x()==b.x() ? a.y()>b.y() : a.x()>b.x(); }
+       bool operator()(Event *a, Event *b) { return a->x>b->x; }
+    };
+
+    std::priority_queue<Point, QVector<Point>, gt> mPoints;
+    std::priority_queue<Event*, QVector<Event*>, gt> mEvents;
+    QRectF mBoundingBox;
     Arc* mRoot;
     QVector<Seg*> mResult;
 };

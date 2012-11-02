@@ -1,5 +1,10 @@
+// Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
+// Alle Rechte vorbehalten.
+
 #ifndef __POINT_H_
 #define __POINT_H_
+
+#include <QtGlobal>
 
 class Point
 {
@@ -22,9 +27,6 @@ public:
 
     inline void setX(qreal x) { mX = x; }
     inline void setY(qreal y) { mY = y; }
-
-    inline bool operator<(const Point& p) { return (mX == p.x())? mY > p.y() : mX > p.x(); }
-    inline bool operator>(const Point& p) { return mX > p.x(); }
 
 private:
     qreal mX;

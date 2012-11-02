@@ -17,12 +17,17 @@ HEADERS += \
     point.h \
     voronoi.h \
     mainwindow.h \
-    main.h
+    main.h \
+    ../../random/rnd.h \
+    ../../random/mersenne_twister.h \
+    ../../random/abstract_random_number_generator.h
 
 SOURCES += \
     voronoi.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ../../random/rnd.cpp \
+    ../../random/mersenne_twister.cpp
 
 FORMS += \
     mainwindow.ui
