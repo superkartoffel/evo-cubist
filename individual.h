@@ -15,13 +15,12 @@
 class Individual {
 public:
     explicit Individual(void)
-        : mOriginal(NULL)
-        , mFitness(std::numeric_limits<quint64>::max())
+        : mFitness(std::numeric_limits<quint64>::max())
     { /* ... */ }
 
     explicit Individual(DNA dna, const QImage& original)
         : mDNA(dna)
-        , mOriginal(&original)
+        , mOriginal(original)
         , mFitness(std::numeric_limits<quint64>::max())
         , mGenerated(original.size(), original.format())
     { /* ... */ }
@@ -49,8 +48,8 @@ public:
     inline quint64 calcFitness(void) {
         draw();
         mFitness = 0;
-        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
-        const QRgb* const oEnd = o + mOriginal->width() * mOriginal->height();
+        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal.constBits());
+        const QRgb* const oEnd = o + mOriginal.width() * mOriginal.height();
         const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
         while (o < oEnd)
             mFitness += rgbDelta(*o++, *g++);
@@ -59,8 +58,8 @@ public:
 
     quint64 maximumFitnessDelta(void) const {
         quint64 maxDelta = 0;
-        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal->bits());
-        const QRgb* const oEnd = o + mOriginal->width() * mOriginal->height();
+        const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal.constBits());
+        const QRgb* const oEnd = o + mOriginal.width() * mOriginal.height();
         while (o < oEnd)
             maxDelta += rgbDelta(*o++, qRgba(255, 255, 255, 255));
         return maxDelta;
@@ -73,7 +72,7 @@ public:
 
 private:
     DNA mDNA;
-    const QImage* mOriginal;
+    QImage mOriginal;
     quint64 mFitness;
     QImage mGenerated;
 
