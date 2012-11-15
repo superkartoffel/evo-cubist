@@ -497,6 +497,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/dnaSaveDirectory", mOptionsForm->dnaSaveDirectory());
     settings.setValue("Options/dnaSaveFilenameTemplate", mOptionsForm->dnaSaveFilenameTemplate());
     settings.setValue("Options/logFile", mOptionsForm->logFile());
+    settings.setValue("Options/internalLogEnabled", mOptionsForm->logInternally());
     settings.setValue("Options/saveInterval", mOptionsForm->saveInterval());
     settings.setValue("Options/autoSave", mOptionsForm->autoSave());
     settings.setValue("Options/startDistribution", mOptionsForm->startDistribution());
@@ -524,6 +525,7 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm->setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
     mOptionsForm->setAutoSave(settings.value("Options/autoSave", true).toBool());
     mOptionsForm->setLogFile(settings.value("Options/logFile").toString());
+    mOptionsForm->setInternalLogEnabled(settings.value("Options/internalLogEnabled", false).toBool());
     mOptionsForm->setCores(settings.value("Options/cores", QThread::idealThreadCount()).toInt());
     mOptionsForm->setStartDistribution(settings.value("Options/startDistribution", 4).toInt());
     mOptionsForm->setScatterFactor(settings.value("Options/scatterFactor", 0.45).toDouble());

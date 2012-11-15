@@ -105,17 +105,15 @@ void GenerationWidget::paintEvent(QPaintEvent*)
 
 void GenerationWidget::mousePressEvent(QMouseEvent* e)
 {
-    const QPoint clickPos = e->pos() - mDestRect.topLeft();
-    const QPointF p((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height());
-    emit clickAt(p);
+    const QPoint& clickPos = e->pos() - mDestRect.topLeft();
+    emit clickAt(QPointF((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height()));
 }
 
 
 void GenerationWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    const QPoint clickPos = e->pos() - mDestRect.topLeft();
-    const QPointF p((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height());
-    mHighlighted = mDNA.findPolygonForPoint(p);
+    const QPoint& clickPos = e->pos() - mDestRect.topLeft();
+    mHighlighted = mDNA.findPolygonForPoint(QPointF((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height()));
     update();
 }
 

@@ -36,7 +36,7 @@ void ImageWidget::setImage(const QImage& image)
 
 void ImageWidget::resizeEvent(QResizeEvent* e)
 {
-    mWindowAspectRatio = (qreal) e->size().width() / e->size().height();
+    mWindowAspectRatio = (qreal)e->size().width() / e->size().height();
 }
 
 

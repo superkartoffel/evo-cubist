@@ -81,6 +81,7 @@ public:
     void setStartDistribution(int);
     void setScatterFactor(qreal);
     void setCores(int);
+    void setInternalLogEnabled(bool);
 
 protected:
     void showEvent(QShowEvent*);
@@ -106,6 +107,7 @@ private slots:
     void backgroundColorChanged(const QString&);
     void backgroundColorChanged(QRgb);
     void backgroundColorSelected(void);
+    void internalLogToggled(bool);
 
 private:
     static const QString SaveFilenameTemplate;
