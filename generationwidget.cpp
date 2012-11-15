@@ -151,7 +151,11 @@ void GenerationWidget::dropEvent(QDropEvent* e)
     if (d->hasUrls()) {
         QString fileUrl = d->urls().first().toString();
         if (fileUrl.contains(QRegExp("file://.*\\.(svg|json)$"))) {
+#ifdef WIN32
             const QString fileName = fileUrl.remove("file:///");
+#else
+            const QString fileName = fileUrl.remove("file://");
+#endif
             emit fileDropped(fileName);
             gSettings.setCurrentDNAFile(fileName);
         }

@@ -50,7 +50,7 @@ public:
         mFitness = 0;
         const QRgb* o = reinterpret_cast<const QRgb*>(mOriginal.constBits());
         const QRgb* const oEnd = o + mOriginal.width() * mOriginal.height();
-        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.bits());
+        const QRgb* g = reinterpret_cast<const QRgb*>(mGenerated.constBits());
         while (o < oEnd)
             mFitness += rgbDelta(*o++, *g++);
         return mFitness;

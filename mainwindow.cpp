@@ -700,7 +700,7 @@ void MainWindow::loadDNA(const QString& filename)
 
 void MainWindow::openDNA(void)
 {
-    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
+    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg *.json *.dna)"));
     loadDNA(filename);
 }
 

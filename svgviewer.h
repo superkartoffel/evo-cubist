@@ -21,7 +21,7 @@ public:
     explicit SVGViewer(QWidget* parent = NULL);
     ~SVGViewer();
 
-    void show(const QString& filename, const QSize&);
+    void show(const QString& filename, const QSize& sizeHint);
     QSize sizeHint(void) const { return mSizeHint; }
 
 protected:
