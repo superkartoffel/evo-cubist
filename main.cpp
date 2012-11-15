@@ -15,7 +15,7 @@ const QString AppUrl = "http://evo-cubist.googlecode.com/";
 const QString AppAuthor = "Oliver Lau";
 const QString AppAuthorMail = "oliver@von-und-fuer-lau.de";
 const QString AppVersionNoDebug = "1.3";
-const QString AppMinorVersion = ".6";
+const QString AppMinorVersion = ".7";
 #ifdef QT_NO_DEBUG
 const QString AppVersion = AppVersionNoDebug + AppMinorVersion;
 #else
