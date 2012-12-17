@@ -30,6 +30,7 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , mAutoStopTimerId(0)
     , mRecentEvolvedGeneration(0)
     , mRecentEvolvedSelection(0)
 {
@@ -124,6 +125,19 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(&mBreeder, SIGNAL(evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long)), SLOT(evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long)));
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned long)), SLOT(proceeded(unsigned long)));
 
+    const QStringList& arg = qApp->arguments();
+    if (arg.size() > 1) {
+        int idx = arg.indexOf("-settings");
+        if (idx > 0 && arg.size() > idx+1) {
+            const bool success = loadSettings(arg.at(idx+1));
+            if (success) {
+                startBreeding();
+                mAutoStopTimerId = startTimer(10 * 60 * 1000); // stop after 10 minutes
+            }
+        }
+    }
+
+
 #ifndef QT_NO_DEBUG
     mOptionsForm->show();
     mLogViewerForm->show();
@@ -144,6 +158,16 @@ MainWindow::~MainWindow()
 bool MainWindow::event(QEvent* e)
 {
     return QMainWindow::event(e);
+}
+
+
+void MainWindow::timerEvent(QTimerEvent* e)
+{
+    if (e->timerId() == mAutoStopTimerId) {
+        killTimer(mAutoStopTimerId);
+        mBreeder.setDirty(false);
+        close();
+    }
 }
 
 
@@ -612,7 +636,7 @@ void MainWindow::loadOriginalImage(const QString& filename)
 }
 
 
-void MainWindow::loadSettings(const QString& filename)
+bool MainWindow::loadSettings(const QString& filename)
 {
     if (!filename.isEmpty()) {
         const bool success = gSettings.load(filename);
@@ -651,11 +675,13 @@ void MainWindow::loadSettings(const QString& filename)
             mOptionsForm->setMinAlpha(gSettings.minA());
             mOptionsForm->setMaxAlpha(gSettings.maxA());
             statusBar()->showMessage(tr("Settings file '%1' loaded.").arg(filename), 3000);
+            return true;
         }
         else {
             QMessageBox::warning(this, tr("Error loading settings"), tr("Settings could not be loaded. (%1)").arg(gSettings.errorString()));
         }
     }
+    return false;
 }
 
 

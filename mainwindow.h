@@ -8,6 +8,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QTimer>
+#include <QTimerEvent>
 #include <QFile>
 #include <QEvent>
 #include <QAction>
@@ -28,13 +29,14 @@ namespace Ui {
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    
+
 public:
     explicit MainWindow(QWidget* parent = NULL);
     ~MainWindow();
 
 protected:
     bool event(QEvent*);
+    void timerEvent(QTimerEvent*);
     void closeEvent(QCloseEvent*);
 
 private:
@@ -47,6 +49,7 @@ private:
     Breeder mBreeder;
     QDateTime mStartTime;
     QFile mLog;
+    int mAutoStopTimerId;
 
     unsigned long mRecentEvolvedGeneration;
     unsigned long mRecentEvolvedSelection;
@@ -73,7 +76,7 @@ private:
     QTimer mAutoSaveTimer;
 
 private slots:
-    void loadSettings(const QString& filename);
+    bool loadSettings(const QString& filename);
     void loadDNA(const QString& filename);
     void evolved(const QImage&, const DNA&, quint64 fitness, unsigned long selected, unsigned long generation);
     void imageDropped(const QImage&);
