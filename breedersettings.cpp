@@ -193,6 +193,12 @@ void BreederSettings::setAutoSave(bool v)
 }
 
 
+void BreederSettings::setStopOnAutosave(bool v)
+{
+    mStopOnAutoSave = v;
+}
+
+
 void BreederSettings::setStartDistribution(int index)
 {
     mStartDistribution = index;
@@ -291,6 +297,7 @@ bool BreederSettings::save(const QString& fileName)
         << "  <autosave>\n"
         << "    <enabled>" << mAutoSave << "</enabled>\n"
         << "    <interval>" << mAutoSaveInterval << "</interval>\n"
+        << "    <autostop>" << mStopOnAutoSave << "</autostop>\n"
         << "    <imageDirectory>" << mImageSaveDirectory << "</imageDirectory>\n"
         << "    <imageFilenameTemplate>" << mImageSaveFilenameTemplate << "</imageFilenameTemplate>\n"
         << "    <dnaDirectory>" << mDNASaveDirectory << "</dnaDirectory>\n"
@@ -756,6 +763,19 @@ void BreederSettings::readAutoSaveInterval(void)
 }
 
 
+void BreederSettings::readAutoSaveAutoStop(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "autostop");
+    bool ok = false;
+    const QString& str = mXml.readElementText();
+    const int v = str.toInt(&ok);
+    if (ok)
+        mStopOnAutoSave = (v != 0);
+    else
+        mXml.raiseError(QObject::tr("invalid autostop enabled value: %1").arg(str));
+}
+
+
 void BreederSettings::readAutoSaveImageDirectory(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "imageDirectory");
@@ -809,6 +829,9 @@ void BreederSettings::readAutosave(void)
         }
         else if (mXml.name() == "interval") {
             readAutoSaveInterval();
+        }
+        else if (mXml.name() == "autostop") {
+            readAutoSaveAutoStop();
         }
         else if (mXml.name() == "imageDirectory") {
             readAutoSaveImageDirectory();

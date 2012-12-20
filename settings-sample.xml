@@ -10,7 +10,7 @@
     <!-- maximale Abweichung des Alphawerts [0..255] eines Polygons bei der Berechnung der nächsten Generation -->
     <alpha>1</alpha>
     <!-- maximale Maß, um das eine Polygonecke bei der Berechnung der nächsten Generation verschoben werden darf [0..1] -->
-    <xy>0.0004</xy>
+    <xy>0.0034</xy>
   </deltas>
   <breeder>
     <!-- Farbe des Hintergrunds im SVGs -->
@@ -57,15 +57,17 @@
          soll, ist hier der Pfad zur SVG-Datei einzutragen. Soll mit der
          in breeder/startDistribution festgelegten Startverteilung
          begonnen werden, bleibt dieser Eintrag leer -->
-    <dna>C:/Workspace/evo-cubist/tmp/Koala/svg/Koala-0003389335-000213515.svg</dna>
+    <dna></dna>
     <!-- Pfad zum Originalbild -->
     <image>C:/Workspace/evo-cubist/test/images/Koala.jpg</image>
   </files>
   <autosave>
-    <!-- 1 = Autospeichern von SVGs und PNGs einschalten, 0 = ausschalten ->
+    <!-- 1 = Autospeichern von SVGs und PNGs einschalten, 0 = ausschalten -->
     <enabled>1</enabled>
     <!-- Intervall in Sekunden für Autospeichern -->
-    <interval>600</interval>
+    <interval>60</interval>
+    <!-- 1 = nach Ablauf des Intervalls Evo Cubist automatisch beenden -->
+    <autostop>1</autostop>
     <!-- Verzeichnis für automatisch gespeicherte PNGs (nur absoluten Pfad mit Forward slashes angeben!) -->
     <imageDirectory>C:/Workspace/evo-cubist/tmp/Koala/png</imageDirectory>
     <!-- Maske für Namen, mit dem PNGs gespeichert werden sollen.

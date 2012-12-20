@@ -41,6 +41,7 @@ public:
         , mScatterFactor(0.5)
         , mAutoSave(false)
         , mAutoSaveInterval(10)
+        , mStopOnAutoSave(false)
         , mCores(2)
         , mBackgroundColor(qRgba(255, 255, 255, 2555))
     {
@@ -73,6 +74,7 @@ public:
     inline bool autoSave(void) const { return mAutoSave; }
     inline const QString& logFile(void) const { return mLogFile; }
     inline int autoSaveInterval(void) const { return mAutoSaveInterval; }
+    inline bool stopOnAutoSave(void) const { return mStopOnAutoSave; }
     inline const QString& currentImageFile(void) const { return mCurrentImageFile; }
     inline const QString& currentDNAFile(void) const { return mCurrentDNAFile; }
     inline const QString& imageSaveDirectory(void) const { return mImageSaveDirectory; }
@@ -109,6 +111,7 @@ public slots:
     void setBackgroundColor(QRgb);
     void setAutoSaveInterval(int);
     void setAutoSave(bool);
+    void setStopOnAutosave(bool);
     void setStartDistribution(int);
     void setScatterFactor(double);
     void setLogFile(const QString&);
@@ -143,6 +146,7 @@ private:
     qreal mScatterFactor;
     bool mAutoSave;
     int mAutoSaveInterval; // secs
+    bool mStopOnAutoSave;
     int mCores;
     bool mGPUComputing;
     QString mLogFile;
@@ -175,6 +179,7 @@ private:
     void readScatterFactor(void);
     void readAutoSaveEnabled(void);
     void readAutoSaveInterval(void);
+    void readAutoSaveAutoStop(void);
     void readAutoSaveImageDirectory(void);
     void readAutoSaveImageFilenameTemplate(void);
     void readAutoSaveDNADirectory(void);

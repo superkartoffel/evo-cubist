@@ -30,7 +30,7 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , mAutoStopTimerId(0)
+    , mCloseOnStop(false)
     , mRecentEvolvedGeneration(0)
     , mRecentEvolvedSelection(0)
 {
@@ -126,17 +126,13 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned long)), SLOT(proceeded(unsigned long)));
 
     const QStringList& arg = qApp->arguments();
-    if (arg.size() > 1) {
-        int idx = arg.indexOf("-settings");
-        if (idx > 0 && arg.size() > idx+1) {
-            const bool success = loadSettings(arg.at(idx+1));
-            if (success) {
-                startBreeding();
-                mAutoStopTimerId = startTimer(10 * 60 * 1000); // stop after 10 minutes
-            }
-        }
-    }
-
+    const int idx = arg.indexOf("-settings");
+    if (idx > 0 && arg.size() > idx+1)
+        loadSettings(arg.at(idx+1));
+    if (arg.indexOf("-close-on-stop") > 0)
+        mCloseOnStop = true;
+    if (arg.indexOf("-start") > 0)
+        startBreeding();
 
 #ifndef QT_NO_DEBUG
     mOptionsForm->show();
@@ -158,16 +154,6 @@ MainWindow::~MainWindow()
 bool MainWindow::event(QEvent* e)
 {
     return QMainWindow::event(e);
-}
-
-
-void MainWindow::timerEvent(QTimerEvent* e)
-{
-    if (e->timerId() == mAutoStopTimerId) {
-        killTimer(mAutoStopTimerId);
-        mBreeder.setDirty(false);
-        close();
-    }
 }
 
 
@@ -358,8 +344,7 @@ void MainWindow::autoSave(void)
 {
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
-    bool success = autoSaveImage();
-    success &= autoSaveDNA();
+    bool success = autoSaveImage() && autoSaveDNA();
     if (success) {
         statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mRecentEvolvedSelection).arg(mRecentEvolvedGeneration), 3000);
         mLogViewerForm->highlightLastRow();
@@ -368,9 +353,13 @@ void MainWindow::autoSave(void)
         statusBar()->showMessage(tr("Automatic saving failed."), 3000);
     }
     setCursor(oldCursor);
-    if (mOptionsForm->stopOnNextAutosave()) {
+    if (mOptionsForm->stopOnNextAutosave() && sender() /* only stop if called from slot */) {
         mOptionsForm->setStopOnNextAutosave(false);
         stopBreeding();
+        if (mCloseOnStop) {
+            mBreeder.setDirty(false);
+            close();
+        }
     }
 }
 
@@ -636,7 +625,7 @@ void MainWindow::loadOriginalImage(const QString& filename)
 }
 
 
-bool MainWindow::loadSettings(const QString& filename)
+void MainWindow::loadSettings(const QString& filename)
 {
     if (!filename.isEmpty()) {
         const bool success = gSettings.load(filename);
@@ -674,14 +663,13 @@ bool MainWindow::loadSettings(const QString& filename)
             mOptionsForm->setMaxGenes(gSettings.maxGenes());
             mOptionsForm->setMinAlpha(gSettings.minA());
             mOptionsForm->setMaxAlpha(gSettings.maxA());
+            mOptionsForm->setStopOnNextAutosave(gSettings.stopOnAutoSave());
             statusBar()->showMessage(tr("Settings file '%1' loaded.").arg(filename), 3000);
-            return true;
         }
         else {
             QMessageBox::warning(this, tr("Error loading settings"), tr("Settings could not be loaded. (%1)").arg(gSettings.errorString()));
         }
     }
-    return false;
 }
 
 

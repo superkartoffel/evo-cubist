@@ -36,7 +36,6 @@ public:
 
 protected:
     bool event(QEvent*);
-    void timerEvent(QTimerEvent*);
     void closeEvent(QCloseEvent*);
 
 private:
@@ -49,8 +48,7 @@ private:
     Breeder mBreeder;
     QDateTime mStartTime;
     QFile mLog;
-    int mAutoStopTimerId;
-
+    bool mCloseOnStop;
     unsigned long mRecentEvolvedGeneration;
     unsigned long mRecentEvolvedSelection;
 
@@ -76,7 +74,7 @@ private:
     QTimer mAutoSaveTimer;
 
 private slots:
-    bool loadSettings(const QString& filename);
+    void loadSettings(const QString& filename);
     void loadDNA(const QString& filename);
     void evolved(const QImage&, const DNA&, quint64 fitness, unsigned long selected, unsigned long generation);
     void imageDropped(const QImage&);
