@@ -15,10 +15,7 @@ SOURCES += \
     ../../breedersettings.cpp \
     ../../random/rnd.cpp \
     ../../random/mersenne_twister.cpp \
-    ../../helper.cpp \
-    painterpathprototype.cpp \
-    painterpathclass.cpp \
-    jsedit/jsedit.cpp
+    ../../helper.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -29,17 +26,11 @@ HEADERS += \
     ../../breedersettings.h \
     ../../random/rnd.h \
     ../../random/mersenne_twister.h \
-    ../../random/abstract_random_number_generator.h \
-    painterpathprototype.h \
-    painterpathclass.h \
-    jsedit/jsedit.h
+    ../../random/abstract_random_number_generator.h
 
 
 FORMS += mainwindow.ui
 
-RESOURCES += \
-    scripts.qrc
+RESOURCES +=
 
-OTHER_FILES += \
-    scripts/default.js \
-    scripts/triangles.js
+OTHER_FILES +=

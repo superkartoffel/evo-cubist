@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/scripts">
-        <file alias="default.js">scripts/default.js</file>
-    </qresource>
-</RCC>
