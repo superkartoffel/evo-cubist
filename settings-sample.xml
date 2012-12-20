@@ -9,7 +9,7 @@
     <blue>1</blue>
     <!-- maximale Abweichung des Alphawerts [0..255] eines Polygons bei der Berechnung der nächsten Generation -->
     <alpha>1</alpha>
-    <!-- maximale Maß, um das eine Polygonecke bei der Berechnung der nächsten Generation verschoben werden darf [0..1] -->
+    <!-- maximales Maß, um das eine Polygonecke bei der Berechnung der nächsten Generation verschoben werden darf [0..1( -->
     <xy>0.0034</xy>
   </deltas>
   <breeder>
