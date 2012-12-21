@@ -37,6 +37,7 @@ public:
 protected:
     bool event(QEvent*);
     void closeEvent(QCloseEvent*);
+    void timerEvent(QTimerEvent*);
 
 private:
     Ui::MainWindow *ui;
@@ -48,7 +49,9 @@ private:
     Breeder mBreeder;
     QDateTime mStartTime;
     QFile mLog;
+    int mAutoStopTimerId;
     bool mCloseOnStop;
+    bool mNoDialogs;
     unsigned long mRecentEvolvedGeneration;
     unsigned long mRecentEvolvedSelection;
 

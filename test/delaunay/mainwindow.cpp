@@ -4,9 +4,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "main.h"
-#include "../../circle.h"
-#include "../../random/rnd.h"
-#include "../../helper.h"
 
 #include <QtCore>
 #include <QtCore/QDebug>
@@ -15,23 +12,49 @@
 #include <QPen>
 #include <QColor>
 #include <QBrush>
-#include <QVector>
+#include <QTimer>
 #include <QSettings>
 #include <qmath.h>
+
+#ifdef WIN32
+#include <Windows.h>
+
+class PerformanceTimer
+{
+public:
+    PerformanceTimer(int& MilliSeconds)
+        : mOutput(MilliSeconds)
+    {
+        ::QueryPerformanceCounter(&mStart);
+    }
+    ~PerformanceTimer(void)
+    {
+        LARGE_INTEGER stop;
+        LARGE_INTEGER freq;
+        ::QueryPerformanceCounter(&stop);
+        ::QueryPerformanceFrequency(&freq);
+        stop.QuadPart -= mStart.QuadPart;
+        stop.QuadPart *= 1000;
+        stop.QuadPart /= freq.QuadPart;
+        mOutput = (stop.HighPart != 0)? -1 : stop.LowPart;
+    }
+protected:
+    LARGE_INTEGER mStart;
+    int& mOutput;
+};
+
+#endif
+
 
 
 MainWindow::MainWindow(QWidget* parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
-    , mShowSplices(false)
 {
     ui->setupUi(this);
-
     setFocusPolicy(Qt::StrongFocus);
     setFocus(Qt::OtherFocusReason);
-
-    RAND::initialize();
-
+    setMouseTracking(true);
     restoreSettings();
 }
 
@@ -69,51 +92,36 @@ void MainWindow::paintEvent(QPaintEvent*)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.fillRect(rect(), Qt::black);
-    painter.setBrush(Qt::green);
+    painter.setBrush(Qt::transparent);
+    painter.setPen(Qt::green);
+    QPainterPath triangle;
+    for (TriangleSet::const_iterator i = mTriangles.begin(); i != mTriangles.end(); ++i) {
+        const Vertex* const v0 = i->vertex(0);
+        const Vertex* const v1 = i->vertex(1);
+        const Vertex* const v2 = i->vertex(2);
+        triangle.moveTo(v0->x(), v0->y());
+        triangle.lineTo(v1->x(), v1->y());
+        triangle.lineTo(v2->x(), v2->y());
+        triangle.lineTo(v0->x(), v0->y());
+    }
+    painter.drawPath(triangle);
+    painter.setBrush(Qt::red);
     painter.setPen(Qt::transparent);
-    for (QPolygonF::const_iterator p = mPolygon.constBegin(); p != mPolygon.constEnd(); ++p)
-        painter.drawEllipse(*p, 3.0, 3.0);
-    if (mPolygon.size() == 3) {
-        Circle circle(mPolygon.at(0), mPolygon.at(1), mPolygon.at(2));
-        painter.setPen(QColor(255, 255, 0));
-        painter.setBrush(QColor(255, 255, 0, 40));
-        painter.drawEllipse(circle.center(), circle.radius(), circle.radius());
-        painter.setBrush(QColor(255, 255, 0, 110));
-        painter.drawEllipse(circle.center(), 1.65, 1.65);
-    }
-    if (isConvexPolygon(mPolygon)) {
-        painter.setPen(QColor(0, 255, 0));
-        painter.setBrush(QColor(0, 255, 0, 40));
-    }
-    else {
-        painter.setPen(QColor(255, 0, 0));
-        painter.setBrush(QColor(255, 0, 0, 40));
-    }
-    painter.drawPolygon(mPolygon);
+    for (VertexSet::const_iterator i = mVertices.begin(); i != mVertices.end(); ++i)
+        painter.drawEllipse(QPointF(i->x(), i->y()), 2.5, 2.5);
+}
 
-    if (mGene.isAlive()) {
-        painter.setPen(QPen(QBrush(QColor(255, 0, 0)), 3, Qt::SolidLine));
-        painter.setBrush(QColor(255, 0, 0, 80));
-        painter.drawPolygon(mGene.polygon());
-        painter.setPen(QPen(QBrush(QColor(255, 0, 255)), 1, Qt::SolidLine));
-        if (mSplices.size() > 0 && mShowSplices) {
-            painter.setBrush(Qt::transparent);
-            painter.setPen(QPen(QBrush(Qt::white), 1.5, Qt::DashDotLine));
-            for (QVector<Gene>::const_iterator g = mSplices.constBegin(); g != mSplices.constEnd(); ++g)
-                painter.drawPolygon(g->polygon());
-        }
-    }
 
-    painter.setPen(QColor(255, 255, 255, 200));
-    painter.drawText(QRectF(width() - 210, 5, 200, 80), Qt::AlignRight | Qt::AlignTop,
-                     "GENERATED CONVEX POLYGON\r\n"
-                     "S: show/hide splices\r\n"
-                     "R: generate random polygon\r\n"
-                     "C: clear polygon");
-    painter.drawText(QRectF(width() - 210, height()-85, 200, 80), Qt::AlignRight | Qt::AlignBottom,
-                     "MANUALLY PRODUCED POLYGON\r\n"
-                     "left click: add point\r\n"
-                     "right click: clear\r\n");
+void MainWindow::mouseMoveEvent(QMouseEvent* e)
+{
+    qDebug() << e->posF();
+    if (mVertices.empty())
+        mVertices.insert(Vertex(e->x(), e->y()));
+//    else
+//        *mVertices.begin() = Vertex(e->x(), e->y());
+    mTriangles.clear();
+    Delaunay::triangulate(mVertices, mTriangles);
+    update();
 }
 
 
@@ -121,11 +129,24 @@ void MainWindow::mousePressEvent(QMouseEvent* e)
 {
     switch (e->button()) {
     case Qt::LeftButton:
-        mPolygon.append(e->posF());
+    {
+        mVertices.insert(Vertex(e->x(), e->y()));
+        qDebug() << "INSERT @" << e->posF() << "size =" << mVertices.size();
+        mTriangles.clear();
+        int t;
+        {
+            PerformanceTimer timer(t);
+            Delaunay::triangulate(mVertices, mTriangles);
+        }
+        qDebug() << t << "ms";
         break;
+    }
     case Qt::RightButton:
-        mPolygon.clear();
+    {
+        mVertices.clear();
+        mTriangles.clear();
         break;
+    }
     }
     e->accept();
     update();
@@ -137,34 +158,6 @@ void MainWindow::keyPressEvent(QKeyEvent* e)
     switch (e->key()) {
     case Qt::Key_Escape:
     {
-        mPolygon.clear();
-        mGene = Gene();
-        update();
-        break;
-    }
-    case Qt::Key_R:
-    {
-        QPolygonF polygon;
-        const int N = RAND::rnd(3, 6);
-        for (int i = 0; i < N; ++i)
-            polygon << QPointF(RAND::rnd1(10, width()-10), RAND::rnd1(10, height()-10));
-        polygon = convexHull(polygon);
-        mGene = Gene(polygon, Qt::black);
-        mSplices = mGene.splice();
-        mPolygon.clear();
-        update();
-        break;
-    }
-    case Qt::Key_S:
-    {
-        mShowSplices = !mShowSplices;
-        update();
-        break;
-    }
-    case Qt::Key_C:
-    {
-        mGene = Gene();
-        update();
         break;
     }
     default:

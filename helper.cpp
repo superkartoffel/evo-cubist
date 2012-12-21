@@ -13,7 +13,7 @@ QString secondsToTime(int seconds)
     seconds -= days * 24 * 60 * 60;
     const unsigned int hours = seconds / 60 / 60;
     seconds -= hours * 60 * 60;
-    const unsigned int minutes =seconds / 60;
+    const unsigned int minutes = seconds / 60;
     seconds -= minutes * 60;
     QString t = QString("%1:%2:%3").arg(hours, 2, 10, QChar('0')).arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
     if (days > 0)

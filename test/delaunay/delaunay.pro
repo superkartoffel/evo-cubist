@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 
-QT += core gui script scripttools
+QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,24 +10,11 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    ../../circle.cpp \
-    ../../gene.cpp \
-    ../../breedersettings.cpp \
-    ../../random/rnd.cpp \
-    ../../random/mersenne_twister.cpp \
-    ../../helper.cpp \
     delaunay.cpp
 
 HEADERS += \
     mainwindow.h \
     main.h \
-    ../../circle.h \
-    ../../gene.h \
-    ../../helper.h \
-    ../../breedersettings.h \
-    ../../random/rnd.h \
-    ../../random/mersenne_twister.h \
-    ../../random/abstract_randomnumber_generator.h \
     delaunay.h
 
 

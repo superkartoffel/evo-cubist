@@ -8,11 +8,8 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include <QPolygonF>
-#include <QVector>
 
-#include "../../gene.h"
-
+#include "delaunay.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,7 +18,7 @@ class MainWindow;
 class MainWindow : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit MainWindow(QWidget* parent = NULL);
     ~MainWindow();
@@ -29,20 +26,19 @@ public:
 protected:
     void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
     void closeEvent(QCloseEvent*);
-    
+
 private:
     Ui::MainWindow *ui;
-    QPolygonF mPolygon;
-
-    Gene mGene;
-    QVector<Gene> mSplices;
-    bool mShowSplices;
 
 private: // methods
     void saveSettings(void);
     void restoreSettings(void);
+
+    VertexSet mVertices;
+    TriangleSet mTriangles;
 };
 
 #endif // __MAINWINDOW_H_

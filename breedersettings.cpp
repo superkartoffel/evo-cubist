@@ -293,6 +293,7 @@ bool BreederSettings::save(const QString& fileName)
         << "  <files>\n"
         << "    <dna>" << mCurrentDNAFile << "</dna>\n"
         << "    <image>" << mCurrentImageFile << "</image>\n"
+        << "    <log>" << mLogFile << "</log>\n"
         << "  </files>\n"
         << "  <autosave>\n"
         << "    <enabled>" << mAutoSave << "</enabled>\n"
@@ -720,6 +721,13 @@ void BreederSettings::readRecentImageFile(void)
 }
 
 
+void BreederSettings::readLogFile(void)
+{
+    Q_ASSERT(mXml.isStartElement() && mXml.name() == "log");
+    mLogFile = mXml.readElementText();
+}
+
+
 void BreederSettings::readFiles(void)
 {
     Q_ASSERT(mXml.isStartElement() && mXml.name() == "files");
@@ -729,6 +737,9 @@ void BreederSettings::readFiles(void)
         }
         else if (mXml.name() == "image") {
             readRecentImageFile();
+        }
+        else if (mXml.name() == "log") {
+            readLogFile();
         }
         else {
             mXml.skipCurrentElement();

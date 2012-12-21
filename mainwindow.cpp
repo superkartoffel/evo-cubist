@@ -30,7 +30,9 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , mAutoStopTimerId(0)
     , mCloseOnStop(false)
+    , mNoDialogs(false)
     , mRecentEvolvedGeneration(0)
     , mRecentEvolvedSelection(0)
 {
@@ -100,7 +102,6 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(ui->actionOptions, SIGNAL(triggered()), mOptionsForm, SLOT(show()));
     QObject::connect(ui->actionLogViewer, SIGNAL(triggered()), mLogViewerForm, SLOT(show()));
 
-
     for (int i = 0; i < MaxRecentFiles; ++i) {
         mRecentImageFileActs[i] = new QAction(this);
         mRecentImageFileActs[i]->setVisible(false);
@@ -126,13 +127,27 @@ MainWindow::MainWindow(QWidget* parent)
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned long)), SLOT(proceeded(unsigned long)));
 
     const QStringList& arg = qApp->arguments();
-    const int idx = arg.indexOf("-settings");
+    int idx;
+    if (arg.indexOf("-no-dialogs") > 0)
+        mNoDialogs = true;
+    idx = arg.indexOf("-settings");
     if (idx > 0 && arg.size() > idx+1)
         loadSettings(arg.at(idx+1));
+
+    int timeout = 0;
+    idx = arg.indexOf("-timeout");
+    if (idx > 0 && arg.size() > idx+1) {
+        timeout = arg.at(idx+1).toInt();
+        mAutoStopTimerId = startTimer(1000 * timeout);
+    }
     if (arg.indexOf("-close-on-stop") > 0)
         mCloseOnStop = true;
     if (arg.indexOf("-start") > 0)
         startBreeding();
+
+    doLog(QString("current working directory = %1").arg(QDir::currentPath()));
+    if (timeout > 0)
+        doLog(QString("stopping automatically after %1 seconds").arg(timeout));
 
 #ifndef QT_NO_DEBUG
     mOptionsForm->show();
@@ -157,10 +172,21 @@ bool MainWindow::event(QEvent* e)
 }
 
 
+void MainWindow::timerEvent(QTimerEvent* e)
+{
+    if (e->timerId() == mAutoStopTimerId) {
+        doLog("AUTOSTOP.");
+        mBreeder.setDirty(false);
+        close();
+    }
+    e->accept();
+}
+
+
 void MainWindow::closeEvent(QCloseEvent* e)
 {
     stopBreeding();
-    if (mBreeder.isDirty()) {
+    if (mBreeder.isDirty() && !mNoDialogs) {
         QMessageBox msgBox;
         msgBox.setText(tr("<b>DNA/settings have been modified.</b>"));
         msgBox.setInformativeText(tr("You have unsaved DNA/settings. Do you want to save them?"));
@@ -278,6 +304,10 @@ void MainWindow::proceeded(unsigned long generation)
 
 void MainWindow::doLog(const QString& message)
 {
+    if (!gSettings.logFile().isEmpty()) {
+        mLog.setFileName(gSettings.logFile());
+        mLog.open(QIODevice::Append | QIODevice::Text);
+    }
     if (mLog.isOpen()) {
         QTextStream f(&mLog);
         f << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << " "
@@ -356,10 +386,6 @@ void MainWindow::autoSave(void)
     if (mOptionsForm->stopOnNextAutosave() && sender() /* only stop if called from slot */) {
         mOptionsForm->setStopOnNextAutosave(false);
         stopBreeding();
-        if (mCloseOnStop) {
-            mBreeder.setDirty(false);
-            close();
-        }
     }
 }
 
@@ -410,14 +436,14 @@ void MainWindow::startBreeding(void)
     // check if DNA save directory exists
     info.setFile(mOptionsForm->dnaSaveDirectory());
     if (!info.exists() || !info.isWritable() || !info.isDir()) {
-        QMessageBox::warning(this, tr("DNA save directory missing"), tr("The selected DNA save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again."));
+        QMessageBox::warning(this, tr("DNA save directory missing"), tr("The selected DNA save directory '%1' (%2) does not exist. Please go to the options dialog and choose a new one. Then try starting again.").arg(mOptionsForm->dnaSaveDirectory()).arg(info.absoluteFilePath()));
         mOptionsForm->go("Autosave", "dnaSaveDirectory");
         return;
     }
     // check if image save directory exists
     info.setFile(mOptionsForm->imageSaveDirectory());
     if (!info.exists() || !info.isWritable() || !info.isDir()) {
-        QMessageBox::warning(this, tr("Image save directory missing"), tr("The selected image save directory does not exist. Please go to the options dialog and choose a new one. Then try starting again."));
+        QMessageBox::warning(this, tr("Image save directory missing"), tr("The selected image save directory '%1' does not exist. Please go to the options dialog and choose a new one. Then try starting again.").arg(mOptionsForm->imageSaveDirectory()).arg(info.absoluteFilePath()));
         mOptionsForm->go("Autosave", "imageSaveDirectory");
         return;
     }
@@ -433,7 +459,7 @@ void MainWindow::startBreeding(void)
     }
 
     statusBar()->showMessage(tr("Starting ..."), 3000);
-    if (!mOptionsForm->logFile().isEmpty()) {
+    if (!mOptionsForm->logFile().isEmpty() && !mLog.isOpen()) {
         mLog.setFileName(mOptionsForm->logFile());
         mLog.open(QIODevice::Append | QIODevice::Text);
         doLog("START.");
@@ -614,12 +640,19 @@ void MainWindow::loadOriginalImage(const QString& filename)
         const bool success = mImageWidget->loadImage(filename);
         if (success) {
             statusBar()->showMessage(tr("Original picture '%1' loaded.").arg(filename), 3000);
+            doLog(tr("Original picture '%1' loaded.").arg(filename));
             appendToRecentFileList(filename, "Options/recentImageFileList");
             updateRecentFileActions("Options/recentImageFileList", ui->menuOpenRecentImage, mRecentImageFileActs);
             gSettings.setCurrentImageFile(filename);
         }
         else {
-            QMessageBox::warning(this, tr("Error loading the original picture."), tr("Original picture could not be loaded."));
+            doLog(tr("Original picture ('%1') could not be loaded.").arg(filename));
+            QImage img(filename);
+            doLog(QString("Image size: %1x%2").arg(img.width()).arg(img.height()));
+            if (img.isNull())
+                doLog(tr("SECOND TRY: Original picture ('%1') could not be loaded. ").arg(filename));
+            if (!mNoDialogs)
+                QMessageBox::warning(this, tr("Error loading the original picture."), tr("Original picture ('%1') could not be loaded.").arg(filename));
         }
     }
 }
@@ -665,6 +698,7 @@ void MainWindow::loadSettings(const QString& filename)
             mOptionsForm->setMaxAlpha(gSettings.maxA());
             mOptionsForm->setStopOnNextAutosave(gSettings.stopOnAutoSave());
             statusBar()->showMessage(tr("Settings file '%1' loaded.").arg(filename), 3000);
+            doLog(tr("Settings file '%1' loaded.").arg(filename));
         }
         else {
             QMessageBox::warning(this, tr("Error loading settings"), tr("Settings could not be loaded. (%1)").arg(gSettings.errorString()));

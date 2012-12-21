@@ -162,6 +162,7 @@ private:
 
     void readRecentDNAFile(void);
     void readRecentImageFile(void);
+    void readLogFile(void);
     void readMinA(void);
     void readMaxA(void);
     void readColorMutationProbability(void);
