@@ -260,7 +260,7 @@ quint64 MainWindow::totalSeconds(void) const {
 void MainWindow::proceeded(unsigned long generation)
 {
     const quint64 totalseconds = totalSeconds();
-    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / totalseconds));
+    ui->gensSLineEdit->setText(QString("%1").arg((qreal)generation / totalseconds, 0, 'g', 5));
     ui->generationLineEdit->setText(QString("%1").arg(generation));
     ui->totalTimeLineEdit->setText(secondsToTime(totalseconds));
 }
@@ -296,8 +296,7 @@ void MainWindow::evolved(const QImage& image, const DNA& dna, quint64 fitness, u
     mRecentEvolvedGeneration = generation;
     const int numPoints = dna.points();
     mGenerationWidget->setImage(image);
-    const qreal reached = 100 * (1.0 - (qreal)fitness / mBreeder.worstFitness());
-    ui->fitnessLineEdit->setText((fitness == std::numeric_limits<quint64>::max())? tr("n/a") : QString("%1%").arg(reached, 0, 'g', 9));
+    ui->fitnessLineEdit->setText((fitness == std::numeric_limits<quint64>::max())? tr("n/a") : QString("%1%").arg(100 * (1.0 - (qreal)fitness / mBreeder.worstFitness()), 0, 'g', 9));
     ui->selectedLineEdit->setText(QString("%1").arg(selected));
     ui->selectedRatioLineEdit->setText(QString("%1%").arg(1e2 * selected / generation, 0, 'g', 5));
     ui->polygonsLineEdit->setText(QString("%1").arg(dna.size()));
@@ -498,6 +497,7 @@ void MainWindow::saveAppSettings(void)
     settings.setValue("Options/dnaSaveDirectory", mOptionsForm->dnaSaveDirectory());
     settings.setValue("Options/dnaSaveFilenameTemplate", mOptionsForm->dnaSaveFilenameTemplate());
     settings.setValue("Options/logFile", mOptionsForm->logFile());
+    settings.setValue("Options/internalLogEnabled", mOptionsForm->logInternally());
     settings.setValue("Options/saveInterval", mOptionsForm->saveInterval());
     settings.setValue("Options/autoSave", mOptionsForm->autoSave());
     settings.setValue("Options/startDistribution", mOptionsForm->startDistribution());
@@ -525,6 +525,7 @@ void MainWindow::restoreAppSettings(void)
     mOptionsForm->setSaveInterval(settings.value("Options/saveInterval", 10).toInt());
     mOptionsForm->setAutoSave(settings.value("Options/autoSave", true).toBool());
     mOptionsForm->setLogFile(settings.value("Options/logFile").toString());
+    mOptionsForm->setInternalLogEnabled(settings.value("Options/internalLogEnabled", false).toBool());
     mOptionsForm->setCores(settings.value("Options/cores", QThread::idealThreadCount()).toInt());
     mOptionsForm->setStartDistribution(settings.value("Options/startDistribution", 4).toInt());
     mOptionsForm->setScatterFactor(settings.value("Options/scatterFactor", 0.45).toDouble());
@@ -701,7 +702,7 @@ void MainWindow::loadDNA(const QString& filename)
 
 void MainWindow::openDNA(void)
 {
-    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg; *.json; *.dna)"));
+    const QString& filename = QFileDialog::getOpenFileName(this, tr("Load DNA"), QString(), tr("DNA files (*.svg *.json *.dna)"));
     loadDNA(filename);
 }
 

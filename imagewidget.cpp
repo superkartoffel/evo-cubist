@@ -36,7 +36,7 @@ void ImageWidget::setImage(const QImage& image)
 
 void ImageWidget::resizeEvent(QResizeEvent* e)
 {
-    mWindowAspectRatio = (qreal) e->size().width() / e->size().height();
+    mWindowAspectRatio = (qreal)e->size().width() / e->size().height();
 }
 
 
@@ -80,7 +80,11 @@ void ImageWidget::dropEvent(QDropEvent* e)
     if (d->hasUrls()) {
         QString fileUrl = d->urls().first().toString();
         if (fileUrl.contains(QRegExp("file://.*\\.(png|jpg|gif|ico|mng|tga|tiff?)$")))
+#ifdef WIN32
             loadImage(fileUrl.remove("file:///"));
+#else
+            loadImage(fileUrl.remove("file://"));
+#endif
     }
 }
 

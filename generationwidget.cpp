@@ -105,17 +105,15 @@ void GenerationWidget::paintEvent(QPaintEvent*)
 
 void GenerationWidget::mousePressEvent(QMouseEvent* e)
 {
-    const QPoint clickPos = e->pos() - mDestRect.topLeft();
-    const QPointF p((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height());
-    emit clickAt(p);
+    const QPoint& clickPos = e->pos() - mDestRect.topLeft();
+    emit clickAt(QPointF((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height()));
 }
 
 
 void GenerationWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    const QPoint clickPos = e->pos() - mDestRect.topLeft();
-    const QPointF p((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height());
-    mHighlighted = mDNA.findPolygonForPoint(p);
+    const QPoint& clickPos = e->pos() - mDestRect.topLeft();
+    mHighlighted = mDNA.findPolygonForPoint(QPointF((qreal)clickPos.x() / mDestRect.width(), (qreal)clickPos.y() / mDestRect.height()));
     update();
 }
 
@@ -151,7 +149,11 @@ void GenerationWidget::dropEvent(QDropEvent* e)
     if (d->hasUrls()) {
         QString fileUrl = d->urls().first().toString();
         if (fileUrl.contains(QRegExp("file://.*\\.(svg|json)$"))) {
+#ifdef WIN32
             const QString fileName = fileUrl.remove("file:///");
+#else
+            const QString fileName = fileUrl.remove("file://");
+#endif
             emit fileDropped(fileName);
             gSettings.setCurrentDNAFile(fileName);
         }

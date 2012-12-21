@@ -9,7 +9,6 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QPolygonF>
-#include <QPointF>
 #include <QVector>
 
 #include "../../gene.h"
@@ -24,13 +23,14 @@ class MainWindow : public QWidget
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget* parent = NULL);
     ~MainWindow();
 
 protected:
     void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
+    void closeEvent(QCloseEvent*);
     
 private:
     Ui::MainWindow *ui;
@@ -39,6 +39,11 @@ private:
     Gene mGene;
     QVector<Gene> mSplices;
     bool mShowSplices;
+
+private: // methods
+    void saveSettings(void);
+    void restoreSettings(void);
 };
 
 #endif // __MAINWINDOW_H_
+

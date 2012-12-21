@@ -3,12 +3,21 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "main.h"
 #include "../../circle.h"
 #include "../../random/rnd.h"
 #include "../../helper.h"
 
+#include <QtCore>
+#include <QtCore/QDebug>
 #include <QPainter>
-#include <QRectF>
+#include <QPainterPath>
+#include <QPen>
+#include <QColor>
+#include <QBrush>
+#include <QVector>
+#include <QSettings>
+#include <qmath.h>
 
 
 MainWindow::MainWindow(QWidget* parent)
@@ -17,13 +26,41 @@ MainWindow::MainWindow(QWidget* parent)
     , mShowSplices(false)
 {
     ui->setupUi(this);
+
+    setFocusPolicy(Qt::StrongFocus);
+    setFocus(Qt::OtherFocusReason);
+
     RAND::initialize();
+
+    restoreSettings();
 }
 
 
 MainWindow::~MainWindow()
 {
+    saveSettings();
     delete ui;
+}
+
+
+void MainWindow::restoreSettings(void)
+{
+    QSettings settings(Company, AppName);
+    restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
+}
+
+
+void MainWindow::saveSettings(void)
+{
+    QSettings settings(Company, AppName);
+    settings.setValue("MainWindow/geometry", saveGeometry());
+}
+
+
+void MainWindow::closeEvent(QCloseEvent* e)
+{
+    saveSettings();
+    e->accept();
 }
 
 
@@ -68,7 +105,7 @@ void MainWindow::paintEvent(QPaintEvent*)
     }
 
     painter.setPen(QColor(255, 255, 255, 200));
-    painter.drawText(QRectF(10, height()-85, 200, 80), Qt::AlignLeft | Qt::AlignBottom,
+    painter.drawText(QRectF(width() - 210, 5, 200, 80), Qt::AlignRight | Qt::AlignTop,
                      "GENERATED CONVEX POLYGON\r\n"
                      "S: show/hide splices\r\n"
                      "R: generate random polygon\r\n"
@@ -98,6 +135,13 @@ void MainWindow::mousePressEvent(QMouseEvent* e)
 void MainWindow::keyPressEvent(QKeyEvent* e)
 {
     switch (e->key()) {
+    case Qt::Key_Escape:
+    {
+        mPolygon.clear();
+        mGene = Gene();
+        update();
+        break;
+    }
     case Qt::Key_R:
     {
         QPolygonF polygon;
@@ -112,12 +156,18 @@ void MainWindow::keyPressEvent(QKeyEvent* e)
         break;
     }
     case Qt::Key_S:
+    {
         mShowSplices = !mShowSplices;
         update();
         break;
+    }
     case Qt::Key_C:
+    {
         mGene = Gene();
         update();
+        break;
+    }
+    default:
         break;
     }
 }

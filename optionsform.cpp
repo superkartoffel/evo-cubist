@@ -71,6 +71,7 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->dnaSaveDirectoryLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setDNASaveDirectory(QString)));
     QObject::connect(ui->imageFilenameTemplateLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setImageSaveFilenameTemplate(QString)));
     QObject::connect(ui->dnaFilenameTemplateLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setDNASaveFilenameTemplate(QString)));
+    QObject::connect(ui->internalLogCheckBox, SIGNAL(toggled(bool)), SLOT(internalLogToggled(bool)));
 }
 
 
@@ -302,6 +303,12 @@ void OptionsForm::setCores(int v)
 }
 
 
+void OptionsForm::setInternalLogEnabled(bool enabled)
+{
+    ui->internalLogCheckBox->setChecked(enabled);
+}
+
+
 void OptionsForm::setStartDistribution(int index)
 {
     Q_ASSERT(index >= 0);
@@ -386,6 +393,16 @@ void OptionsForm::backgroundColorSelected(void)
         const QRgb rgb = newColor.rgba();
         gSettings.setBackgroundColor(rgb);
         emit backgroundColorSelected(rgb);
+    }
+}
+
+
+void OptionsForm::internalLogToggled(bool checked)
+{
+    if (checked && sender() != NULL) {
+        const int rc = QMessageBox::warning(this, tr("Excessive memory usage warning"), tr("Attention, enabling internal logging uses up more and more memory as time goes by. Are you sure you want to enable the log?"), QMessageBox::Yes, QMessageBox::No);
+        if (rc != QMessageBox::Yes)
+            ui->internalLogCheckBox->setChecked(false);
     }
 }
 

@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Oliver Lau <oliver@von-und-fuer-lau.de>
 
-QT += core gui
+QT += core gui script scripttools
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -32,3 +32,7 @@ HEADERS += \
 
 
 FORMS += mainwindow.ui
+
+RESOURCES +=
+
+OTHER_FILES +=
