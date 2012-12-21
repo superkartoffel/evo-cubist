@@ -15,7 +15,8 @@ SOURCES += \
     ../../breedersettings.cpp \
     ../../random/rnd.cpp \
     ../../random/mersenne_twister.cpp \
-    ../../helper.cpp
+    ../../helper.cpp \
+    delaunay.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -26,7 +27,8 @@ HEADERS += \
     ../../breedersettings.h \
     ../../random/rnd.h \
     ../../random/mersenne_twister.h \
-    ../../random/abstract_random_number_generator.h
+    ../../random/abstract_randomnumber_generator.h \
+    delaunay.h
 
 
 FORMS += mainwindow.ui
