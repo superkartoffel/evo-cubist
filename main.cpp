@@ -13,9 +13,9 @@ const QString Company = "c't";
 const QString AppName = "Evo Cubist";
 const QString AppUrl = "http://evo-cubist.googlecode.com/";
 const QString AppAuthor = "Oliver Lau";
-const QString AppAuthorMail = "oliver@von-und-fuer-lau.de";
+const QString AppAuthorMail = "ola@ct.de";
 const QString AppVersionNoDebug = "1.3";
-const QString AppMinorVersion = ".7";
+const QString AppMinorVersion = ".7-AUTORUN";
 #ifdef QT_NO_DEBUG
 const QString AppVersion = AppVersionNoDebug + AppMinorVersion;
 #else

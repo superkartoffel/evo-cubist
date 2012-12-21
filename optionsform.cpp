@@ -66,6 +66,7 @@ OptionsForm::OptionsForm(QWidget* parent)
     QObject::connect(ui->scatterFactorSpinBox, SIGNAL(valueChanged(double)), &gSettings, SLOT(setScatterFactor(double)));
     QObject::connect(ui->coresSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setCores(int)));
     QObject::connect(ui->saveIntervalSpinBox, SIGNAL(valueChanged(int)), &gSettings, SLOT(setAutoSaveInterval(int)));
+    QObject::connect(ui->stopOnNextAutosaveCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setStopOnAutosave(bool)));
     QObject::connect(ui->autoSaveCheckBox, SIGNAL(toggled(bool)), &gSettings, SLOT(setAutoSave(bool)));
     QObject::connect(ui->imageSaveDirectoryLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setImageSaveDirectory(QString)));
     QObject::connect(ui->dnaSaveDirectoryLineEdit, SIGNAL(textChanged(QString)), &gSettings, SLOT(setDNASaveDirectory(QString)));

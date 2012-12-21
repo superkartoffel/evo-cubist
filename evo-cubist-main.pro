@@ -68,7 +68,8 @@ OTHER_FILES += \
     tools/dna2svg.py \
     TODO.txt \
     LICENSE.txt \
-    README.txt
+    README.txt \
+    settings-sample.xml
 
 RESOURCES += \
     evo-cubist.qrc

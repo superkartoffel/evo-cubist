@@ -8,6 +8,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QTimer>
+#include <QTimerEvent>
 #include <QFile>
 #include <QEvent>
 #include <QAction>
@@ -28,7 +29,7 @@ namespace Ui {
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    
+
 public:
     explicit MainWindow(QWidget* parent = NULL);
     ~MainWindow();
@@ -47,7 +48,7 @@ private:
     Breeder mBreeder;
     QDateTime mStartTime;
     QFile mLog;
-
+    bool mCloseOnStop;
     unsigned long mRecentEvolvedGeneration;
     unsigned long mRecentEvolvedSelection;
 

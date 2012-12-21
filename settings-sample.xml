@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<evocubist-settings version="1.3">
+  <deltas>
+    <!-- maximale Abweichung des Rotwerts [0..255] eines Polygons bei der Berechnung der nächsten Generation -->
+    <red>1</red>
+    <!-- maximale Abweichung des Grünwerts [0..255] eines Polygons bei der Berechnung der nächsten Generation -->
+    <green>1</green>
+    <!-- maximale Abweichung des Blauwerts [0..255] eines Polygons bei der Berechnung der nächsten Generation -->
+    <blue>1</blue>
+    <!-- maximale Abweichung des Alphawerts [0..255] eines Polygons bei der Berechnung der nächsten Generation -->
+    <alpha>1</alpha>
+    <!-- maximales Maß, um das eine Polygonecke bei der Berechnung der nächsten Generation verschoben werden darf [0..1( -->
+    <xy>0.0034</xy>
+  </deltas>
+  <breeder>
+    <!-- Farbe des Hintergrunds im SVGs -->
+    <backgroundColor>rgb(255,255,255)</backgroundColor>
+    <!-- Kehrwert der Wahrscheinlichkeit der Farbmutation bei der Berechnung der nächsten Generation -->
+    <colorMutationProbability>495</colorMutationProbability>
+    <!-- Kehrwert der Wahrscheinlichkeit, dass ein Punkt eines Polygons bei der Berechnung der nächsten Generation eine Translation erfährt -->
+    <pointMutationProbability>1600</pointMutationProbability>
+    <!-- Kehrwert der Wahrscheinlichkeit, dass ein Punkt in einem Polygon bei der Berechnung der nächsten Generation wegfällt -->
+    <pointKillProbability>200</pointKillProbability>
+    <!-- Kehrwert der Wahrscheinlichkeit, dass ein Punkt in einem Polygon bei der Berechnung der nächsten Generation hinzukommt -->
+    <pointEmergenceProbability>200000</pointEmergenceProbability>
+    <!-- Kehrwert der Wahrscheinlichkeit, dass ein Polygon bei der Berechnung der nächsten Generation gelöscht wird -->
+    <geneKillProbability>1000000</geneKillProbability>
+    <!-- Kehrwert der Wahrscheinlichkeit, dass ein Polygon bei der Berechnung der nächsten Generation verschoben wird -->
+    <geneMoveProbability>1000000</geneMoveProbability>
+    <!-- Kehrwert der Wahrscheinlichkeit, dass ein Polygon bei der Berechnung der nächsten Generation hinzukommt -->
+    <geneEmergenceProbability>1000000</geneEmergenceProbability>
+    <!-- minimale und maximale Anzahl von Punkten pro Polygon -->
+    <minPointsPerGene>4</minPointsPerGene>
+    <maxPointsPerGene>4</maxPointsPerGene>
+    <!-- minimale und maximale Anzahl Polygone -->
+    <minGenes>390</minGenes>
+    <maxGenes>1000</maxGenes>
+    <!-- minimaler und maximaler Alpha-Wert der Polygone -->
+    <minA>70</minA>
+    <maxA>255</maxA>
+    <!-- Nummer der Startverteilung:
+         1: zufällige Polygone mit zufälliger Farbe
+         2: gekachelt mit zufälliger Farbe
+         3: gekachelt mit Farbe aus Originalbild
+         4: zufällig gestreut mit zufälliger Farbe
+         5: zufällig gestreut mit Farbe aus Originalbild
+         6: dreieckige Kacheln
+    -->
+    <startDistribution>2</startDistribution>
+    <!-- Maß für Streuung bei Startverteilungen 4 und 5 -->
+    <scatterFactor>0.55</scatterFactor>
+    <!-- Anzahl der Kerne, auf die die Berechnung verteilt werden soll -->
+    <cores>2</cores>
+  </breeder>
+  <files>
+    <!-- falls die Berechnung mit einer bestimmten Generation beginnen
+         soll, ist hier der Pfad zur SVG-Datei einzutragen. Soll mit der
+         in breeder/startDistribution festgelegten Startverteilung
+         begonnen werden, bleibt dieser Eintrag leer -->
+    <dna></dna>
+    <!-- Pfad zum Originalbild -->
+    <image>C:/Workspace/evo-cubist/test/images/Koala.jpg</image>
+  </files>
+  <autosave>
+    <!-- 1 = Autospeichern von SVGs und PNGs einschalten, 0 = ausschalten -->
+    <enabled>1</enabled>
+    <!-- Intervall in Sekunden für Autospeichern -->
+    <interval>60</interval>
+    <!-- 1 = nach Ablauf des Intervalls Evo Cubist automatisch beenden -->
+    <autostop>1</autostop>
+    <!-- Verzeichnis für automatisch gespeicherte PNGs (nur absoluten Pfad mit Forward slashes angeben!) -->
+    <imageDirectory>C:/Workspace/evo-cubist/tmp/Koala/png</imageDirectory>
+    <!-- Maske für Namen, mit dem PNGs gespeichert werden sollen.
+         %1 = Dateiname des Originalbildes (ohne Pfad, ohne Endung)
+         %2 = Generation
+         %3 = Nummer der ausgewählten Generation
+    -->
+    <imageFilenameTemplate>%1-%2-%3.png</imageFilenameTemplate>
+    <!-- Verzeichnis für automatisch gespeicherte SVGs (nur absoluten Pfad mit Forward slashes angeben!) -->
+    <dnaDirectory>C:/Workspace/evo-cubist/tmp/Koala/svg</dnaDirectory>
+    <!-- Maske für Namen, mit dem SVGs gespeichert werden sollen.
+         %1 = Dateiname des Originalbildes (ohne Pfad, ohne Endung)
+         %2 = Generation
+         %3 = Nummer der ausgewählten Generation
+    -->
+    <dnaFilenameTemplate>%1-%2-%3.svg</dnaFilenameTemplate>
+  </autosave>
+</evocubist-settings>

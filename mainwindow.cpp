@@ -30,6 +30,7 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , mCloseOnStop(false)
     , mRecentEvolvedGeneration(0)
     , mRecentEvolvedSelection(0)
 {
@@ -123,6 +124,15 @@ MainWindow::MainWindow(QWidget* parent)
     qRegisterMetaType<DNA>("DNA");
     QObject::connect(&mBreeder, SIGNAL(evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long)), SLOT(evolved(const QImage&, const DNA&, quint64, unsigned long, unsigned long)));
     QObject::connect(&mBreeder, SIGNAL(proceeded(unsigned long)), SLOT(proceeded(unsigned long)));
+
+    const QStringList& arg = qApp->arguments();
+    const int idx = arg.indexOf("-settings");
+    if (idx > 0 && arg.size() > idx+1)
+        loadSettings(arg.at(idx+1));
+    if (arg.indexOf("-close-on-stop") > 0)
+        mCloseOnStop = true;
+    if (arg.indexOf("-start") > 0)
+        startBreeding();
 
 #ifndef QT_NO_DEBUG
     mOptionsForm->show();
@@ -334,8 +344,7 @@ void MainWindow::autoSave(void)
 {
     const QCursor oldCursor = cursor();
     setCursor(Qt::WaitCursor);
-    bool success = autoSaveImage();
-    success &= autoSaveDNA();
+    bool success = autoSaveImage() && autoSaveDNA();
     if (success) {
         statusBar()->showMessage(tr("Automatically saved mutation %1 out of %2 generations.").arg(mRecentEvolvedSelection).arg(mRecentEvolvedGeneration), 3000);
         mLogViewerForm->highlightLastRow();
@@ -344,9 +353,13 @@ void MainWindow::autoSave(void)
         statusBar()->showMessage(tr("Automatic saving failed."), 3000);
     }
     setCursor(oldCursor);
-    if (mOptionsForm->stopOnNextAutosave()) {
+    if (mOptionsForm->stopOnNextAutosave() && sender() /* only stop if called from slot */) {
         mOptionsForm->setStopOnNextAutosave(false);
         stopBreeding();
+        if (mCloseOnStop) {
+            mBreeder.setDirty(false);
+            close();
+        }
     }
 }
 
@@ -650,6 +663,7 @@ void MainWindow::loadSettings(const QString& filename)
             mOptionsForm->setMaxGenes(gSettings.maxGenes());
             mOptionsForm->setMinAlpha(gSettings.minA());
             mOptionsForm->setMaxAlpha(gSettings.maxA());
+            mOptionsForm->setStopOnNextAutosave(gSettings.stopOnAutoSave());
             statusBar()->showMessage(tr("Settings file '%1' loaded.").arg(filename), 3000);
         }
         else {
